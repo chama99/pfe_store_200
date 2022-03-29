@@ -2,6 +2,7 @@
 
 // ignore: avoid_web_libraries_in_flutter
 
+import 'dart:async';
 import 'dart:io';
 import 'package:chama_projet/pages/table.dart';
 import 'package:chama_projet/services/contact.dart';
@@ -52,19 +53,26 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
   List listItem = ["Devis", "Bon de commande"];
   var montant = "0,00";
   var taxe = "0,00";
+  // ignore: prefer_typing_uninitialized_variables
+  late double remisee = 0.00;
+  // ignore: prefer_final_fields
+  StreamController<String> _streamController = StreamController();
 
   bool test = false;
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   @override
   void initState() {
     super.initState();
-
     fetchDatabaseList();
+    _streamController.stream.listen((item) {
+      setState(() {
+        var ch = item.substring(0, item.indexOf("%"));
+        // ignore: unnecessary_cast
+        double r = double.parse(ch) as double;
+
+        // ignore: unnecessary_cast
+        remisee = r / 100 as double;
+      });
+    });
   }
 
   List userContactList = [];
@@ -83,6 +91,11 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
   }
 
   late String dropdown;
+  @override
+  void dispose() {
+    _streamController.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -349,7 +362,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                     ),
                                     validator: (value) {
                                       if (value!.isEmpty) {
-                                        return "Veuillez entrer  remise ";
+                                        return "Veuillez entrer valeur de remise ";
                                       }
                                       if (!RegExp("%").hasMatch(value)) {
                                         return "Veuillez entrer  valeur avec % ";
@@ -367,7 +380,9 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                               ElevatedButton(
                                 onPressed: () {
                                   // Validate returns true if the form is valid, otherwise false.
-                                  if (_formKey.currentState!.validate()) {}
+                                  if (_formKey.currentState!.validate()) {
+                                    _streamController.add(Contolleremise.text);
+                                  }
                                 },
                                 child: const Text(
                                   "Calculer",
@@ -399,11 +414,11 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                         "Montant HT: $montant",
                                         style: const TextStyle(fontSize: 20),
                                       ),
-                                      const Padding(
-                                        padding: EdgeInsets.all(8.0),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                          "Remise: 0,00",
-                                          style: TextStyle(fontSize: 20),
+                                          "Remise: $remisee",
+                                          style: const TextStyle(fontSize: 20),
                                         ),
                                       ),
                                       Padding(
