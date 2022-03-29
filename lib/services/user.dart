@@ -1,6 +1,5 @@
 // ignore_for_file: unused_import
 
-import 'package:chama_projet/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {

@@ -4,6 +4,8 @@ import 'package:chama_projet/services/user.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../widget/toast.dart';
+
 class AjoutRole extends StatefulWidget {
   String name, email;
 
@@ -330,11 +332,4 @@ class _AjoutRoleState extends State<AjoutRole> {
       ),
     );
   }
-
-  showToast(mssg) => Fluttertoast.showToast(
-      msg: mssg,
-      fontSize: 50,
-      gravity: ToastGravity.CENTER,
-      backgroundColor: Colors.red,
-      textColor: Colors.white);
 }

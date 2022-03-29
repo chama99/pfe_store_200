@@ -90,6 +90,22 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
         appBar: AppBar(
           title: const Text("Créer Un Devis"),
           backgroundColor: Colors.orange,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: ElevatedButton(
+                onPressed: () {
+                  // Validate returns true if the form is valid, otherwise false.
+                  if (_formKey.currentState!.validate()) {}
+                },
+                child: const Text(
+                  "Sauvgarder",
+                  style: TextStyle(fontSize: 18.0),
+                ),
+                style: ElevatedButton.styleFrom(primary: Colors.indigo),
+              ),
+            ),
+          ],
         ),
         body: RefreshIndicator(
           onRefresh: () {
@@ -315,7 +331,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                   child: TextFormField(
                                     controller: Contolleremise,
                                     decoration: InputDecoration(
-                                      hintText: 'Pourcentage(%)',
+                                      hintText: 'valeur %',
                                       filled: true,
                                       fillColor: Colors.white,
                                       focusedBorder: OutlineInputBorder(
@@ -331,115 +347,20 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                         ),
                                       ),
                                     ),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return "Veuillez entrer  remise ";
+                                      }
+                                      if (!RegExp("%").hasMatch(value)) {
+                                        return "Veuillez entrer  valeur avec % ";
+                                      }
+                                      return null;
+                                    },
                                   ),
                                 ),
                               )
                             ],
                           ),
-                          if (Contolleremise.text.isEmpty) ...[
-                            Row(
-                              children: [
-                                Container(
-                                  width: 220,
-                                  height: 200,
-                                  margin: const EdgeInsets.only(
-                                      top: 30, right: 50, left: 80, bottom: 40),
-                                  decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                      color:
-                                          Color.fromARGB(255, 245, 245, 245)),
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.only(left: 8, top: 15),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "Montant HT: $montant",
-                                          style: const TextStyle(fontSize: 20),
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "Remise: 0,00",
-                                            style: TextStyle(fontSize: 20),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "Taxes: $taxe",
-                                            style:
-                                                const TextStyle(fontSize: 20),
-                                          ),
-                                        ),
-                                        const Divider(
-                                          color: Colors.black,
-                                        ),
-                                        Text(
-                                          "Total: $taxe",
-                                          style: const TextStyle(fontSize: 20),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ] else ...[
-                            Row(
-                              children: [
-                                Container(
-                                  width: 220,
-                                  height: 200,
-                                  margin: const EdgeInsets.only(
-                                      top: 30, right: 50, left: 80, bottom: 40),
-                                  decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                      color:
-                                          Color.fromARGB(255, 245, 245, 245)),
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.only(left: 8, top: 15),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "Montant HT: $montant",
-                                          style: const TextStyle(fontSize: 20),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "Remise: ${int.parse("Contolleremise.text") / 100}",
-                                            style:
-                                                const TextStyle(fontSize: 20),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "Taxes: $taxe",
-                                            style:
-                                                const TextStyle(fontSize: 20),
-                                          ),
-                                        ),
-                                        const Divider(
-                                          color: Colors.black,
-                                        ),
-                                        Text(
-                                          "Total: $taxe",
-                                          style: const TextStyle(fontSize: 20),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -449,14 +370,62 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                   if (_formKey.currentState!.validate()) {}
                                 },
                                 child: const Text(
-                                  "Sauvegarder",
+                                  "Calculer",
                                   style: TextStyle(fontSize: 18.0),
                                 ),
                                 style: ElevatedButton.styleFrom(
                                     primary: Colors.orange),
                               ),
                             ],
-                          )
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                width: 220,
+                                height: 200,
+                                margin: const EdgeInsets.only(
+                                    top: 30, right: 50, left: 80, bottom: 40),
+                                decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                    color: Color.fromARGB(255, 245, 245, 245)),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 8, top: 15),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "Montant HT: $montant",
+                                        style: const TextStyle(fontSize: 20),
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Text(
+                                          "Remise: 0,00",
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          "Taxes: $taxe",
+                                          style: const TextStyle(fontSize: 20),
+                                        ),
+                                      ),
+                                      const Divider(
+                                        color: Colors.black,
+                                      ),
+                                      Text(
+                                        "Total: $taxe",
+                                        style: const TextStyle(fontSize: 20),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       )),
                     ],
@@ -468,12 +437,6 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
         ));
   }
 
-  showToast(mssg) => Fluttertoast.showToast(
-      msg: mssg,
-      fontSize: 50,
-      gravity: ToastGravity.CENTER,
-      backgroundColor: Colors.red,
-      textColor: Colors.white);
   void onSort(int columnIndex, bool ascending) {
     setState(() {
       sortColumnIndex = columnIndex;

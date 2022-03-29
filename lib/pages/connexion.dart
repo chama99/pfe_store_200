@@ -4,10 +4,10 @@ import 'package:chama_projet/services/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../widget/InputDeco_design.dart';
 import '../widget/menuAdmin.dart';
+import '../widget/toast.dart';
 
 class Connexion extends StatefulWidget {
   const Connexion({Key? key}) : super(key: key);
@@ -208,11 +208,4 @@ class _connexion extends State<Connexion> {
       ),
     );
   }
-
-  showToast(mssg) => Fluttertoast.showToast(
-      msg: mssg,
-      fontSize: 20,
-      gravity: ToastGravity.CENTER,
-      backgroundColor: Colors.red,
-      textColor: Colors.white);
 }

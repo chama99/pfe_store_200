@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:chama_projet/pages/connexion.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,12 +34,14 @@ class NavBar extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.notifications),
             title: const Text("Notifications"),
+            // ignore: avoid_returning_null_for_void
             onTap: () => null,
           ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.message),
             title: const Text("Messages"),
+            // ignore: avoid_returning_null_for_void
             onTap: () => null,
           ),
           const Divider(),

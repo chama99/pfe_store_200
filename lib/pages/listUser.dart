@@ -5,6 +5,7 @@ import 'package:chama_projet/services/user.dart';
 
 import 'package:flutter/material.dart';
 
+import '../widget/boitedialogue.dart';
 import 'creer_user_page.dart';
 
 class ListUser extends StatefulWidget {
@@ -142,8 +143,13 @@ class _ListUserState extends State<ListUser> {
                                   title: Text(user["name"]),
                                   subtitle: Text(user["email"]),
                                   trailing: IconButton(
-                                    onPressed: () =>
-                                        {User().deleteUser(user["email"])},
+                                    onPressed: () => {
+                                      openDialog(
+                                          context,
+                                          user["email"],
+                                          "Êtes-vous sûr de vouloir supprimer cet utilisateur",
+                                          "utilisateur")
+                                    },
                                     icon: const Icon(
                                       Icons.delete,
                                       color: Colors.red,

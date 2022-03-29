@@ -15,6 +15,7 @@ import 'package:path/path.dart';
 
 import '../services/employe.dart';
 import '../widget/InputDeco_design.dart';
+import '../widget/toast.dart';
 
 class AddUserPage extends StatefulWidget {
   const AddUserPage({Key? key}) : super(key: key);
@@ -56,23 +57,27 @@ class _AddUserPageState extends State<AddUserPage> {
 
   // ignore: non_constant_identifier_names
   List NomsEmpList = [];
+  // ignore: non_constant_identifier_names
+  List EmailUser = [];
   fetchDatabaseList() async {
     dynamic resultant = await Employe().getEmployesListByNom();
+    dynamic resultant2 = await User().getUsersByEmail();
 
     if (resultant == null) {
       print('Unable to retrieve');
     } else {
       setState(() {
         NomsEmpList = resultant;
+        EmailUser = resultant2;
       });
     }
   }
 
   // ignore: non_constant_identifier_names
-  bool Test(String nom) {
+  bool Test(String nom, List list) {
     bool b = false;
-    for (int i = 0; i < NomsEmpList.length; i++) {
-      if (nom == NomsEmpList[i]) {
+    for (int i = 0; i < list.length; i++) {
+      if (nom == list[i]) {
         b = true;
       }
     }
@@ -295,29 +300,39 @@ class _AddUserPageState extends State<AddUserPage> {
                                 onPressed: () {
                                   // Validate returns true if the form is valid, otherwise false.
                                   if (_formKey.currentState!.validate() &&
-                                      Test(nomController.text)) {
-                                    setState(() {
-                                      nom = nomController.text;
-                                      email = emailController.text;
-                                      password = passwordController.text;
-                                      role = ch;
-                                      if (imageFile == null) {
-                                        User().addUser(
-                                            email,
-                                            nom,
-                                            password,
-                                            role,
-                                            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+                                      Test(nomController.text, NomsEmpList)) {
+                                    if (Test(emailController.text, EmailUser) ==
+                                        false) {
+                                      if (ch != null) {
+                                        setState(() {
+                                          nom = nomController.text;
+                                          email = emailController.text;
+                                          password = passwordController.text;
+                                          role = ch;
+                                          if (imageFile == null) {
+                                            User().addUser(
+                                                email,
+                                                nom,
+                                                password,
+                                                role,
+                                                "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+                                          } else {
+                                            uploadImage(email);
+                                          }
+
+                                          clearText();
+                                          ch = null;
+                                          imageFile = null;
+
+                                          print(NomsEmpList);
+                                        });
                                       } else {
-                                        uploadImage(email);
+                                        showToast(
+                                            "veuillez sélectionner poste occupé ");
                                       }
-
-                                      clearText();
-                                      ch = null;
-                                      imageFile = null;
-
-                                      print(NomsEmpList);
-                                    });
+                                    } else {
+                                      showToast("Email déja exitait");
+                                    }
                                   } else {
                                     showToast("Nom de l'employé n'existe pas");
                                   }
@@ -406,11 +421,4 @@ class _AddUserPageState extends State<AddUserPage> {
       print('error occured');
     }
   }
-
-  showToast(mssg) => Fluttertoast.showToast(
-      msg: mssg,
-      fontSize: 20,
-      gravity: ToastGravity.CENTER,
-      backgroundColor: Colors.red,
-      textColor: Colors.white);
 }

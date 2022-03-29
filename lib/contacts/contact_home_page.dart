@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, unused_local_variable, camel_case_types
 
 import 'package:chama_projet/services/contact.dart';
+import 'package:chama_projet/widget/boitedialogue.dart';
 
 import 'package:flutter/material.dart';
 
@@ -148,7 +149,11 @@ class _listContactState extends State<listContact> {
                                   subtitle: Text(contact["email"]),
                                   trailing: IconButton(
                                     onPressed: () => {
-                                      Contact().deleteContact(contact["name"])
+                                      openDialog(
+                                          context,
+                                          contact["name"],
+                                          "Êtes-vous sûr de vouloir supprimer",
+                                          "contact")
                                     },
                                     icon: const Icon(
                                       Icons.delete,

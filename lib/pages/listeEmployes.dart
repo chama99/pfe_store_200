@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, unused_local_variable
 
 import 'package:chama_projet/pages/employe_detaille.dart';
+import 'package:chama_projet/widget/boitedialogue.dart';
 
 import 'package:flutter/material.dart';
 import 'package:chama_projet/pages/creer_employe.dart';
@@ -148,7 +149,11 @@ class _listEmployeState extends State<listEmploye> {
                                   subtitle: Text(employe["email"]),
                                   trailing: IconButton(
                                     onPressed: () => {
-                                      Employe().deleteEmploye(employe["name"])
+                                      openDialog(
+                                          context,
+                                          employe["name"],
+                                          "Êtes-vous sûr de vouloir supprimer cet employé",
+                                          "employé")
                                     },
                                     icon: const Icon(
                                       Icons.delete,

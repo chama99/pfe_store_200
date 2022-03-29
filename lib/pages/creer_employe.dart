@@ -15,6 +15,7 @@ import 'package:path/path.dart';
 
 import '../services/employe.dart';
 import '../widget/InputDeco_design.dart';
+import '../widget/toast.dart';
 
 class CreeEmployePage extends StatefulWidget {
   const CreeEmployePage({Key? key}) : super(key: key);
@@ -48,6 +49,37 @@ class _CreeEmployePageState extends State<CreeEmployePage> {
   bool isHiddenPassword = true;
   // ignore: prefer_typing_uninitialized_variables
   var ch;
+  List NomEmpl = [];
+  @override
+  void initState() {
+    super.initState();
+
+    fetchDatabaseList();
+  }
+
+  fetchDatabaseList() async {
+    dynamic resultant = await Employe().getEmployesListByNom();
+
+    if (resultant == null) {
+      // ignore: avoid_print
+      print('Unable to retrieve');
+    } else {
+      setState(() {
+        NomEmpl = resultant;
+      });
+    }
+  }
+
+  // ignore: non_constant_identifier_names
+  bool Test(String nom) {
+    bool b = false;
+    for (int i = 0; i < NomEmpl.length; i++) {
+      if (nom == NomEmpl[i]) {
+        b = true;
+      }
+    }
+    return b;
+  }
 
   @override
   void dispose() {
@@ -243,7 +275,8 @@ class _CreeEmployePageState extends State<CreeEmployePage> {
                               ElevatedButton(
                                 onPressed: () {
                                   // Validate returns true if the form is valid, otherwise false.
-                                  if (_formKey.currentState!.validate()) {
+                                  if (_formKey.currentState!.validate() &&
+                                      Test(nomController.text) == false) {
                                     if (ch != null) {
                                       setState(() {
                                         email = emailController.text;
@@ -271,6 +304,8 @@ class _CreeEmployePageState extends State<CreeEmployePage> {
                                       showToast(
                                           "veuillez sélectionner poste occupé ");
                                     }
+                                  } else {
+                                    showToast("Nom de l'employé déja existait");
                                   }
                                 },
                                 child: const Text(
@@ -359,11 +394,4 @@ class _CreeEmployePageState extends State<CreeEmployePage> {
       print('error occured');
     }
   }
-
-  showToast(mssg) => Fluttertoast.showToast(
-      msg: mssg,
-      fontSize: 20,
-      gravity: ToastGravity.CENTER,
-      backgroundColor: Colors.red,
-      textColor: Colors.white);
 }
