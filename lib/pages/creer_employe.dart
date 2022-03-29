@@ -49,6 +49,7 @@ class _CreeEmployePageState extends State<CreeEmployePage> {
   bool isHiddenPassword = true;
   // ignore: prefer_typing_uninitialized_variables
   var ch;
+  // ignore: non_constant_identifier_names
   List NomEmpl = [];
   @override
   void initState() {

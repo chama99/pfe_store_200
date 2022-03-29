@@ -1,0 +1,44 @@
+import 'package:chama_projet/widget/toast.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class Commande {
+  final CollectionReference commande =
+      FirebaseFirestore.instance.collection('commandes');
+
+  Future getCommandesList() async {
+    List itemsList = [];
+
+    try {
+      await commande.get().then((querySnapshot) {
+        querySnapshot.docs.map((element) {
+          Map a = element.data() as Map<String, dynamic>;
+          itemsList.add(a);
+        }).toList();
+      });
+      return itemsList;
+    } catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future<void> addCommande(ref, article, des, unite, qt, prix, taxe) {
+    return commande
+        .doc()
+        .set({
+          'réf': ref,
+          'Article': article,
+          'Description': des,
+          'Unite': unite,
+          'Quantite': qt,
+          'prix': prix,
+          'taxe': taxe
+        })
+        // ignore: avoid_print
+        .then((value) => showToast("Commande ajoutée"))
+        // ignore: avoid_print
+        .catchError(
+            (error) => showToast("Échec de l'ajout de la commande:$error"));
+  }
+}

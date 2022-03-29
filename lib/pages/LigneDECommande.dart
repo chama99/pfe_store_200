@@ -1,16 +1,49 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, file_names
+
+import 'package:chama_projet/services/commande.dart';
 import 'package:flutter/material.dart';
 
-class Tabletest extends StatefulWidget {
-  const Tabletest({Key? key}) : super(key: key);
+import '../widget/toast.dart';
+
+class LigneCommande extends StatefulWidget {
+  const LigneCommande({Key? key}) : super(key: key);
 
   @override
-  State<Tabletest> createState() => _TabletestState();
+  State<LigneCommande> createState() => _LigneCommandeState();
 }
 
-class _TabletestState extends State<Tabletest> {
+class _LigneCommandeState extends State<LigneCommande> {
   final _formKey = GlobalKey<FormState>();
-  var ch;
-  List listItem = [];
+  var article;
+  List listItem = ["store12", "store15"];
+  final ref = TextEditingController();
+  final des = TextEditingController();
+  final unite = TextEditingController();
+  final qt = TextEditingController();
+  final prix = TextEditingController();
+  final taxe = TextEditingController();
+  clearText() {
+    ref.clear();
+    des.clear();
+    unite.clear();
+    qt.clear();
+    prix.clear();
+    taxe.clear();
+    article = null;
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    ref.dispose();
+    des.dispose();
+    unite.dispose();
+    qt.dispose();
+    prix.dispose();
+    taxe.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +62,7 @@ class _TabletestState extends State<Tabletest> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    controller: ref,
                     decoration: InputDecoration(
                       hintText: 'réf',
                       filled: true,
@@ -50,6 +84,7 @@ class _TabletestState extends State<Tabletest> {
                       if (value!.isEmpty) {
                         return "Veuillez entrer  réf ";
                       }
+                      return null;
                     },
                   ),
                 ),
@@ -74,10 +109,10 @@ class _TabletestState extends State<Tabletest> {
                         style:
                             const TextStyle(fontSize: 20, color: Colors.black),
                         iconSize: 40,
-                        value: ch,
+                        value: article,
                         onChanged: (newValue) {
                           setState(() {
-                            ch = newValue.toString();
+                            article = newValue.toString();
                           });
                         },
                         items: listItem.map((valueItem) {
@@ -93,6 +128,7 @@ class _TabletestState extends State<Tabletest> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    controller: des,
                     decoration: InputDecoration(
                       hintText: 'Description',
                       filled: true,
@@ -115,6 +151,7 @@ class _TabletestState extends State<Tabletest> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    controller: unite,
                     decoration: InputDecoration(
                       hintText: 'Unité',
                       filled: true,
@@ -137,6 +174,7 @@ class _TabletestState extends State<Tabletest> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    controller: qt,
                     decoration: InputDecoration(
                       hintText: 'Quantité',
                       filled: true,
@@ -158,12 +196,14 @@ class _TabletestState extends State<Tabletest> {
                       if (value!.isEmpty) {
                         return "Veuillez entrer Quantité ";
                       }
+                      return null;
                     },
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    controller: prix,
                     decoration: InputDecoration(
                       hintText: 'Prix unitaire',
                       filled: true,
@@ -185,15 +225,17 @@ class _TabletestState extends State<Tabletest> {
                       if (value!.isEmpty) {
                         return "Veuillez entrer Prix unitaire";
                       }
+                      return null;
                     },
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    controller: taxe,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      hintText: 'Taxes',
+                      hintText: 'Taxes (%)',
                       filled: true,
                       fillColor: Colors.white,
                       focusedBorder: OutlineInputBorder(
@@ -213,6 +255,10 @@ class _TabletestState extends State<Tabletest> {
                       if (value!.isEmpty) {
                         return "Veuillez entrer Taxes";
                       }
+                      if (!RegExp("%").hasMatch(value)) {
+                        return "Veuillez entrer\n  valeur avec % ";
+                      }
+                      return null;
                     },
                   ),
                 ),
@@ -222,7 +268,19 @@ class _TabletestState extends State<Tabletest> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          print("erreur");
+                          if (article != null) {
+                            Commande().addCommande(
+                                ref.text,
+                                article,
+                                des.text,
+                                unite.text,
+                                int.parse(qt.text),
+                                double.parse(prix.text),
+                                taxe.text);
+                            clearText();
+                          } else {
+                            showToast("veuillez sélectionner poste occupé ");
+                          }
                         }
                       },
                       child: const Text(

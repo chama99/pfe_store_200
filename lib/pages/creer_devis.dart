@@ -4,7 +4,8 @@
 
 import 'dart:async';
 import 'dart:io';
-import 'package:chama_projet/pages/table.dart';
+import 'package:chama_projet/pages/LigneDECommande.dart';
+import 'package:chama_projet/services/commande.dart';
 import 'package:chama_projet/services/contact.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -47,12 +48,16 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
   XFile? imageFile;
 
   final _formKey = GlobalKey<FormState>();
+  final titre = TextEditingController();
 
   // ignore: prefer_typing_uninitialized_variables
-  var ch;
+  var client;
+  // ignore: prefer_typing_uninitialized_variables
+  var etat;
   List listItem = ["Devis", "Bon de commande"];
-  var montant = "0,00";
-  var taxe = "0,00";
+  var montant = 0.00;
+  var taxe = 0.00;
+  var total = 0.00;
   // ignore: prefer_typing_uninitialized_variables
   late double remisee = 0.00;
   // ignore: prefer_final_fields
@@ -76,9 +81,11 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
   }
 
   List userContactList = [];
+  List commandeList = [];
 
   fetchDatabaseList() async {
     dynamic resultant = await Contact().getContactListByNom();
+    dynamic resultant2 = await Commande().getCommandesList();
 
     if (resultant == null) {
       // ignore: avoid_print
@@ -86,6 +93,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
     } else {
       setState(() {
         userContactList = resultant;
+        commandeList = resultant2;
       });
     }
   }
@@ -148,6 +156,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                           Padding(
                             padding: const EdgeInsets.all(10),
                             child: TextFormField(
+                              controller: titre,
                               decoration: InputDecoration(
                                 hintText: 'Titire',
                                 filled: true,
@@ -196,10 +205,10 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                     style: const TextStyle(
                                         fontSize: 20, color: Colors.black),
                                     iconSize: 40,
-                                    value: ch,
+                                    value: client,
                                     onChanged: (newValue) {
                                       setState(() {
-                                        ch = newValue.toString();
+                                        client = newValue.toString();
                                       });
                                     },
                                     items: userContactList.map((valueItem) {
@@ -242,10 +251,10 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                     style: const TextStyle(
                                         fontSize: 20, color: Colors.black),
                                     iconSize: 40,
-                                    value: ch,
+                                    value: etat,
                                     onChanged: (newValue) {
                                       setState(() {
-                                        ch = newValue.toString();
+                                        etat = newValue.toString();
                                       });
                                     },
                                     items: listItem.map((valueItem) {
@@ -267,7 +276,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const Tabletest()));
+                                            const LigneCommande()));
                               },
                               child: const Text(
                                 "Ajouter Lignes de la commande",
@@ -362,10 +371,10 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                     ),
                                     validator: (value) {
                                       if (value!.isEmpty) {
-                                        return "Veuillez entrer valeur de remise ";
+                                        return "Veuillez entrer valeur\n de remise ";
                                       }
                                       if (!RegExp("%").hasMatch(value)) {
-                                        return "Veuillez entrer  valeur avec % ";
+                                        return "Veuillez entrer\n  valeur avec % ";
                                       }
                                       return null;
                                     },
@@ -432,7 +441,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                         color: Colors.black,
                                       ),
                                       Text(
-                                        "Total: $taxe",
+                                        "Total: $total",
                                         style: const TextStyle(fontSize: 20),
                                       ),
                                     ],
