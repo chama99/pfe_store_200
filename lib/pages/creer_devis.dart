@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:chama_projet/pages/LigneDECommande.dart';
 import 'package:chama_projet/services/commande.dart';
 import 'package:chama_projet/services/contact.dart';
+import 'package:chama_projet/services/devis.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -82,6 +83,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
 
   List userContactList = [];
   List commandeList = [];
+  List listTotal = [];
 
   fetchDatabaseList() async {
     dynamic resultant = await Contact().getContactListByNom();
@@ -95,6 +97,22 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
         userContactList = resultant;
         commandeList = resultant2;
       });
+    }
+  }
+
+  addList() {
+    double sousTotal = 0.00;
+    for (var i = 0; i < commandeList.length; i++) {
+      sousTotal = commandeList[i]["Quantite"] * commandeList[i]["prix"];
+
+      listTotal.add(sousTotal);
+    }
+  }
+
+  calculMontat() {
+    addList();
+    for (var x in listTotal) {
+      montant = montant + x;
     }
   }
 
@@ -117,7 +135,9 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
               child: ElevatedButton(
                 onPressed: () {
                   // Validate returns true if the form is valid, otherwise false.
-                  if (_formKey.currentState!.validate()) {}
+                  if (_formKey.currentState!.validate()) {
+                    Devis().addDevis(titre, client, etat, total);
+                  }
                 },
                 child: const Text(
                   "Sauvgarder",
@@ -329,7 +349,28 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                   )
                                 ],
                                 rows: [
-                                  DataRow(cells: getCells(lists)),
+                                  for (var i = 0;
+                                      i < commandeList.length;
+                                      i++) ...[
+                                    DataRow(cells: [
+                                      DataCell(
+                                          Text(commandeList[i]['Article'])),
+                                      DataCell(
+                                          Text(commandeList[i]['Description'])),
+                                      DataCell(Text(
+                                          "${commandeList[i]['Quantite']}")),
+                                      DataCell(
+                                          Text("${commandeList[i]['Unite']}")),
+                                      DataCell(
+                                          Text("${commandeList[i]['prix']}")),
+                                      DataCell(
+                                          Text("${commandeList[i]['réf']}")),
+                                      DataCell(
+                                          Text("${commandeList[i]['taxe']}")),
+                                      DataCell(Text(
+                                          "${commandeList[i]["Quantite"] * commandeList[i]["prix"]}")),
+                                    ]),
+                                  ]
                                 ],
                               ),
                             ),
@@ -391,6 +432,9 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                   // Validate returns true if the form is valid, otherwise false.
                                   if (_formKey.currentState!.validate()) {
                                     _streamController.add(Contolleremise.text);
+                                    calculMontat();
+                                    taxe = 0.2;
+                                    total = (taxe + montant) - remisee;
                                   }
                                 },
                                 child: const Text(
@@ -449,6 +493,25 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                 ),
                               ),
                             ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // Validate returns true if the form is valid, otherwise false.
+                                if (_formKey.currentState!.validate()) {
+                                  Devis().addDevis(
+                                      titre.text, client, etat, total);
+                                  Commande().deleteCommande();
+                                }
+                              },
+                              child: const Text(
+                                "Sauvgarder",
+                                style: TextStyle(fontSize: 18.0),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.indigo),
+                            ),
                           ),
                         ],
                       )),

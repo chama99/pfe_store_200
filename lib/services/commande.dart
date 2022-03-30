@@ -41,4 +41,13 @@ class Commande {
         .catchError(
             (error) => showToast("Échec de l'ajout de la commande:$error"));
   }
+
+  Future<void> deleteCommande() {
+    // print("Employe Deleted $id");
+    return commande.get().then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.delete();
+      }
+    });
+  }
 }

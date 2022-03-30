@@ -174,6 +174,7 @@ class _LigneCommandeState extends State<LigneCommande> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    keyboardType: TextInputType.number,
                     controller: qt,
                     decoration: InputDecoration(
                       hintText: 'Quantité',
@@ -203,6 +204,7 @@ class _LigneCommandeState extends State<LigneCommande> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    keyboardType: TextInputType.number,
                     controller: prix,
                     decoration: InputDecoration(
                       hintText: 'Prix unitaire',
@@ -233,7 +235,6 @@ class _LigneCommandeState extends State<LigneCommande> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     controller: taxe,
-                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: 'Taxes (%)',
                       filled: true,

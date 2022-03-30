@@ -22,14 +22,13 @@ class Devis {
     }
   }
 
-  Future<void> addDevis(titre, client, etat, commande, total) {
+  Future<void> addDevis(titre, client, etat, total) {
     return devis
         .doc(titre)
         .set({
           'titre': titre,
           'client': client,
           'etat': etat,
-          'commande': commande,
           'total': total,
         })
         // ignore: avoid_print
