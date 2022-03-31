@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, unused_local_variable
+// ignore_for_file: file_names, unused_local_variable, camel_case_types
 
 import 'package:chama_projet/pages/employe_detaille.dart';
 import 'package:chama_projet/widget/boitedialogue.dart';

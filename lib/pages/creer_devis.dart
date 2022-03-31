@@ -4,7 +4,9 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'package:chama_projet/pages/LigneDECommande.dart';
+import 'package:chama_projet/pages/listDevis.dart';
 import 'package:chama_projet/services/commande.dart';
 import 'package:chama_projet/services/contact.dart';
 import 'package:chama_projet/services/devis.dart';
@@ -15,6 +17,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multiselect/flutter_multiselect.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
@@ -84,6 +88,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
   List userContactList = [];
   List commandeList = [];
   List listTotal = [];
+  List list = [];
 
   fetchDatabaseList() async {
     dynamic resultant = await Contact().getContactListByNom();
@@ -104,10 +109,13 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
     double sousTotal = 0.00;
     for (var i = 0; i < commandeList.length; i++) {
       sousTotal = commandeList[i]["Quantite"] * commandeList[i]["prix"];
+      list.add(commandeList[i]);
 
       listTotal.add(sousTotal);
     }
   }
+
+  var ch = "Nouveau";
 
   calculMontat() {
     addList();
@@ -125,28 +133,11 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
 
   @override
   Widget build(BuildContext context) {
+    final number = Random().nextInt(20);
     return Scaffold(
         appBar: AppBar(
           title: const Text("Créer Un Devis"),
           backgroundColor: Colors.orange,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: ElevatedButton(
-                onPressed: () {
-                  // Validate returns true if the form is valid, otherwise false.
-                  if (_formKey.currentState!.validate()) {
-                    Devis().addDevis(titre, client, etat, total);
-                  }
-                },
-                child: const Text(
-                  "Sauvgarder",
-                  style: TextStyle(fontSize: 18.0),
-                ),
-                style: ElevatedButton.styleFrom(primary: Colors.indigo),
-              ),
-            ),
-          ],
         ),
         body: RefreshIndicator(
           onRefresh: () {
@@ -174,120 +165,14 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                           child: ListView(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: TextFormField(
-                              controller: titre,
-                              decoration: InputDecoration(
-                                hintText: 'Titire',
-                                filled: true,
-                                fillColor: Colors.white,
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: const BorderSide(
-                                      color: Colors.orange, width: 1.5),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: const BorderSide(
-                                    color: Colors.orange,
-                                    width: 1.5,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.all(13),
-                                child: Text(
-                                  "Client",
-                                  style:
-                                      TextStyle(fontSize: 15, letterSpacing: 3),
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(left: 38),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                        color: Colors.grey, width: 1.5)),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                    dropdownColor: Colors.white,
-                                    icon: const Padding(
-                                      padding: EdgeInsets.only(left: 115),
-                                      child: Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Colors.orange,
-                                      ),
-                                    ),
-                                    style: const TextStyle(
-                                        fontSize: 20, color: Colors.black),
-                                    iconSize: 40,
-                                    value: client,
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        client = newValue.toString();
-                                      });
-                                    },
-                                    items: userContactList.map((valueItem) {
-                                      return DropdownMenuItem(
-                                        value: valueItem,
-                                        child: Text(valueItem),
-                                      );
-                                    }).toList(),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.all(20),
-                                child: Text(
-                                  "Etat",
-                                  style:
-                                      TextStyle(fontSize: 15, letterSpacing: 3),
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(left: 43),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                        color: Colors.grey, width: 1.5)),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                    dropdownColor: Colors.white,
-                                    icon: const Padding(
-                                      padding: EdgeInsets.only(left: 20),
-                                      child: Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Colors.orange,
-                                      ),
-                                    ),
-                                    style: const TextStyle(
-                                        fontSize: 20, color: Colors.black),
-                                    iconSize: 40,
-                                    value: etat,
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        etat = newValue.toString();
-                                      });
-                                    },
-                                    items: listItem.map((valueItem) {
-                                      return DropdownMenuItem(
-                                        value: valueItem,
-                                        child: Text(valueItem),
-                                      );
-                                    }).toList(),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                              padding: const EdgeInsets.all(10),
+                              child: Text(
+                                ch,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30,
+                                    color: Colors.grey),
+                              )),
                           Padding(
                             padding: const EdgeInsets.all(13),
                             child: InkWell(
@@ -376,6 +261,98 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                             ),
                           ),
                           Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(13),
+                                child: Text(
+                                  "Client",
+                                  style:
+                                      TextStyle(fontSize: 15, letterSpacing: 3),
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(left: 38),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(
+                                        color: Colors.grey, width: 1.5)),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton(
+                                    dropdownColor: Colors.white,
+                                    icon: const Padding(
+                                      padding: EdgeInsets.only(left: 115),
+                                      child: Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.orange,
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                        fontSize: 20, color: Colors.black),
+                                    iconSize: 40,
+                                    value: client,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        client = newValue.toString();
+                                      });
+                                    },
+                                    items: userContactList.map((valueItem) {
+                                      return DropdownMenuItem(
+                                        value: valueItem,
+                                        child: Text(valueItem),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Text(
+                                  "État",
+                                  style:
+                                      TextStyle(fontSize: 15, letterSpacing: 3),
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(left: 43),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(
+                                        color: Colors.grey, width: 1.5)),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton(
+                                    dropdownColor: Colors.white,
+                                    icon: const Padding(
+                                      padding: EdgeInsets.only(left: 20),
+                                      child: Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.orange,
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                        fontSize: 20, color: Colors.black),
+                                    iconSize: 40,
+                                    value: etat,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        etat = newValue.toString();
+                                      });
+                                    },
+                                    items: listItem.map((valueItem) {
+                                      return DropdownMenuItem(
+                                        value: valueItem,
+                                        child: Text(valueItem),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
@@ -449,10 +426,8 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                           Row(
                             children: [
                               Container(
-                                width: 220,
+                                width: 350,
                                 height: 200,
-                                margin: const EdgeInsets.only(
-                                    top: 30, right: 50, left: 80, bottom: 40),
                                 decoration: const BoxDecoration(
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(10),
@@ -495,14 +470,18 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                             ],
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.only(left: 10, right: 10),
                             child: ElevatedButton(
                               onPressed: () {
                                 // Validate returns true if the form is valid, otherwise false.
                                 if (_formKey.currentState!.validate()) {
-                                  Devis().addDevis(
-                                      titre.text, client, etat, total);
+                                  // ignore: prefer_adjacent_string_concatenation
+                                  ch = "S" + "$number";
+
+                                  Devis()
+                                      .addDevis(ch, client, etat, total, list);
                                   Commande().deleteCommande();
+                                  Get.to(() => const ListDevis());
                                 }
                               },
                               child: const Text(

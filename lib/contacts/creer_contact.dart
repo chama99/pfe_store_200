@@ -33,6 +33,7 @@ class _CreeContactPageState extends State<CreeContactPage> {
   final ImagePicker picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
   late String imageUrl;
+  // ignore: prefer_typing_uninitialized_variables
   var radio;
   String client = "client";
   String fournisseur = "fournisseur";

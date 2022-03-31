@@ -2,8 +2,10 @@
 
 import 'package:chama_projet/services/commande.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../widget/toast.dart';
+import 'creer_devis.dart';
 
 class LigneCommande extends StatefulWidget {
   const LigneCommande({Key? key}) : super(key: key);
@@ -279,6 +281,7 @@ class _LigneCommandeState extends State<LigneCommande> {
                                 double.parse(prix.text),
                                 taxe.text);
                             clearText();
+                            Get.to(() => const CreeDevisPage());
                           } else {
                             showToast("veuillez sélectionner poste occupé ");
                           }

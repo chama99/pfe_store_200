@@ -2,7 +2,6 @@
 
 import 'package:chama_projet/services/user.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../widget/toast.dart';
 

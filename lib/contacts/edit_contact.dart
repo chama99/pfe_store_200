@@ -19,6 +19,7 @@ class EditContact extends StatefulWidget {
 }
 
 class _EditContactState extends State<EditContact> {
+  // ignore: prefer_typing_uninitialized_variables
   var radio;
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;

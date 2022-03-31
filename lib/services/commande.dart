@@ -25,8 +25,7 @@ class Commande {
 
   Future<void> addCommande(ref, article, des, unite, qt, prix, taxe) {
     return commande
-        .doc()
-        .set({
+        .add({
           'réf': ref,
           'Article': article,
           'Description': des,

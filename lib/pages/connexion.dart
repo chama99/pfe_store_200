@@ -77,7 +77,7 @@ class _connexion extends State<Connexion> {
         }
       });
     } else {
-      showToast(" Mauvais nom d'utilisateur ");
+      showToast(" Email n'existe pas ");
     }
   }
 

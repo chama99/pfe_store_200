@@ -1,11 +1,15 @@
 // ignore_for_file: file_names, unused_local_variable
 
-import 'package:chama_projet/pages/employe_detaille.dart';
+import 'package:chama_projet/services/commande.dart';
+import 'package:chama_projet/services/devis.dart';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
-import '../services/employe.dart';
+import '../widget/boitedialogue.dart';
 import 'creer_devis.dart';
+import 'devis_detailler.dart';
 
 class ListDevis extends StatefulWidget {
   const ListDevis({Key? key}) : super(key: key);
@@ -17,7 +21,8 @@ class ListDevis extends StatefulWidget {
 class _ListDevisState extends State<ListDevis> {
   TextEditingController searchcontroller = TextEditingController();
   TextEditingController editingController = TextEditingController();
-  List userProfilesList = [];
+  // ignore: non_constant_identifier_names
+  List Listdevis = [];
   @override
   void initState() {
     super.initState();
@@ -26,14 +31,14 @@ class _ListDevisState extends State<ListDevis> {
   }
 
   fetchDatabaseList() async {
-    dynamic resultant = await Employe().getEmployesList();
+    dynamic resultant = await Devis().getDevisList();
 
     if (resultant == null) {
       // ignore: avoid_print
       print('Unable to retrieve');
     } else {
       setState(() {
-        userProfilesList = resultant;
+        Listdevis = resultant;
       });
     }
   }
@@ -101,7 +106,7 @@ class _ListDevisState extends State<ListDevis> {
                 ),
               ),
               Expanded(
-                child: userProfilesList.isEmpty
+                child: Listdevis.isEmpty
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
@@ -117,48 +122,41 @@ class _ListDevisState extends State<ListDevis> {
                           return Future.value(false);
                         },
                         child: ListView.builder(
-                            itemCount: userProfilesList.length,
+                            itemCount: Listdevis.length,
                             itemBuilder: (context, index) {
-                              final employe = userProfilesList[index];
+                              final devis = Listdevis[index];
                               return Card(
                                   child: InkWell(
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => EmployeDetail(
-                                                image: userProfilesList[index]
-                                                    ['image'],
-                                                email: userProfilesList[index]
-                                                    ['email'],
-                                                nom: userProfilesList[index]
-                                                    ['name'],
-                                                tel: userProfilesList[index]
-                                                    ['portable professionnel'],
-                                                adresse: userProfilesList[index]
-                                                    ['Adresse professionnelle'],
-                                                role: userProfilesList[index]
-                                                    ['role'],
-                                              )));
+                                  Get.to(() => DevisDetailler(
+                                        titre: devis["titre"],
+                                        client: devis["client"],
+                                        etat: devis["etat"],
+                                        commande: devis["commande"],
+                                        total: devis["total"],
+                                      ));
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),
                                 child: ListTile(
-                                  title: Text(employe["name"]),
-                                  subtitle: Text(employe["email"]),
+                                  title: Text(devis["etat"]),
                                   trailing: IconButton(
                                     onPressed: () => {
-                                      Employe().deleteEmploye(employe["name"])
+                                      openDialog(
+                                          context,
+                                          devis["titre"],
+                                          "Êtes-vous sûr de vouloir supprimer cet devis",
+                                          "devis")
                                     },
                                     icon: const Icon(
                                       Icons.delete,
                                       color: Colors.red,
                                     ),
                                   ),
-                                  leading: CircleAvatar(
-                                    radius: 20.0,
-                                    backgroundImage:
-                                        NetworkImage(employe['image']),
+                                  leading: Text(
+                                    devis["titre"],
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ));
@@ -170,13 +168,13 @@ class _ListDevisState extends State<ListDevis> {
   }
 
   void filterSearchResults(String query) {
-    final suggestions = userProfilesList.where((employe) {
-      final namemploye = employe['name'].toLowerCase();
+    final suggestions = Listdevis.where((devis) {
+      final namemploye = devis['titre'].toLowerCase();
       final input = query.toLowerCase();
       return namemploye.contains(input);
     }).toList();
     setState(() {
-      userProfilesList = suggestions;
+      Listdevis = suggestions;
     });
   }
 }
