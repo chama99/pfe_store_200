@@ -44,9 +44,9 @@ class _MenuAdminState extends State<MenuAdmin> {
           children: <Widget>[
             for (var x in widget.acces) ...[
               if (x == "Configuration") ...[buildInputCardConfig(widget.name)],
-              if (x == "Employé") ...[buildInputCardEmploye()],
+              if (x == "Employés") ...[buildInputCardEmploye()],
               if (x == "Devis") ...[buildInputCardDevis()],
-              if (x == "Contact") ...[buildInputCardContact()],
+              if (x == "Contacts") ...[buildInputCardContact()],
             ]
           ],
         ),

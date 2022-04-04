@@ -1,6 +1,6 @@
 // ignore_for_file: file_names, must_be_immutable
 
-import 'package:chama_projet/pages/update_employe.dart';
+import 'package:chama_projet/employes.dart/update_employe.dart';
 import 'package:flutter/material.dart';
 
 class EmployeDetail extends StatefulWidget {

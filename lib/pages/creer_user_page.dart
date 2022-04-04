@@ -3,6 +3,7 @@
 // ignore: avoid_web_libraries_in_flutter
 
 import 'dart:io';
+import 'package:chama_projet/pages/listUser.dart';
 import 'package:chama_projet/services/user.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -10,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
@@ -44,11 +46,12 @@ class _AddUserPageState extends State<AddUserPage> {
   var email = "";
   var password = "";
   var r = "Poste occupé ";
-  var nom = "";
+  // ignore: prefer_typing_uninitialized_variables
+  var nom;
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final nomController = TextEditingController();
+
   final confirmpassword = TextEditingController();
   List listItem = ["Technicien", "Comptable"];
   bool isHiddenPassword = true;
@@ -90,7 +93,6 @@ class _AddUserPageState extends State<AddUserPage> {
     confirmpassword.dispose();
     emailController.dispose();
     passwordController.dispose();
-    nomController.dispose();
 
     super.dispose();
   }
@@ -99,7 +101,7 @@ class _AddUserPageState extends State<AddUserPage> {
     confirmpassword.clear();
     emailController.clear();
     passwordController.clear();
-    nomController.clear();
+    nom = null;
   }
 
   ImageProvider<Object> networkImage = NetworkImage(
@@ -169,24 +171,40 @@ class _AddUserPageState extends State<AddUserPage> {
                       Expanded(
                           child: ListView(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: 15, left: 10, right: 10),
-                            child: TextFormField(
-                              controller: nomController,
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: buildInputDecoration(
-                                Icons.person,
-                                "Nom",
-                                color: Colors.white,
+                          Container(
+                            margin: const EdgeInsets.only(
+                                left: 15, bottom: 10, right: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1.5)),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                hint: const Text("Nom de l'employé "),
+                                dropdownColor: Colors.white,
+                                icon: const Padding(
+                                  padding: EdgeInsets.only(left: 115),
+                                  child: Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Colors.orange,
+                                  ),
+                                ),
+                                style: const TextStyle(
+                                    fontSize: 20, color: Colors.black),
+                                iconSize: 40,
+                                value: nom,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    nom = newValue.toString();
+                                  });
+                                },
+                                items: NomsEmpList.map((valueItem) {
+                                  return DropdownMenuItem(
+                                    value: valueItem,
+                                    child: Text(valueItem),
+                                  );
+                                }).toList(),
                               ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Veuillez entrer  adresse e-mail ";
-                                }
-
-                                return null;
-                              },
                             ),
                           ),
                           Padding(
@@ -300,12 +318,11 @@ class _AddUserPageState extends State<AddUserPage> {
                                 onPressed: () {
                                   // Validate returns true if the form is valid, otherwise false.
                                   if (_formKey.currentState!.validate() &&
-                                      Test(nomController.text, NomsEmpList)) {
+                                      nom != null) {
                                     if (Test(emailController.text, EmailUser) ==
                                         false) {
                                       if (ch != null) {
                                         setState(() {
-                                          nom = nomController.text;
                                           email = emailController.text;
                                           password = passwordController.text;
                                           role = ch;
@@ -324,7 +341,7 @@ class _AddUserPageState extends State<AddUserPage> {
                                           ch = null;
                                           imageFile = null;
 
-                                          print(NomsEmpList);
+                                          Get.to(() => ListUser());
                                         });
                                       } else {
                                         showToast(
@@ -334,7 +351,8 @@ class _AddUserPageState extends State<AddUserPage> {
                                       showToast("Email déja exitait");
                                     }
                                   } else {
-                                    showToast("Nom de l'employé n'existe pas");
+                                    showToast(
+                                        "veuillez sélectionner Nom de l'employé");
                                   }
                                 },
                                 child: const Text(

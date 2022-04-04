@@ -1,5 +1,6 @@
 // ignore_for_file: unused_import
 
+import 'package:chama_projet/widget/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
@@ -17,9 +18,10 @@ class User {
           'acces': [],
         })
         // ignore: avoid_print
-        .then((value) => print('User Added'))
+        .then((value) => showToast("Utilisateur ajouté"))
         // ignore: avoid_print
-        .catchError((error) => print('Failed to Add user: $error'));
+        .catchError(
+            (error) => showToast("Échec de l'ajout de l'utilisateur : $error"));
   }
 
   Future getUsersList() async {
@@ -69,9 +71,10 @@ class User {
           'acces': acces,
         })
         // ignore: avoid_print
-        .then((value) => print("User Updated"))
+        .then((value) => showToast("Mise à jour de l'utilisateur"))
         // ignore: avoid_print
-        .catchError((error) => print("Failed to update user: $error"));
+        .catchError((error) =>
+            showToast("Échec de la mise à jour de l'utilisateur : $error"));
   }
 
   Future<void> deleteUser(id) {
@@ -80,9 +83,10 @@ class User {
         .doc(id)
         .delete()
         // ignore: avoid_print
-        .then((value) => print('User Deleted'))
+        .then((value) => showToast("Utilisateur supprimé"))
         // ignore: avoid_print
-        .catchError((error) => print('Failed to Delete employé: $error'));
+        .catchError((error) =>
+            showToast("Échec de la suppression de l'employé : $error"));
   }
 
   Future getListUserTech() async {

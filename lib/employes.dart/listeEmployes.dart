@@ -1,28 +1,24 @@
-// ignore_for_file: file_names, unused_local_variable
+// ignore_for_file: file_names, unused_local_variable, camel_case_types
 
-import 'package:chama_projet/services/commande.dart';
-import 'package:chama_projet/services/devis.dart';
+import 'package:chama_projet/widget/boitedialogue.dart';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
-import '../widget/boitedialogue.dart';
-import 'creer_devis.dart';
-import 'devis_detailler.dart';
+import '../services/employe.dart';
+import 'creer_employe.dart';
+import 'employe_detaille.dart';
 
-class ListDevis extends StatefulWidget {
-  const ListDevis({Key? key}) : super(key: key);
+class listEmploye extends StatefulWidget {
+  const listEmploye({Key? key}) : super(key: key);
 
   @override
-  _ListDevisState createState() => _ListDevisState();
+  _listEmployeState createState() => _listEmployeState();
 }
 
-class _ListDevisState extends State<ListDevis> {
+class _listEmployeState extends State<listEmploye> {
   TextEditingController searchcontroller = TextEditingController();
   TextEditingController editingController = TextEditingController();
-  // ignore: non_constant_identifier_names
-  List Listdevis = [];
+  List userProfilesList = [];
   @override
   void initState() {
     super.initState();
@@ -31,14 +27,14 @@ class _ListDevisState extends State<ListDevis> {
   }
 
   fetchDatabaseList() async {
-    dynamic resultant = await Devis().getDevisList();
+    dynamic resultant = await Employe().getEmployesList();
 
     if (resultant == null) {
       // ignore: avoid_print
       print('Unable to retrieve');
     } else {
       setState(() {
-        Listdevis = resultant;
+        userProfilesList = resultant;
       });
     }
   }
@@ -47,7 +43,7 @@ class _ListDevisState extends State<ListDevis> {
   var length;
 
   // ignore: unnecessary_new
-  Widget appBarTitle = const Text("Devis");
+  Widget appBarTitle = const Text("Employés");
   Icon actionIcon = const Icon(Icons.search);
   @override
   Widget build(BuildContext context) {
@@ -62,7 +58,7 @@ class _ListDevisState extends State<ListDevis> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CreeDevisPage()));
+                          builder: (context) => const CreeEmployePage()));
                 },
                 child: Text(
                   "Créer".toUpperCase(),
@@ -106,7 +102,7 @@ class _ListDevisState extends State<ListDevis> {
                 ),
               ),
               Expanded(
-                child: Listdevis.isEmpty
+                child: userProfilesList.isEmpty
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
@@ -115,48 +111,59 @@ class _ListDevisState extends State<ListDevis> {
                           Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
-                                  pageBuilder: (a, b, c) => const ListDevis(),
+                                  pageBuilder: (a, b, c) => const listEmploye(),
                                   transitionDuration:
                                       const Duration(seconds: 0)));
                           // ignore: void_checks
                           return Future.value(false);
                         },
                         child: ListView.builder(
-                            itemCount: Listdevis.length,
+                            itemCount: userProfilesList.length,
                             itemBuilder: (context, index) {
-                              final devis = Listdevis[index];
+                              final employe = userProfilesList[index];
                               return Card(
                                   child: InkWell(
                                 onTap: () {
-                                  Get.to(() => DevisDetailler(
-                                        titre: devis["titre"],
-                                        client: devis["client"],
-                                        etat: devis["etat"],
-                                        commande: devis["commande"],
-                                        total: devis["total"],
-                                      ));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => EmployeDetail(
+                                                image: userProfilesList[index]
+                                                    ['image'],
+                                                email: userProfilesList[index]
+                                                    ['email'],
+                                                nom: userProfilesList[index]
+                                                    ['name'],
+                                                tel: userProfilesList[index]
+                                                    ['portable professionnel'],
+                                                adresse: userProfilesList[index]
+                                                    ['Adresse professionnelle'],
+                                                role: userProfilesList[index]
+                                                    ['role'],
+                                              )));
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),
                                 child: ListTile(
-                                  title: Text(devis["etat"]),
+                                  title: Text(employe["name"]),
+                                  subtitle: Text(employe["email"]),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          devis["titre"],
-                                          "Êtes-vous sûr de vouloir supprimer cet devis",
-                                          "devis")
+                                          employe["name"],
+                                          "Êtes-vous sûr de vouloir supprimer cet employé",
+                                          "employé")
                                     },
                                     icon: const Icon(
                                       Icons.delete,
                                       color: Colors.red,
                                     ),
                                   ),
-                                  leading: Text(
-                                    devis["titre"],
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
+                                  leading: CircleAvatar(
+                                    radius: 20.0,
+                                    backgroundImage:
+                                        NetworkImage(employe['image']),
                                   ),
                                 ),
                               ));
@@ -168,13 +175,13 @@ class _ListDevisState extends State<ListDevis> {
   }
 
   void filterSearchResults(String query) {
-    final suggestions = Listdevis.where((devis) {
-      final namemploye = devis['titre'].toLowerCase();
+    final suggestions = userProfilesList.where((employe) {
+      final namemploye = employe['name'].toLowerCase();
       final input = query.toLowerCase();
       return namemploye.contains(input);
     }).toList();
     setState(() {
-      Listdevis = suggestions;
+      userProfilesList = suggestions;
     });
   }
 }

@@ -1,6 +1,7 @@
-import 'package:chama_projet/pages/listDevis.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../devis.dart/listDevis.dart';
 
 Card buildInputCardDevis() {
   return Card(

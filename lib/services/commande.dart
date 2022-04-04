@@ -23,7 +23,8 @@ class Commande {
     }
   }
 
-  Future<void> addCommande(ref, article, des, unite, qt, prix, taxe) {
+  Future<void> addCommande(
+      ref, article, des, unite, qt, prix, taxe, soustotal) {
     return commande
         .add({
           'réf': ref,
@@ -32,7 +33,8 @@ class Commande {
           'Unite': unite,
           'Quantite': qt,
           'prix': prix,
-          'taxe': taxe
+          'taxe': taxe,
+          'sous-total': soustotal
         })
         // ignore: avoid_print
         .then((value) => showToast("Commande ajoutée"))

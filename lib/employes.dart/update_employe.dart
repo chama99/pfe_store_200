@@ -3,11 +3,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
 import '../services/employe.dart';
 import '../widget/InputDeco_design.dart';
+import 'listeEmployes.dart';
 
 class UpdateEmployePage extends StatefulWidget {
   final String nom;
@@ -124,12 +126,6 @@ class _UpdateEmployePageState extends State<UpdateEmployePage> {
                             "Tel",
                             color: Colors.white,
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Entrer Name';
-                            }
-                            return null;
-                          },
                         ),
                       ),
                       Container(
@@ -161,7 +157,7 @@ class _UpdateEmployePageState extends State<UpdateEmployePage> {
                           autofocus: false,
                           onChanged: (value) => adresse = value,
                           decoration: buildInputDecoration(
-                            Icons.email,
+                            Icons.location_on,
                             "Adresse professionnelle",
                             color: Colors.white,
                           ),
@@ -216,7 +212,7 @@ class _UpdateEmployePageState extends State<UpdateEmployePage> {
                                     uploadImage(
                                         email, widget.nom, tel, adresse);
                                   }
-                                  Navigator.pop(context);
+                                  Get.to(() => const listEmploye());
                                 }
                               },
                               child: const Text(

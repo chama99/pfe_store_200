@@ -1,3 +1,4 @@
+import 'package:chama_projet/widget/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Contact {
@@ -35,9 +36,10 @@ class Contact {
           'Etiquette': etiquette,
         })
         // ignore: avoid_print
-        .then((value) => print('Contact Added'))
+        .then((value) => showToast('Contact ajouté'))
         // ignore: avoid_print
-        .catchError((error) => print('Failed to Add contact: $error'));
+        .catchError(
+            (error) => showToast("Échec de l'ajout du contact : $error"));
   }
 
   Future<void> updateContact(email, nom, tel, adresse, type, etiquette, url) {
@@ -52,9 +54,10 @@ class Contact {
           'Etiquette': etiquette,
         })
         // ignore: avoid_print
-        .then((value) => print("Contact Updated"))
+        .then((value) => showToast("Contact mis à jour"))
         // ignore: avoid_print
-        .catchError((error) => print("Failed to update contact: $error"));
+        .catchError((error) =>
+            showToast("Échec de la mise à jour du contact : $error"));
   }
 
   Future<void> deleteContact(id) {
@@ -63,9 +66,10 @@ class Contact {
         .doc(id)
         .delete()
         // ignore: avoid_print
-        .then((value) => print('Contact Deleted'))
+        .then((value) => showToast('Contact supprimé'))
         // ignore: avoid_print
-        .catchError((error) => print('Failed to Delete contact: $error'));
+        .catchError((error) =>
+            showToast('Échec de la suppression du contact : $error'));
   }
 
   Future getContactListByNom() async {

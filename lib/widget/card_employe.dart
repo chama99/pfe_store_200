@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../pages/listeEmployes.dart';
+import '../employes.dart/listeEmployes.dart';
 
 Card buildInputCardEmploye() {
   return Card(

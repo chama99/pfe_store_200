@@ -5,8 +5,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'package:chama_projet/pages/LigneDECommande.dart';
-import 'package:chama_projet/pages/listDevis.dart';
+
 import 'package:chama_projet/services/commande.dart';
 import 'package:chama_projet/services/contact.dart';
 import 'package:chama_projet/services/devis.dart';
@@ -24,6 +23,8 @@ import 'package:path/path.dart';
 
 import '../services/employe.dart';
 import '../widget/InputDeco_design.dart';
+import 'LigneDECommande.dart';
+import 'listDevis.dart';
 
 class CreeDevisPage extends StatefulWidget {
   const CreeDevisPage({Key? key}) : super(key: key);
@@ -106,21 +107,16 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
   }
 
   addList() {
-    double sousTotal = 0.00;
     for (var i = 0; i < commandeList.length; i++) {
-      sousTotal = commandeList[i]["Quantite"] * commandeList[i]["prix"];
       list.add(commandeList[i]);
-
-      listTotal.add(sousTotal);
     }
   }
 
   var ch = "Nouveau";
 
   calculMontat() {
-    addList();
-    for (var x in listTotal) {
-      montant = montant + x;
+    for (var i = 0; i < commandeList.length; i++) {
+      montant = montant + commandeList[i]["sous-total"];
     }
   }
 
@@ -201,6 +197,10 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                 sortColumnIndex: sortColumnIndex,
                                 columns: [
                                   DataColumn(
+                                    label: const Text("Numéro de ligne "),
+                                    onSort: onSort,
+                                  ),
+                                  DataColumn(
                                     label: const Text("réf"),
                                     onSort: onSort,
                                   ),
@@ -238,22 +238,21 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                       i < commandeList.length;
                                       i++) ...[
                                     DataRow(cells: [
+                                      DataCell(Text("$i")),
+                                      DataCell(
+                                          Text("${commandeList[i]['réf']}")),
                                       DataCell(
                                           Text(commandeList[i]['Article'])),
                                       DataCell(
                                           Text(commandeList[i]['Description'])),
+                                      DataCell(Text(commandeList[i]['Unite'])),
                                       DataCell(Text(
                                           "${commandeList[i]['Quantite']}")),
                                       DataCell(
-                                          Text("${commandeList[i]['Unite']}")),
-                                      DataCell(
                                           Text("${commandeList[i]['prix']}")),
-                                      DataCell(
-                                          Text("${commandeList[i]['réf']}")),
-                                      DataCell(
-                                          Text("${commandeList[i]['taxe']}")),
+                                      const DataCell(Text("${0.2}")),
                                       DataCell(Text(
-                                          "${commandeList[i]["Quantite"] * commandeList[i]["prix"]}")),
+                                          "${commandeList[i]["sous-total"]}")),
                                     ]),
                                   ]
                                 ],
@@ -477,9 +476,10 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                 if (_formKey.currentState!.validate()) {
                                   // ignore: prefer_adjacent_string_concatenation
                                   ch = "S" + "$number";
+                                  addList();
 
-                                  Devis()
-                                      .addDevis(ch, client, etat, total, list);
+                                  Devis().addDevis(ch, client, etat, total,
+                                      list, remisee, montant);
                                   Commande().deleteCommande();
                                   Get.to(() => const ListDevis());
                                 }
@@ -509,7 +509,4 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
       isAscending = ascending;
     });
   }
-
-  List<DataCell> getCells(List<dynamic> cells) =>
-      cells.map((data) => DataCell(Text('$data'))).toList();
 }

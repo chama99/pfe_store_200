@@ -4,10 +4,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:get/get.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
 import '../widget/InputDeco_design.dart';
+import 'contact_home_page.dart';
 
 class EditContact extends StatefulWidget {
   final String nom;
@@ -106,6 +109,7 @@ class _EditContactState extends State<EditContact> {
                           )
                         ]),
                       ),
+
                       Container(
                         margin: const EdgeInsets.symmetric(vertical: 10.0),
                         child: TextFormField(
@@ -118,12 +122,6 @@ class _EditContactState extends State<EditContact> {
                             "Tel",
                             color: Colors.white,
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Entrer Name';
-                            }
-                            return null;
-                          },
                         ),
                       ),
                       Container(
@@ -184,9 +182,6 @@ class _EditContactState extends State<EditContact> {
                               onPressed: () {
                                 // Validate returns true if the form is valid, otherwise false.
                                 if (_formKey.currentState!.validate()) {
-                                  if (radio != null) {
-                                    type = radio;
-                                  }
                                   if (imageFile == null) {
                                     Contact().updateContact(email, nom, tel,
                                         adresse, type, etiquette, url);
@@ -194,7 +189,7 @@ class _EditContactState extends State<EditContact> {
                                     uploadImage(email, widget.nom, tel, adresse,
                                         type, etiquette);
                                   }
-                                  Navigator.pop(context);
+                                  Get.to(() => const listContact());
                                 }
                               },
                               child: const Text(

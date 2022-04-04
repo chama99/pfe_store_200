@@ -1,3 +1,4 @@
+import 'package:chama_projet/widget/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Employe {
@@ -41,9 +42,10 @@ class Employe {
           'Adresse professionnelle': adresse,
         })
         // ignore: avoid_print
-        .then((value) => print('Employé Added'))
+        .then((value) => showToast('Employé Ajouté'))
         // ignore: avoid_print
-        .catchError((error) => print('Failed to Add employé: $error'));
+        .catchError(
+            (error) => showToast("Échec de l'ajout de l'employé : $error"));
   }
 
   Future<void> updateEmploye(email, nom, tel, adresse, role, url) {
@@ -57,9 +59,10 @@ class Employe {
           'image': url,
         })
         // ignore: avoid_print
-        .then((value) => print("Employe Updated"))
+        .then((value) => showToast("Employé mis à jour"))
         // ignore: avoid_print
-        .catchError((error) => print("Failed to update employé: $error"));
+        .catchError((error) =>
+            showToast("Échec de la mise à jour de l'employé : $error"));
   }
 
   Future<void> deleteEmploye(id) {
@@ -68,9 +71,10 @@ class Employe {
         .doc(id)
         .delete()
         // ignore: avoid_print
-        .then((value) => print('Employe Deleted'))
+        .then((value) => print(showToast("Employé supprimé")))
         // ignore: avoid_print
-        .catchError((error) => print('Failed to Delete employé: $error'));
+        .catchError((error) =>
+            showToast("Échec de la suppression de l'employé : $error"));
   }
 
   Future getEmployesListByNom() async {

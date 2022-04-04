@@ -1,11 +1,13 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:chama_projet/pages/listUser.dart';
 import 'package:chama_projet/services/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import '../widget/InputDeco_design.dart';
@@ -194,7 +196,7 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
                                   } else {
                                     uploadImage(email, mdp, role);
                                   }
-                                  Navigator.pop(context);
+                                  Get.to(() => const ListUser());
                                 }
                               },
                               child: const Text(

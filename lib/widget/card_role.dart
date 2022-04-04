@@ -17,11 +17,11 @@ Card buildInputCardRole() {
           mainAxisSize: MainAxisSize.min,
           children: const <Widget>[
             Icon(
-              Icons.add_box,
+              Icons.card_membership,
               size: 70,
               color: Colors.white,
             ),
-            Text("Rôle",
+            Text("Applications",
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.white))
           ],

@@ -4,6 +4,7 @@
 
 import 'dart:io';
 
+import 'package:chama_projet/contacts/contact_home_page.dart';
 import 'package:chama_projet/services/contact.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -12,11 +13,14 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multiselect/flutter_multiselect.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
 import '../services/employe.dart';
 import '../widget/InputDeco_design.dart';
+import '../widget/toast.dart';
 
 class CreeContactPage extends StatefulWidget {
   const CreeContactPage({Key? key}) : super(key: key);
@@ -276,10 +280,11 @@ class _CreeContactPageState extends State<CreeContactPage> {
                                         clearText();
                                         radio = null;
                                         imageFile = null;
+                                        Get.to(() => const listContact());
                                       });
                                     } else {
                                       showToast(
-                                          "veuillez sélectionner poste occupé ");
+                                          "veuillez sélectionner fournisseur ou client ");
                                     }
                                   }
                                 },
@@ -369,11 +374,4 @@ class _CreeContactPageState extends State<CreeContactPage> {
       print('error occured');
     }
   }
-
-  showToast(mssg) => Fluttertoast.showToast(
-      msg: mssg,
-      fontSize: 20,
-      gravity: ToastGravity.CENTER,
-      backgroundColor: Colors.red,
-      textColor: Colors.white);
 }

@@ -1,3 +1,4 @@
+import 'package:chama_projet/widget/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Devis {
@@ -22,7 +23,8 @@ class Devis {
     }
   }
 
-  Future<void> addDevis(titre, client, etat, total, ligneCommande) {
+  Future<void> addDevis(
+      titre, client, etat, total, ligneCommande, remise, montant) {
     return devis
         .doc(titre)
         .set({
@@ -31,27 +33,33 @@ class Devis {
           'etat': etat,
           'total': total,
           'commande': ligneCommande,
+          'remise': remise,
+          'montant': montant
         })
         // ignore: avoid_print
-        .then((value) => print('devis Added'))
+        .then((value) => showToast('devis ajouté'))
         // ignore: avoid_print
-        .catchError((error) => print('Failed to Add devis: $error'));
+        .catchError(
+            (error) => showToast("Échec de l'ajout de l'appareil : $error"));
   }
 
-  Future<void> updateDevis(titre, client, etat, commande, total) {
+  Future<void> updateDevis(titre, client, etat, total, cmd, remise, montant) {
     return devis
         .doc(titre)
         .update({
           'titre': titre,
           'client': client,
           'etat': etat,
-          'commande': commande,
           'total': total,
+          'commande': cmd,
+          'remise': remise,
+          'montant': montant
         })
         // ignore: avoid_print
-        .then((value) => print("devis Updated"))
+        .then((value) => showToast("devis mis à jour"))
         // ignore: avoid_print
-        .catchError((error) => print("Failed to update devis: $error"));
+        .catchError((error) =>
+            showToast("Échec de la mise à jour de l'appareil : $error"));
   }
 
   Future<void> deleteDevis(id) {
@@ -60,9 +68,10 @@ class Devis {
         .doc(id)
         .delete()
         // ignore: avoid_print
-        .then((value) => print('Devis Deleted'))
+        .then((value) => showToast('Devis Deleted'))
         // ignore: avoid_print
-        .catchError((error) => print('Failed to Delete devis: $error'));
+        .catchError((error) =>
+            showToast("Échec de la suppression de l'appareil : $error"));
   }
 
   Future getDevisListByNom() async {

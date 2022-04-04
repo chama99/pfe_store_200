@@ -32,13 +32,13 @@ class AjoutRole extends StatefulWidget {
 class _AjoutRoleState extends State<AjoutRole> {
   List roleList = [];
   var stock = "Stock";
-  var achat = "Achat";
+  var achat = "Achats";
   var devis = "Devis";
   var config = "Configuration";
-  var contact = "Contact";
+  var contact = "Contacts";
   var plan = "Plan";
   var mssg = "Message";
-  var notif = "Notificaion";
+  var notif = "Employés";
   var fact = "facture";
 
   bool t = false;
@@ -65,7 +65,7 @@ class _AjoutRoleState extends State<AjoutRole> {
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
               Text(
-                "Liste De Role",
+                "Liste Des Applications",
                 style: TextStyle(
                     color: Colors.indigo,
                     fontWeight: FontWeight.bold,
