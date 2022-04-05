@@ -6,13 +6,19 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:chama_projet/facture.dart/AjoutLigneFact.dart';
+import 'package:chama_projet/facture.dart/listfact.dart';
 import 'package:chama_projet/services/commande.dart';
 import 'package:chama_projet/services/contact.dart';
 import 'package:chama_projet/services/devis.dart';
+import 'package:chama_projet/services/facture.dart';
+import 'package:chama_projet/services/lignefact.dart';
+import 'package:chama_projet/widget/toast.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multiselect/flutter_multiselect.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,19 +29,22 @@ import 'package:path/path.dart';
 
 import '../services/employe.dart';
 import '../widget/InputDeco_design.dart';
-import 'LigneDECommande.dart';
-import 'listDevis.dart';
 
-class CreeDevisPage extends StatefulWidget {
-  const CreeDevisPage({Key? key}) : super(key: key);
+class CreeFacturePage extends StatefulWidget {
+  const CreeFacturePage({Key? key}) : super(key: key);
 
   @override
-  _CreeDevisPageState createState() => _CreeDevisPageState();
+  _CreeFacturePageState createState() => _CreeFacturePageState();
 }
 
-class _CreeDevisPageState extends State<CreeDevisPage> {
+class _CreeFacturePageState extends State<CreeFacturePage> {
+  DateTime dataTime = DateTime.now();
+  DateTime dataTime2 = DateTime.now();
+
   // ignore: non_constant_identifier_names
   final Contolleremise = TextEditingController();
+  // ignore: non_constant_identifier_names
+  final Contollertitre = TextEditingController();
 
   int? sortColumnIndex;
   bool isAscending = false;
@@ -45,12 +54,13 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
 
   final _formKey = GlobalKey<FormState>();
   final titre = TextEditingController();
+  final adresse = TextEditingController();
 
   // ignore: prefer_typing_uninitialized_variables
   var client;
   // ignore: prefer_typing_uninitialized_variables
   var etat;
-  List listItem = ["Devis", "Bon de commande"];
+  List listItem = ["Brouillon", "Comptabilisé"];
 
   var taxe = 0.00;
   var total = 0.00;
@@ -78,12 +88,12 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
 
   List userContactList = [];
   List commandeList = [];
-  List listTotal = [];
+
   List list = [];
 
   fetchDatabaseList() async {
     dynamic resultant = await Contact().getContactListByNom();
-    dynamic resultant2 = await Commande().getCommandesList();
+    dynamic resultant2 = await CommandeFact().getCommList();
 
     if (resultant == null) {
       // ignore: avoid_print
@@ -124,7 +134,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
     final number = Random().nextInt(20);
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Créer Un Devis"),
+          title: const Text("Créer Un Facture"),
           backgroundColor: Colors.orange,
         ),
         body: RefreshIndicator(
@@ -133,7 +143,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                 context,
                 PageRouteBuilder(
                     // ignore: prefer_const_constructors
-                    pageBuilder: (a, b, c) => CreeDevisPage(),
+                    pageBuilder: (a, b, c) => CreeFacturePage(),
                     // ignore: prefer_const_constructors
                     transitionDuration: Duration(seconds: 0)));
             // ignore: void_checks
@@ -165,14 +175,12 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                             padding: const EdgeInsets.all(13),
                             child: InkWell(
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LigneCommande()));
+                                Get.to(() => LigneFacture(
+                                      titre: Contollertitre.text,
+                                    ));
                               },
                               child: const Text(
-                                "Ajouter Lignes de la commande",
+                                "Ajouter Lignes de facture",
                                 style: TextStyle(
                                     fontSize: 15,
                                     letterSpacing: 3,
@@ -193,19 +201,19 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                     onSort: onSort,
                                   ),
                                   DataColumn(
-                                    label: const Text("réf"),
-                                    onSort: onSort,
-                                  ),
-                                  DataColumn(
                                     label: const Text("Article"),
                                     onSort: onSort,
                                   ),
                                   DataColumn(
-                                    label: const Text("Description"),
+                                    label: const Text("Libélle"),
                                     onSort: onSort,
                                   ),
                                   DataColumn(
-                                    label: const Text("Unité"),
+                                    label: const Text("Compte analytique"),
+                                    onSort: onSort,
+                                  ),
+                                  DataColumn(
+                                    label: const Text(" Étiquette analytique"),
                                     onSort: onSort,
                                   ),
                                   DataColumn(
@@ -213,11 +221,11 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                     onSort: onSort,
                                   ),
                                   DataColumn(
-                                    label: const Text("Prix unitaire"),
+                                    label: const Text("Prix "),
                                     onSort: onSort,
                                   ),
                                   DataColumn(
-                                    label: const Text("Taxes"),
+                                    label: const Text("TVA"),
                                     onSort: onSort,
                                   ),
                                   DataColumn(
@@ -231,20 +239,21 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                       i++) ...[
                                     DataRow(cells: [
                                       DataCell(Text("$i")),
+                                      DataCell(Text(
+                                          "${commandeList[i]['Article']}")),
                                       DataCell(
-                                          Text("${commandeList[i]['réf']}")),
-                                      DataCell(
-                                          Text(commandeList[i]['Article'])),
-                                      DataCell(
-                                          Text(commandeList[i]['Description'])),
-                                      DataCell(Text(commandeList[i]['Unite'])),
+                                          Text(commandeList[i]['Libélle'])),
+                                      DataCell(Text(commandeList[i]
+                                          ['Compte analytique'])),
+                                      DataCell(Text(commandeList[i]
+                                          ['Etiquette analytique'])),
                                       DataCell(Text(
                                           "${commandeList[i]['Quantite']}")),
                                       DataCell(
                                           Text("${commandeList[i]['prix']}")),
                                       const DataCell(Text("${0.2}")),
                                       DataCell(Text(
-                                          "${commandeList[i]["sous-total"]}")),
+                                          "${commandeList[i]['Quantite'] * commandeList[i]['prix']}")),
                                     ]),
                                   ]
                                 ],
@@ -344,25 +353,34 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                             ],
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(
-                                    top: 30, right: 13, left: 13, bottom: 40),
-                                child: const Text(
-                                  "Remise",
+                            children: const [
+                              Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Text(
+                                  "Date de facturations",
                                   style:
                                       TextStyle(fontSize: 15, letterSpacing: 3),
                                 ),
                               ),
-                              Flexible(
-                                child: Container(
-                                  margin: const EdgeInsets.only(
-                                      left: 45, right: 65),
+                            ],
+                          ),
+                          Container(child: buildDatePicker(dataTime)),
+                          Container(
+                            margin: const EdgeInsets.only(top: 40, bottom: 40),
+                            child: Row(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.all(20),
+                                  child: Text(
+                                    "Adresse d'intervention",
+                                    style: TextStyle(
+                                        fontSize: 15, letterSpacing: 3),
+                                  ),
+                                ),
+                                Flexible(
                                   child: TextFormField(
-                                    controller: Contolleremise,
+                                    controller: adresse,
                                     decoration: InputDecoration(
-                                      hintText: 'valeur %',
                                       filled: true,
                                       fillColor: Colors.white,
                                       focusedBorder: OutlineInputBorder(
@@ -378,16 +396,74 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                         ),
                                       ),
                                     ),
-                                    validator: (value) {
-                                      if (!RegExp("%").hasMatch(value!)) {
-                                        return "Veuillez entrer\n  valeur avec % ";
-                                      }
-                                      return null;
-                                    },
                                   ),
                                 ),
-                              )
+                              ],
+                            ),
+                          ),
+                          Row(
+                            children: const [
+                              Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Text(
+                                  "Date d'intervention",
+                                  style:
+                                      TextStyle(fontSize: 15, letterSpacing: 3),
+                                ),
+                              ),
                             ],
+                          ),
+                          Container(child: buildDatePicker(dataTime2)),
+                          Container(
+                            margin: const EdgeInsets.only(top: 40, bottom: 40),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.only(
+                                      top: 30, right: 13, left: 13, bottom: 10),
+                                  child: const Text(
+                                    "Ajouter une remise",
+                                    style: TextStyle(
+                                        fontSize: 15, letterSpacing: 3),
+                                  ),
+                                ),
+                                Flexible(
+                                  child: Container(
+                                    margin: const EdgeInsets.only(
+                                        left: 10, right: 65, top: 30),
+                                    child: TextFormField(
+                                      controller: Contolleremise,
+                                      decoration: InputDecoration(
+                                        hintText: 'valeur %',
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(
+                                              color: Colors.orange, width: 1.5),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(
+                                            color: Colors.orange,
+                                            width: 1.5,
+                                          ),
+                                        ),
+                                      ),
+                                      validator: (value) {
+                                        if (!RegExp("%").hasMatch(value!)) {
+                                          return "Veuillez\nentrer\nvaleur\navec % ";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -408,51 +484,49 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                               ),
                             ],
                           ),
-                          Row(
-                            children: [
-                              Container(
-                                width: 350,
-                                height: 200,
-                                decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
+                          Container(
+                            margin: const EdgeInsets.only(top: 20),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 350,
+                                  height: 200,
+                                  decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                      color:
+                                          Color.fromARGB(255, 245, 245, 245)),
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.only(left: 8, top: 15),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "Montant HT: ${calculMontat()}",
+                                          style: const TextStyle(fontSize: 20),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "Remise: $remisee",
+                                            style:
+                                                const TextStyle(fontSize: 20),
+                                          ),
+                                        ),
+                                        const Divider(
+                                          color: Colors.black,
+                                        ),
+                                        Text(
+                                          "Total: ${calculMontat() - remisee}",
+                                          style: const TextStyle(fontSize: 20),
+                                        ),
+                                      ],
                                     ),
-                                    color: Color.fromARGB(255, 245, 245, 245)),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 8, top: 15),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        "Montant HT: ${calculMontat()}",
-                                        style: const TextStyle(fontSize: 20),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          "Remise: $remisee",
-                                          style: const TextStyle(fontSize: 20),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          "Taxes: $taxe",
-                                          style: const TextStyle(fontSize: 20),
-                                        ),
-                                      ),
-                                      const Divider(
-                                        color: Colors.black,
-                                      ),
-                                      Text(
-                                        "Total:  ${calculMontat() - remisee}",
-                                        style: const TextStyle(fontSize: 20),
-                                      ),
-                                    ],
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 10, right: 10),
@@ -461,19 +535,29 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                 // Validate returns true if the form is valid, otherwise false.
                                 if (_formKey.currentState!.validate()) {
                                   // ignore: prefer_adjacent_string_concatenation
-                                  ch = "D" + "$number";
+                                  ch = "F" + "$number";
                                   addList();
-
-                                  Devis().addDevis(
-                                      ch,
-                                      client,
-                                      etat,
-                                      calculMontat() - remisee,
-                                      list,
-                                      remisee,
-                                      calculMontat());
-                                  Commande().deleteCommande();
-                                  Get.to(() => const ListDevis());
+                                  if (client != null) {
+                                    if (etat != null) {
+                                      Facture().addFacture(
+                                          ch,
+                                          client,
+                                          etat,
+                                          dataTime,
+                                          dataTime2,
+                                          adresse.text,
+                                          calculMontat() - remisee,
+                                          list,
+                                          remisee,
+                                          calculMontat());
+                                      CommandeFact().deleteCommde();
+                                      Get.to(() => const ListFacture());
+                                    } else {
+                                      showToast("veuillez sélectionner état ");
+                                    }
+                                  } else {
+                                    showToast("veuillez sélectionner client ");
+                                  }
                                 }
                               },
                               child: const Text(
@@ -501,4 +585,15 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
       isAscending = ascending;
     });
   }
+
+  Widget buildDatePicker(date) => SizedBox(
+        height: 60,
+        child: CupertinoDatePicker(
+          initialDateTime: date,
+          mode: CupertinoDatePickerMode.date,
+          onDateTimeChanged: (dateTime) => setState(() {
+            date = dateTime;
+          }),
+        ),
+      );
 }

@@ -50,7 +50,7 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                         montant: widget.montant,
                       ));
                 } else {
-                  showToast("N'est peut pas modifier ce devis");
+                  showToast("Ne peut pas modifier ce devis");
                 }
               },
               child: Text(
