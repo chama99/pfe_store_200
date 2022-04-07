@@ -16,7 +16,7 @@ Card buildInputCardFacture() {
           mainAxisSize: MainAxisSize.min,
           children: const <Widget>[
             Icon(
-              Icons.factory_outlined,
+              Icons.description_outlined,
               size: 70,
               color: Colors.white,
             ),

@@ -1,6 +1,7 @@
 import 'package:chama_projet/services/contact.dart';
 import 'package:chama_projet/services/devis.dart';
 import 'package:chama_projet/services/employe.dart';
+import 'package:chama_projet/services/facture.dart';
 import 'package:chama_projet/services/user.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,8 @@ Future openDialog(context, id, mssg, ch) {
                       User().deleteUser(id);
                     } else if (ch == "devis") {
                       Devis().deleteDevis(id);
+                    } else if (ch == "facture") {
+                      Facture().deleteFacture(id);
                     } else {
                       Contact().deleteContact(id);
                     }

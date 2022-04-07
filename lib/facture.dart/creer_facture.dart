@@ -179,13 +179,24 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                                       titre: Contollertitre.text,
                                     ));
                               },
-                              child: const Text(
-                                "Ajouter Lignes de facture",
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    letterSpacing: 3,
-                                    color: Colors.indigo),
-                                textAlign: TextAlign.left,
+                              child: Row(
+                                children: const [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.add_outlined,
+                                      color: Colors.indigo,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Ajouter Lignes de facture",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        letterSpacing: 3,
+                                        color: Colors.indigo),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -587,7 +598,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
   }
 
   Widget buildDatePicker(date) => SizedBox(
-        height: 60,
+        height: 150,
         child: CupertinoDatePicker(
           initialDateTime: date,
           mode: CupertinoDatePickerMode.date,

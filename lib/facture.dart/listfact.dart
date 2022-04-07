@@ -1,8 +1,12 @@
 // ignore_for_file: file_names, unused_local_variable
 
 import 'package:chama_projet/facture.dart/creer_facture.dart';
+import 'package:chama_projet/facture.dart/detille_factyre.dart';
 import 'package:chama_projet/services/facture.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'package:intl/intl.dart';
 import '../widget/boitedialogue.dart';
 
 class ListFacture extends StatefulWidget {
@@ -119,14 +123,31 @@ class _ListFactureState extends State<ListFacture> {
                               final facture = ListFact[index];
                               return Card(
                                   child: InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  Get.to(
+                                    () => DetailFacture(
+                                        titre: facture['titre'],
+                                        client: facture['client'],
+                                        etat: facture['etat'],
+                                        date1: formattedDate(
+                                            facture["date de facturation"]),
+                                        date2: formattedDate(
+                                            facture["date d'intervention"]),
+                                        adrss:
+                                            facture["adresse d'intervention"],
+                                        total: facture['total'],
+                                        order: 20,
+                                        listfact: facture["ligne facture"]),
+                                  );
+                                  print(facture["ligne facture"]);
+                                },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),
                                 child: ListTile(
                                   title: Text(facture["etat"]),
                                   subtitle: Text(
                                       // ignore: unnecessary_string_interpolations
-                                      "${facture["date de facturation"].toDate().toString()}"),
+                                      "${formattedDate(facture["date de facturation"])}       ${facture["total"]}£"),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(
@@ -163,5 +184,11 @@ class _ListFactureState extends State<ListFacture> {
     setState(() {
       ListFact = suggestions;
     });
+  }
+
+  String formattedDate(timeStamp) {
+    var dateFromTimeStamp =
+        DateTime.fromMicrosecondsSinceEpoch(timeStamp.seconds * 1000);
+    return DateFormat('dd-MM-yyyy').format(dateFromTimeStamp);
   }
 }

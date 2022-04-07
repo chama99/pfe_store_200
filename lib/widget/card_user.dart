@@ -17,7 +17,7 @@ Card buildInputCardUser() {
           mainAxisSize: MainAxisSize.min,
           children: const <Widget>[
             Icon(
-              Icons.person,
+              Icons.supervised_user_circle_outlined,
               size: 70,
               color: Colors.white,
             ),

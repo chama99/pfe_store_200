@@ -140,6 +140,7 @@ class _ListDevisState extends State<ListDevis> {
                                     const Color.fromARGB(255, 3, 56, 109),
                                 child: ListTile(
                                   title: Text(devis["etat"]),
+                                  subtitle: Text("${devis["total"]}£"),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(

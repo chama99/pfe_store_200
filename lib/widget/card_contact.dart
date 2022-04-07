@@ -17,7 +17,7 @@ Card buildInputCardContact() {
           mainAxisSize: MainAxisSize.min,
           children: const <Widget>[
             Icon(
-              Icons.supervisor_account_sharp,
+              Icons.supervised_user_circle,
               size: 70,
               color: Colors.white,
             ),

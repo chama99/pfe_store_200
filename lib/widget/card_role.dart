@@ -17,7 +17,7 @@ Card buildInputCardRole() {
           mainAxisSize: MainAxisSize.min,
           children: const <Widget>[
             Icon(
-              Icons.card_membership,
+              Icons.view_module,
               size: 70,
               color: Colors.white,
             ),

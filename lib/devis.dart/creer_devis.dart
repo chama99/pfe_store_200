@@ -9,6 +9,7 @@ import 'dart:math';
 import 'package:chama_projet/services/commande.dart';
 import 'package:chama_projet/services/contact.dart';
 import 'package:chama_projet/services/devis.dart';
+import 'package:chama_projet/widget/toast.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -189,10 +190,6 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                 sortColumnIndex: sortColumnIndex,
                                 columns: [
                                   DataColumn(
-                                    label: const Text("Numéro de ligne "),
-                                    onSort: onSort,
-                                  ),
-                                  DataColumn(
                                     label: const Text("réf"),
                                     onSort: onSort,
                                   ),
@@ -230,7 +227,6 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                       i < commandeList.length;
                                       i++) ...[
                                     DataRow(cells: [
-                                      DataCell(Text("$i")),
                                       DataCell(
                                           Text("${commandeList[i]['réf']}")),
                                       DataCell(
@@ -460,20 +456,28 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                               onPressed: () {
                                 // Validate returns true if the form is valid, otherwise false.
                                 if (_formKey.currentState!.validate()) {
-                                  // ignore: prefer_adjacent_string_concatenation
-                                  ch = "D" + "$number";
-                                  addList();
+                                  if (client != null) {
+                                    if (etat != null) {
+                                      // ignore: prefer_adjacent_string_concatenation
+                                      ch = "D" + "$number";
+                                      addList();
 
-                                  Devis().addDevis(
-                                      ch,
-                                      client,
-                                      etat,
-                                      calculMontat() - remisee,
-                                      list,
-                                      remisee,
-                                      calculMontat());
-                                  Commande().deleteCommande();
-                                  Get.to(() => const ListDevis());
+                                      Devis().addDevis(
+                                          ch,
+                                          client,
+                                          etat,
+                                          calculMontat() - remisee,
+                                          list,
+                                          remisee,
+                                          calculMontat());
+                                      Commande().deleteCommande();
+                                      Get.to(() => const ListDevis());
+                                    } else {
+                                      showToast("veuillez sélectionner état");
+                                    }
+                                  } else {
+                                    showToast("veuillez sélectionner client");
+                                  }
                                 }
                               },
                               child: const Text(
