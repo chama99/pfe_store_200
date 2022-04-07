@@ -2,21 +2,56 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path/path.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class PdfApi {
-  static Future<File> generatePDF(
-      {required double order,
-      required ByteData imageSignature,
-      required List commnd}) async {
+  static Future<File> generatePDF({
+    required double order,
+    required String titre,
+    required ByteData imageSignature,
+    required List commnd,
+    required String client,
+    required String date1,
+    required String date2,
+    required String adrss,
+  }) async {
     final document = PdfDocument();
     final page = document.pages.add();
-    drawGrid(order, page, commnd);
+
     drawSignature(order, page, imageSignature);
+    drawGrid(order, page, commnd);
+    drawTitre(order, page, titre, client, date1, date2, adrss);
+
     return saveFile(document);
+  }
+
+  static void drawTitre(
+    double order,
+    PdfPage page,
+    String titre,
+    String client,
+    String date1,
+    String date2,
+    String adrss,
+  ) {
+    page.graphics.drawString(
+        titre, PdfStandardFont(PdfFontFamily.helvetica, 30),
+        brush: PdfBrushes.black, bounds: Rect.fromLTWH(0, 10, 200, 0));
+    page.graphics.drawString(
+        "Client : $client", PdfStandardFont(PdfFontFamily.helvetica, 20),
+        brush: PdfBrushes.black, bounds: Rect.fromLTWH(0, 50, 200, 0));
+    page.graphics.drawString("Date de facturation : $date1",
+        PdfStandardFont(PdfFontFamily.helvetica, 20),
+        brush: PdfBrushes.black, bounds: Rect.fromLTWH(0, 80, 0, 0));
+    page.graphics.drawString("Adresse d'intervention : $adrss",
+        PdfStandardFont(PdfFontFamily.helvetica, 20),
+        brush: PdfBrushes.black, bounds: Rect.fromLTWH(0, 110, 0, 0));
+
+    page.graphics.drawString("Date d'intervention: $date2",
+        PdfStandardFont(PdfFontFamily.helvetica, 20),
+        brush: PdfBrushes.black, bounds: Rect.fromLTWH(0, 140, 0, 0));
   }
 
   static void drawGrid(double order, PdfPage page, List cmmd) {
@@ -35,7 +70,7 @@ class PdfApi {
     headerRow.cells[6].value = 'Sous-total';
     headerRow.style.font =
         PdfStandardFont(PdfFontFamily.helvetica, 10, style: PdfFontStyle.bold);
-    grid.draw(page: page, bounds: Rect.fromLTWH(0, 40, 0, 0))!;
+    grid.draw(page: page, bounds: Rect.fromLTWH(0, 250, 0, 0))!;
 
     for (var i = 0; i < cmmd.length; i++) {
       final row = grid.rows.add();
@@ -48,7 +83,7 @@ class PdfApi {
       row.cells[6].value = cmmd[0]['sous-total'].toString();
       row.style.font = PdfStandardFont(PdfFontFamily.helvetica, 10,
           style: PdfFontStyle.bold);
-      grid.draw(page: page, bounds: Rect.fromLTWH(0, 40, 0, 0))!;
+      grid.draw(page: page, bounds: Rect.fromLTWH(0, 250, 0, 0))!;
     }
   }
 

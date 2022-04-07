@@ -75,7 +75,12 @@ class _DetailFactureState extends State<DetailFacture> {
     final file = await PdfApi.generatePDF(
         order: widget.order,
         imageSignature: imageSignature!,
-        commnd: widget.listfact);
+        commnd: widget.listfact,
+        titre: widget.titre,
+        client: widget.client,
+        date1: widget.date1,
+        date2: widget.date2,
+        adrss: widget.adrss);
     Navigator.of(context).pop();
     await OpenFile.open(file.path);
   }
