@@ -126,20 +126,22 @@ class _ListFactureState extends State<ListFacture> {
                                 onTap: () {
                                   Get.to(
                                     () => DetailFacture(
-                                        titre: facture['titre'],
-                                        client: facture['client'],
-                                        etat: facture['etat'],
-                                        date1: formattedDate(
-                                            facture["date de facturation"]),
-                                        date2: formattedDate(
-                                            facture["date d'intervention"]),
-                                        adrss:
-                                            facture["adresse d'intervention"],
-                                        total: facture['total'],
-                                        order: 20,
-                                        listfact: facture["ligne facture"]),
+                                      titre: facture['titre'],
+                                      client: facture['client'],
+                                      etat: facture['etat'],
+                                      date1: facture["date de facturation"]
+                                          .toDate()
+                                          .toString(),
+                                      date2: facture["date d'intervention"]
+                                          .toDate()
+                                          .toString(),
+                                      adrss: facture["adresse d'intervention"],
+                                      total: facture['total'],
+                                      order: 20,
+                                      listfact: facture["ligne facture"],
+                                      montant: facture["montant"],
+                                    ),
                                   );
-                                  print(facture["ligne facture"]);
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),
@@ -147,7 +149,7 @@ class _ListFactureState extends State<ListFacture> {
                                   title: Text(facture["etat"]),
                                   subtitle: Text(
                                       // ignore: unnecessary_string_interpolations
-                                      "${formattedDate(facture["date de facturation"])}       ${facture["total"]}£"),
+                                      "${facture["date de facturation"].toDate().toString()}       ${facture["total"]}£"),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(

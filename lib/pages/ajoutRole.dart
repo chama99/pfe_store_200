@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../widget/toast.dart';
 
-class AjoutRole extends StatefulWidget {
+class AjoutAcces extends StatefulWidget {
   String name, email;
 
   String image;
@@ -15,7 +15,7 @@ class AjoutRole extends StatefulWidget {
   String mp;
   List acces;
 
-  AjoutRole(
+  AjoutAcces(
       {Key? key,
       required this.name,
       required this.email,
@@ -26,10 +26,10 @@ class AjoutRole extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<AjoutRole> createState() => _AjoutRoleState();
+  State<AjoutAcces> createState() => _AjoutAccesState();
 }
 
-class _AjoutRoleState extends State<AjoutRole> {
+class _AjoutAccesState extends State<AjoutAcces> {
   List roleList = [];
   var stock = "Stock";
   var achat = "Achats";

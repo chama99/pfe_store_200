@@ -24,7 +24,7 @@ class Devis {
   }
 
   Future<void> addDevis(
-      titre, client, etat, total, ligneCommande, remise, montant) {
+      titre, client, etat, total, ligneCommande, remise, montant, date) {
     return devis
         .doc(titre)
         .set({
@@ -34,7 +34,8 @@ class Devis {
           'total': total,
           'commande': ligneCommande,
           'remise': remise,
-          'montant': montant
+          'montant': montant,
+          'date de devis': date,
         })
         // ignore: avoid_print
         .then((value) => showToast('devis ajouté'))

@@ -4,6 +4,7 @@ import 'package:chama_projet/services/devis.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../widget/boitedialogue.dart';
 import 'creer_devis.dart';
@@ -134,13 +135,17 @@ class _ListDevisState extends State<ListDevis> {
                                         total: devis["total"],
                                         remise: devis["remise"],
                                         montant: devis["montant"],
+                                        date: devis["date de devis"]
+                                            .toDate()
+                                            .toString(),
                                       ));
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),
                                 child: ListTile(
                                   title: Text(devis["etat"]),
-                                  subtitle: Text("${devis["total"]}£"),
+                                  subtitle: Text(
+                                      "${devis["date de devis"].toDate().toString()}               ${devis["total"]}£"),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(
@@ -177,5 +182,11 @@ class _ListDevisState extends State<ListDevis> {
     setState(() {
       Listdevis = suggestions;
     });
+  }
+
+  String formattedDate(timeStamp) {
+    var dateFromTimeStamp =
+        DateTime.fromMicrosecondsSinceEpoch(timeStamp.seconds * 2000);
+    return DateFormat('MM/dd/yyyy').format(dateFromTimeStamp);
   }
 }

@@ -56,7 +56,7 @@ class Facture {
           'etat': etat,
           'date de facturation': date1,
           "adresse d'intervention": adresse,
-          "date d'intervention": adresse,
+          "date d'intervention": date2,
           'total': total,
           'ligne facture': ligneCommande,
           'remise': remise,

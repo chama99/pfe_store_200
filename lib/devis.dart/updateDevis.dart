@@ -44,14 +44,21 @@ class _UpdateDevisState extends State<UpdateDevis> {
   final Contolleremise = TextEditingController();
   final n = TextEditingController();
   // ignore: prefer_final_fields
-  StreamController<String> _streamController = StreamController();
+  StreamController<String> streamController = StreamController();
   List listitem = [];
+  calculMontat() {
+    var montant = 0.00;
+    for (var i = 0; i < widget.commande.length; i++) {
+      montant = montant + widget.commande[i]["sous-total"];
+    }
+    return montant;
+  }
 
   @override
   void initState() {
     super.initState();
 
-    _streamController.stream.listen((item) {
+    streamController.stream.listen((item) {
       setState(() {
         var ch = item.substring(0, item.indexOf("%"));
         // ignore: unnecessary_cast
@@ -63,15 +70,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
     });
   }
 
-  calculMontat(List list) {
-    for (var i = 0; i < list.length; i++) {
-      montant = montant + list[i]["sous-total"];
-    }
-  }
-
-  var montant = 0.00;
   var taxe = 0.00;
-  var total = 0.00;
 
   @override
   Widget build(BuildContext context) {
@@ -186,7 +185,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                         "Veuillez entrer Numéro de ligne");
                                   } else {
                                     Get.to(() => ModifierCommande(
-                                          num: n.text,
+                                          num: int.parse(n.text),
                                           titre: widget.titre,
                                           client: widget.client,
                                           etat: widget.etat,
@@ -376,18 +375,13 @@ class _UpdateDevisState extends State<UpdateDevis> {
                           children: [
                             ElevatedButton(
                               onPressed: () {
-                                if (Contolleremise.text.isEmpty) {
-                                  _streamController
-                                      .add("${widget.remise * 100}%");
-                                } else {
-                                  _streamController.add(Contolleremise.text);
+                                // Validate returns true if the form is valid, otherwise false.
+                                if (_formKey.currentState!.validate()) {
+                                  streamController.add(Contolleremise.text);
                                 }
-                                calculMontat(widget.commande);
-
-                                total = (0.2 + montant) - remise;
                               },
                               child: const Text(
-                                "Calculer",
+                                "Ajouter",
                                 style: TextStyle(fontSize: 18.0),
                               ),
                               style: ElevatedButton.styleFrom(
@@ -411,7 +405,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      "Montant HT:$montant ",
+                                      "Montant HT:${calculMontat()} ",
                                       style: const TextStyle(fontSize: 20),
                                     ),
                                     Padding(
@@ -432,7 +426,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                       color: Colors.black,
                                     ),
                                     Text(
-                                      "Total: $total",
+                                      "Total: ${(calculMontat() + 0.2) - remise}",
                                       style: const TextStyle(fontSize: 20),
                                     ),
                                   ],
@@ -440,28 +434,6 @@ class _UpdateDevisState extends State<UpdateDevis> {
                               ),
                             ),
                           ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Devis().updateDevis(
-                                  widget.titre,
-                                  widget.client,
-                                  widget.etat,
-                                  total,
-                                  widget.commande,
-                                  remise,
-                                  montant);
-                              Get.to(() => const ListDevis());
-                            },
-                            child: const Text(
-                              "Sauvgarder",
-                              style: TextStyle(fontSize: 18.0),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.indigo),
-                          ),
                         ),
                       ],
                     )),
@@ -471,6 +443,20 @@ class _UpdateDevisState extends State<UpdateDevis> {
             )),
           ],
         ),
+      ),
+      bottomNavigationBar: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          maximumSize: const Size(double.infinity, 50),
+          primary: Colors.indigo,
+        ),
+        child: const Text("Modifier"),
+        onPressed: () {
+          // Validate returns true if the form is valid, otherwise false.
+
+          Devis().updateDevis(widget.titre, widget.client, widget.etat,
+              calculMontat() - remise, widget.commande, remise, calculMontat());
+          Get.to(() => const ListDevis());
+        },
       ),
     );
   }
@@ -482,5 +468,3 @@ class _UpdateDevisState extends State<UpdateDevis> {
     });
   }
 }
-
-class $ {}

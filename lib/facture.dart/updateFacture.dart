@@ -1,95 +1,86 @@
-// ignore_for_file: unused_import, deprecated_member_use
-
-// ignore: avoid_web_libraries_in_flutter
+// ignore_for_file: must_be_immutable
 
 import 'dart:async';
-import 'dart:io';
-import 'dart:math';
 
-import 'package:chama_projet/facture.dart/LigneFact.dart';
 import 'package:chama_projet/facture.dart/listfact.dart';
-import 'package:chama_projet/services/commande.dart';
-import 'package:chama_projet/services/contact.dart';
-import 'package:chama_projet/services/devis.dart';
-import 'package:chama_projet/services/facture.dart';
-import 'package:chama_projet/services/lignefact.dart';
-import 'package:chama_projet/widget/toast.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_multiselect/flutter_multiselect.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
+import '../services/contact.dart';
+import '../services/facture.dart';
+import '../services/lignefact.dart';
+import '../widget/toast.dart';
+import 'AjoutLigneFact.dart';
+import 'ModifierLigneFact.dart';
 
-import '../services/employe.dart';
-import '../widget/InputDeco_design.dart';
+class UpdateFacture extends StatefulWidget {
+  String titre, client, etat, adrss;
+  final double order;
+  double montant;
+  List listfact;
+  String date1, date2;
 
-class CreeFacturePage extends StatefulWidget {
-  const CreeFacturePage({Key? key}) : super(key: key);
+  double total;
+  UpdateFacture(
+      {Key? key,
+      required this.titre,
+      required this.client,
+      required this.etat,
+      required this.adrss,
+      required this.total,
+      required this.order,
+      required this.listfact,
+      required this.montant,
+      required this.date1,
+      required this.date2})
+      : super(key: key);
 
   @override
-  _CreeFacturePageState createState() => _CreeFacturePageState();
+  State<UpdateFacture> createState() => _UpdateFactureState();
 }
 
-class _CreeFacturePageState extends State<CreeFacturePage> {
-  DateTime dataTime = DateTime.now();
-  DateTime dataTime2 = DateTime.now();
-
-  // ignore: non_constant_identifier_names
-  final Contolleremise = TextEditingController();
-  // ignore: non_constant_identifier_names
-  final Contollertitre = TextEditingController();
-
+class _UpdateFactureState extends State<UpdateFacture> {
   int? sortColumnIndex;
   bool isAscending = false;
-  firebase_storage.FirebaseStorage storage =
-      firebase_storage.FirebaseStorage.instance;
-  XFile? imageFile;
-
   final _formKey = GlobalKey<FormState>();
-  final titre = TextEditingController();
-  final adresse = TextEditingController();
+  // ignore: prefer_typing_uninitialized_variables
 
-  // ignore: prefer_typing_uninitialized_variables
-  var client;
-  // ignore: prefer_typing_uninitialized_variables
-  var etat;
   List listItem = ["Brouillon", "Comptabilisé"];
-
-  var taxe = 0.00;
-  var total = 0.00;
-  // ignore: prefer_typing_uninitialized_variables
-  late double remisee = 0.00;
+  double remise = 0.00;
+  // ignore: non_constant_identifier_names
+  final Contolleremise = TextEditingController();
+  final n = TextEditingController();
   // ignore: prefer_final_fields
-  StreamController<String> _streamController = StreamController();
+  StreamController<String> streamController = StreamController();
+  List listitem = [];
 
-  bool test = false;
+  calculMontat() {
+    var montant = 0.00;
+    for (var i = 0; i < widget.listfact.length; i++) {
+      montant = montant + widget.listfact[i]["sous-total"];
+    }
+    return montant;
+  }
+
   @override
   void initState() {
     super.initState();
     fetchDatabaseList();
-    _streamController.stream.listen((item) {
+    streamController.stream.listen((item) {
       setState(() {
         var ch = item.substring(0, item.indexOf("%"));
         // ignore: unnecessary_cast
         double r = double.parse(ch) as double;
 
         // ignore: unnecessary_cast
-        remisee = r / 100 as double;
+        remise = r / 100 as double;
       });
     });
   }
 
   List userContactList = [];
   List commandeList = [];
-
-  List list = [];
 
   fetchDatabaseList() async {
     dynamic resultant = await Contact().getContactListByNom();
@@ -106,35 +97,17 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
     }
   }
 
-  addList() {
-    for (var i = 0; i < commandeList.length; i++) {
-      list.add(commandeList[i]);
-    }
-  }
-
-  var ch = "Nouveau";
-
-  calculMontat() {
-    var montant = 0.00;
-    for (var i = 0; i < commandeList.length; i++) {
-      montant = montant + commandeList[i]["sous-total"];
-    }
-    return montant;
-  }
-
-  late String dropdown;
-  @override
-  void dispose() {
-    _streamController.close();
-    super.dispose();
-  }
-
+  var taxe = 0.00;
   @override
   Widget build(BuildContext context) {
-    final number = Random().nextInt(20);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Créer Un Facture"),
+        title: Text(
+          "Facture / ${widget.titre}",
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
         backgroundColor: Colors.orange,
       ),
       body: RefreshIndicator(
@@ -143,7 +116,18 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
               context,
               PageRouteBuilder(
                   // ignore: prefer_const_constructors
-                  pageBuilder: (a, b, c) => CreeFacturePage(),
+                  pageBuilder: (a, b, c) => UpdateFacture(
+                        titre: widget.titre,
+                        client: widget.client,
+                        etat: widget.etat,
+                        adrss: widget.adrss,
+                        total: widget.total,
+                        order: widget.order,
+                        listfact: widget.listfact,
+                        montant: widget.montant,
+                        date1: widget.date1,
+                        date2: widget.date2,
+                      ),
                   // ignore: prefer_const_constructors
                   transitionDuration: Duration(seconds: 0)));
           // ignore: void_checks
@@ -162,108 +146,165 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                     Expanded(
                         child: ListView(
                       children: [
-                        Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Text(
-                              ch,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 30,
-                                  color: Colors.grey),
-                            )),
-                        Padding(
-                          padding: const EdgeInsets.all(13),
-                          child: InkWell(
-                            onTap: () {
-                              Get.to(() => LigneFacture(
-                                    titre: Contollertitre.text,
-                                  ));
-                            },
-                            child: Row(
-                              children: const [
-                                Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Icon(
-                                    Icons.add_outlined,
-                                    color: Colors.indigo,
+                        Row(
+                          children: [
+                            const Text(
+                              "Ajouter lignes de commande ",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  letterSpacing: 3,
+                                  color: Colors.indigo),
+                              textAlign: TextAlign.left,
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                Get.to(() => AjoutLigneFacture(
+                                    titre: widget.titre,
+                                    commande: widget.listfact,
+                                    adresse: widget.adrss,
+                                    client: widget.client,
+                                    date1: widget.date1,
+                                    date2: widget.date2,
+                                    etat: widget.etat,
+                                    montant: widget.montant,
+                                    remise: remise,
+                                    total: widget.total));
+                              },
+                              icon: const Icon(
+                                Icons.add,
+                                color: Colors.orange,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Text(
+                              "Modifier la commande Numéro :",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  letterSpacing: 3,
+                                  color: Colors.indigo),
+                              textAlign: TextAlign.left,
+                            ),
+                            Flexible(
+                              child: TextFormField(
+                                controller: n,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                    borderSide: const BorderSide(
+                                        color: Colors.orange, width: 1.5),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                    borderSide: const BorderSide(
+                                      color: Colors.orange,
+                                      width: 1.5,
+                                    ),
                                   ),
                                 ),
-                                Text(
-                                  "Ajouter Lignes de facture",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      letterSpacing: 3,
-                                      color: Colors.indigo),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
+                            Flexible(
+                              child: IconButton(
+                                onPressed: () {
+                                  if (n.text.isEmpty) {
+                                    showToast(
+                                        "Veuillez entrer Numéro de ligne");
+                                  } else {
+                                    Get.to(() => ModifieLignFact(
+                                        titre: widget.titre,
+                                        commande: widget.listfact,
+                                        num: int.parse(n.text),
+                                        adresse: widget.adrss,
+                                        client: widget.client,
+                                        date1: widget.date1,
+                                        date2: widget.date2,
+                                        etat: widget.etat,
+                                        montant: widget.montant,
+                                        remise: remise,
+                                        total: widget.total));
+                                  }
+                                },
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: SingleChildScrollView(
                             child: DataTable(
-                              sortAscending: isAscending,
-                              sortColumnIndex: sortColumnIndex,
-                              columns: [
+                              columns: const [
                                 DataColumn(
-                                  label: const Text("Numéro de ligne "),
-                                  onSort: onSort,
+                                  label: Text("Numéro de ligne"),
                                 ),
                                 DataColumn(
-                                  label: const Text("Article"),
-                                  onSort: onSort,
+                                  label: Text(
+                                    "Article",
+                                  ),
                                 ),
                                 DataColumn(
-                                  label: const Text("Libélle"),
-                                  onSort: onSort,
+                                  label: Text(
+                                    "Libélle",
+                                  ),
                                 ),
                                 DataColumn(
-                                  label: const Text("Compte analytique"),
-                                  onSort: onSort,
+                                  label: Text(
+                                    "Compte analytique",
+                                  ),
                                 ),
                                 DataColumn(
-                                  label: const Text(" Étiquette analytique"),
-                                  onSort: onSort,
+                                  label: Text(
+                                    "Étiquette analytique",
+                                  ),
                                 ),
                                 DataColumn(
-                                  label: const Text("Quantité"),
-                                  onSort: onSort,
+                                  label: Text(
+                                    "Quantité",
+                                  ),
                                 ),
                                 DataColumn(
-                                  label: const Text("Prix "),
-                                  onSort: onSort,
+                                  label: Text(
+                                    "Prix ",
+                                  ),
                                 ),
                                 DataColumn(
-                                  label: const Text("TVA"),
-                                  onSort: onSort,
+                                  label: Text(
+                                    "TVA",
+                                  ),
                                 ),
                                 DataColumn(
-                                  label: const Text("Sous-total"),
-                                  onSort: onSort,
+                                  label: Text("Sous-total"),
                                 )
                               ],
                               rows: [
                                 for (var i = 0;
-                                    i < commandeList.length;
+                                    i < widget.listfact.length;
                                     i++) ...[
                                   DataRow(cells: [
                                     DataCell(Text("$i")),
                                     DataCell(
-                                        Text("${commandeList[i]['Article']}")),
-                                    DataCell(Text(commandeList[i]['Libélle'])),
-                                    DataCell(Text(
-                                        commandeList[i]['Compte analytique'])),
-                                    DataCell(Text(commandeList[i]
-                                        ['Etiquette analytique'])),
+                                        Text(widget.listfact[i]['Article'])),
                                     DataCell(
-                                        Text("${commandeList[i]['Quantite']}")),
-                                    DataCell(
-                                        Text("${commandeList[i]['prix']}")),
-                                    const DataCell(Text("${0.2}")),
+                                        Text(widget.listfact[i]['Libélle'])),
                                     DataCell(Text(
-                                        "${commandeList[i]['Quantite'] * commandeList[i]['prix']}")),
+                                        "${widget.listfact[i]['Compte analytique']}")),
+                                    DataCell(Text(
+                                        "${widget.listfact[i]['Etiquette analytique']}")),
+                                    DataCell(Text(
+                                        "${widget.listfact[i]['Quantite']}")),
+                                    DataCell(
+                                        Text("${widget.listfact[i]['prix']}")),
+                                    const DataCell(Text("20%")),
+                                    DataCell(Text(
+                                        "${widget.listfact[i]["sous-total"]}")),
                                   ]),
                                 ]
                               ],
@@ -299,10 +340,10 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                                   style: const TextStyle(
                                       fontSize: 20, color: Colors.black),
                                   iconSize: 40,
-                                  value: client,
+                                  value: widget.client,
                                   onChanged: (newValue) {
                                     setState(() {
-                                      client = newValue.toString();
+                                      widget.client = newValue.toString();
                                     });
                                   },
                                   items: userContactList.map((valueItem) {
@@ -345,10 +386,10 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                                   style: const TextStyle(
                                       fontSize: 20, color: Colors.black),
                                   iconSize: 40,
-                                  value: etat,
+                                  value: widget.etat,
                                   onChanged: (newValue) {
                                     setState(() {
-                                      etat = newValue.toString();
+                                      widget.etat = newValue.toString();
                                     });
                                   },
                                   items: listItem.map((valueItem) {
@@ -362,19 +403,6 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                             ),
                           ],
                         ),
-                        Row(
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.all(20),
-                              child: Text(
-                                "Date de facturations",
-                                style:
-                                    TextStyle(fontSize: 15, letterSpacing: 3),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(child: buildDatePicker(dataTime)),
                         Container(
                           margin: const EdgeInsets.only(top: 40, bottom: 40),
                           child: Row(
@@ -389,7 +417,8 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                               ),
                               Flexible(
                                 child: TextFormField(
-                                  controller: adresse,
+                                  initialValue: widget.adrss,
+                                  onChanged: (value) => widget.adrss = value,
                                   decoration: InputDecoration(
                                     filled: true,
                                     fillColor: Colors.white,
@@ -411,21 +440,8 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                             ],
                           ),
                         ),
-                        Row(
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.all(20),
-                              child: Text(
-                                "Date d'intervention",
-                                style:
-                                    TextStyle(fontSize: 15, letterSpacing: 3),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(child: buildDatePicker(dataTime2)),
                         Container(
-                          margin: const EdgeInsets.only(top: 40, bottom: 40),
+                          margin: const EdgeInsets.only(bottom: 40),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -433,7 +449,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                                 margin: const EdgeInsets.only(
                                     top: 30, right: 13, left: 13, bottom: 10),
                                 child: const Text(
-                                  "Ajouter une remise",
+                                  "Modifier une remise",
                                   style:
                                       TextStyle(fontSize: 15, letterSpacing: 3),
                                 ),
@@ -480,7 +496,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                               onPressed: () {
                                 // Validate returns true if the form is valid, otherwise false.
                                 if (_formKey.currentState!.validate()) {
-                                  _streamController.add(Contolleremise.text);
+                                  streamController.add(Contolleremise.text);
                                 }
                               },
                               child: const Text(
@@ -513,18 +529,15 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                                         "Montant HT: ${calculMontat()}",
                                         style: const TextStyle(fontSize: 20),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          "Remise: $remisee",
-                                          style: const TextStyle(fontSize: 20),
-                                        ),
+                                      Text(
+                                        "Remise: $remise",
+                                        style: const TextStyle(fontSize: 20),
                                       ),
                                       const Divider(
                                         color: Colors.black,
                                       ),
                                       Text(
-                                        "Total: ${calculMontat() - remisee}",
+                                        "Total: ${calculMontat() - remise}",
                                         style: const TextStyle(fontSize: 20),
                                       ),
                                     ],
@@ -548,34 +561,23 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
           maximumSize: const Size(double.infinity, 50),
           primary: Colors.indigo,
         ),
-        child: const Text("Sauvgarder"),
+        child: const Text("Modifier"),
         onPressed: () {
           // Validate returns true if the form is valid, otherwise false.
           if (_formKey.currentState!.validate()) {
             // ignore: prefer_adjacent_string_concatenation
-            ch = "F" + "$number";
-            addList();
-            if (client != null) {
-              if (etat != null) {
-                Facture().addFacture(
-                    ch,
-                    client,
-                    etat,
-                    dataTime,
-                    dataTime2,
-                    adresse.text,
-                    calculMontat() - remisee,
-                    list,
-                    remisee,
-                    calculMontat());
-                CommandeFact().deleteCommde();
-                Get.to(() => const ListFacture());
-              } else {
-                showToast("veuillez sélectionner état ");
-              }
-            } else {
-              showToast("veuillez sélectionner client ");
-            }
+            Facture().updateFacture(
+                widget.titre,
+                widget.client,
+                widget.etat,
+                DateTime.parse(widget.date1),
+                DateTime.parse(widget.date2),
+                widget.adrss,
+                calculMontat() - remise,
+                widget.listfact,
+                remise,
+                calculMontat());
+            Get.to(() => const ListFacture());
           }
         },
       ),

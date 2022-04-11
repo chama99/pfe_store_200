@@ -77,7 +77,7 @@ class _AddUserPageState extends State<AddUserPage> {
   }
 
   // ignore: non_constant_identifier_names
-  bool Test(String nom, List list) {
+  bool VerificationUserByEmail(String nom, List list) {
     bool b = false;
     for (int i = 0; i < list.length; i++) {
       if (nom == list[i]) {
@@ -319,7 +319,8 @@ class _AddUserPageState extends State<AddUserPage> {
                                   // Validate returns true if the form is valid, otherwise false.
                                   if (_formKey.currentState!.validate() &&
                                       nom != null) {
-                                    if (Test(emailController.text, EmailUser) ==
+                                    if (VerificationUserByEmail(
+                                            emailController.text, EmailUser) ==
                                         false) {
                                       if (ch != null) {
                                         setState(() {

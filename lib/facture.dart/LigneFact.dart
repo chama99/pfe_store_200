@@ -1,45 +1,62 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, file_names, must_be_immutable
+// ignore: file_names
+// ignore_for_file: must_be_immutable, file_names, duplicate_ignore
 
-import 'package:chama_projet/devis.dart/updateDevis.dart';
-import 'package:chama_projet/services/devis.dart';
+import 'package:chama_projet/facture.dart/creer_facture.dart';
+
+import 'package:chama_projet/services/lignefact.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ModifierCommande extends StatefulWidget {
-  String titre, client, etat;
-  int num;
-  double remise;
-  List commande;
-  double total, montant;
-  ModifierCommande({
-    Key? key,
-    required this.titre,
-    required this.client,
-    required this.etat,
-    required this.commande,
-    required this.total,
-    required this.remise,
-    required this.montant,
-    required this.num,
-  }) : super(key: key);
+import '../widget/toast.dart';
+
+class LigneFacture extends StatefulWidget {
+  String titre;
+  LigneFacture({Key? key, required this.titre}) : super(key: key);
 
   @override
-  State<ModifierCommande> createState() => _ModifierCommandeState();
+  State<LigneFacture> createState() => _LigneFactureState();
 }
 
-class _ModifierCommandeState extends State<ModifierCommande> {
+class _LigneFactureState extends State<LigneFacture> {
   final _formKey = GlobalKey<FormState>();
   var article;
+  List lignFact = [];
   List listItem = ["store12", "store15"];
+  final lib = TextEditingController();
+  final comp = TextEditingController();
+  final etq = TextEditingController();
+  final qt = TextEditingController();
+  final prix = TextEditingController();
 
-  List list = [];
+  clearText() {
+    lib.clear();
+    comp.clear();
+    etq.clear();
+    qt.clear();
+    prix.clear();
+
+    article = null;
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    lib.dispose();
+    etq.dispose();
+    comp.dispose();
+    qt.dispose();
+    prix.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange,
-        title: Text("Modifier  Ligne de la commande ${widget.num}"),
+        title: const Text("Ajouter Ligne de facture"),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -51,31 +68,6 @@ class _ModifierCommandeState extends State<ModifierCommande> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    initialValue: '${widget.commande[widget.num]["réf"]}',
-                    onChanged: (value) {
-                      widget.commande[widget.num]["réf"] = value;
-                    },
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.white,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
                   child: Container(
                     width: 320,
                     decoration: BoxDecoration(
@@ -83,6 +75,7 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                         border: Border.all(color: Colors.grey, width: 1)),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton(
+                        hint: const Text("Article "),
                         dropdownColor: Colors.white,
                         icon: const Padding(
                           padding: EdgeInsets.only(left: 15),
@@ -94,11 +87,10 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                         style:
                             const TextStyle(fontSize: 20, color: Colors.black),
                         iconSize: 40,
-                        value: "${widget.commande[widget.num]["Article"]}",
+                        value: article,
                         onChanged: (newValue) {
                           setState(() {
-                            widget.commande[widget.num]["Article"] =
-                                newValue.toString();
+                            article = newValue.toString();
                           });
                         },
                         items: listItem.map((valueItem) {
@@ -114,12 +106,38 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    initialValue:
-                        '${widget.commande[widget.num]["Description"]}',
-                    onChanged: (value) {
-                      widget.commande[widget.num]["Description"] = value;
-                    },
+                    controller: lib,
                     decoration: InputDecoration(
+                      hintText: 'Libellé',
+                      filled: true,
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide:
+                            const BorderSide(color: Colors.orange, width: 1.5),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: const BorderSide(
+                          color: Colors.white,
+                          width: 1.5,
+                        ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Veuillez entrer  libellé ";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: comp,
+                    decoration: InputDecoration(
+                      hintText: 'Compte analytique',
                       filled: true,
                       fillColor: Colors.white,
                       focusedBorder: OutlineInputBorder(
@@ -140,11 +158,9 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    initialValue: '${widget.commande[widget.num]["Unite"]}',
-                    onChanged: (value) {
-                      widget.commande[widget.num]["Unite"] = value;
-                    },
+                    controller: etq,
                     decoration: InputDecoration(
+                      hintText: 'Étiquette analytique',
                       filled: true,
                       fillColor: Colors.white,
                       focusedBorder: OutlineInputBorder(
@@ -166,12 +182,9 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     keyboardType: TextInputType.number,
-                    initialValue: '${widget.commande[widget.num]["Quantite"]}',
-                    onChanged: (value) {
-                      widget.commande[widget.num]["Quantite"] =
-                          int.parse(value);
-                    },
+                    controller: qt,
                     decoration: InputDecoration(
+                      hintText: 'Quantité',
                       filled: true,
                       fillColor: Colors.white,
                       focusedBorder: OutlineInputBorder(
@@ -187,17 +200,21 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                         ),
                       ),
                     ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Veuillez entrer Quantité ";
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     keyboardType: TextInputType.number,
-                    initialValue: '${widget.commande[widget.num]["prix"]}',
-                    onChanged: (value) {
-                      widget.commande[widget.num]["prix"] = double.parse(value);
-                    },
+                    controller: prix,
                     decoration: InputDecoration(
+                      hintText: 'Prix ',
                       filled: true,
                       fillColor: Colors.white,
                       focusedBorder: OutlineInputBorder(
@@ -213,6 +230,12 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                         ),
                       ),
                     ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Veuillez entrer Prix ";
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 Row(
@@ -220,26 +243,25 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        Devis().updateDevis(
-                            widget.titre,
-                            widget.client,
-                            widget.etat,
-                            widget.total,
-                            widget.commande,
-                            widget.remise,
-                            widget.montant);
-
-                        Get.to(() => UpdateDevis(
-                            titre: widget.titre,
-                            client: widget.client,
-                            etat: widget.etat,
-                            total: widget.total,
-                            commande: widget.commande,
-                            remise: widget.remise,
-                            montant: widget.montant));
+                        if (_formKey.currentState!.validate()) {
+                          if (article != null) {
+                            CommandeFact().addCommde(
+                                lib.text,
+                                article,
+                                comp.text,
+                                etq.text,
+                                int.parse(qt.text),
+                                double.parse(prix.text),
+                                int.parse(qt.text) * double.parse(prix.text));
+                            clearText();
+                            Get.to(() => const CreeFacturePage());
+                          } else {
+                            showToast("veuillez sélectionner Article ");
+                          }
+                        }
                       },
                       child: const Text(
-                        "Modifier",
+                        "Ajouter",
                         style: TextStyle(fontSize: 25),
                       ),
                       style: ElevatedButton.styleFrom(primary: Colors.orange),

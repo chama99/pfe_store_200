@@ -5,13 +5,6 @@ class Employe {
   final CollectionReference employe =
       FirebaseFirestore.instance.collection('employes');
 
-  Future<void> createUserData(
-      String name, String gender, int score, String uid) async {
-    return await employe
-        .doc(uid)
-        .set({'name': name, 'gender': gender, 'score': score});
-  }
-
   Future getEmployesList() async {
     List itemsList = [];
 

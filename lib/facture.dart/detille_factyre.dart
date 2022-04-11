@@ -2,16 +2,20 @@
 
 import 'dart:ui';
 
+import 'package:chama_projet/facture.dart/updateFacture.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:open_file/open_file.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 import '../services/pdf_api.dart';
+import '../widget/toast.dart';
 
 class DetailFacture extends StatefulWidget {
   String titre, client, etat, date1, date2, adrss;
   final double order;
   List listfact;
+  double montant;
 
   double total;
   DetailFacture(
@@ -24,7 +28,8 @@ class DetailFacture extends StatefulWidget {
       required this.adrss,
       required this.total,
       required this.order,
-      required this.listfact})
+      required this.listfact,
+      required this.montant})
       : super(key: key);
 
   @override
@@ -38,27 +43,203 @@ class _DetailFactureState extends State<DetailFacture> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.titre),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(top: 20, right: 30),
+            child: InkWell(
+              onTap: () {
+                if (widget.etat == "Brouillon") {
+                  Get.to(() => UpdateFacture(
+                        titre: widget.titre,
+                        client: widget.client,
+                        etat: widget.etat,
+                        adrss: widget.adrss,
+                        total: widget.total,
+                        order: widget.order,
+                        listfact: widget.listfact,
+                        montant: widget.montant,
+                        date1: widget.date1,
+                        date2: widget.date2,
+                      ));
+                } else {
+                  showToast("Ne peut pas modifier cette facture");
+                }
+              },
+              child: Text(
+                "Modifier".toUpperCase(),
+                style: const TextStyle(
+                    fontSize: 15, color: Colors.white, letterSpacing: 3),
+                textAlign: TextAlign.left,
+              ),
+            ),
+          ),
+        ],
         backgroundColor: Colors.orange,
       ),
-      body: Column(
+      body: ListView(
         children: [
-          Text("Etat :${widget.etat}"),
-          Text("Client :${widget.client}"),
-          Text("Date de Facturation :${widget.date1}"),
-          Text("Adresse d'intervention :${widget.adrss}"),
-          Text("Date d'intervention :${widget.date2}"),
-          Text("Total :${widget.total}"),
-          SfSignaturePad(
-            key: keySignaturePad,
-            backgroundColor: Colors.yellow[100],
+          Container(
+            margin: const EdgeInsets.only(top: 30, left: 10),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 8, top: 20),
+                      child: Text(
+                        "Client:",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 30),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8, top: 20),
+                      child: Text(
+                        widget.client,
+                        style:
+                            const TextStyle(color: Colors.indigo, fontSize: 25),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 8, top: 30),
+                      child: Text(
+                        "État:",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 30),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8, top: 30),
+                      child: Text(
+                        widget.etat,
+                        style:
+                            const TextStyle(color: Colors.indigo, fontSize: 25),
+                      ),
+                    ),
+                  ],
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 30),
+                  child: Text(
+                    "Lignes de facture :",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SingleChildScrollView(
+                      child: DataTable(
+                        columns: const [
+                          DataColumn(
+                            label: Text(
+                              "Article",
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              "Libélle",
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              "Compte analytique",
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              "Étiquette analytique",
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              "Quantité",
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              "Prix ",
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              "TVA",
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text("Sous-total"),
+                          )
+                        ],
+                        rows: [
+                          for (var i = 0; i < widget.listfact.length; i++) ...[
+                            DataRow(cells: [
+                              DataCell(Text(widget.listfact[i]['Article'])),
+                              DataCell(Text(widget.listfact[i]['Libélle'])),
+                              DataCell(Text(
+                                  "${widget.listfact[i]['Compte analytique']}")),
+                              DataCell(Text(
+                                  "${widget.listfact[i]['Etiquette analytique']}")),
+                              DataCell(
+                                  Text("${widget.listfact[i]['Quantite']}")),
+                              DataCell(Text("${widget.listfact[i]['prix']}")),
+                              const DataCell(Text("20%")),
+                              DataCell(
+                                  Text("${widget.listfact[i]["sous-total"]}")),
+                            ]),
+                          ]
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 8, top: 30),
+                      child: Text(
+                        "Total =",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 30),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8, top: 30),
+                      child: Text(
+                        "${widget.total}£",
+                        style:
+                            const TextStyle(color: Colors.indigo, fontSize: 25),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      "Signature:",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SfSignaturePad(
+                      key: keySignaturePad,
+                      backgroundColor: Colors.yellow[100],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           )
         ],
       ),
       bottomNavigationBar: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          maximumSize: Size(double.infinity, 50),
+          maximumSize: const Size(double.infinity, 50),
+          primary: Colors.indigo,
         ),
-        child: Text("sauvgarder"),
+        child: const Text("Convertir  au format PDF"),
         onPressed: onSubmit,
       ),
     );
@@ -67,20 +248,22 @@ class _DetailFactureState extends State<DetailFacture> {
   Future onSubmit() async {
     showDialog(
         context: context,
-        builder: (context) => Center(
+        builder: (context) => const Center(
               child: CircularProgressIndicator(),
             ));
     final image = await keySignaturePad.currentState?.toImage();
     final imageSignature = await image!.toByteData(format: ImageByteFormat.png);
     final file = await PdfApi.generatePDF(
-        order: widget.order,
-        imageSignature: imageSignature!,
-        commnd: widget.listfact,
-        titre: widget.titre,
-        client: widget.client,
-        date1: widget.date1,
-        date2: widget.date2,
-        adrss: widget.adrss);
+      order: widget.order,
+      imageSignature: imageSignature!,
+      commnd: widget.listfact,
+      titre: widget.titre,
+      client: widget.client,
+      date1: widget.date1,
+      date2: widget.date2,
+      adrss: widget.adrss,
+      total: widget.total,
+    );
     Navigator.of(context).pop();
     await OpenFile.open(file.path);
   }

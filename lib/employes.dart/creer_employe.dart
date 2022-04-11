@@ -75,7 +75,7 @@ class _CreeEmployePageState extends State<CreeEmployePage> {
   }
 
   // ignore: non_constant_identifier_names
-  bool Test(String nom) {
+  bool VerificationEmploye(String nom) {
     bool b = false;
     for (int i = 0; i < NomEmpl.length; i++) {
       if (nom == NomEmpl[i]) {
@@ -280,7 +280,8 @@ class _CreeEmployePageState extends State<CreeEmployePage> {
                                 onPressed: () {
                                   // Validate returns true if the form is valid, otherwise false.
                                   if (_formKey.currentState!.validate() &&
-                                      Test(nomController.text) == false) {
+                                      VerificationEmploye(nomController.text) ==
+                                          false) {
                                     if (ch != null) {
                                       setState(() {
                                         email = emailController.text;

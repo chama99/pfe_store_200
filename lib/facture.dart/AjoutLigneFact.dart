@@ -1,26 +1,40 @@
 // ignore: file_names
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, file_names, duplicate_ignore
 
-import 'dart:convert' show json;
+import 'dart:convert';
 
-import 'package:chama_projet/facture.dart/creer_facture.dart';
-import 'package:chama_projet/services/facture.dart';
-import 'package:chama_projet/services/lignefact.dart';
-
+import 'package:chama_projet/facture.dart/updateFacture.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../services/facture.dart';
 import '../widget/toast.dart';
 
-class LigneFacture extends StatefulWidget {
+class AjoutLigneFacture extends StatefulWidget {
   String titre;
-  LigneFacture({Key? key, required this.titre}) : super(key: key);
+  List commande;
+
+  String client, etat, date1, date2, adresse;
+  double total, remise, montant;
+  AjoutLigneFacture(
+      {Key? key,
+      required this.titre,
+      required this.commande,
+      required this.adresse,
+      required this.client,
+      required this.date1,
+      required this.date2,
+      required this.etat,
+      required this.montant,
+      required this.remise,
+      required this.total})
+      : super(key: key);
 
   @override
-  State<LigneFacture> createState() => _LigneFactureState();
+  State<AjoutLigneFacture> createState() => AjoutLigneFactureState();
 }
 
-class _LigneFactureState extends State<LigneFacture> {
+class AjoutLigneFactureState extends State<AjoutLigneFacture> {
   final _formKey = GlobalKey<FormState>();
   var article;
   List lignFact = [];
@@ -247,16 +261,42 @@ class _LigneFactureState extends State<LigneFacture> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           if (article != null) {
-                            CommandeFact().addCommde(
-                                lib.text,
-                                article,
-                                comp.text,
-                                etq.text,
-                                int.parse(qt.text),
-                                double.parse(prix.text),
-                                int.parse(qt.text) * double.parse(prix.text));
+                            var a = ({
+                              'Libélle': lib.text,
+                              'Article': article,
+                              'Compte analytique': comp.text,
+                              'Etiquette analytique': etq.text,
+                              'Quantite': int.parse(qt.text),
+                              'prix': double.parse(prix.text),
+                              'sous-total':
+                                  int.parse(qt.text) * double.parse(prix.text),
+                            });
+
+                            var data = json.decode(json.encode(a));
+                            widget.commande.add(data);
+                            Facture().updateFacture(
+                                widget.titre,
+                                widget.client,
+                                widget.etat,
+                                DateTime.parse(widget.date1),
+                                DateTime.parse(widget.date2),
+                                widget.adresse,
+                                widget.total,
+                                widget.commande,
+                                widget.remise,
+                                widget.montant);
                             clearText();
-                            Get.to(() => const CreeFacturePage());
+                            Get.to(() => UpdateFacture(
+                                titre: widget.titre,
+                                client: widget.client,
+                                etat: widget.etat,
+                                adrss: widget.adresse,
+                                total: widget.total,
+                                order: 20,
+                                listfact: widget.commande,
+                                montant: widget.montant,
+                                date1: widget.date1,
+                                date2: widget.date2));
                           } else {
                             showToast("veuillez sélectionner Article ");
                           }

@@ -1,15 +1,23 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:ui';
+
 import 'package:chama_projet/devis.dart/updateDevis.dart';
 import 'package:chama_projet/widget/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:open_file/open_file.dart';
+import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
+
+import '../services/pdf_api.dart';
+import '../services/pdf_devis.dart';
 
 class DevisDetailler extends StatefulWidget {
   String titre, client, etat;
   double remise;
   List commande;
   double total, montant;
+  String date;
   DevisDetailler(
       {Key? key,
       required this.titre,
@@ -18,7 +26,8 @@ class DevisDetailler extends StatefulWidget {
       required this.commande,
       required this.total,
       required this.remise,
-      required this.montant})
+      required this.montant,
+      required this.date})
       : super(key: key);
 
   @override
@@ -28,7 +37,7 @@ class DevisDetailler extends StatefulWidget {
 class _DevisDetaillerState extends State<DevisDetailler> {
   int? sortColumnIndex;
   bool isAscending = false;
-
+  final keySignaturePad = GlobalKey<SfSignaturePadState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,17 +73,9 @@ class _DevisDetaillerState extends State<DevisDetailler> {
         ],
         backgroundColor: Colors.orange,
       ),
-      body: Container(
-          width: 500,
-          height: 800,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-            color: Color.fromARGB(255, 248, 243, 243),
-          ),
-          margin: const EdgeInsets.all(10),
-          child: Container(
+      body: ListView(
+        children: [
+          Container(
             margin: const EdgeInsets.only(top: 30, left: 10),
             child: Column(
               children: [
@@ -136,12 +137,6 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                         columns: [
                           DataColumn(
                             label: const Text(
-                              "Numéro de ligne",
-                            ),
-                            onSort: onSort,
-                          ),
-                          DataColumn(
-                            label: const Text(
                               "réf",
                             ),
                             onSort: onSort,
@@ -190,8 +185,7 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                         rows: [
                           for (var i = 0; i < widget.commande.length; i++) ...[
                             DataRow(cells: [
-                              DataCell(Text("$i")),
-                              DataCell(Text(widget.commande[i]['réf'])),
+                              DataCell(Text("${widget.commande[i]['réf']}")),
                               DataCell(Text(widget.commande[i]['Article'])),
                               DataCell(Text(widget.commande[i]['Description'])),
                               DataCell(Text("${widget.commande[i]['Unite']}")),
@@ -221,16 +215,41 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                     Padding(
                       padding: const EdgeInsets.only(left: 8, top: 30),
                       child: Text(
-                        "${widget.total}",
+                        "${widget.total}£",
                         style:
                             const TextStyle(color: Colors.indigo, fontSize: 25),
                       ),
                     ),
                   ],
                 ),
+                Row(
+                  children: [
+                    const Text(
+                      "Signature:",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: SfSignaturePad(
+                        key: keySignaturePad,
+                        backgroundColor: Colors.yellow[100],
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
-          )),
+          ),
+        ],
+      ),
+      bottomNavigationBar: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          maximumSize: const Size(double.infinity, 50),
+          primary: Colors.indigo,
+        ),
+        child: const Text("Convertir  au format PDF"),
+        onPressed: onSubmit,
+      ),
     );
   }
 
@@ -239,5 +258,25 @@ class _DevisDetaillerState extends State<DevisDetailler> {
       sortColumnIndex = columnIndex;
       isAscending = ascending;
     });
+  }
+
+  Future onSubmit() async {
+    showDialog(
+        context: context,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+    final image = await keySignaturePad.currentState?.toImage();
+    final imageSignature = await image!.toByteData(format: ImageByteFormat.png);
+    final file = await PdDevis.generatePDF(
+      imageSignature: imageSignature!,
+      commnd: widget.commande,
+      titre: widget.titre,
+      client: widget.client,
+      date1: widget.date,
+      total: widget.total,
+    );
+    Navigator.of(context).pop();
+    await OpenFile.open(file.path);
   }
 }
