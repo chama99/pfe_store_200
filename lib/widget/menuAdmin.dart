@@ -3,12 +3,13 @@
 import 'package:chama_projet/widget/NavBar.dart';
 import 'package:chama_projet/widget/card_article.dart';
 import 'package:chama_projet/widget/card_contact.dart';
-import 'package:chama_projet/widget/card_plan.dart';
+
 import 'package:flutter/material.dart';
 
 import 'card_devis.dart';
 import 'card_employe.dart';
 import 'card_facture.dart';
+import 'card_plan.dart';
 import 'card_role.dart';
 import 'card_user.dart';
 
