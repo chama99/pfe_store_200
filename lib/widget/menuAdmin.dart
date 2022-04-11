@@ -3,9 +3,9 @@
 import 'package:chama_projet/widget/NavBar.dart';
 import 'package:chama_projet/widget/card_article.dart';
 import 'package:chama_projet/widget/card_contact.dart';
+import 'package:chama_projet/widget/planning.dart';
 import 'package:flutter/material.dart';
 
-import 'card_config.dart';
 import 'card_devis.dart';
 import 'card_employe.dart';
 import 'card_facture.dart';
@@ -54,6 +54,7 @@ class _MenuAdminState extends State<MenuAdmin> {
               if (x == "Factures") ...[buildInputCardFacture()],
               if (x == "Utilisateurs") ...[buildInputCardUser()],
               if (x == "Applications") ...[buildInputCardRole()],
+              if (x == "Planning") ...[buildInputPlanning()],
             ]
           ],
         ),
