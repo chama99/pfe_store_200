@@ -2,6 +2,8 @@ import 'package:chama_projet/inventaire/reception.dart/listReception.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../services/reception.dart';
+
 class ListInventaire extends StatefulWidget {
   const ListInventaire({Key? key}) : super(key: key);
 
@@ -10,6 +12,27 @@ class ListInventaire extends StatefulWidget {
 }
 
 class _ListInventaireState extends State<ListInventaire> {
+  // ignore: non_constant_identifier_names
+  List Listreception = [];
+  @override
+  void initState() {
+    super.initState();
+    fetchDatabaseList();
+  }
+
+  fetchDatabaseList() async {
+    dynamic resultant = await Reception().getReceptionList();
+
+    if (resultant == null) {
+      // ignore: avoid_print
+      print('Unable to retrieve');
+    } else {
+      setState(() {
+        Listreception = resultant;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +85,7 @@ class _ListInventaireState extends State<ListInventaire> {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 primary: Colors.indigo),
-                            child: const Text("Traiter"),
+                            child: Text("${Listreception.length} A traiter"),
                             onPressed: null,
                           ),
                         )

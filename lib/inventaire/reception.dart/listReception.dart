@@ -1,12 +1,12 @@
 // ignore_for_file: file_names
 
+import 'package:chama_projet/services/reception.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
-import '../../services/facture.dart';
 import '../../widget/boitedialogue.dart';
 import 'creer_reception.dart';
+import 'details_reception.dart';
 
 class ListReception extends StatefulWidget {
   const ListReception({Key? key}) : super(key: key);
@@ -19,7 +19,7 @@ class _ListReceptionState extends State<ListReception> {
   TextEditingController searchcontroller = TextEditingController();
   TextEditingController editingController = TextEditingController();
   // ignore: non_constant_identifier_names
-  List ListFact = [];
+  List Listreception = [];
   @override
   void initState() {
     super.initState();
@@ -27,14 +27,14 @@ class _ListReceptionState extends State<ListReception> {
   }
 
   fetchDatabaseList() async {
-    dynamic resultant = await Facture().getFacturesList();
+    dynamic resultant = await Reception().getReceptionList();
 
     if (resultant == null) {
       // ignore: avoid_print
       print('Unable to retrieve');
     } else {
       setState(() {
-        ListFact = resultant;
+        Listreception = resultant;
       });
     }
   }
@@ -55,7 +55,7 @@ class _ListReceptionState extends State<ListReception> {
               padding: const EdgeInsets.only(top: 20, right: 30),
               child: InkWell(
                 onTap: () {
-                  Get.to(() => CreerReception());
+                  Get.to(() => const CreerReception());
                 },
                 child: Text(
                   "Créer".toUpperCase(),
@@ -99,7 +99,7 @@ class _ListReceptionState extends State<ListReception> {
                 ),
               ),
               Expanded(
-                child: ListFact.isEmpty
+                child: Listreception.isEmpty
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
@@ -116,26 +116,34 @@ class _ListReceptionState extends State<ListReception> {
                           return Future.value(false);
                         },
                         child: ListView.builder(
-                            itemCount: ListFact.length,
+                            itemCount: Listreception.length,
                             itemBuilder: (context, index) {
-                              final facture = ListFact[index];
+                              final recp = Listreception[index];
                               return Card(
                                   child: InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  Get.to(() => ReceptionDetaile(
+                                      titre: recp["titre"],
+                                      typeoperation: recp["type d'operation"],
+                                      etat: recp["etat"],
+                                      receptions: recp["reception"],
+                                      LigneOperations:
+                                          recp["ligne d'operation"]));
+                                },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),
                                 child: ListTile(
-                                  title: Text(facture["etat"]),
+                                  title: Text(recp["etat"]),
                                   subtitle: Text(
                                       // ignore: unnecessary_string_interpolations
-                                      "${facture["date de facturation"].toDate().toString()}       ${facture["total"]}£"),
+                                      "${recp["date prévue"].toDate().toString()}"),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          facture["titre"],
-                                          "Êtes-vous sûr de vouloir supprimer cette facture",
-                                          "facture")
+                                          recp["titre"],
+                                          "Êtes-vous sûr de vouloir supprimer ce produit",
+                                          "reception")
                                     },
                                     icon: const Icon(
                                       Icons.delete,
@@ -143,7 +151,7 @@ class _ListReceptionState extends State<ListReception> {
                                     ),
                                   ),
                                   leading: Text(
-                                    facture["titre"],
+                                    recp["titre"],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -157,13 +165,13 @@ class _ListReceptionState extends State<ListReception> {
   }
 
   void filterSearchResults(String query) {
-    final suggestions = ListFact.where((facture) {
-      final namemploye = facture['titre'].toLowerCase();
+    final suggestions = Listreception.where((recp) {
+      final namemploye = recp['titre'].toLowerCase();
       final input = query.toLowerCase();
       return namemploye.contains(input);
     }).toList();
     setState(() {
-      ListFact = suggestions;
+      Listreception = suggestions;
     });
   }
 

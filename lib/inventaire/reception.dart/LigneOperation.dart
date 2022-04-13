@@ -23,6 +23,7 @@ class _LigneOperationState extends State<LigneOperation> {
   List lignFact = [];
   List listItem = ["store12", "store15"];
   final colis = TextEditingController();
+  final colisDes = TextEditingController();
   final appartenant = TextEditingController();
   final fait = TextEditingController();
   final unite = TextEditingController();
@@ -103,6 +104,35 @@ class _LigneOperationState extends State<LigneOperation> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     controller: colis,
+                    decoration: InputDecoration(
+                      hintText: 'Colis source',
+                      filled: true,
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide:
+                            const BorderSide(color: Colors.orange, width: 1.5),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: const BorderSide(
+                          color: Colors.white,
+                          width: 1.5,
+                        ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Veuillez entrer  colis de destination";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: colisDes,
                     decoration: InputDecoration(
                       hintText: 'Colis de destination',
                       filled: true,
@@ -213,6 +243,7 @@ class _LigneOperationState extends State<LigneOperation> {
                           if (article != null) {
                             CommandeOperation().addCommdeop(
                                 colis.text,
+                                colisDes.text,
                                 article,
                                 appartenant.text,
                                 fait.text,

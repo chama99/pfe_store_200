@@ -1,0 +1,143 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:flutter/material.dart';
+
+class ReceptionDetaile extends StatefulWidget {
+  String titre, typeoperation, etat, receptions;
+  // ignore: non_constant_identifier_names
+  List LigneOperations;
+  ReceptionDetaile(
+      {Key? key,
+      required this.titre,
+      required this.typeoperation,
+      required this.etat,
+      required this.receptions,
+      // ignore: non_constant_identifier_names
+      required this.LigneOperations})
+      : super(key: key);
+
+  @override
+  State<ReceptionDetaile> createState() => _ReceptionDetaileState();
+}
+
+class _ReceptionDetaileState extends State<ReceptionDetaile> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.titre),
+        backgroundColor: Colors.orange,
+      ),
+      body: Container(
+        margin: const EdgeInsets.only(top: 30, left: 10),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 8, top: 20),
+                  child: Text(
+                    "Type d'operation:",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, top: 20),
+                  child: Text(
+                    widget.typeoperation,
+                    style: const TextStyle(color: Colors.indigo, fontSize: 25),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 8, top: 30),
+                  child: Text(
+                    "État:",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, top: 30),
+                  child: Text(
+                    widget.etat,
+                    style: const TextStyle(color: Colors.indigo, fontSize: 25),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 8, top: 30),
+                  child: Text(
+                    "Reception de:",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, top: 30),
+                  child: Text(
+                    widget.receptions,
+                    style: const TextStyle(color: Colors.indigo, fontSize: 25),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SingleChildScrollView(
+                  child: DataTable(
+                    columns: const [
+                      DataColumn(
+                        label: Text("Article"),
+                      ),
+                      DataColumn(
+                        label: Text("Colis source"),
+                      ),
+                      DataColumn(
+                        label: Text("Colis de destination"),
+                      ),
+                      DataColumn(
+                        label: Text("Appartenant à"),
+                      ),
+                      DataColumn(
+                        label: Text("Fait"),
+                      ),
+                      DataColumn(
+                        label: Text("Unité de mesure"),
+                      ),
+                    ],
+                    rows: [
+                      for (var i = 0;
+                          i < widget.LigneOperations.length;
+                          i++) ...[
+                        DataRow(cells: [
+                          DataCell(Text(widget.LigneOperations[i]['Article'])),
+                          DataCell(
+                              Text(widget.LigneOperations[i]['Colis source'])),
+                          DataCell(Text(widget.LigneOperations[i]
+                              ['Colis de destination'])),
+                          DataCell(Text(
+                              "${widget.LigneOperations[i]['Appartenant']}")),
+                          DataCell(
+                              Text("${widget.LigneOperations[i]['Fait']}")),
+                          DataCell(
+                              Text("${widget.LigneOperations[i]['Unite']}")),
+                        ]),
+                      ]
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

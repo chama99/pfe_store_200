@@ -5,6 +5,8 @@ import 'package:chama_projet/services/facture.dart';
 import 'package:chama_projet/services/user.dart';
 import 'package:flutter/material.dart';
 
+import '../services/reception.dart';
+
 Future openDialog(context, id, mssg, ch) {
   return showDialog(
       context: context,
@@ -26,6 +28,8 @@ Future openDialog(context, id, mssg, ch) {
                       Devis().deleteDevis(id);
                     } else if (ch == "facture") {
                       Facture().deleteFacture(id);
+                    } else if (ch == "reception") {
+                      Reception().deleteReception(id);
                     } else {
                       Contact().deleteContact(id);
                     }

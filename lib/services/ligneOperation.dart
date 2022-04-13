@@ -25,11 +25,12 @@ class CommandeOperation {
     }
   }
 
-  Future<void> addCommdeop(colis, article, appartenant, fait, unite) {
+  Future<void> addCommdeop(colis, colisDes, article, appartenant, fait, unite) {
     return commande
         .add({
           'Article': article,
-          'Colis de destination': colis,
+          'Colis source': colis,
+          'Colis de destination': colisDes,
           'Appartenant': appartenant,
           'Fait': fait,
           'Unite': unite,
