@@ -3,6 +3,7 @@
 import 'package:chama_projet/widget/NavBar.dart';
 import 'package:chama_projet/widget/card_article.dart';
 import 'package:chama_projet/widget/card_contact.dart';
+import 'package:chama_projet/widget/card_inventaire.dart';
 
 import 'package:flutter/material.dart';
 
@@ -56,6 +57,7 @@ class _MenuAdminState extends State<MenuAdmin> {
               if (x == "Utilisateurs") ...[buildInputCardUser()],
               if (x == "Applications") ...[buildInputCardRole()],
               if (x == "Plan") ...[buildInputCardPlan()],
+              if (x == "Inventaire") ...[buildInputCardInventaire()],
             ]
           ],
         ),

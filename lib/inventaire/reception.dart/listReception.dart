@@ -1,40 +1,40 @@
-// ignore_for_file: file_names, unused_local_variable, camel_case_types
-
-import 'package:chama_projet/widget/boitedialogue.dart';
+// ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
-import '../services/employe.dart';
-import 'creer_employe.dart';
-import 'employe_detaille.dart';
+import '../../services/facture.dart';
+import '../../widget/boitedialogue.dart';
+import 'creer_reception.dart';
 
-class listEmploye extends StatefulWidget {
-  const listEmploye({Key? key}) : super(key: key);
+class ListReception extends StatefulWidget {
+  const ListReception({Key? key}) : super(key: key);
 
   @override
-  _listEmployeState createState() => _listEmployeState();
+  State<ListReception> createState() => _ListReceptionState();
 }
 
-class _listEmployeState extends State<listEmploye> {
+class _ListReceptionState extends State<ListReception> {
   TextEditingController searchcontroller = TextEditingController();
   TextEditingController editingController = TextEditingController();
-  List userProfilesList = [];
+  // ignore: non_constant_identifier_names
+  List ListFact = [];
   @override
   void initState() {
     super.initState();
-
     fetchDatabaseList();
   }
 
   fetchDatabaseList() async {
-    dynamic resultant = await Employe().getEmployesList();
+    dynamic resultant = await Facture().getFacturesList();
 
     if (resultant == null) {
       // ignore: avoid_print
       print('Unable to retrieve');
     } else {
       setState(() {
-        userProfilesList = resultant;
+        ListFact = resultant;
       });
     }
   }
@@ -43,7 +43,7 @@ class _listEmployeState extends State<listEmploye> {
   var length;
 
   // ignore: unnecessary_new
-  Widget appBarTitle = const Text("Employés");
+  Widget appBarTitle = const Text("Réceptions");
   Icon actionIcon = const Icon(Icons.search);
   @override
   Widget build(BuildContext context) {
@@ -55,10 +55,7 @@ class _listEmployeState extends State<listEmploye> {
               padding: const EdgeInsets.only(top: 20, right: 30),
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CreeEmployePage()));
+                  Get.to(() => CreerReception());
                 },
                 child: Text(
                   "Créer".toUpperCase(),
@@ -102,7 +99,7 @@ class _listEmployeState extends State<listEmploye> {
                 ),
               ),
               Expanded(
-                child: userProfilesList.isEmpty
+                child: ListFact.isEmpty
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
@@ -111,57 +108,44 @@ class _listEmployeState extends State<listEmploye> {
                           Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
-                                  pageBuilder: (a, b, c) => const listEmploye(),
+                                  pageBuilder: (a, b, c) =>
+                                      const ListReception(),
                                   transitionDuration:
                                       const Duration(seconds: 0)));
                           // ignore: void_checks
                           return Future.value(false);
                         },
                         child: ListView.builder(
-                            itemCount: userProfilesList.length,
+                            itemCount: ListFact.length,
                             itemBuilder: (context, index) {
-                              final employe = userProfilesList[index];
+                              final facture = ListFact[index];
                               return Card(
                                   child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => EmployeDetail(
-                                                image: userProfilesList[index]
-                                                    ['image'],
-                                                email: userProfilesList[index]
-                                                    ['email'],
-                                                nom: userProfilesList[index]
-                                                    ['name'],
-                                                tel: userProfilesList[index]
-                                                    ['portable professionnel'],
-                                                adresse: userProfilesList[index]
-                                                    ['Adresse professionnelle'],
-                                              )));
-                                },
+                                onTap: () {},
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),
                                 child: ListTile(
-                                  title: Text(employe["name"]),
-                                  subtitle: Text(employe["email"]),
+                                  title: Text(facture["etat"]),
+                                  subtitle: Text(
+                                      // ignore: unnecessary_string_interpolations
+                                      "${facture["date de facturation"].toDate().toString()}       ${facture["total"]}£"),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          employe["name"],
-                                          "Êtes-vous sûr de vouloir supprimer cet employé",
-                                          "employé")
+                                          facture["titre"],
+                                          "Êtes-vous sûr de vouloir supprimer cette facture",
+                                          "facture")
                                     },
                                     icon: const Icon(
                                       Icons.delete,
                                       color: Colors.red,
                                     ),
                                   ),
-                                  leading: CircleAvatar(
-                                    radius: 20.0,
-                                    backgroundImage:
-                                        NetworkImage(employe['image']),
+                                  leading: Text(
+                                    facture["titre"],
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ));
@@ -173,13 +157,19 @@ class _listEmployeState extends State<listEmploye> {
   }
 
   void filterSearchResults(String query) {
-    final suggestions = userProfilesList.where((employe) {
-      final namemploye = employe['name'].toLowerCase();
+    final suggestions = ListFact.where((facture) {
+      final namemploye = facture['titre'].toLowerCase();
       final input = query.toLowerCase();
       return namemploye.contains(input);
     }).toList();
     setState(() {
-      userProfilesList = suggestions;
+      ListFact = suggestions;
     });
+  }
+
+  String formattedDate(timeStamp) {
+    var dateFromTimeStamp =
+        DateTime.fromMicrosecondsSinceEpoch(timeStamp.seconds * 1000);
+    return DateFormat('dd-MM-yyyy').format(dateFromTimeStamp);
   }
 }

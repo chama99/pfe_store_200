@@ -564,21 +564,20 @@ class _UpdateFactureState extends State<UpdateFacture> {
         child: const Text("Modifier"),
         onPressed: () {
           // Validate returns true if the form is valid, otherwise false.
-          if (_formKey.currentState!.validate()) {
-            // ignore: prefer_adjacent_string_concatenation
-            Facture().updateFacture(
-                widget.titre,
-                widget.client,
-                widget.etat,
-                DateTime.parse(widget.date1),
-                DateTime.parse(widget.date2),
-                widget.adrss,
-                calculMontat() - remise,
-                widget.listfact,
-                remise,
-                calculMontat());
-            Get.to(() => const ListFacture());
-          }
+
+          // ignore: prefer_adjacent_string_concatenation
+          Facture().updateFacture(
+              widget.titre,
+              widget.client,
+              widget.etat,
+              DateTime.parse(widget.date1),
+              DateTime.parse(widget.date2),
+              widget.adrss,
+              calculMontat() - remise,
+              widget.listfact,
+              remise,
+              calculMontat());
+          Get.to(() => const ListFacture());
         },
       ),
     );

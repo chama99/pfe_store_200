@@ -335,7 +335,7 @@ class _AddUserPageState extends State<AddUserPage> {
                                                 role,
                                                 "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
                                           } else {
-                                            uploadImage(email);
+                                            uploadImage(email, nom);
                                           }
 
                                           clearText();
@@ -349,7 +349,7 @@ class _AddUserPageState extends State<AddUserPage> {
                                             "veuillez sélectionner poste occupé ");
                                       }
                                     } else {
-                                      showToast("Email déja exitait");
+                                      showToast("Email déja existé");
                                     }
                                   } else {
                                     showToast(
@@ -421,7 +421,7 @@ class _AddUserPageState extends State<AddUserPage> {
     });
   }
 
-  uploadImage(String email) async {
+  uploadImage(String email, String n) async {
     // ignore: unused_local_variable
     final fileName = basename(imageFile!.path);
     // ignore: prefer_const_declarations
@@ -434,7 +434,7 @@ class _AddUserPageState extends State<AddUserPage> {
       UploadTask uploadTask = ref.putFile(File(imageFile!.path));
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
-        User().addUser(email, nom, password, role, uploadPath);
+        User().addUser(email, n, password, role, uploadPath);
       });
     } catch (e) {
       print('error occured');

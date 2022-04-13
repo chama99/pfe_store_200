@@ -4,7 +4,7 @@ import 'package:chama_projet/employes.dart/update_employe.dart';
 import 'package:flutter/material.dart';
 
 class EmployeDetail extends StatefulWidget {
-  String email, nom, tel, adresse, image, role;
+  String email, nom, tel, adresse, image;
   EmployeDetail({
     Key? key,
     required this.image,
@@ -12,7 +12,6 @@ class EmployeDetail extends StatefulWidget {
     required this.nom,
     required this.tel,
     required this.adresse,
-    required this.role,
   }) : super(key: key);
 
   @override
@@ -87,9 +86,6 @@ class _EmployeDetailState extends State<EmployeDetail> {
                   children: [
                     textfield(
                       hintText: widget.email,
-                    ),
-                    textfield(
-                      hintText: widget.role,
                     ),
                     textfield(
                       hintText: widget.adresse,

@@ -179,6 +179,7 @@ class _AjoutCommandeState extends State<AjoutCommande> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     controller: unite,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: 'unité',
                       filled: true,
@@ -256,7 +257,7 @@ class _AjoutCommandeState extends State<AjoutCommande> {
                             'réf': ref.text,
                             'Article': article,
                             'Description': des.text,
-                            'Unite': unite.text,
+                            'Unite': int.parse(unite.text),
                             'Quantite': int.parse(qt.text),
                             'prix': double.parse(prix.text),
                             'taxe': "20%",

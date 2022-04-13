@@ -163,36 +163,7 @@ class _UpdateEmployePageState extends State<UpdateEmployePage> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            bottom: 20, left: 70, right: 70, top: 10),
-                        child: DropdownButton(
-                          dropdownColor: Colors.white,
-                          icon: const Padding(
-                            padding: EdgeInsets.only(left: 45),
-                            child: Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.orange,
-                            ),
-                          ),
-                          style: const TextStyle(
-                              fontSize: 20, color: Colors.black),
-                          iconSize: 40,
-                          hint: Text(role),
-                          value: ch,
-                          onChanged: (newValue) {
-                            setState(() {
-                              ch = newValue.toString();
-                            });
-                          },
-                          items: listItem.map((valueItem) {
-                            return DropdownMenuItem(
-                              value: valueItem,
-                              child: Text(valueItem),
-                            );
-                          }).toList(),
-                        ),
-                      ),
+
                       // ignore: avoid_unnecessary_containers
                       Container(
                         child: Row(
@@ -206,8 +177,8 @@ class _UpdateEmployePageState extends State<UpdateEmployePage> {
                                     role = ch;
                                   }
                                   if (imageFile == null) {
-                                    Employe().updateEmploye(email, widget.nom,
-                                        tel, adresse, role, url);
+                                    Employe().updateEmploye(
+                                        email, widget.nom, tel, adresse, url);
                                   } else {
                                     uploadImage(
                                         email, widget.nom, tel, adresse);
@@ -294,8 +265,7 @@ class _UpdateEmployePageState extends State<UpdateEmployePage> {
       UploadTask uploadTask = ref.putFile(File(imageFile!.path));
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
-        Employe()
-            .updateEmploye(email, widget.nom, tel, adresse, role, uploadPath);
+        Employe().updateEmploye(email, widget.nom, tel, adresse, uploadPath);
       });
     } catch (e) {
       // ignore: avoid_print

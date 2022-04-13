@@ -41,9 +41,6 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
   DateTime dataTime = DateTime.now();
   int? sortColumnIndex;
   bool isAscending = false;
-  firebase_storage.FirebaseStorage storage =
-      firebase_storage.FirebaseStorage.instance;
-  XFile? imageFile;
 
   final _formKey = GlobalKey<FormState>();
   final titre = TextEditingController();
@@ -232,7 +229,8 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                     DataCell(Text(commandeList[i]['Article'])),
                                     DataCell(
                                         Text(commandeList[i]['Description'])),
-                                    DataCell(Text(commandeList[i]['Unite'])),
+                                    DataCell(
+                                        Text("${commandeList[i]['Unite']}")),
                                     DataCell(
                                         Text("${commandeList[i]['Quantite']}")),
                                     DataCell(

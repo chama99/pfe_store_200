@@ -30,6 +30,37 @@ class CreeContactPage extends StatefulWidget {
 }
 
 class _CreeContactPageState extends State<CreeContactPage> {
+  List NomContact = [];
+  @override
+  void initState() {
+    super.initState();
+
+    fetchDatabaseList();
+  }
+
+  fetchDatabaseList() async {
+    dynamic resultant = await Contact().getContactListByNom();
+
+    if (resultant == null) {
+      // ignore: avoid_print
+      print('Unable to retrieve');
+    } else {
+      setState(() {
+        NomContact = resultant;
+      });
+    }
+  }
+
+  bool VerificationContactByNom(String nom) {
+    bool b = false;
+    for (int i = 0; i < NomContact.length; i++) {
+      if (nom == NomContact[i]) {
+        b = true;
+      }
+    }
+    return b;
+  }
+
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
   XFile? imageFile;
@@ -256,7 +287,10 @@ class _CreeContactPageState extends State<CreeContactPage> {
                               ElevatedButton(
                                 onPressed: () {
                                   // Validate returns true if the form is valid, otherwise false.
-                                  if (_formKey.currentState!.validate()) {
+                                  if (_formKey.currentState!.validate() &&
+                                      VerificationContactByNom(
+                                              nomController.text) ==
+                                          false) {
                                     if (radio != null) {
                                       setState(() {
                                         email = emailController.text;
@@ -286,6 +320,8 @@ class _CreeContactPageState extends State<CreeContactPage> {
                                       showToast(
                                           "veuillez sélectionner fournisseur ou client ");
                                     }
+                                  } else {
+                                    showToast("Nom de contact déja existé");
                                   }
                                 },
                                 child: const Text(

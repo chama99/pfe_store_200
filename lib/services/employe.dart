@@ -23,13 +23,12 @@ class Employe {
     }
   }
 
-  Future<void> addEmploye(email, nom, tel, adresse, role, url) {
+  Future<void> addEmploye(email, nom, tel, adresse, url) {
     return employe
         .doc(nom)
         .set({
           'email': email,
           'name': nom,
-          'role': role,
           'image': url,
           'portable professionnel': tel,
           'Adresse professionnelle': adresse,
@@ -41,14 +40,13 @@ class Employe {
             (error) => showToast("Échec de l'ajout de l'employé : $error"));
   }
 
-  Future<void> updateEmploye(email, nom, tel, adresse, role, url) {
+  Future<void> updateEmploye(email, nom, tel, adresse, url) {
     return employe
         .doc(nom)
         .update({
           'email': email,
           'portable professionnel': tel,
           'Adresse professionnelle': adresse,
-          'role': role,
           'image': url,
         })
         // ignore: avoid_print

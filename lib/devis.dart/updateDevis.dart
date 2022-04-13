@@ -340,7 +340,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                 child: TextFormField(
                                   controller: Contolleremise,
                                   decoration: InputDecoration(
-                                    hintText: '${widget.remise}',
+                                    hintText: '${widget.remise * 100}%',
                                     filled: true,
                                     fillColor: Colors.white,
                                     focusedBorder: OutlineInputBorder(

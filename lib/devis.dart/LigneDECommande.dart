@@ -65,7 +65,6 @@ class _LigneCommandeState extends State<LigneCommande> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     controller: ref,
-                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: 'réf',
                       filled: true,
@@ -155,6 +154,7 @@ class _LigneCommandeState extends State<LigneCommande> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     controller: unite,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: 'Unité',
                       filled: true,
@@ -242,10 +242,10 @@ class _LigneCommandeState extends State<LigneCommande> {
                         if (_formKey.currentState!.validate()) {
                           if (article != null) {
                             Commande().addCommande(
-                                int.parse(ref.text),
+                                ref.text,
                                 article,
                                 des.text,
-                                unite.text,
+                                int.parse(unite.text),
                                 int.parse(qt.text),
                                 double.parse(prix.text),
                                 "20 %",

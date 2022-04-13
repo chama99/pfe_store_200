@@ -1,7 +1,9 @@
 // ignore_for_file: file_names, must_be_immutable
 
+import 'package:chama_projet/pages/role.dart';
 import 'package:chama_projet/services/user.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../widget/toast.dart';
 
@@ -31,25 +33,30 @@ class AjoutAcces extends StatefulWidget {
 
 class _AjoutAccesState extends State<AjoutAcces> {
   List roleList = [];
-  var stock = "Stock";
+  var stock = "Inventaire";
   var achat = "Achats";
   var devis = "Devis";
-  var config = "Configuration";
+  var uts = "Utilisateurs";
   var contact = "Contacts";
   var plan = "Plan";
   var mssg = "Message";
-  var notif = "Employés";
-  var fact = "facture";
+  var emp = "Employés";
+  var fact = "Factures";
+  var article = "Articles";
+  var app = "Applications";
+  var cong = "Conges";
 
   bool t = false;
-
+  bool ap = false;
+  bool ar = false;
+  bool con = false;
   bool s = false;
   bool a = false;
+  bool u = false;
   bool c = false;
-  bool g = false;
   bool p = false;
   bool m = false;
-  bool n = false;
+  bool e = false;
   bool d = false;
   bool f = false;
   @override
@@ -88,7 +95,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                         }
                       }
                       if (t == true) {
-                        showToast("Rôle existait déjà ");
+                        showToast("$achat déjà existé");
                       }
                       if (t == false) {
                         roleList.add(achat);
@@ -104,25 +111,106 @@ class _AjoutAccesState extends State<AjoutAcces> {
               children: [
                 Checkbox(
                   activeColor: Colors.indigo,
-                  value: g,
+                  value: ar,
                   onChanged: (value) {
                     setState(() {
-                      g = value!;
+                      ar = value!;
+
                       for (var i in widget.acces) {
-                        if (i == config) {
+                        if (i == article) {
                           t = true;
                         }
                       }
                       if (t == true) {
-                        showToast("Rôle existait déjà ");
+                        showToast("$article  déjà existé ");
                       }
                       if (t == false) {
-                        roleList.add(config);
+                        roleList.add(article);
                       }
                     });
                   },
                 ),
-                Text(config),
+                Text(article),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Checkbox(
+                  activeColor: Colors.indigo,
+                  value: ap,
+                  onChanged: (value) {
+                    setState(() {
+                      ap = value!;
+
+                      for (var i in widget.acces) {
+                        if (i == app) {
+                          t = true;
+                        }
+                      }
+                      if (t == true) {
+                        showToast("$app déjà existé");
+                      }
+                      if (t == false) {
+                        roleList.add(app);
+                      }
+                    });
+                  },
+                ),
+                Text(app),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Checkbox(
+                  activeColor: Colors.indigo,
+                  value: con,
+                  onChanged: (value) {
+                    setState(() {
+                      con = value!;
+
+                      for (var i in widget.acces) {
+                        if (i == cong) {
+                          t = true;
+                        }
+                      }
+                      if (t == true) {
+                        showToast("$cong déjà existé ");
+                      }
+                      if (t == false) {
+                        roleList.add(cong);
+                      }
+                    });
+                  },
+                ),
+                Text(cong),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Checkbox(
+                  activeColor: Colors.indigo,
+                  value: u,
+                  onChanged: (value) {
+                    setState(() {
+                      u = value!;
+                      for (var i in widget.acces) {
+                        if (i == uts) {
+                          t = true;
+                        }
+                      }
+                      if (t == true) {
+                        showToast("$uts déjà existé");
+                      }
+                      if (t == false) {
+                        roleList.add(uts);
+                      }
+                    });
+                  },
+                ),
+                Text(uts),
               ],
             ),
             Row(
@@ -140,7 +228,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                         }
                       }
                       if (t == true) {
-                        showToast("Rôle existait déjà ");
+                        showToast("$contact  déjà existé");
                       }
                       if (t == false) {
                         roleList.add(contact);
@@ -166,7 +254,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                         }
                       }
                       if (t == true) {
-                        showToast("Rôle existait déjà ");
+                        showToast("$devis  déjà existé");
                       }
                       if (t == false) {
                         roleList.add(devis);
@@ -192,7 +280,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                         }
                       }
                       if (t == true) {
-                        showToast("Rôle existait déjà ");
+                        showToast("$fact déjà existé");
                       }
                       if (t == false) {
                         roleList.add(fact);
@@ -218,7 +306,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                         }
                       }
                       if (t == true) {
-                        showToast("Rôle existait déjà ");
+                        showToast("$mssg  déjà existé");
                       }
                       if (t == false) {
                         roleList.add(mssg);
@@ -227,32 +315,6 @@ class _AjoutAccesState extends State<AjoutAcces> {
                   },
                 ),
                 Text(mssg),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Checkbox(
-                  activeColor: Colors.indigo,
-                  value: n,
-                  onChanged: (value) {
-                    setState(() {
-                      n = value!;
-                      for (var i in widget.acces) {
-                        if (i == notif) {
-                          t = true;
-                        }
-                      }
-                      if (t == true) {
-                        showToast("Rôle existait déjà ");
-                      }
-                      if (t == false) {
-                        roleList.add(notif);
-                      }
-                    });
-                  },
-                ),
-                Text(notif),
               ],
             ),
             Row(
@@ -270,7 +332,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                         }
                       }
                       if (t == true) {
-                        showToast("Rôle existait déjà ");
+                        showToast("$plan déjà existé ");
                       }
                       if (t == false) {
                         roleList.add(plan);
@@ -279,6 +341,32 @@ class _AjoutAccesState extends State<AjoutAcces> {
                   },
                 ),
                 Text(plan),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Checkbox(
+                  activeColor: Colors.indigo,
+                  value: e,
+                  onChanged: (value) {
+                    setState(() {
+                      e = value!;
+                      for (var i in widget.acces) {
+                        if (i == emp) {
+                          t = true;
+                        }
+                      }
+                      if (t == true) {
+                        showToast("$emp déjà existé ");
+                      }
+                      if (t == false) {
+                        roleList.add(emp);
+                      }
+                    });
+                  },
+                ),
+                Text(emp),
               ],
             ),
             Row(
@@ -296,7 +384,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                         }
                       }
                       if (t == true) {
-                        showToast("Rôle existait déjà ");
+                        showToast("$stock déjà existé");
                       }
                       if (t == false) {
                         roleList.add(stock);
@@ -317,6 +405,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                     }
                     User().updateRoleUser(widget.email, widget.mp, widget.role,
                         widget.image, widget.acces, widget.name);
+                    Get.to(() => const Roles());
                   },
                   child: const Text(
                     "Ajouter",

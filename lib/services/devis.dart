@@ -69,7 +69,7 @@ class Devis {
         .doc(id)
         .delete()
         // ignore: avoid_print
-        .then((value) => showToast('Devis Deleted'))
+        .then((value) => showToast('Devis supprimée'))
         // ignore: avoid_print
         .catchError((error) =>
             showToast("Échec de la suppression de l'appareil : $error"));

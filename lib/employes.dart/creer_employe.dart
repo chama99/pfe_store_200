@@ -50,8 +50,7 @@ class _CreeEmployePageState extends State<CreeEmployePage> {
   final adressee = TextEditingController();
   List listItem = ["Technicien", "Comptable"];
   bool isHiddenPassword = true;
-  // ignore: prefer_typing_uninitialized_variables
-  var ch;
+
   // ignore: non_constant_identifier_names
   List NomEmpl = [];
   @override
@@ -243,75 +242,41 @@ class _CreeEmployePageState extends State<CreeEmployePage> {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: 20, left: 70, right: 70, top: 10),
-                            child: DropdownButton(
-                              hint: const Text("Poste occupé "),
-                              dropdownColor: Colors.white,
-                              icon: const Padding(
-                                padding: EdgeInsets.only(left: 50),
-                                child: Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.orange,
-                                ),
-                              ),
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.black),
-                              iconSize: 40,
-                              value: ch,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  ch = newValue.toString();
-                                });
-                              },
-                              items: listItem.map((valueItem) {
-                                return DropdownMenuItem(
-                                  value: valueItem,
-                                  child: Text(valueItem),
-                                );
-                              }).toList(),
-                            ),
-                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               ElevatedButton(
                                 onPressed: () {
                                   // Validate returns true if the form is valid, otherwise false.
-                                  if (_formKey.currentState!.validate() &&
-                                      VerificationEmploye(nomController.text) ==
-                                          false) {
-                                    if (ch != null) {
+                                  if (_formKey.currentState!.validate()) {
+                                    if (VerificationEmploye(
+                                            nomController.text) ==
+                                        false) {
                                       setState(() {
                                         email = emailController.text;
                                         nom = nomController.text;
                                         tel = telp.text;
                                         adresse = adressee.text;
-                                        role = ch;
+
                                         if (imageFile == null) {
                                           Employe().addEmploye(
                                               email,
                                               nom,
                                               tel,
                                               adresse,
-                                              role,
                                               "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
                                         } else {
                                           uploadImage(email);
                                         }
 
                                         clearText();
-                                        ch = null;
+
                                         imageFile = null;
                                         Get.to(() => const listEmploye());
                                       });
                                     } else {
-                                      showToast(
-                                          "veuillez sélectionner poste occupé ");
+                                      showToast("Nom de l'employé déja existé");
                                     }
-                                  } else {
-                                    showToast("Nom de l'employé déja existait");
                                   }
                                 },
                                 child: const Text(
@@ -393,7 +358,7 @@ class _CreeEmployePageState extends State<CreeEmployePage> {
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
 
-        Employe().addEmploye(email, nom, tel, adresse, role, uploadPath);
+        Employe().addEmploye(email, nom, tel, adresse, uploadPath);
       });
     } catch (e) {
       // ignore: avoid_print
