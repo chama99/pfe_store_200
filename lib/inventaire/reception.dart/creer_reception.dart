@@ -339,7 +339,7 @@ class _CreerReceptionState extends State<CreerReception> {
             if (operation != null) {
               if (etat != null) {
                 Reception().addReception(
-                    ch, typeoperation, etat, dataTime, list, reception);
+                    ch, operation, etat, dataTime, list, reception);
                 CommandeOperation().deleteCommdeop();
                 Get.to(() => const ListReception());
               } else {

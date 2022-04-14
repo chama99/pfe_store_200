@@ -68,354 +68,356 @@ class _AjoutAccesState extends State<AjoutAcces> {
       ),
       body: Container(
         margin: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
-              Text(
-                "Liste Des Applications",
-                style: TextStyle(
-                    color: Colors.indigo,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30),
-              )
-            ]),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Checkbox(
-                  activeColor: Colors.indigo,
-                  value: a,
-                  onChanged: (value) {
-                    setState(() {
-                      a = value!;
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
+                Text(
+                  "Liste Des Applications",
+                  style: TextStyle(
+                      color: Colors.indigo,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30),
+                )
+              ]),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Checkbox(
+                    activeColor: Colors.indigo,
+                    value: a,
+                    onChanged: (value) {
+                      setState(() {
+                        a = value!;
 
-                      for (var i in widget.acces) {
-                        if (i == achat) {
-                          t = true;
+                        for (var i in widget.acces) {
+                          if (i == achat) {
+                            t = true;
+                          }
                         }
-                      }
-                      if (t == true) {
-                        showToast("$achat déjà existé");
-                      }
-                      if (t == false) {
-                        roleList.add(achat);
-                      }
-                    });
-                  },
-                ),
-                Text(achat),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Checkbox(
-                  activeColor: Colors.indigo,
-                  value: ar,
-                  onChanged: (value) {
-                    setState(() {
-                      ar = value!;
-
-                      for (var i in widget.acces) {
-                        if (i == article) {
-                          t = true;
+                        if (t == true) {
+                          showToast("$achat déjà existé");
                         }
-                      }
-                      if (t == true) {
-                        showToast("$article  déjà existé ");
-                      }
-                      if (t == false) {
-                        roleList.add(article);
-                      }
-                    });
-                  },
-                ),
-                Text(article),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Checkbox(
-                  activeColor: Colors.indigo,
-                  value: ap,
-                  onChanged: (value) {
-                    setState(() {
-                      ap = value!;
-
-                      for (var i in widget.acces) {
-                        if (i == app) {
-                          t = true;
+                        if (t == false) {
+                          roleList.add(achat);
                         }
-                      }
-                      if (t == true) {
-                        showToast("$app déjà existé");
-                      }
-                      if (t == false) {
-                        roleList.add(app);
-                      }
-                    });
-                  },
-                ),
-                Text(app),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Checkbox(
-                  activeColor: Colors.indigo,
-                  value: con,
-                  onChanged: (value) {
-                    setState(() {
-                      con = value!;
-
-                      for (var i in widget.acces) {
-                        if (i == cong) {
-                          t = true;
-                        }
-                      }
-                      if (t == true) {
-                        showToast("$cong déjà existé ");
-                      }
-                      if (t == false) {
-                        roleList.add(cong);
-                      }
-                    });
-                  },
-                ),
-                Text(cong),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Checkbox(
-                  activeColor: Colors.indigo,
-                  value: u,
-                  onChanged: (value) {
-                    setState(() {
-                      u = value!;
-                      for (var i in widget.acces) {
-                        if (i == uts) {
-                          t = true;
-                        }
-                      }
-                      if (t == true) {
-                        showToast("$uts déjà existé");
-                      }
-                      if (t == false) {
-                        roleList.add(uts);
-                      }
-                    });
-                  },
-                ),
-                Text(uts),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Checkbox(
-                  activeColor: Colors.indigo,
-                  value: c,
-                  onChanged: (value) {
-                    setState(() {
-                      c = value!;
-                      for (var i in widget.acces) {
-                        if (i == contact) {
-                          t = true;
-                        }
-                      }
-                      if (t == true) {
-                        showToast("$contact  déjà existé");
-                      }
-                      if (t == false) {
-                        roleList.add(contact);
-                      }
-                    });
-                  },
-                ),
-                Text(contact),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Checkbox(
-                  activeColor: Colors.indigo,
-                  value: d,
-                  onChanged: (value) {
-                    setState(() {
-                      d = value!;
-                      for (var i in widget.acces) {
-                        if (i == devis) {
-                          t = true;
-                        }
-                      }
-                      if (t == true) {
-                        showToast("$devis  déjà existé");
-                      }
-                      if (t == false) {
-                        roleList.add(devis);
-                      }
-                    });
-                  },
-                ),
-                Text(devis),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Checkbox(
-                  activeColor: Colors.indigo,
-                  value: f,
-                  onChanged: (value) {
-                    setState(() {
-                      f = value!;
-                      for (var i in widget.acces) {
-                        if (i == fact) {
-                          t = true;
-                        }
-                      }
-                      if (t == true) {
-                        showToast("$fact déjà existé");
-                      }
-                      if (t == false) {
-                        roleList.add(fact);
-                      }
-                    });
-                  },
-                ),
-                Text(fact),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Checkbox(
-                  activeColor: Colors.indigo,
-                  value: m,
-                  onChanged: (value) {
-                    setState(() {
-                      m = value!;
-                      for (var i in widget.acces) {
-                        if (i == mssg) {
-                          t = true;
-                        }
-                      }
-                      if (t == true) {
-                        showToast("$mssg  déjà existé");
-                      }
-                      if (t == false) {
-                        roleList.add(mssg);
-                      }
-                    });
-                  },
-                ),
-                Text(mssg),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Checkbox(
-                  activeColor: Colors.indigo,
-                  value: p,
-                  onChanged: (value) {
-                    setState(() {
-                      p = value!;
-                      for (var i in widget.acces) {
-                        if (i == plan) {
-                          t = true;
-                        }
-                      }
-                      if (t == true) {
-                        showToast("$plan déjà existé ");
-                      }
-                      if (t == false) {
-                        roleList.add(plan);
-                      }
-                    });
-                  },
-                ),
-                Text(plan),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Checkbox(
-                  activeColor: Colors.indigo,
-                  value: e,
-                  onChanged: (value) {
-                    setState(() {
-                      e = value!;
-                      for (var i in widget.acces) {
-                        if (i == emp) {
-                          t = true;
-                        }
-                      }
-                      if (t == true) {
-                        showToast("$emp déjà existé ");
-                      }
-                      if (t == false) {
-                        roleList.add(emp);
-                      }
-                    });
-                  },
-                ),
-                Text(emp),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Checkbox(
-                  activeColor: Colors.indigo,
-                  value: s,
-                  onChanged: (value) {
-                    setState(() {
-                      s = value!;
-                      for (var i in widget.acces) {
-                        if (i == stock) {
-                          t = true;
-                        }
-                      }
-                      if (t == true) {
-                        showToast("$stock déjà existé");
-                      }
-                      if (t == false) {
-                        roleList.add(stock);
-                      }
-                    });
-                  },
-                ),
-                Text(stock),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    for (var ch in roleList) {
-                      widget.acces.add(ch);
-                    }
-                    User().updateRoleUser(widget.email, widget.mp, widget.role,
-                        widget.image, widget.acces, widget.name);
-                    Get.to(() => const Roles());
-                  },
-                  child: const Text(
-                    "Ajouter",
-                    style: TextStyle(fontSize: 18.0),
+                      });
+                    },
                   ),
-                  style: ElevatedButton.styleFrom(primary: Colors.orange),
-                ),
-              ],
-            )
-          ],
+                  Text(achat),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Checkbox(
+                    activeColor: Colors.indigo,
+                    value: ar,
+                    onChanged: (value) {
+                      setState(() {
+                        ar = value!;
+
+                        for (var i in widget.acces) {
+                          if (i == article) {
+                            t = true;
+                          }
+                        }
+                        if (t == true) {
+                          showToast("$article  déjà existé ");
+                        }
+                        if (t == false) {
+                          roleList.add(article);
+                        }
+                      });
+                    },
+                  ),
+                  Text(article),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Checkbox(
+                    activeColor: Colors.indigo,
+                    value: ap,
+                    onChanged: (value) {
+                      setState(() {
+                        ap = value!;
+
+                        for (var i in widget.acces) {
+                          if (i == app) {
+                            t = true;
+                          }
+                        }
+                        if (t == true) {
+                          showToast("$app déjà existé");
+                        }
+                        if (t == false) {
+                          roleList.add(app);
+                        }
+                      });
+                    },
+                  ),
+                  Text(app),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Checkbox(
+                    activeColor: Colors.indigo,
+                    value: con,
+                    onChanged: (value) {
+                      setState(() {
+                        con = value!;
+
+                        for (var i in widget.acces) {
+                          if (i == cong) {
+                            t = true;
+                          }
+                        }
+                        if (t == true) {
+                          showToast("$cong déjà existé ");
+                        }
+                        if (t == false) {
+                          roleList.add(cong);
+                        }
+                      });
+                    },
+                  ),
+                  Text(cong),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Checkbox(
+                    activeColor: Colors.indigo,
+                    value: u,
+                    onChanged: (value) {
+                      setState(() {
+                        u = value!;
+                        for (var i in widget.acces) {
+                          if (i == uts) {
+                            t = true;
+                          }
+                        }
+                        if (t == true) {
+                          showToast("$uts déjà existé");
+                        }
+                        if (t == false) {
+                          roleList.add(uts);
+                        }
+                      });
+                    },
+                  ),
+                  Text(uts),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Checkbox(
+                    activeColor: Colors.indigo,
+                    value: c,
+                    onChanged: (value) {
+                      setState(() {
+                        c = value!;
+                        for (var i in widget.acces) {
+                          if (i == contact) {
+                            t = true;
+                          }
+                        }
+                        if (t == true) {
+                          showToast("$contact  déjà existé");
+                        }
+                        if (t == false) {
+                          roleList.add(contact);
+                        }
+                      });
+                    },
+                  ),
+                  Text(contact),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Checkbox(
+                    activeColor: Colors.indigo,
+                    value: d,
+                    onChanged: (value) {
+                      setState(() {
+                        d = value!;
+                        for (var i in widget.acces) {
+                          if (i == devis) {
+                            t = true;
+                          }
+                        }
+                        if (t == true) {
+                          showToast("$devis  déjà existé");
+                        }
+                        if (t == false) {
+                          roleList.add(devis);
+                        }
+                      });
+                    },
+                  ),
+                  Text(devis),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Checkbox(
+                    activeColor: Colors.indigo,
+                    value: f,
+                    onChanged: (value) {
+                      setState(() {
+                        f = value!;
+                        for (var i in widget.acces) {
+                          if (i == fact) {
+                            t = true;
+                          }
+                        }
+                        if (t == true) {
+                          showToast("$fact déjà existé");
+                        }
+                        if (t == false) {
+                          roleList.add(fact);
+                        }
+                      });
+                    },
+                  ),
+                  Text(fact),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Checkbox(
+                    activeColor: Colors.indigo,
+                    value: m,
+                    onChanged: (value) {
+                      setState(() {
+                        m = value!;
+                        for (var i in widget.acces) {
+                          if (i == mssg) {
+                            t = true;
+                          }
+                        }
+                        if (t == true) {
+                          showToast("$mssg  déjà existé");
+                        }
+                        if (t == false) {
+                          roleList.add(mssg);
+                        }
+                      });
+                    },
+                  ),
+                  Text(mssg),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Checkbox(
+                    activeColor: Colors.indigo,
+                    value: p,
+                    onChanged: (value) {
+                      setState(() {
+                        p = value!;
+                        for (var i in widget.acces) {
+                          if (i == plan) {
+                            t = true;
+                          }
+                        }
+                        if (t == true) {
+                          showToast("$plan déjà existé ");
+                        }
+                        if (t == false) {
+                          roleList.add(plan);
+                        }
+                      });
+                    },
+                  ),
+                  Text(plan),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Checkbox(
+                    activeColor: Colors.indigo,
+                    value: e,
+                    onChanged: (value) {
+                      setState(() {
+                        e = value!;
+                        for (var i in widget.acces) {
+                          if (i == emp) {
+                            t = true;
+                          }
+                        }
+                        if (t == true) {
+                          showToast("$emp déjà existé ");
+                        }
+                        if (t == false) {
+                          roleList.add(emp);
+                        }
+                      });
+                    },
+                  ),
+                  Text(emp),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Checkbox(
+                    activeColor: Colors.indigo,
+                    value: s,
+                    onChanged: (value) {
+                      setState(() {
+                        s = value!;
+                        for (var i in widget.acces) {
+                          if (i == stock) {
+                            t = true;
+                          }
+                        }
+                        if (t == true) {
+                          showToast("$stock déjà existé");
+                        }
+                        if (t == false) {
+                          roleList.add(stock);
+                        }
+                      });
+                    },
+                  ),
+                  Text(stock),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      for (var ch in roleList) {
+                        widget.acces.add(ch);
+                      }
+                      User().updateRoleUser(widget.email, widget.mp,
+                          widget.role, widget.image, widget.acces, widget.name);
+                      Get.to(() => const Roles());
+                    },
+                    child: const Text(
+                      "Ajouter",
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                    style: ElevatedButton.styleFrom(primary: Colors.orange),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class User {
   final CollectionReference user =
       FirebaseFirestore.instance.collection('users');
-  Future<void> addUser(email, name, password, role, url) {
+  Future<void> addUser(email, name, password, role, url, acces) {
     return user
         .doc(email)
         .set({
@@ -15,7 +15,7 @@ class User {
           'mot de passe': password,
           'role': role,
           'image': url,
-          'acces': [],
+          'acces': acces,
         })
         // ignore: avoid_print
         .then((value) => showToast("Utilisateur ajouté"))

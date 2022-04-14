@@ -41,7 +41,9 @@ class _AddUserPageState extends State<AddUserPage> {
   final ImagePicker picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
   late String imageUrl;
-
+  List acces = [];
+  late bool _obscureText = true;
+  late bool _obscureText2 = true;
   var role = "";
   var email = "";
   var password = "";
@@ -237,11 +239,46 @@ class _AddUserPageState extends State<AddUserPage> {
                             child: TextFormField(
                               controller: passwordController,
                               keyboardType: TextInputType.text,
-                              obscureText: isHiddenPassword,
-                              decoration: buildInputDecoration(
-                                Icons.lock,
-                                "Mot de passe",
-                                color: Colors.white,
+                              obscureText: _obscureText,
+                              decoration: InputDecoration(
+                                hintText: "Mot de passe",
+                                filled: true,
+                                fillColor: Colors.white,
+                                prefixIcon: Icon(
+                                  Icons.lock,
+                                  color: Colors.orange,
+                                ),
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _obscureText = !_obscureText;
+                                    });
+                                  },
+                                  child: Icon(
+                                      _obscureText
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: Colors.orange),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  borderSide: const BorderSide(
+                                      color: Colors.orange, width: 1.5),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.orange,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.grey,
+                                    width: 1.5,
+                                  ),
+                                ),
                               ),
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -256,12 +293,47 @@ class _AddUserPageState extends State<AddUserPage> {
                                 bottom: 20, left: 5, right: 5, top: 10),
                             child: TextFormField(
                               controller: confirmpassword,
-                              obscureText: isHiddenPassword,
                               keyboardType: TextInputType.text,
-                              decoration: buildInputDecoration(
-                                Icons.lock,
-                                "Confirmez le mot de passe",
-                                color: Colors.white,
+                              obscureText: _obscureText2,
+                              decoration: InputDecoration(
+                                hintText: "Mot de passe",
+                                filled: true,
+                                fillColor: Colors.white,
+                                prefixIcon: Icon(
+                                  Icons.lock,
+                                  color: Colors.orange,
+                                ),
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _obscureText2 = !_obscureText2;
+                                    });
+                                  },
+                                  child: Icon(
+                                      _obscureText2
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: Colors.orange),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  borderSide: const BorderSide(
+                                      color: Colors.orange, width: 1.5),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.orange,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.grey,
+                                    width: 1.5,
+                                  ),
+                                ),
                               ),
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -317,6 +389,14 @@ class _AddUserPageState extends State<AddUserPage> {
                               ElevatedButton(
                                 onPressed: () {
                                   // Validate returns true if the form is valid, otherwise false.
+                                  if (ch == "Technicien") {
+                                    acces.add("Plan");
+                                    acces.add("Conges");
+                                  } else {
+                                    acces.add("Factures");
+                                    acces.add("Conges");
+                                  }
+
                                   if (_formKey.currentState!.validate() &&
                                       nom != null) {
                                     if (VerificationUserByEmail(
@@ -333,7 +413,8 @@ class _AddUserPageState extends State<AddUserPage> {
                                                 nom,
                                                 password,
                                                 role,
-                                                "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+                                                "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+                                                acces);
                                           } else {
                                             uploadImage(email, nom);
                                           }
@@ -434,7 +515,7 @@ class _AddUserPageState extends State<AddUserPage> {
       UploadTask uploadTask = ref.putFile(File(imageFile!.path));
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
-        User().addUser(email, n, password, role, uploadPath);
+        User().addUser(email, n, password, role, uploadPath, acces);
       });
     } catch (e) {
       print('error occured');
