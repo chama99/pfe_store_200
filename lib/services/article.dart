@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Article {
-  final CollectionReference employe =
+  final CollectionReference article =
       FirebaseFirestore.instance.collection('Articles');
 
   Future getArticlesList() async {
     List itemsList = [];
 
     try {
-      await employe.get().then((querySnapshot) {
+      await article.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           itemsList.add(a);
@@ -25,28 +25,33 @@ class Article {
   Future<void> addArticle(
       nom,
       type,
-      code_barres,
+      role,
+      cat,
+      data,
       reference_interne,
-      reference_fabricant,
       prix_vente,
       taxes_a_la_vente,
+      prix_dachat,
       sale_prix,
       prix_de_vente,
-      prix_dachat,
+      unite,
       url) {
-    return employe
+    return article
         .doc(nom)
         .set({
           'nom': nom,
           'type': type,
-          'image': url,
-          'code_barres': code_barres,
+          'role': role,
+          'cat': cat,
+          'code_a_barre': data,
           'reference_interne': reference_interne,
-          'reference_fabricant': reference_fabricant,
           'prix_vente': prix_vente,
           'taxes_a_la_vente': taxes_a_la_vente,
+          'prix_dachat': prix_dachat,
           'sale_prix': sale_prix,
           'prix_de_vente': prix_de_vente,
+          'unite': unite,
+          'image': url,
         })
         // ignore: avoid_print
         .then((value) => print('Article Added'))
@@ -57,28 +62,33 @@ class Article {
   Future<void> updateArticle(
       nom,
       type,
-      code_barres,
+      role,
+      cat,
+      data,
       reference_interne,
-      reference_fabricant,
       prix_vente,
       taxes_a_la_vente,
+      prix_dachat,
       sale_prix,
       prix_de_vente,
-      prix_dachat,
+      unite,
       url) {
-    return employe
+    return article
         .doc(nom)
         .update({
           'nom': nom,
           'type': type,
-          'image': url,
-          'code_barres': code_barres,
+          'role': role,
+          'cat': cat,
+          'code_a_barre': data,
           'reference_interne': reference_interne,
-          'reference_fabricant': reference_fabricant,
           'prix_vente': prix_vente,
           'taxes_a_la_vente': taxes_a_la_vente,
+          'prix_dachat': prix_dachat,
           'sale_prix': sale_prix,
           'prix_de_vente': prix_de_vente,
+          'unite': unite,
+          'image': url,
         })
         // ignore: avoid_print
         .then((value) => print("Article Updated"))
@@ -88,7 +98,7 @@ class Article {
 
   Future<void> deleteArticle(id) {
     // print("Employe Deleted $id");
-    return employe
+    return article
         .doc(id)
         .delete()
         // ignore: avoid_print
@@ -101,7 +111,7 @@ class Article {
     List itemsListNom = [];
 
     try {
-      await employe.get().then((querySnapshot) {
+      await article.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           itemsListNom.add(a['nom']);

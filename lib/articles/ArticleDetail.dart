@@ -3,29 +3,35 @@ import 'package:flutter/material.dart';
 import 'edit_article.dart';
 
 class ArticleDetail extends StatefulWidget {
-  String image,
+  String nom,
       type,
-      nom,
-      code_barres,
+      role,
+      cat,
+      data,
       reference_interne,
-      reference_fabricant,
       prix_vente,
       taxes_a_la_vente,
+      prix_dachat,
       sale_prix,
-      prix_de_vente;
+      prix_de_vente,
+      unite;
+  String image;
 
   ArticleDetail({
     Key? key,
-    required this.image,
     required this.nom,
-    required this.code_barres,
+    required this.type,
+    required this.role,
+    required this.cat,
+    required this.data,
     required this.reference_interne,
-    required this.reference_fabricant,
     required this.prix_vente,
     required this.taxes_a_la_vente,
+    required this.prix_dachat,
     required this.sale_prix,
     required this.prix_de_vente,
-    required this.type,
+    required this.unite,
+    required this.image,
   }) : super(key: key);
 
   @override
@@ -85,100 +91,108 @@ class _ArticleDetailState extends State<ArticleDetail> {
           ),
         ],
       ),
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                height: 450,
-                width: double.infinity,
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: Stack(alignment: Alignment.center, children: [
+        ListView(
+          children: [
+            Column(
+              children: [
+                Stack(
+                  //alignment: Alignment.center,
                   children: [
-                    textfield(
-                      hintText: widget.code_barres,
+                    CustomPaint(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                      ),
+                      painter: HeaderCurvedContainer(),
                     ),
-                    textfield(
-                      hintText: widget.reference_interne,
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(150, 20, 150, 0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(10.0),
+                                width: MediaQuery.of(context).size.width / 4,
+                                height: MediaQuery.of(context).size.width / 4,
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.white, width: 5),
+                                  shape: BoxShape.circle,
+                                  color: Colors.white,
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(widget.image),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    textfield(
-                      hintText: widget.reference_fabricant,
-                    ),
-                    textfield(
-                      hintText: widget.prix_vente,
-                    ),
-                    textfield(
-                      hintText: widget.taxes_a_la_vente,
-                    ),
-                    textfield(
-                      hintText: widget.sale_prix,
-                    ),
-                    textfield(
-                      hintText: widget.prix_de_vente,
-                    ),
-                    textfield(
-                      hintText: widget.type,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 850,
+                          width: double.infinity,
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(height: 70),
+                              textfield(
+                                hintText: widget.nom,
+                              ),
+                              textfield(
+                                hintText: widget.role,
+                              ),
+                              textfield(
+                                hintText: widget.cat,
+                              ),
+                              textfield(
+                                hintText: widget.data,
+                              ),
+                              textfield(
+                                hintText: widget.reference_interne,
+                              ),
+                              textfield(
+                                hintText: widget.prix_vente,
+                              ),
+                              textfield(
+                                hintText: widget.prix_dachat,
+                              ),
+                              textfield(
+                                hintText: widget.unite,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              )
-            ],
-          ),
-          CustomPaint(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
+              ],
             ),
-            painter: HeaderCurvedContainer(),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Text(
-                  widget.nom,
-                  style: const TextStyle(
-                    fontSize: 35,
-                    letterSpacing: 1.5,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                width: MediaQuery.of(context).size.width / 2,
-                height: MediaQuery.of(context).size.width / 2,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 5),
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(widget.image),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+          ],
+        ),
+      ]),
     );
   }
 }
 
+//..quadraticBezierTo(size.width / 2, 225, size.width, 150)
 class HeaderCurvedContainer extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()..color = Colors.orange;
     Path path = Path()
-      ..relativeLineTo(0, 150)
-      ..quadraticBezierTo(size.width / 2, 225, size.width, 150)
-      ..relativeLineTo(0, -150)
+      ..relativeLineTo(0, 40)
+      ..quadraticBezierTo(size.width / 2, 80, size.width, 40)
+      ..relativeLineTo(0, -40)
       ..close();
     canvas.drawPath(path, paint);
   }

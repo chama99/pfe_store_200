@@ -1,8 +1,11 @@
+import 'package:chama_projet/articles/article_home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
@@ -27,7 +30,25 @@ class _EditContactState extends State<EditArticle> {
   late String imageUrl;
   final ImagePicker picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
-
+  List listItem = ["Article stockable", "Article consommable", "Service"];
+  List listItem1 = [
+    "Tous",
+    "Accessoires",
+    "Accessoires/adaptateur",
+    "Accessoires/antichutes",
+    "Accessoires/capteur",
+    "Accessoires/invenseur+câble",
+    "Accessoires/verrou",
+    "Accessoires somfoy"
+  ];
+  List listItem2 = ["Jours", "Litres", "ML", "Piéces", "Kg"];
+  var data;
+  var role;
+  var ch;
+  var unite;
+  var chh;
+  var cat;
+  var chhh;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,16 +80,20 @@ class _EditContactState extends State<EditArticle> {
                 );
               }
               var data = snapshot.data!.data();
-              var code_barres = data!['code_barres'];
+              var nom = data!['nom'];
+              var type = data['type'];
+              role = data['role'];
+              cat = data['cat'];
+
               var reference_interne = data['reference_interne'];
-              var reference_fabricant = data['reference_fabricant '];
+
               var prix_vente = data['prix_vente '];
               var taxes_a_la_vente = data['taxes_a_la_vente'];
               var prix_dachat = data['prix_dachat'];
               var sale_prix = data['sale_prix'];
               var prix_de_vente = data['prix_de_vente '];
-              var nom = data['nom'];
-              var type = data['type'];
+
+              unite = data['unite'];
               var url = data['image'];
 
               // ignore: unused_local_variable
@@ -111,84 +136,68 @@ class _EditContactState extends State<EditArticle> {
                           )
                         ]),
                       ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: TextFormField(
-                          initialValue: nom,
-                          autofocus: false,
-                          keyboardType: TextInputType.text,
-                          onChanged: (value) => nom = value,
-                          decoration: buildInputDecoration(
-                            Icons.article,
-                            "Nom de article",
-                            color: Colors.white,
+
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            bottom: 20, left: 1, right: 1, top: 10),
+                        child: DropdownButton(
+                          dropdownColor: Colors.white,
+                          icon: const Padding(
+                            padding: EdgeInsets.only(right: 1),
+                            child: Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.orange,
+                            ),
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Veuillez entrer le nom darticle';
-                            }
-                            return null;
+                          style: const TextStyle(
+                              fontSize: 20, color: Colors.black),
+                          iconSize: 40,
+                          hint: Text(role),
+                          value: ch,
+                          onChanged: (newValue) {
+                            setState(() {
+                              ch = newValue.toString();
+                            });
                           },
+                          items: listItem.map((valueItem) {
+                            return DropdownMenuItem(
+                              value: valueItem,
+                              child: Text(valueItem),
+                            );
+                          }).toList(),
                         ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: TextFormField(
-                          initialValue: code_barres,
-                          autofocus: false,
-                          keyboardType: TextInputType.number,
-                          onChanged: (value) => code_barres = value,
-                          decoration: buildInputDecoration(
-                            Icons.qr_code,
-                            "code à barres",
-                            color: Colors.white,
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            bottom: 20, left: 0, right: 0, top: 1),
+                        child: DropdownButton(
+                          dropdownColor: Colors.white,
+                          icon: const Padding(
+                            padding: EdgeInsets.only(left: 1),
+                            child: Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.orange,
+                            ),
                           ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Veuillez entrer le code à barres';
-                            }
-                            return null;
+                          style: const TextStyle(
+                              fontSize: 20, color: Colors.black),
+                          iconSize: 40,
+                          hint: Text(cat),
+                          value: chh,
+                          onChanged: (newValue) {
+                            setState(() {
+                              chh = newValue.toString();
+                            });
                           },
+                          items: listItem1.map((valueItem) {
+                            return DropdownMenuItem(
+                              value: valueItem,
+                              child: Text(valueItem),
+                            );
+                          }).toList(),
                         ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: TextFormField(
-                          initialValue: reference_interne,
-                          autofocus: false,
-                          onChanged: (value) => reference_interne = value,
-                          decoration: buildInputDecoration(
-                            Icons.recent_actors,
-                            "référence interne",
-                            color: Colors.white,
-                          ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Veuillez entrer la référence interne';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: TextFormField(
-                          initialValue: reference_fabricant,
-                          autofocus: false,
-                          onChanged: (value) => reference_fabricant = value,
-                          decoration: buildInputDecoration(
-                            Icons.person_pin_rounded,
-                            "référence fabricant",
-                            color: Colors.white,
-                          ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Veuillez entrer la référence fabricant';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
+
                       Container(
                         margin: const EdgeInsets.symmetric(vertical: 10.0),
                         child: TextFormField(
@@ -196,7 +205,7 @@ class _EditContactState extends State<EditArticle> {
                           autofocus: false,
                           onChanged: (value) => prix_vente = value,
                           decoration: buildInputDecoration(
-                            Icons.verified_outlined,
+                            Icons.monetization_on,
                             "prix vente",
                             color: Colors.white,
                           ),
@@ -215,7 +224,7 @@ class _EditContactState extends State<EditArticle> {
                           autofocus: false,
                           onChanged: (value) => taxes_a_la_vente = value,
                           decoration: buildInputDecoration(
-                            Icons.vignette,
+                            Icons.monetization_on,
                             "taxes à la vente",
                             color: Colors.white,
                           ),
@@ -229,25 +238,6 @@ class _EditContactState extends State<EditArticle> {
                       ),
 
                       // ignore: avoid_unnece
-                      Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: TextFormField(
-                          initialValue: prix_dachat,
-                          autofocus: false,
-                          onChanged: (value) => prix_dachat = value,
-                          decoration: buildInputDecoration(
-                            Icons.monetization_on,
-                            "prix d'achat",
-                            color: Colors.white,
-                          ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Veuillez entrer le prix d'achat";
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
 
                       // ignore: avoid_unnece
                       Container(
@@ -257,7 +247,7 @@ class _EditContactState extends State<EditArticle> {
                           autofocus: false,
                           onChanged: (value) => sale_prix = value,
                           decoration: buildInputDecoration(
-                            Icons.point_of_sale,
+                            Icons.monetization_on,
                             "sale prix",
                             color: Colors.white,
                           ),
@@ -276,7 +266,7 @@ class _EditContactState extends State<EditArticle> {
                           autofocus: false,
                           onChanged: (value) => prix_de_vente = value,
                           decoration: buildInputDecoration(
-                            Icons.price_change,
+                            Icons.monetization_on,
                             "prix de vente",
                             color: Colors.white,
                           ),
@@ -306,32 +296,37 @@ class _EditContactState extends State<EditArticle> {
                                     type = radio;
                                   }
                                   if (imageFile == null) {
-                                    Article().updateArticle(
-                                        type,
+                                    var updateArticle = Article().updateArticle(
                                         nom,
-                                        code_barres,
+                                        type,
+                                        role,
+                                        cat,
+                                        data,
                                         reference_interne,
-                                        reference_fabricant,
                                         prix_vente,
                                         taxes_a_la_vente,
                                         prix_dachat,
                                         sale_prix,
                                         prix_de_vente,
-                                        imageUrl);
+                                        unite,
+                                        url);
                                   } else {
                                     uploadImage(
-                                      type,
                                       nom,
-                                      code_barres,
+                                      type,
+                                      role,
+                                      cat,
+                                      data,
                                       reference_interne,
-                                      reference_fabricant,
                                       prix_vente,
                                       taxes_a_la_vente,
                                       prix_dachat,
                                       sale_prix,
                                       prix_de_vente,
+                                      unite,
                                     );
                                   }
+                                  // Get.to(() => const listArticle());
                                   Navigator.pop(context);
                                 }
                               },
@@ -402,16 +397,19 @@ class _EditContactState extends State<EditArticle> {
   }
 
   uploadImage(
-      String nom,
-      code_barres,
-      reference_interne,
-      reference_fabricant,
-      prix_vente,
-      taxes_a_la_vente,
-      prix_dachat,
-      sale_prix,
-      prix_de_vente,
-      type) async {
+    String nom,
+    type,
+    role,
+    cat,
+    data,
+    reference_interne,
+    prix_vente,
+    taxes_a_la_vente,
+    prix_dachat,
+    sale_prix,
+    prix_de_vente,
+    unite,
+  ) async {
     // ignore: unused_local_variable
     final fileName = basename(imageFile!.path);
     // ignore: prefer_const_declarations
@@ -425,17 +423,19 @@ class _EditContactState extends State<EditArticle> {
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
         Article().updateArticle(
-          uploadPath,
-          type,
           nom,
-          code_barres,
+          type,
+          role,
+          cat,
+          data,
           reference_interne,
-          reference_fabricant,
           prix_vente,
           taxes_a_la_vente,
           prix_dachat,
           sale_prix,
           prix_de_vente,
+          unite,
+          uploadPath,
         );
       });
     } catch (e) {

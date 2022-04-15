@@ -1,13 +1,16 @@
 import 'dart:io';
 
+import 'package:chama_projet/articles/article_home_page.dart';
 import 'package:chama_projet/services/article.dart';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/get_core.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
@@ -24,6 +27,12 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
   XFile? imageFile;
+  String data = '';
+  _scan() async {
+    await FlutterBarcodeScanner.scanBarcode(
+            "#FFA500", "Annuler", true, ScanMode.BARCODE)
+        .then((value) => setState(() => data = value));
+  }
 
   final ImagePicker picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
@@ -32,26 +41,41 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
   String choix1 = "Peut être vendu";
   String choix2 = "Peut être acheté";
   String choix3 = "Peut être inséré dans un note de frais";
-  String choix4 = "option(H/L)";
-  String choix5 = "Puissance";
-
+  var role = '';
   var type = '';
   var nom = "";
-  var code_barres = "";
+  var cat = "";
+  var unite = "";
+  var code_a_barre = "";
   var reference_interne = "";
-  var reference_fabricant = "";
+  var ch;
+  var chh;
+  var chhh;
   var prix_vente = "";
   var taxes_a_la_vente = "";
   var prix_dachat = "";
   var sale_prix = "";
   var prix_de_vente = "";
+  var etat;
+
+  List listItem = ["Article stockable", "Article consommable", "Service"];
+  List listItem1 = [
+    "Tous",
+    "Accessoires",
+    "Accessoires/adaptateur",
+    "Accessoires/antichutes",
+    "Accessoires/capteur",
+    "Accessoires/invenseur+câble",
+    "Accessoires/verrou",
+    "Accessoires somfoy"
+  ];
+  List listItem2 = ["Jours", "Litres", "ML", "Piéces", "Kg"];
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
 
-  final code_barresController = TextEditingController();
   final nomController = TextEditingController();
   final reference_interneController = TextEditingController();
-  final reference_fabricantController = TextEditingController();
+
   final prix_venteController = TextEditingController();
   final taxes_a_la_venteController = TextEditingController();
   final prix_dachatController = TextEditingController();
@@ -59,14 +83,16 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
   final prix_de_venteController = TextEditingController();
   final value = false;
   bool isHiddenPassword = true;
-
+  late String dropdown1;
+  late String dropdown2;
+  late String dropdown3;
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    code_barresController.dispose();
+
     nomController.dispose();
     reference_interneController.dispose();
-    reference_fabricantController.dispose();
+
     prix_venteController.dispose();
     taxes_a_la_venteController.dispose();
     prix_dachatController.dispose();
@@ -76,13 +102,10 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
     super.dispose();
   }
 
-  late String dropdown;
-
   clearText() {
-    code_barresController.clear();
     nomController.clear();
     reference_interneController.clear();
-    reference_fabricantController.clear();
+
     prix_venteController.clear();
     taxes_a_la_venteController.clear();
     prix_dachatController.clear();
@@ -90,9 +113,31 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
     prix_de_venteController.clear();
   }
 
+  //zyda
+  List nomarticle = [];
+  @override
+  void initState() {
+    super.initState();
+
+    fetchDatabaseList();
+  }
+
+  fetchDatabaseList() async {
+    dynamic resultant = await Article().getArticleListByNom();
+
+    if (resultant == null) {
+      // ignore: avoid_print
+      print('Unable to retrieve');
+    } else {
+      setState(() {
+        nomarticle = resultant;
+      });
+    }
+  }
+
   // ignore: prefer_const_constructors
   ImageProvider<Object> networkImage = NetworkImage(
-      "https://cdn3.vectorstock.com/i/1000x1000/98/37/camera-with-a-orange-color-on-a-blue-background-vector-35539837.jpg");
+      "https://avatar.anytimefitness.com/Content/Placeholders/camera.png");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,24 +223,115 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                               },
                             ),
                           ),
+                          RadioListTile(
+                              title: const Text("Peut être vendu"),
+                              value: choix1,
+                              groupValue: radio,
+                              onChanged: (value) {
+                                setState(() {
+                                  radio = value;
+                                });
+                              }),
+                          RadioListTile(
+                              title: const Text("Peut être acheté"),
+                              value: choix2,
+                              groupValue: radio,
+                              onChanged: (value) {
+                                setState(() {
+                                  radio = value;
+                                });
+                              }),
+                          RadioListTile(
+                              title: const Text(
+                                  "Peut être inséré dans un note de frais"),
+                              value: choix3,
+                              groupValue: radio,
+                              onChanged: (value) {
+                                setState(() {
+                                  radio = value;
+                                });
+                              }),
                           Padding(
                             padding: const EdgeInsets.only(
-                                bottom: 15, left: 10, right: 10),
-                            child: TextFormField(
-                              controller: code_barresController,
-                              keyboardType: TextInputType.number,
-                              decoration: buildInputDecoration(
-                                Icons.qr_code,
-                                "code à barres",
-                                color: Colors.white,
+                                bottom: 1, left: 1, right: 1, top: 1),
+                            child: DropdownButton(
+                              hint: const Text("Type d'article"),
+                              dropdownColor: Colors.white,
+                              icon: const Padding(
+                                padding: EdgeInsets.only(left: 50),
+                                child: Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.orange,
+                                ),
                               ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Veuillez entrer le code à barres';
-                                }
-                                return null;
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.black),
+                              iconSize: 40,
+                              value: ch,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  ch = newValue.toString();
+                                });
                               },
+                              items: listItem.map((valueItem) {
+                                return DropdownMenuItem(
+                                  value: valueItem,
+                                  child: Text(valueItem),
+                                );
+                              }).toList(),
                             ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 1, left: 1, right: 1, top: 1),
+                            child: DropdownButton(
+                              hint: const Text("Catégorie d'article "),
+                              dropdownColor: Colors.white,
+                              icon: const Padding(
+                                padding: EdgeInsets.only(left: 50),
+                                child: Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.black),
+                              iconSize: 40,
+                              value: chh,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  chh = newValue.toString();
+                                });
+                              },
+                              items: listItem1.map((valueItem) {
+                                return DropdownMenuItem(
+                                  value: valueItem,
+                                  child: Text(valueItem),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              FlatButton(
+                                  onPressed: () => _scan(),
+                                  child: Text(
+                                    "code à barres",
+                                    style: TextStyle(
+                                      backgroundColor: Colors.orange,
+                                      fontSize: 25,
+                                      color: Colors.black,
+                                    ),
+                                  )),
+                              Text(
+                                data,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 25,
+                                ),
+                              ),
+                            ],
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
@@ -218,31 +354,12 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                bottom: 20, left: 5, right: 5, top: 10),
-                            child: TextFormField(
-                              controller: reference_fabricantController,
-                              keyboardType: TextInputType.number,
-                              decoration: buildInputDecoration(
-                                Icons.person_pin_rounded,
-                                "référence fabricant",
-                                color: Colors.white,
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Veuillez entrer la référence fabricant';
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
                                 bottom: 15, left: 10, right: 10),
                             child: TextFormField(
                               controller: prix_venteController,
                               keyboardType: TextInputType.number,
                               decoration: buildInputDecoration(
-                                Icons.verified_outlined,
+                                Icons.monetization_on,
                                 "prix vente",
                                 color: Colors.white,
                               ),
@@ -261,7 +378,7 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                               controller: taxes_a_la_venteController,
                               keyboardType: TextInputType.number,
                               decoration: buildInputDecoration(
-                                Icons.vignette,
+                                Icons.monetization_on,
                                 "taxes à la vente",
                                 color: Colors.white,
                               ),
@@ -299,7 +416,7 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                               controller: sale_prixController,
                               keyboardType: TextInputType.number,
                               decoration: buildInputDecoration(
-                                Icons.point_of_sale,
+                                Icons.monetization_on,
                                 "sale prix",
                                 color: Colors.white,
                               ),
@@ -318,7 +435,7 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                               controller: prix_de_venteController,
                               keyboardType: TextInputType.number,
                               decoration: buildInputDecoration(
-                                Icons.price_change,
+                                Icons.monetization_on,
                                 "prix de vente",
                                 color: Colors.white,
                               ),
@@ -330,52 +447,36 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                               },
                             ),
                           ),
-                          RadioListTile(
-                              title: const Text("Peut être vendu"),
-                              value: choix1,
-                              groupValue: radio,
-                              onChanged: (value) {
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 1, left: 1, right: 1, top: 1),
+                            child: DropdownButton(
+                              hint: const Text("  Unité de mesure  "),
+                              dropdownColor: Colors.white,
+                              icon: const Padding(
+                                padding: EdgeInsets.only(left: 50),
+                                child: Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.black),
+                              iconSize: 40,
+                              value: chhh,
+                              onChanged: (newValue) {
                                 setState(() {
-                                  radio = value;
+                                  chhh = newValue.toString();
                                 });
-                              }),
-                          RadioListTile(
-                              title: const Text("Peut être acheté"),
-                              value: choix2,
-                              groupValue: radio,
-                              onChanged: (value) {
-                                setState(() {
-                                  radio = value;
-                                });
-                              }),
-                          RadioListTile(
-                              title: const Text(
-                                  "Peut être inséré dans un note de frais"),
-                              value: choix3,
-                              groupValue: radio,
-                              onChanged: (value) {
-                                setState(() {
-                                  radio = value;
-                                });
-                              }),
-                          RadioListTile(
-                              title: const Text("option(H/L)"),
-                              value: choix4,
-                              groupValue: radio,
-                              onChanged: (value) {
-                                setState(() {
-                                  radio = value;
-                                });
-                              }),
-                          RadioListTile(
-                              title: const Text("Puissance"),
-                              value: choix5,
-                              groupValue: radio,
-                              onChanged: (value) {
-                                setState(() {
-                                  radio = value;
-                                });
-                              }),
+                              },
+                              items: listItem2.map((valueItem) {
+                                return DropdownMenuItem(
+                                  value: valueItem,
+                                  child: Text(valueItem),
+                                );
+                              }).toList(),
+                            ),
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -383,15 +484,19 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                                 onPressed: () {
                                   // Validate returns true if the form is valid, otherwise false.
                                   if (_formKey.currentState!.validate()) {
-                                    if (radio != null) {
+                                    if ((radio != null) &&
+                                        (ch != null) &&
+                                        (chh != null) &&
+                                        (chhh != null)) {
                                       setState(() {
-                                        code_barres =
-                                            code_barresController.text;
                                         nom = nomController.text;
+                                        type = radio;
+                                        role = ch;
+                                        cat = chh;
+                                        code_a_barre = data;
                                         reference_interne =
                                             reference_interneController.text;
-                                        reference_fabricant =
-                                            reference_fabricantController.text;
+
                                         prix_vente = prix_venteController.text;
                                         taxes_a_la_vente =
                                             taxes_a_la_venteController.text;
@@ -400,31 +505,38 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                                         sale_prix = sale_prixController.text;
                                         prix_de_vente =
                                             prix_de_venteController.text;
-                                        type = radio;
+
+                                        unite = chhh;
                                         if (imageFile == null) {
                                           Article().addArticle(
-                                              type,
-                                              code_barres,
                                               nom,
+                                              type,
+                                              role,
+                                              cat,
+                                              data,
                                               reference_interne,
-                                              reference_fabricant,
                                               prix_vente,
                                               taxes_a_la_vente,
                                               prix_dachat,
                                               sale_prix,
                                               prix_de_vente,
-                                              "https://cdn3.vectorstock.com/i/1000x1000/98/37/camera-with-a-orange-color-on-a-blue-background-vector-35539837.jpg");
+                                              unite,
+                                              "https://avatar.anytimefitness.com/Content/Placeholders/camera.png");
                                         } else {
                                           uploadImage(imageUrl);
                                         }
 
                                         clearText();
+                                        ch = null;
+                                        chh = null;
+                                        chhh = null;
                                         radio = null;
                                         imageFile = null;
+                                        Get.to(() => const listArticle());
                                       });
                                     } else {
                                       showToast(
-                                          "veuillez sélectionner poste occupé ");
+                                          "veuillez sélectionner un type darticle , catégorie darticle et unite de mesure ");
                                     }
                                   }
                                 },
@@ -507,18 +619,21 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
         Article().addArticle(
-            type,
-            nom,
-            code_barres,
-            reference_interne,
-            reference_fabricant,
-            prix_vente,
-            prix_dachat,
-            taxes_a_la_vente,
-            sale_prix,
-            prix_de_vente,
-            uploadPath);
-        type = '';
+          nom,
+          type,
+          role,
+          cat,
+          data,
+          reference_interne,
+          prix_vente,
+          taxes_a_la_vente,
+          prix_dachat,
+          sale_prix,
+          prix_de_vente,
+          unite,
+          imageUrl,
+        );
+        //type = '';
       });
     } catch (e) {
       // ignore: avoid_print

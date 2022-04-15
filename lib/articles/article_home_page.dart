@@ -126,40 +126,45 @@ class _listArticleState extends State<listArticle> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => ArticleDetail(
-                                                image: userArticleList[index]
-                                                    ['image'],
                                                 nom: userArticleList[index]
                                                     ['nom'],
-                                                code_barres:
-                                                    userArticleList[index]
-                                                        ['code_barres'],
+                                                type: userArticleList[index]
+                                                    ['type'],
+                                                role: userArticleList[index]
+                                                    ['role'],
+                                                cat: userArticleList[index]
+                                                    ['cat'],
+                                                data: userArticleList[index]
+                                                    ['code_a_barre'],
                                                 reference_interne:
                                                     userArticleList[index]
                                                         ['reference_interne'],
-                                                reference_fabricant:
-                                                    userArticleList[index]
-                                                        ['reference_fabricant'],
                                                 prix_vente:
                                                     userArticleList[index]
                                                         ['prix_vente'],
                                                 taxes_a_la_vente:
                                                     userArticleList[index]
                                                         ['taxes_a_la_vente'],
+                                                prix_dachat:
+                                                    userArticleList[index]
+                                                        ['prix_dachat'],
                                                 sale_prix:
                                                     userArticleList[index]
                                                         ['sale_prix'],
                                                 prix_de_vente:
                                                     userArticleList[index]
                                                         ['prix_de_vente'],
-                                                type: userArticleList[index]
-                                                    ['type'],
+                                                unite: userArticleList[index]
+                                                    ['unite'],
+                                                image: userArticleList[index]
+                                                    ['image'],
                                               )));
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),
                                 child: ListTile(
                                   title: Text(article['nom']),
-                                  subtitle: Text(article['code_barres']),
+                                  subtitle: Text(article['cat']),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       Article().deleteArticle(article["nom"])
@@ -185,9 +190,9 @@ class _listArticleState extends State<listArticle> {
 
   void filterSearchResults(String query) {
     final suggestions = userArticleList.where((article) {
-      final namemploye = article['name'].toLowerCase();
+      final nom = article['nom'].toLowerCase();
       final input = query.toLowerCase();
-      return namemploye.contains(input);
+      return nom.contains(input);
     }).toList();
     setState(() {
       userArticleList = suggestions;
