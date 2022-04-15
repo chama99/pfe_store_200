@@ -1,4 +1,5 @@
-// ignore_for_file: must_be_immutable
+// ignore: file_names
+// ignore_for_file: must_be_immutable, file_names, duplicate_ignore
 
 import 'dart:async';
 
@@ -563,9 +564,6 @@ class _UpdateFactureState extends State<UpdateFacture> {
         ),
         child: const Text("Modifier"),
         onPressed: () {
-          // Validate returns true if the form is valid, otherwise false.
-
-          // ignore: prefer_adjacent_string_concatenation
           Facture().updateFacture(
               widget.titre,
               widget.client,

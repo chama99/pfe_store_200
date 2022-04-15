@@ -1,59 +1,38 @@
-// ignore_for_file: file_names, must_be_immutable
+// ignore_for_file: must_be_immutable, file_names
 
-import 'package:chama_projet/services/ligneOperation.dart';
+import 'package:chama_projet/inventaire/reception.dart/update_reception.dart';
+import 'package:chama_projet/services/reception.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../widget/toast.dart';
-import 'creer_reception.dart';
-
-class LigneOperation extends StatefulWidget {
-  const LigneOperation({
-    Key? key,
-  }) : super(key: key);
+class ModifierOperation extends StatefulWidget {
+  int num;
+  List ligneOperation;
+  String titre, date;
+  String reception, etat;
+  ModifierOperation(
+      {Key? key,
+      required this.titre,
+      required this.reception,
+      required this.etat,
+      required this.num,
+      required this.ligneOperation,
+      required this.date})
+      : super(key: key);
 
   @override
-  State<LigneOperation> createState() => _LigneOperationState();
+  State<ModifierOperation> createState() => _ModifierOperationState();
 }
 
-class _LigneOperationState extends State<LigneOperation> {
+class _ModifierOperationState extends State<ModifierOperation> {
   final _formKey = GlobalKey<FormState>();
-  // ignore: prefer_typing_uninitialized_variables
-  var article;
-
   List listItem = ["store12", "store15"];
-  final colis = TextEditingController();
-  final colisDes = TextEditingController();
-  final appartenant = TextEditingController();
-  final fait = TextEditingController();
-  final unite = TextEditingController();
-
-  clearText() {
-    colis.clear();
-    appartenant.clear();
-    fait.clear();
-    unite.clear();
-
-    article = null;
-  }
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    colis.dispose();
-    appartenant.dispose();
-    fait.dispose();
-    unite.dispose();
-
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text("Modifier Opération ${widget.num}"),
         backgroundColor: Colors.orange,
-        title: const Text("Ajouter Ligne de opérations"),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -84,10 +63,11 @@ class _LigneOperationState extends State<LigneOperation> {
                         style:
                             const TextStyle(fontSize: 20, color: Colors.black),
                         iconSize: 40,
-                        value: article,
+                        value: widget.ligneOperation[widget.num]["Article"],
                         onChanged: (newValue) {
                           setState(() {
-                            article = newValue.toString();
+                            widget.ligneOperation[widget.num]["Article"] =
+                                newValue.toString();
                           });
                         },
                         items: listItem.map((valueItem) {
@@ -103,7 +83,10 @@ class _LigneOperationState extends State<LigneOperation> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    controller: colis,
+                    initialValue: widget.ligneOperation[widget.num]
+                        ["Colis source"],
+                    onChanged: (value) => widget.ligneOperation[widget.num]
+                        ["Colis source"] = value,
                     decoration: InputDecoration(
                       hintText: 'Colis source',
                       filled: true,
@@ -121,18 +104,15 @@ class _LigneOperationState extends State<LigneOperation> {
                         ),
                       ),
                     ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Veuillez entrer  colis de destination";
-                      }
-                      return null;
-                    },
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    controller: colisDes,
+                    initialValue: widget.ligneOperation[widget.num]
+                        ["Colis de destination"],
+                    onChanged: (value) => widget.ligneOperation[widget.num]
+                        ["Colis de destination"] = value,
                     decoration: InputDecoration(
                       hintText: 'Colis de destination',
                       filled: true,
@@ -150,18 +130,15 @@ class _LigneOperationState extends State<LigneOperation> {
                         ),
                       ),
                     ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Veuillez entrer  colis de destination";
-                      }
-                      return null;
-                    },
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    controller: appartenant,
+                    initialValue: widget.ligneOperation[widget.num]
+                        ["Appartenant"],
+                    onChanged: (value) => widget.ligneOperation[widget.num]
+                        ["Appartenant"] = value,
                     decoration: InputDecoration(
                       hintText: 'Appartenant à',
                       filled: true,
@@ -184,7 +161,9 @@ class _LigneOperationState extends State<LigneOperation> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    controller: fait,
+                    initialValue: widget.ligneOperation[widget.num]["Fait"],
+                    onChanged: (value) =>
+                        widget.ligneOperation[widget.num]["Fait"] = value,
                     decoration: InputDecoration(
                       hintText: 'Fait',
                       filled: true,
@@ -208,7 +187,10 @@ class _LigneOperationState extends State<LigneOperation> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     keyboardType: TextInputType.number,
-                    controller: unite,
+                    initialValue:
+                        widget.ligneOperation[widget.num]["Unite"].toString(),
+                    onChanged: (value) => widget.ligneOperation[widget.num]
+                        ["Unite"] = int.parse(value),
                     decoration: InputDecoration(
                       hintText: 'Unité de mesure',
                       filled: true,
@@ -226,12 +208,6 @@ class _LigneOperationState extends State<LigneOperation> {
                         ),
                       ),
                     ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Veuillez entrer unité de mesure";
-                      }
-                      return null;
-                    },
                   ),
                 ),
                 Row(
@@ -239,24 +215,21 @@ class _LigneOperationState extends State<LigneOperation> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          if (article != null) {
-                            CommandeOperation().addCommdeop(
-                                colis.text,
-                                colisDes.text,
-                                article,
-                                appartenant.text,
-                                fait.text,
-                                int.parse(unite.text));
-                            clearText();
-                            Get.to(() => const CreerReception());
-                          } else {
-                            showToast("veuillez sélectionner Article ");
-                          }
-                        }
+                        Reception().updateReception(
+                            widget.titre,
+                            "Atelier:Réception",
+                            widget.etat,
+                            widget.date,
+                            widget.ligneOperation);
+                        Get.to(() => UpdateReception(
+                            titre: widget.titre,
+                            OperationList: widget.ligneOperation,
+                            reception: widget.reception,
+                            etat: widget.etat,
+                            date: widget.date));
                       },
                       child: const Text(
-                        "Ajouter",
+                        "Modifier",
                         style: TextStyle(fontSize: 25),
                       ),
                       style: ElevatedButton.styleFrom(primary: Colors.orange),

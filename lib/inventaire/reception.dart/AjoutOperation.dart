@@ -1,22 +1,15 @@
-// ignore_for_file: file_names, must_be_immutable
+// ignore_for_file: file_names
 
-import 'package:chama_projet/services/ligneOperation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../widget/toast.dart';
-import 'creer_reception.dart';
-
-class LigneOperation extends StatefulWidget {
-  const LigneOperation({
-    Key? key,
-  }) : super(key: key);
+class Ajoutoperation extends StatefulWidget {
+  const Ajoutoperation({Key? key}) : super(key: key);
 
   @override
-  State<LigneOperation> createState() => _LigneOperationState();
+  State<Ajoutoperation> createState() => _AjoutoperationState();
 }
 
-class _LigneOperationState extends State<LigneOperation> {
+class _AjoutoperationState extends State<Ajoutoperation> {
   final _formKey = GlobalKey<FormState>();
   // ignore: prefer_typing_uninitialized_variables
   var article;
@@ -239,21 +232,7 @@ class _LigneOperationState extends State<LigneOperation> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          if (article != null) {
-                            CommandeOperation().addCommdeop(
-                                colis.text,
-                                colisDes.text,
-                                article,
-                                appartenant.text,
-                                fait.text,
-                                int.parse(unite.text));
-                            clearText();
-                            Get.to(() => const CreerReception());
-                          } else {
-                            showToast("veuillez sélectionner Article ");
-                          }
-                        }
+                        if (_formKey.currentState!.validate()) {}
                       },
                       child: const Text(
                         "Ajouter",

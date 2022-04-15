@@ -4,7 +4,6 @@ import 'package:chama_projet/facture.dart/updateFacture.dart';
 import 'package:chama_projet/services/facture.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class ModifieLignFact extends StatefulWidget {
   String titre;

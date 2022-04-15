@@ -213,7 +213,7 @@ class _CreerReceptionState extends State<CreerReception> {
                         Row(
                           children: [
                             const Padding(
-                              padding: EdgeInsets.only(left: 13, top: 20),
+                              padding: EdgeInsets.only(left: 35, top: 20),
                               child: Text(
                                 "Réception de",
                                 style:
@@ -221,7 +221,7 @@ class _CreerReceptionState extends State<CreerReception> {
                               ),
                             ),
                             Container(
-                              margin: const EdgeInsets.only(left: 30, top: 20),
+                              margin: const EdgeInsets.only(top: 20),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(

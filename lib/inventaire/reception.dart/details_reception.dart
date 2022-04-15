@@ -1,9 +1,11 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:chama_projet/inventaire/reception.dart/update_reception.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ReceptionDetaile extends StatefulWidget {
-  String titre, typeoperation, etat, receptions;
+  String titre, typeoperation, etat, receptions, date;
   // ignore: non_constant_identifier_names
   List LigneOperations;
   ReceptionDetaile(
@@ -12,6 +14,7 @@ class ReceptionDetaile extends StatefulWidget {
       required this.typeoperation,
       required this.etat,
       required this.receptions,
+      required this.date,
       // ignore: non_constant_identifier_names
       required this.LigneOperations})
       : super(key: key);
@@ -26,6 +29,28 @@ class _ReceptionDetaileState extends State<ReceptionDetaile> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.titre),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(top: 20, right: 30),
+            child: InkWell(
+              onTap: () {
+                Get.to(() => UpdateReception(
+                      titre: widget.titre,
+                      OperationList: widget.LigneOperations,
+                      reception: widget.receptions,
+                      etat: widget.etat,
+                      date: widget.date,
+                    ));
+              },
+              child: Text(
+                "Modifier".toUpperCase(),
+                style: const TextStyle(
+                    fontSize: 15, color: Colors.white, letterSpacing: 3),
+                textAlign: TextAlign.left,
+              ),
+            ),
+          ),
+        ],
         backgroundColor: Colors.orange,
       ),
       body: Container(
@@ -33,22 +58,22 @@ class _ReceptionDetaileState extends State<ReceptionDetaile> {
         child: Column(
           children: [
             Row(
-              children: [
-                const Padding(
+              children: const [
+                Padding(
                   padding: EdgeInsets.only(left: 8, top: 20),
                   child: Text(
                     "Type d'operation:",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, top: 20),
-                  child: Text(
-                    widget.typeoperation,
-                    style: const TextStyle(color: Colors.indigo, fontSize: 25),
-                  ),
-                ),
               ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8, top: 20),
+              child: Text(
+                widget.typeoperation,
+                style: const TextStyle(color: Colors.indigo, fontSize: 25),
+              ),
             ),
             Row(
               children: [
