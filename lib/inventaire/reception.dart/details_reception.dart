@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ReceptionDetaile extends StatefulWidget {
-  String titre, typeoperation, etat, receptions, date;
+  String titre, typeoperation, etat, date;
+  String receptions;
   // ignore: non_constant_identifier_names
   List LigneOperations;
   ReceptionDetaile(
