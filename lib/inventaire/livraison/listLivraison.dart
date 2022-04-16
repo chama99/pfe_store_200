@@ -1,25 +1,26 @@
-// ignore_for_file: file_names, unused_local_variable
-
-import 'package:chama_projet/facture.dart/creer_facture.dart';
-import 'package:chama_projet/facture.dart/detille_facture.dart';
-import 'package:chama_projet/services/facture.dart';
+import 'package:chama_projet/inventaire/livraison/creer_livraison.dart';
+import 'package:chama_projet/services/livraison.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:intl/intl.dart';
-import '../widget/boitedialogue.dart';
 
-class ListFacture extends StatefulWidget {
-  const ListFacture({Key? key}) : super(key: key);
+import '../../services/reception.dart';
+import '../../widget/boitedialogue.dart';
+import '../reception./details_reception.dart';
+import 'dtail_livraison.dart';
+
+class ListLivraison extends StatefulWidget {
+  const ListLivraison({Key? key}) : super(key: key);
+
   @override
-  _ListFactureState createState() => _ListFactureState();
+  State<ListLivraison> createState() => _ListLivraisonState();
 }
 
-class _ListFactureState extends State<ListFacture> {
+class _ListLivraisonState extends State<ListLivraison> {
   TextEditingController searchcontroller = TextEditingController();
   TextEditingController editingController = TextEditingController();
   // ignore: non_constant_identifier_names
-  List ListFact = [];
+  List Listlivraison = [];
   @override
   void initState() {
     super.initState();
@@ -27,14 +28,14 @@ class _ListFactureState extends State<ListFacture> {
   }
 
   fetchDatabaseList() async {
-    dynamic resultant = await Facture().getFacturesList();
+    dynamic resultant = await Livraison().getLivraisonList();
 
     if (resultant == null) {
       // ignore: avoid_print
       print('Unable to retrieve');
     } else {
       setState(() {
-        ListFact = resultant;
+        Listlivraison = resultant;
       });
     }
   }
@@ -43,7 +44,7 @@ class _ListFactureState extends State<ListFacture> {
   var length;
 
   // ignore: unnecessary_new
-  Widget appBarTitle = const Text("Factures");
+  Widget appBarTitle = const Text("Livraison");
   Icon actionIcon = const Icon(Icons.search);
   @override
   Widget build(BuildContext context) {
@@ -55,10 +56,7 @@ class _ListFactureState extends State<ListFacture> {
               padding: const EdgeInsets.only(top: 20, right: 30),
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CreeFacturePage()));
+                  Get.to(() => const CreerLivraison());
                 },
                 child: Text(
                   "Créer".toUpperCase(),
@@ -102,7 +100,7 @@ class _ListFactureState extends State<ListFacture> {
                 ),
               ),
               Expanded(
-                child: ListFact.isEmpty
+                child: Listlivraison.isEmpty
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
@@ -111,52 +109,44 @@ class _ListFactureState extends State<ListFacture> {
                           Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
-                                  pageBuilder: (a, b, c) => const ListFacture(),
+                                  pageBuilder: (a, b, c) =>
+                                      const ListLivraison(),
                                   transitionDuration:
                                       const Duration(seconds: 0)));
                           // ignore: void_checks
                           return Future.value(false);
                         },
                         child: ListView.builder(
-                            itemCount: ListFact.length,
+                            itemCount: Listlivraison.length,
                             itemBuilder: (context, index) {
-                              final facture = ListFact[index];
+                              final liv = Listlivraison[index];
                               return Card(
                                   child: InkWell(
                                 onTap: () {
-                                  Get.to(
-                                    () => DetailFacture(
-                                      titre: facture['titre'],
-                                      client: facture['client'],
-                                      etat: facture['etat'],
-                                      date1: facture["date de facturation"]
+                                  Get.to(() => LivraisonDetaile(
+                                      titre: liv["titre"],
+                                      typeoperation: liv["type d'operation"],
+                                      etat: liv["etat"],
+                                      livraison: liv["Adresse de livraison"],
+                                      LigneOperations: liv["ligne d'operation"],
+                                      date: liv["date prévue"]
                                           .toDate()
-                                          .toString(),
-                                      date2: facture["date d'intervention"]
-                                          .toDate()
-                                          .toString(),
-                                      adrss: facture["adresse d'intervention"],
-                                      total: facture['total'],
-                                      order: 20,
-                                      listfact: facture["ligne facture"],
-                                      montant: facture["montant"],
-                                    ),
-                                  );
+                                          .toString()));
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),
                                 child: ListTile(
-                                  title: Text(facture["etat"]),
+                                  title: Text(liv["etat"]),
                                   subtitle: Text(
                                       // ignore: unnecessary_string_interpolations
-                                      "${facture["date de facturation"].toDate().toString()}       ${facture["total"]}£"),
+                                      "${liv["date prévue"].toDate().toString()}"),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          facture["titre"],
-                                          "Êtes-vous sûr de vouloir supprimer cette facture",
-                                          "facture")
+                                          liv["titre"],
+                                          "Êtes-vous sûr de vouloir supprimer ce produit",
+                                          "livraison")
                                     },
                                     icon: const Icon(
                                       Icons.delete,
@@ -164,7 +154,7 @@ class _ListFactureState extends State<ListFacture> {
                                     ),
                                   ),
                                   leading: Text(
-                                    facture["titre"],
+                                    liv["titre"],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -178,13 +168,13 @@ class _ListFactureState extends State<ListFacture> {
   }
 
   void filterSearchResults(String query) {
-    final suggestions = ListFact.where((facture) {
-      final namemploye = facture['titre'].toLowerCase();
+    final suggestions = Listlivraison.where((liv) {
+      final namemploye = liv['titre'].toLowerCase();
       final input = query.toLowerCase();
       return namemploye.contains(input);
     }).toList();
     setState(() {
-      ListFact = suggestions;
+      Listlivraison = suggestions;
     });
   }
 

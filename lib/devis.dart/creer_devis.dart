@@ -91,6 +91,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
       setState(() {
         userContactList = resultant;
         commandeList = resultant2;
+        Commande().deleteCommande();
       });
     }
   }
@@ -486,7 +487,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
 
                 Devis().addDevis(ch, client, etat, calculMontat() - remisee,
                     list, remisee, calculMontat(), dataTime);
-                Commande().deleteCommande();
+
                 Get.to(() => const ListDevis());
               } else {
                 showToast("veuillez sélectionner état");

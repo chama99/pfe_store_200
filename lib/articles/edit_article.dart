@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
@@ -209,12 +209,6 @@ class _EditContactState extends State<EditArticle> {
                             "prix vente",
                             color: Colors.white,
                           ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Veuillez entrer la prix de vente';
-                            }
-                            return null;
-                          },
                         ),
                       ),
                       Container(
@@ -251,12 +245,6 @@ class _EditContactState extends State<EditArticle> {
                             "sale prix",
                             color: Colors.white,
                           ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Veuillez entrer la sale prix ';
-                            }
-                            return null;
-                          },
                         ),
                       ),
                       Container(
@@ -270,12 +258,6 @@ class _EditContactState extends State<EditArticle> {
                             "prix de vente",
                             color: Colors.white,
                           ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Veuillez entrer le prix de vente';
-                            }
-                            return null;
-                          },
                         ),
                       ),
 
@@ -327,7 +309,7 @@ class _EditContactState extends State<EditArticle> {
                                     );
                                   }
                                   // Get.to(() => const listArticle());
-                                  Navigator.pop(context);
+                                  Get.to(() => const listArticle());
                                 }
                               },
                               child: const Text(

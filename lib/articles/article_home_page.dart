@@ -3,6 +3,7 @@
 import 'package:chama_projet/services/article.dart';
 
 import 'package:flutter/material.dart';
+import '../widget/boitedialogue.dart';
 import 'ArticleDetail.dart';
 import 'cree_article.dart';
 
@@ -167,7 +168,11 @@ class _listArticleState extends State<listArticle> {
                                   subtitle: Text(article['cat']),
                                   trailing: IconButton(
                                     onPressed: () => {
-                                      Article().deleteArticle(article["nom"])
+                                      openDialog(
+                                          context,
+                                          article["titre"],
+                                          "Êtes-vous sûr de vouloir supprimer cette article",
+                                          "article")
                                     },
                                     icon: const Icon(
                                       Icons.delete,

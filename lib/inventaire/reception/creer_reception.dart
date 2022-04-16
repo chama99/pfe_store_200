@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:chama_projet/inventaire/reception.dart/LigneOperation.dart';
-import 'package:chama_projet/inventaire/reception.dart/listReception.dart';
+import 'package:chama_projet/inventaire/reception/LigneOperation.dart';
+import 'package:chama_projet/inventaire/reception/listReception.dart';
 import 'package:chama_projet/services/reception.dart';
 import 'package:chama_projet/services/ligneOperation.dart';
 import 'package:flutter/cupertino.dart';
@@ -52,6 +52,7 @@ class _CreerReceptionState extends State<CreerReception> {
     } else {
       setState(() {
         commandeList = resultant;
+        CommandeOperation().deleteCommdeop();
       });
     }
   }
@@ -109,7 +110,9 @@ class _CreerReceptionState extends State<CreerReception> {
                           padding: const EdgeInsets.all(13),
                           child: InkWell(
                             onTap: () {
-                              Get.to(() => const LigneOperation());
+                              Get.to(() => LigneOperation(
+                                    page: "reception",
+                                  ));
                             },
                             child: const Text(
                               "Ajouter Une Opération",
@@ -334,19 +337,19 @@ class _CreerReceptionState extends State<CreerReception> {
           // Validate returns true if the form is valid, otherwise false.
           if (_formKey.currentState!.validate()) {
             // ignore: prefer_adjacent_string_concatenation
-            ch = "Inventaire" + "$number";
+            ch = "R" + "$number";
             addList();
             if (operation != null) {
               if (etat != null) {
                 Reception().addReception(
                     ch, operation, etat, dataTime, list, reception);
-                CommandeOperation().deleteCommdeop();
+
                 Get.to(() => const ListReception());
               } else {
                 showToast("veuillez sélectionner etat ");
               }
             } else {
-              showToast("veuillez sélectionner client type d'opération");
+              showToast("veuillez sélectionner  type d'opération");
             }
           }
         },

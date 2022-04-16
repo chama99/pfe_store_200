@@ -1,30 +1,32 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:chama_projet/inventaire/reception.dart/update_reception.dart';
+import 'package:chama_projet/inventaire/livraison/update_livraison.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ReceptionDetaile extends StatefulWidget {
+import '../../widget/toast.dart';
+
+class LivraisonDetaile extends StatefulWidget {
   String titre, typeoperation, etat, date;
-  String receptions;
+  String livraison;
   // ignore: non_constant_identifier_names
   List LigneOperations;
-  ReceptionDetaile(
+  LivraisonDetaile(
       {Key? key,
       required this.titre,
       required this.typeoperation,
       required this.etat,
-      required this.receptions,
+      required this.livraison,
       required this.date,
       // ignore: non_constant_identifier_names
       required this.LigneOperations})
       : super(key: key);
 
   @override
-  State<ReceptionDetaile> createState() => _ReceptionDetaileState();
+  State<LivraisonDetaile> createState() => _LivraisonDetaileState();
 }
 
-class _ReceptionDetaileState extends State<ReceptionDetaile> {
+class _LivraisonDetaileState extends State<LivraisonDetaile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,13 +37,16 @@ class _ReceptionDetaileState extends State<ReceptionDetaile> {
             padding: const EdgeInsets.only(top: 20, right: 30),
             child: InkWell(
               onTap: () {
-                Get.to(() => UpdateReception(
+                if (widget.etat == "Brouillon" || widget.etat == "En attente") {
+                  Get.to(() => UpdateLivraison(
                       titre: widget.titre,
                       OperationList: widget.LigneOperations,
-                      reception: widget.receptions,
+                      livraison: widget.livraison,
                       etat: widget.etat,
-                      date: widget.date,
-                    ));
+                      date: widget.date));
+                } else {
+                  showToast("Ne peut pas modifier cette réception");
+                }
               },
               child: Text(
                 "Modifier".toUpperCase(),
@@ -95,22 +100,22 @@ class _ReceptionDetaileState extends State<ReceptionDetaile> {
               ],
             ),
             Row(
-              children: [
-                const Padding(
+              children: const [
+                Padding(
                   padding: EdgeInsets.only(left: 8, top: 30),
                   child: Text(
-                    "Reception de:",
+                    "Adresse de livraison:",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, top: 30),
-                  child: Text(
-                    widget.receptions,
-                    style: const TextStyle(color: Colors.indigo, fontSize: 25),
-                  ),
-                ),
               ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8, top: 30),
+              child: Text(
+                widget.livraison,
+                style: const TextStyle(color: Colors.indigo, fontSize: 25),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(20),

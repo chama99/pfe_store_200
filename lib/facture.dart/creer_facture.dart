@@ -102,6 +102,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
       setState(() {
         userContactList = resultant;
         commandeList = resultant2;
+        CommandeFact().deleteCommde();
       });
     }
   }
@@ -208,10 +209,6 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                               sortColumnIndex: sortColumnIndex,
                               columns: [
                                 DataColumn(
-                                  label: const Text("Numéro de ligne "),
-                                  onSort: onSort,
-                                ),
-                                DataColumn(
                                   label: const Text("Article"),
                                   onSort: onSort,
                                 ),
@@ -249,7 +246,6 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                                     i < commandeList.length;
                                     i++) ...[
                                   DataRow(cells: [
-                                    DataCell(Text("$i")),
                                     DataCell(
                                         Text("${commandeList[i]['Article']}")),
                                     DataCell(Text(commandeList[i]['Libélle'])),

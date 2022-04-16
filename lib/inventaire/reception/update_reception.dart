@@ -1,7 +1,11 @@
 // ignore_for_file: must_be_immutable, non_constant_identifier_names
 
+import 'package:chama_projet/inventaire/reception/AjoutOperation.dart';
+import 'package:chama_projet/inventaire/reception/listReception.dart';
+import 'package:chama_projet/services/reception.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../widget/toast.dart';
 import 'ModifierLigneOperation.dart';
 
 class UpdateReception extends StatefulWidget {
@@ -74,7 +78,14 @@ class _UpdateReceptionState extends State<UpdateReception> {
                         textAlign: TextAlign.left,
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.to(() => Ajoutoperation(
+                              titre: widget.titre,
+                              etat: widget.etat,
+                              date: widget.date,
+                              ListOperation: widget.OperationList,
+                              reception: widget.reception));
+                        },
                         icon: const Icon(
                           Icons.add,
                           color: Colors.orange,
@@ -119,14 +130,18 @@ class _UpdateReceptionState extends State<UpdateReception> {
                       Flexible(
                         child: IconButton(
                           onPressed: () {
-                            Get.to(() => ModifierOperation(
-                                  titre: widget.titre,
-                                  reception: widget.reception,
-                                  etat: widget.etat,
-                                  num: int.parse(n.text),
-                                  ligneOperation: widget.OperationList,
-                                  date: widget.date,
-                                ));
+                            if (n.text.isEmpty) {
+                              showToast("Veuillez entrer Numéro de ligne");
+                            } else {
+                              Get.to(() => ModifierOperation(
+                                    titre: widget.titre,
+                                    reception: widget.reception,
+                                    etat: widget.etat,
+                                    num: int.parse(n.text),
+                                    ligneOperation: widget.OperationList,
+                                    date: widget.date,
+                                  ));
+                            }
                           },
                           icon: const Icon(
                             Icons.edit,
@@ -290,7 +305,16 @@ class _UpdateReceptionState extends State<UpdateReception> {
           primary: Colors.indigo,
         ),
         child: const Text("Modifier"),
-        onPressed: () {},
+        onPressed: () {
+          Reception().updateReception(
+              widget.titre,
+              "Atelier:Réception",
+              widget.etat,
+              DateTime.parse(widget.date),
+              widget.OperationList,
+              widget.reception);
+          Get.to(() => const ListReception());
+        },
       ),
     );
   }

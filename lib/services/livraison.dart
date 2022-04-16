@@ -1,15 +1,15 @@
 import 'package:chama_projet/widget/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Reception {
-  final CollectionReference reception =
-      FirebaseFirestore.instance.collection('reception');
+class Livraison {
+  final CollectionReference livraisonn =
+      FirebaseFirestore.instance.collection('livraison');
 
-  Future getReceptionList() async {
+  Future getLivraisonList() async {
     List itemsList = [];
 
     try {
-      await reception.get().then((querySnapshot) {
+      await livraisonn.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           itemsList.add(a);
@@ -23,8 +23,8 @@ class Reception {
     }
   }
 
-  Future<void> addReception(titre, type, etat, date, ligneOperation, recept) {
-    return reception
+  Future<void> addLivraison(titre, type, etat, date, ligneOperation, adresse) {
+    return livraisonn
         .doc(titre)
         .set({
           'titre': titre,
@@ -32,7 +32,7 @@ class Reception {
           'etat': etat,
           'date prévue': date,
           "ligne d'operation": ligneOperation,
-          "reception": recept
+          "Adresse de livraison": adresse
         })
         // ignore: avoid_print
         .then((value) => showToast('produit ajouté'))
@@ -41,9 +41,9 @@ class Reception {
             (error) => showToast("Échec de l'ajout de produit : $error"));
   }
 
-  Future<void> updateReception(
-      titre, type, etat, date, ligneOperation, recept) {
-    return reception
+  Future<void> updateLivraison(
+      titre, type, etat, date, ligneOperation, adresse) {
+    return livraisonn
         .doc(titre)
         .update({
           'titre': titre,
@@ -51,7 +51,7 @@ class Reception {
           'etat': etat,
           'date prévue': date,
           "ligne d'operation": ligneOperation,
-          "reception": recept
+          "Adresse de livraison": adresse
         })
         // ignore: avoid_print
         .then((value) => showToast("produit mis à jour"))
@@ -60,9 +60,9 @@ class Reception {
             showToast("Échec de la mise à jour de produit : $error"));
   }
 
-  Future<void> deleteReception(id) {
+  Future<void> deleteLivraison(id) {
     // print("Employe Deleted $id");
-    return reception
+    return livraisonn
         .doc(id)
         .delete()
         // ignore: avoid_print
@@ -72,11 +72,11 @@ class Reception {
             showToast("Échec de la suppression de produit : $error"));
   }
 
-  Future getRecepListByLigneOperation() async {
+  Future getRecepListByLigneLivraison() async {
     List itemsListNom = [];
 
     try {
-      await reception.get().then((querySnapshot) {
+      await livraisonn.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           itemsListNom.add(a["ligne d'operation"]);

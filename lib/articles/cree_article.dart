@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/get_core.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
@@ -137,7 +137,7 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
 
   // ignore: prefer_const_constructors
   ImageProvider<Object> networkImage = NetworkImage(
-      "https://avatar.anytimefitness.com/Content/Placeholders/camera.png");
+      "http://www.ipsgroup.fr/wp-content/uploads/2013/12/default_image_01-1024x1024-1140x642.png");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -521,9 +521,9 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                                               sale_prix,
                                               prix_de_vente,
                                               unite,
-                                              "https://avatar.anytimefitness.com/Content/Placeholders/camera.png");
+                                              "http://www.ipsgroup.fr/wp-content/uploads/2013/12/default_image_01-1024x1024-1140x642.png");
                                         } else {
-                                          uploadImage(imageUrl);
+                                          uploadImage(nom);
                                         }
 
                                         clearText();
@@ -605,7 +605,7 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
     });
   }
 
-  uploadImage(String imageUrl) async {
+  uploadImage(String nom) async {
     // ignore: unused_local_variable
     final fileName = basename(imageFile!.path);
     // ignore: prefer_const_declarations
@@ -614,7 +614,7 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
     try {
       final ref = firebase_storage.FirebaseStorage.instance
           .ref(destination)
-          .child('$imageUrl/');
+          .child('$nom/');
       UploadTask uploadTask = ref.putFile(File(imageFile!.path));
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
@@ -631,7 +631,7 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
           sale_prix,
           prix_de_vente,
           unite,
-          imageUrl,
+          uploadPath,
         );
         //type = '';
       });

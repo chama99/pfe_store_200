@@ -1,15 +1,33 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, must_be_immutable, non_constant_identifier_names
+
+import 'dart:convert';
+
+import 'package:chama_projet/inventaire/livraison/update_livraison.dart';
+
+import 'package:chama_projet/services/livraison.dart';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class Ajoutoperation extends StatefulWidget {
-  const Ajoutoperation({Key? key}) : super(key: key);
+import '../../widget/toast.dart';
+
+class AjoutoperationLiv extends StatefulWidget {
+  List ListOperation;
+  String titre, etat, date, livraison;
+  AjoutoperationLiv(
+      {Key? key,
+      required this.titre,
+      required this.etat,
+      required this.date,
+      required this.ListOperation,
+      required this.livraison})
+      : super(key: key);
 
   @override
-  State<Ajoutoperation> createState() => _AjoutoperationState();
+  State<AjoutoperationLiv> createState() => _AjoutoperationLivState();
 }
 
-class _AjoutoperationState extends State<Ajoutoperation> {
+class _AjoutoperationLivState extends State<AjoutoperationLiv> {
   final _formKey = GlobalKey<FormState>();
   // ignore: prefer_typing_uninitialized_variables
   var article;
@@ -232,7 +250,37 @@ class _AjoutoperationState extends State<Ajoutoperation> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {}
+                        if (_formKey.currentState!.validate()) {
+                          if (article != null) {
+                            var a = ({
+                              'Article': article,
+                              'Colis source': colis.text,
+                              'Colis de destination': colisDes.text,
+                              'Appartenant': appartenant.text,
+                              'Fait': fait.text,
+                              'Unite': int.parse(unite.text),
+                            });
+
+                            var data = json.decode(json.encode(a));
+                            widget.ListOperation.add(data);
+                            Livraison().updateLivraison(
+                                widget.titre,
+                                "Atelier:Réception",
+                                widget.etat,
+                                DateTime.parse(widget.date),
+                                widget.ListOperation,
+                                widget.livraison);
+                            clearText();
+                            Get.to(() => UpdateLivraison(
+                                titre: widget.titre,
+                                OperationList: widget.ListOperation,
+                                livraison: widget.livraison,
+                                etat: widget.etat,
+                                date: widget.date));
+                          } else {
+                            showToast("veuillez sélectionner Article ");
+                          }
+                        }
                       },
                       child: const Text(
                         "Ajouter",

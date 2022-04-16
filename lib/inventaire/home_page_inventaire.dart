@@ -1,4 +1,6 @@
-import 'package:chama_projet/inventaire/reception.dart/listReception.dart';
+import 'package:chama_projet/inventaire/livraison/listLivraison.dart';
+import 'package:chama_projet/inventaire/reception/listReception.dart';
+import 'package:chama_projet/services/livraison.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,6 +16,7 @@ class ListInventaire extends StatefulWidget {
 class _ListInventaireState extends State<ListInventaire> {
   // ignore: non_constant_identifier_names
   List Listreception = [];
+  List Listlivraison = [];
   @override
   void initState() {
     super.initState();
@@ -22,6 +25,7 @@ class _ListInventaireState extends State<ListInventaire> {
 
   fetchDatabaseList() async {
     dynamic resultant = await Reception().getReceptionList();
+    dynamic resultant2 = await Livraison().getLivraisonList();
 
     if (resultant == null) {
       // ignore: avoid_print
@@ -29,6 +33,7 @@ class _ListInventaireState extends State<ListInventaire> {
     } else {
       setState(() {
         Listreception = resultant;
+        Listlivraison = resultant2;
       });
     }
   }
@@ -133,7 +138,9 @@ class _ListInventaireState extends State<ListInventaire> {
                   margin: const EdgeInsets.all(20),
                   child: Card(
                       child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() => const ListLivraison());
+                    },
                     splashColor: const Color.fromARGB(255, 3, 56, 109),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -157,7 +164,7 @@ class _ListInventaireState extends State<ListInventaire> {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 primary: Colors.indigo),
-                            child: const Text("Traiter"),
+                            child: Text("${Listlivraison.length} A Traiter"),
                             onPressed: null,
                           ),
                         )

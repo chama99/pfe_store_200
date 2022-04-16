@@ -1,19 +1,21 @@
 // ignore_for_file: must_be_immutable, file_names
 
-import 'package:chama_projet/inventaire/reception.dart/update_reception.dart';
-import 'package:chama_projet/services/reception.dart';
+import 'package:chama_projet/inventaire/livraison/update_livraison.dart';
+
+import 'package:chama_projet/services/livraison.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ModifierOperation extends StatefulWidget {
+class ModifierOperationLiv extends StatefulWidget {
   int num;
   List ligneOperation;
   String titre, date;
-  String reception, etat;
-  ModifierOperation(
+  String livraison, etat;
+  ModifierOperationLiv(
       {Key? key,
       required this.titre,
-      required this.reception,
+      required this.livraison,
       required this.etat,
       required this.num,
       required this.ligneOperation,
@@ -21,10 +23,10 @@ class ModifierOperation extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ModifierOperation> createState() => _ModifierOperationState();
+  State<ModifierOperationLiv> createState() => _ModifierOperationLivState();
 }
 
-class _ModifierOperationState extends State<ModifierOperation> {
+class _ModifierOperationLivState extends State<ModifierOperationLiv> {
   final _formKey = GlobalKey<FormState>();
   List listItem = ["store12", "store15"];
   @override
@@ -215,16 +217,17 @@ class _ModifierOperationState extends State<ModifierOperation> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        Reception().updateReception(
+                        Livraison().updateLivraison(
                             widget.titre,
-                            "Atelier:Réception",
+                            "Atelier:Livraison",
                             widget.etat,
-                            widget.date,
-                            widget.ligneOperation);
-                        Get.to(() => UpdateReception(
+                            DateTime.parse(widget.date),
+                            widget.ligneOperation,
+                            widget.livraison);
+                        Get.to(() => UpdateLivraison(
                             titre: widget.titre,
                             OperationList: widget.ligneOperation,
-                            reception: widget.reception,
+                            livraison: widget.livraison,
                             etat: widget.etat,
                             date: widget.date));
                       },
