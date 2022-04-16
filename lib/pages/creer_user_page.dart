@@ -10,8 +10,6 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_string_encryption/flutter_string_encryption.dart';
-
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -39,7 +37,7 @@ class _AddUserPageState extends State<AddUserPage> {
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
   XFile? imageFile;
-  var key = "null";
+
   final ImagePicker picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
   late String imageUrl;
@@ -52,7 +50,7 @@ class _AddUserPageState extends State<AddUserPage> {
   var r = "Poste occupé ";
   // ignore: prefer_typing_uninitialized_variables
   var nom;
-  late PlatformStringCryptor cryptor;
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -438,7 +436,6 @@ class _AddUserPageState extends State<AddUserPage> {
                                     showToast(
                                         "veuillez sélectionner Nom de l'employé");
                                   }
-                                  Encrypt();
                                 },
                                 child: const Text(
                                   "Sauvegarder",
@@ -523,14 +520,5 @@ class _AddUserPageState extends State<AddUserPage> {
     } catch (e) {
       print('error occured');
     }
-  }
-
-  Future<void> Encrypt() async {
-    cryptor = PlatformStringCryptor();
-    final salt = await cryptor.generateSalt();
-    password = passwordController.text;
-    key = await cryptor.generateKeyFromPassword(password, salt);
-    var encryptedS = await cryptor.encrypt(password, key);
-    print(encryptedS);
   }
 }
