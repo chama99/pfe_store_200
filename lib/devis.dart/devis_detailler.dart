@@ -9,11 +9,10 @@ import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
-import '../services/pdf_api.dart';
 import '../services/pdf_devis.dart';
 
 class DevisDetailler extends StatefulWidget {
-  String titre, client, etat;
+  String titre, client, etat, role;
   double remise;
   List commande;
   double total, montant;
@@ -27,7 +26,8 @@ class DevisDetailler extends StatefulWidget {
       required this.total,
       required this.remise,
       required this.montant,
-      required this.date})
+      required this.date,
+      required this.role})
       : super(key: key);
 
   @override
@@ -48,7 +48,7 @@ class _DevisDetaillerState extends State<DevisDetailler> {
             padding: const EdgeInsets.only(top: 20, right: 30),
             child: InkWell(
               onTap: () {
-                if (widget.etat == "Devis") {
+                if (widget.etat == "Devis" && widget.role == "Admin") {
                   Get.to(() => UpdateDevis(
                         titre: widget.titre,
                         client: widget.client,
@@ -57,6 +57,7 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                         remise: widget.remise,
                         total: widget.total,
                         montant: widget.montant,
+                        role: widget.role,
                       ));
                 } else {
                   showToast("Ne peut pas modifier ce devis");
@@ -85,16 +86,17 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                       padding: EdgeInsets.only(left: 8, top: 20),
                       child: Text(
                         "Client:",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 30),
+                        style: TextStyle(fontSize: 20, letterSpacing: 3),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8, top: 20),
                       child: Text(
                         widget.client,
-                        style:
-                            const TextStyle(color: Colors.indigo, fontSize: 25),
+                        style: const TextStyle(
+                            color: Colors.indigo,
+                            fontSize: 25,
+                            letterSpacing: 3),
                       ),
                     ),
                   ],
@@ -105,16 +107,17 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                       padding: EdgeInsets.only(left: 8, top: 30),
                       child: Text(
                         "État:",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 30),
+                        style: TextStyle(fontSize: 20, letterSpacing: 3),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8, top: 30),
                       child: Text(
                         widget.etat,
-                        style:
-                            const TextStyle(color: Colors.indigo, fontSize: 25),
+                        style: const TextStyle(
+                            color: Colors.indigo,
+                            fontSize: 25,
+                            letterSpacing: 3),
                       ),
                     ),
                   ],
@@ -123,7 +126,7 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                   padding: EdgeInsets.only(top: 30),
                   child: Text(
                     "Lignes de la commande :",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                    style: TextStyle(fontSize: 20, letterSpacing: 3),
                   ),
                 ),
                 Padding(
@@ -208,16 +211,17 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                       padding: EdgeInsets.only(left: 8, top: 30),
                       child: Text(
                         "Total =",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 30),
+                        style: TextStyle(fontSize: 20, letterSpacing: 3),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8, top: 30),
                       child: Text(
                         "${widget.total}£",
-                        style:
-                            const TextStyle(color: Colors.indigo, fontSize: 25),
+                        style: const TextStyle(
+                            color: Colors.indigo,
+                            fontSize: 25,
+                            letterSpacing: 3),
                       ),
                     ),
                   ],
@@ -226,7 +230,7 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                   children: [
                     const Text(
                       "Signature:",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 20, letterSpacing: 3),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),

@@ -22,20 +22,8 @@ class Article {
     }
   }
 
-  Future<void> addArticle(
-      nom,
-      type,
-      role,
-      cat,
-      data,
-      reference_interne,
-      prix_vente,
-      taxes_a_la_vente,
-      prix_dachat,
-      sale_prix,
-      prix_de_vente,
-      unite,
-      url) {
+  Future<void> addArticle(nom, type, role, cat, data, reference_interne,
+      taxes_a_la_vente, prix_dachat, sale_prix, prix_de_vente, unite, url) {
     return article
         .doc(nom)
         .set({
@@ -45,7 +33,6 @@ class Article {
           'cat': cat,
           'code_a_barre': data,
           'reference_interne': reference_interne,
-          'prix_vente': prix_vente,
           'taxes_a_la_vente': taxes_a_la_vente,
           'prix_dachat': prix_dachat,
           'sale_prix': sale_prix,
@@ -59,20 +46,8 @@ class Article {
         .catchError((error) => print('Failed to Add article: $error'));
   }
 
-  Future<void> updateArticle(
-      nom,
-      type,
-      role,
-      cat,
-      data,
-      reference_interne,
-      prix_vente,
-      taxes_a_la_vente,
-      prix_dachat,
-      sale_prix,
-      prix_de_vente,
-      unite,
-      url) {
+  Future<void> updateArticle(nom, type, role, cat, data, reference_interne,
+      taxes_a_la_vente, prix_dachat, sale_prix, prix_de_vente, unite, url) {
     return article
         .doc(nom)
         .update({
@@ -82,7 +57,6 @@ class Article {
           'cat': cat,
           'code_a_barre': data,
           'reference_interne': reference_interne,
-          'prix_vente': prix_vente,
           'taxes_a_la_vente': taxes_a_la_vente,
           'prix_dachat': prix_dachat,
           'sale_prix': sale_prix,
@@ -115,6 +89,46 @@ class Article {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           itemsListNom.add(a['nom']);
+        }).toList();
+      });
+      return itemsListNom;
+    } catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future getArticleListByTyoeservice() async {
+    List itemsListNom = [];
+
+    try {
+      await article.get().then((querySnapshot) {
+        querySnapshot.docs.map((element) {
+          Map a = element.data() as Map<String, dynamic>;
+          if (a['role'] == "Service") {
+            itemsListNom.add(a);
+          }
+        }).toList();
+      });
+      return itemsListNom;
+    } catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future getArticleListByTyid(id) async {
+    List itemsListNom = [];
+
+    try {
+      await article.get().then((querySnapshot) {
+        querySnapshot.docs.map((element) {
+          Map a = element.data() as Map<String, dynamic>;
+          if (a['nom'] == "id") {
+            itemsListNom.add(a);
+          }
         }).toList();
       });
       return itemsListNom;

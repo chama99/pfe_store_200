@@ -70,7 +70,7 @@ class _ReceptionDetaileState extends State<ReceptionDetaile> {
                   padding: EdgeInsets.only(left: 8, top: 20),
                   child: Text(
                     "Type d'operation:",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                    style: TextStyle(fontSize: 20, letterSpacing: 3),
                   ),
                 ),
               ],
@@ -79,7 +79,8 @@ class _ReceptionDetaileState extends State<ReceptionDetaile> {
               padding: const EdgeInsets.only(left: 8, top: 20),
               child: Text(
                 widget.typeoperation,
-                style: const TextStyle(color: Colors.indigo, fontSize: 25),
+                style: const TextStyle(
+                    color: Colors.indigo, fontSize: 25, letterSpacing: 3),
               ),
             ),
             Row(
@@ -88,14 +89,15 @@ class _ReceptionDetaileState extends State<ReceptionDetaile> {
                   padding: EdgeInsets.only(left: 8, top: 30),
                   child: Text(
                     "État:",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                    style: TextStyle(fontSize: 20, letterSpacing: 3),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8, top: 30),
                   child: Text(
                     widget.etat,
-                    style: const TextStyle(color: Colors.indigo, fontSize: 25),
+                    style: const TextStyle(
+                        color: Colors.indigo, fontSize: 25, letterSpacing: 3),
                   ),
                 ),
               ],
@@ -106,14 +108,15 @@ class _ReceptionDetaileState extends State<ReceptionDetaile> {
                   padding: EdgeInsets.only(left: 8, top: 30),
                   child: Text(
                     "Reception de:",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                    style: TextStyle(fontSize: 20, letterSpacing: 3),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8, top: 30),
                   child: Text(
                     widget.receptions,
-                    style: const TextStyle(color: Colors.indigo, fontSize: 25),
+                    style: const TextStyle(
+                        color: Colors.indigo, fontSize: 25, letterSpacing: 3),
                   ),
                 ),
               ],

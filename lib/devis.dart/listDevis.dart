@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, unused_local_variable
 
 import 'package:chama_projet/services/devis.dart';
+import 'package:chama_projet/widget/toast.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,8 @@ import 'creer_devis.dart';
 import 'devis_detailler.dart';
 
 class ListDevis extends StatefulWidget {
-  const ListDevis({Key? key}) : super(key: key);
+  String role;
+  ListDevis({Key? key, required this.role}) : super(key: key);
 
   @override
   _ListDevisState createState() => _ListDevisState();
@@ -58,10 +60,16 @@ class _ListDevisState extends State<ListDevis> {
               padding: const EdgeInsets.only(top: 20, right: 30),
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CreeDevisPage()));
+                  if (widget.role == "Admin") {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreeDevisPage(
+                                  role: widget.role,
+                                )));
+                  } else {
+                    showToast("Tu ne peux pas créer un devis");
+                  }
                 },
                 child: Text(
                   "Créer".toUpperCase(),
@@ -114,7 +122,9 @@ class _ListDevisState extends State<ListDevis> {
                           Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
-                                  pageBuilder: (a, b, c) => const ListDevis(),
+                                  pageBuilder: (a, b, c) => ListDevis(
+                                        role: widget.role,
+                                      ),
                                   transitionDuration:
                                       const Duration(seconds: 0)));
                           // ignore: void_checks
@@ -138,6 +148,7 @@ class _ListDevisState extends State<ListDevis> {
                                         date: devis["date de devis"]
                                             .toDate()
                                             .toString(),
+                                        role: widget.role,
                                       ));
                                 },
                                 splashColor:

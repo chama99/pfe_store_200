@@ -29,7 +29,8 @@ import 'LigneDECommande.dart';
 import 'listDevis.dart';
 
 class CreeDevisPage extends StatefulWidget {
-  const CreeDevisPage({Key? key}) : super(key: key);
+  String role;
+  CreeDevisPage({Key? key, required this.role}) : super(key: key);
 
   @override
   _CreeDevisPageState createState() => _CreeDevisPageState();
@@ -133,7 +134,9 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
               context,
               PageRouteBuilder(
                   // ignore: prefer_const_constructors
-                  pageBuilder: (a, b, c) => CreeDevisPage(),
+                  pageBuilder: (a, b, c) => CreeDevisPage(
+                        role: widget.role,
+                      ),
                   // ignore: prefer_const_constructors
                   transitionDuration: Duration(seconds: 0)));
           // ignore: void_checks
@@ -168,8 +171,9 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          const LigneCommande()));
+                                      builder: (context) => LigneCommande(
+                                            role: widget.role,
+                                          )));
                             },
                             child: const Text(
                               "Ajouter Lignes de la commande",
@@ -488,7 +492,9 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                 Devis().addDevis(ch, client, etat, calculMontat() - remisee,
                     list, remisee, calculMontat(), dataTime);
 
-                Get.to(() => const ListDevis());
+                Get.to(() => ListDevis(
+                      role: widget.role,
+                    ));
               } else {
                 showToast("veuillez sélectionner état");
               }

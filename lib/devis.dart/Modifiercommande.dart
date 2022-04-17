@@ -6,22 +6,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ModifierCommande extends StatefulWidget {
-  String titre, client, etat;
+  String titre, client, etat, role;
   int num;
   double remise;
   List commande;
   double total, montant;
-  ModifierCommande({
-    Key? key,
-    required this.titre,
-    required this.client,
-    required this.etat,
-    required this.commande,
-    required this.total,
-    required this.remise,
-    required this.montant,
-    required this.num,
-  }) : super(key: key);
+  ModifierCommande(
+      {Key? key,
+      required this.titre,
+      required this.client,
+      required this.etat,
+      required this.commande,
+      required this.total,
+      required this.remise,
+      required this.montant,
+      required this.num,
+      required this.role})
+      : super(key: key);
 
   @override
   State<ModifierCommande> createState() => _ModifierCommandeState();
@@ -233,13 +234,15 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                             widget.montant);
 
                         Get.to(() => UpdateDevis(
-                            titre: widget.titre,
-                            client: widget.client,
-                            etat: widget.etat,
-                            total: widget.total,
-                            commande: widget.commande,
-                            remise: widget.remise,
-                            montant: widget.montant));
+                              titre: widget.titre,
+                              client: widget.client,
+                              etat: widget.etat,
+                              total: widget.total,
+                              commande: widget.commande,
+                              remise: widget.remise,
+                              montant: widget.montant,
+                              role: widget.role,
+                            ));
                       },
                       child: const Text(
                         "Modifier",

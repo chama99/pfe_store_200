@@ -1,10 +1,10 @@
-import 'package:chama_projet/inventaire/livraison/listLivraison.dart';
 import 'package:chama_projet/services/article.dart';
 import 'package:chama_projet/services/contact.dart';
 import 'package:chama_projet/services/devis.dart';
 import 'package:chama_projet/services/employe.dart';
 import 'package:chama_projet/services/facture.dart';
 import 'package:chama_projet/services/livraison.dart';
+import 'package:chama_projet/services/transfert.dart';
 import 'package:chama_projet/services/user.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +37,8 @@ Future openDialog(context, id, mssg, ch) {
                       Livraison().deleteLivraison(id);
                     } else if (ch == "article") {
                       Article().deleteArticle(id);
+                    } else if (ch == "transfert") {
+                      Transfert().deleteTransfert(id);
                     } else {
                       Contact().deleteContact(id);
                     }

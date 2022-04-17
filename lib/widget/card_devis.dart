@@ -3,13 +3,15 @@ import 'package:get/get.dart';
 
 import '../devis.dart/listDevis.dart';
 
-Card buildInputCardDevis() {
+Card buildInputCardDevis(String role) {
   return Card(
     color: Colors.blue[200],
     margin: const EdgeInsets.all(8.0),
     child: InkWell(
       onTap: () {
-        Get.to(() => const ListDevis());
+        Get.to(() => ListDevis(
+              role: role,
+            ));
       },
       splashColor: const Color.fromARGB(255, 3, 56, 109),
       child: Center(

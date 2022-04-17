@@ -1,32 +1,32 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:chama_projet/inventaire/livraison/update_livraison.dart';
+import 'package:chama_projet/inventaire/Transfert/update_transfert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../widget/toast.dart';
 
-class LivraisonDetaile extends StatefulWidget {
+class TransfertDetaile extends StatefulWidget {
   String titre, typeoperation, etat, date;
-  String livraison;
+  String transf;
   // ignore: non_constant_identifier_names
   List LigneOperations;
-  LivraisonDetaile(
+  TransfertDetaile(
       {Key? key,
       required this.titre,
       required this.typeoperation,
       required this.etat,
-      required this.livraison,
+      required this.transf,
       required this.date,
       // ignore: non_constant_identifier_names
       required this.LigneOperations})
       : super(key: key);
 
   @override
-  State<LivraisonDetaile> createState() => _LivraisonDetaileState();
+  State<TransfertDetaile> createState() => _TransfertDetaileState();
 }
 
-class _LivraisonDetaileState extends State<LivraisonDetaile> {
+class _TransfertDetaileState extends State<TransfertDetaile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,14 +38,14 @@ class _LivraisonDetaileState extends State<LivraisonDetaile> {
             child: InkWell(
               onTap: () {
                 if (widget.etat == "Brouillon" || widget.etat == "En attente") {
-                  Get.to(() => UpdateLivraison(
+                  Get.to(() => UpdateTransfert(
                       titre: widget.titre,
                       OperationList: widget.LigneOperations,
-                      livraison: widget.livraison,
+                      transf: widget.transf,
                       etat: widget.etat,
                       date: widget.date));
                 } else {
-                  showToast("Ne peut pas modifier cette réception");
+                  showToast("Ne peut pas modifier ce transfert");
                 }
               },
               child: Text(
@@ -115,7 +115,7 @@ class _LivraisonDetaileState extends State<LivraisonDetaile> {
             Padding(
               padding: const EdgeInsets.only(left: 8, top: 30),
               child: Text(
-                widget.livraison,
+                widget.transf,
                 style: const TextStyle(
                     color: Colors.indigo, fontSize: 25, letterSpacing: 3),
               ),

@@ -1,39 +1,42 @@
-// ignore_for_file: file_names, unused_local_variable, camel_case_types
+// ignore_for_file: file_names
 
-import 'package:chama_projet/services/article.dart';
+import 'package:chama_projet/inventaire/Transfert/creer_transfert.dart';
+import 'package:chama_projet/inventaire/Transfert/detail_transfert.dart';
 
+import 'package:chama_projet/services/transfert.dart';
 import 'package:flutter/material.dart';
-import '../widget/boitedialogue.dart';
-import 'ArticleDetail.dart';
-import 'cree_article.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
-class listArticle extends StatefulWidget {
-  const listArticle({Key? key}) : super(key: key);
+import '../../widget/boitedialogue.dart';
+
+class ListTransfert extends StatefulWidget {
+  const ListTransfert({Key? key}) : super(key: key);
 
   @override
-  _listArticleState createState() => _listArticleState();
+  State<ListTransfert> createState() => _ListTransfertState();
 }
 
-class _listArticleState extends State<listArticle> {
+class _ListTransfertState extends State<ListTransfert> {
   TextEditingController searchcontroller = TextEditingController();
   TextEditingController editingController = TextEditingController();
-  List userArticleList = [];
+  // ignore: non_constant_identifier_names
+  List ListTransf = [];
   @override
   void initState() {
     super.initState();
-
     fetchDatabaseList();
   }
 
   fetchDatabaseList() async {
-    dynamic resultant = await Article().getArticlesList();
+    dynamic resultant = await Transfert().getTransfert();
 
     if (resultant == null) {
       // ignore: avoid_print
       print('Unable to retrieve');
     } else {
       setState(() {
-        userArticleList = resultant;
+        ListTransf = resultant;
       });
     }
   }
@@ -42,7 +45,7 @@ class _listArticleState extends State<listArticle> {
   var length;
 
   // ignore: unnecessary_new
-  Widget appBarTitle = const Text("Articles");
+  Widget appBarTitle = const Text("Transfert interne");
   Icon actionIcon = const Icon(Icons.search);
   @override
   Widget build(BuildContext context) {
@@ -54,10 +57,7 @@ class _listArticleState extends State<listArticle> {
               padding: const EdgeInsets.only(top: 20, right: 30),
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CreeArticlePage()));
+                  Get.to(() => const CreerTransfert());
                 },
                 child: Text(
                   "Créer".toUpperCase(),
@@ -101,7 +101,7 @@ class _listArticleState extends State<listArticle> {
                 ),
               ),
               Expanded(
-                child: userArticleList.isEmpty
+                child: ListTransf.isEmpty
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
@@ -110,76 +110,55 @@ class _listArticleState extends State<listArticle> {
                           Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
-                                  pageBuilder: (a, b, c) => const listArticle(),
+                                  pageBuilder: (a, b, c) =>
+                                      const ListTransfert(),
                                   transitionDuration:
                                       const Duration(seconds: 0)));
                           // ignore: void_checks
                           return Future.value(false);
                         },
                         child: ListView.builder(
-                            itemCount: userArticleList.length,
+                            itemCount: ListTransf.length,
                             itemBuilder: (context, index) {
-                              final article = userArticleList[index];
+                              final trans = ListTransf[index];
                               return Card(
                                   child: InkWell(
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ArticleDetail(
-                                                nom: userArticleList[index]
-                                                    ['nom'],
-                                                type: userArticleList[index]
-                                                    ['type'],
-                                                role: userArticleList[index]
-                                                    ['role'],
-                                                cat: userArticleList[index]
-                                                    ['cat'],
-                                                data: userArticleList[index]
-                                                    ['code_a_barre'],
-                                                reference_interne:
-                                                    userArticleList[index]
-                                                        ['reference_interne'],
-                                                taxes_a_la_vente:
-                                                    userArticleList[index]
-                                                        ['taxes_a_la_vente'],
-                                                prix_dachat:
-                                                    userArticleList[index]
-                                                        ['prix_dachat'],
-                                                sale_prix:
-                                                    userArticleList[index]
-                                                        ['sale_prix'],
-                                                prix_de_vente:
-                                                    userArticleList[index]
-                                                        ['prix_de_vente'],
-                                                unite: userArticleList[index]
-                                                    ['unite'],
-                                                image: userArticleList[index]
-                                                    ['image'],
-                                              )));
+                                  Get.to(() => TransfertDetaile(
+                                      titre: trans["titre"],
+                                      typeoperation: trans["type d'operation"],
+                                      etat: trans["etat"],
+                                      transf: trans["transfert à"],
+                                      LigneOperations:
+                                          trans["ligne d'operation"],
+                                      date: trans["date prévue"]
+                                          .toDate()
+                                          .toString()));
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),
                                 child: ListTile(
-                                  title: Text(article['nom']),
-                                  subtitle: Text(article['cat']),
+                                  title: Text(trans["etat"]),
+                                  subtitle: Text(
+                                      // ignore: unnecessary_string_interpolations
+                                      "${trans["date prévue"].toDate().toString()}"),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          article["titre"],
-                                          "Êtes-vous sûr de vouloir supprimer cette article",
-                                          "article")
+                                          trans["titre"],
+                                          "Êtes-vous sûr de vouloir supprimer ce produit",
+                                          "transfert")
                                     },
                                     icon: const Icon(
                                       Icons.delete,
                                       color: Colors.red,
                                     ),
                                   ),
-                                  leading: CircleAvatar(
-                                    radius: 20.0,
-                                    backgroundImage:
-                                        NetworkImage(article['image']),
+                                  leading: Text(
+                                    trans["titre"],
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ));
@@ -191,13 +170,19 @@ class _listArticleState extends State<listArticle> {
   }
 
   void filterSearchResults(String query) {
-    final suggestions = userArticleList.where((article) {
-      final nom = article['nom'].toLowerCase();
+    final suggestions = ListTransf.where((trans) {
+      final namemploye = trans['titre'].toLowerCase();
       final input = query.toLowerCase();
-      return nom.contains(input);
+      return namemploye.contains(input);
     }).toList();
     setState(() {
-      userArticleList = suggestions;
+      ListTransf = suggestions;
     });
+  }
+
+  String formattedDate(timeStamp) {
+    var dateFromTimeStamp =
+        DateTime.fromMicrosecondsSinceEpoch(timeStamp.seconds * 1000);
+    return DateFormat('dd-MM-yyyy').format(dateFromTimeStamp);
   }
 }

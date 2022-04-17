@@ -62,6 +62,7 @@ class _connexion extends State<Connexion> {
         String name = value.data()!["name"];
         List acces = value.data()!["acces"];
         String url = value.data()!["image"];
+        String role = value.data()!["role"];
         if (e == email && m == mdp) {
           Navigator.push(
               context,
@@ -71,6 +72,7 @@ class _connexion extends State<Connexion> {
                         name: name,
                         acces: acces,
                         url: url,
+                        role: role,
                       )));
         } else {
           showToast("Mauvais  mot de passe");

@@ -88,16 +88,17 @@ class _DetailFactureState extends State<DetailFacture> {
                       padding: EdgeInsets.only(left: 8, top: 20),
                       child: Text(
                         "Client:",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 30),
+                        style: TextStyle(fontSize: 20, letterSpacing: 3),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8, top: 20),
                       child: Text(
                         widget.client,
-                        style:
-                            const TextStyle(color: Colors.indigo, fontSize: 25),
+                        style: const TextStyle(
+                            color: Colors.indigo,
+                            fontSize: 25,
+                            letterSpacing: 3),
                       ),
                     ),
                   ],
@@ -108,16 +109,17 @@ class _DetailFactureState extends State<DetailFacture> {
                       padding: EdgeInsets.only(left: 8, top: 30),
                       child: Text(
                         "État:",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 30),
+                        style: TextStyle(fontSize: 20, letterSpacing: 3),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8, top: 30),
                       child: Text(
                         widget.etat,
-                        style:
-                            const TextStyle(color: Colors.indigo, fontSize: 25),
+                        style: const TextStyle(
+                            color: Colors.indigo,
+                            fontSize: 25,
+                            letterSpacing: 3),
                       ),
                     ),
                   ],
@@ -126,7 +128,7 @@ class _DetailFactureState extends State<DetailFacture> {
                   padding: EdgeInsets.only(top: 30),
                   child: Text(
                     "Lignes de facture :",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                    style: TextStyle(fontSize: 20, letterSpacing: 3),
                   ),
                 ),
                 Padding(
@@ -203,8 +205,7 @@ class _DetailFactureState extends State<DetailFacture> {
                       padding: EdgeInsets.only(left: 8, top: 30),
                       child: Text(
                         "Total =",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 30),
+                        style: TextStyle(fontSize: 20, letterSpacing: 3),
                       ),
                     ),
                     Padding(
@@ -221,7 +222,7 @@ class _DetailFactureState extends State<DetailFacture> {
                   children: [
                     const Text(
                       "Signature:",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 20, letterSpacing: 3),
                     ),
                     SfSignaturePad(
                       key: keySignaturePad,

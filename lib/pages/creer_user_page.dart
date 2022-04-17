@@ -395,6 +395,7 @@ class _AddUserPageState extends State<AddUserPage> {
                                   } else {
                                     acces.add("Factures");
                                     acces.add("Conges");
+                                    acces.add("Devis");
                                   }
 
                                   if (_formKey.currentState!.validate() &&

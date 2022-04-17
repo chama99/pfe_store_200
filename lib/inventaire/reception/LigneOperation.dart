@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, must_be_immutable
 
+import 'package:chama_projet/inventaire/Transfert/creer_transfert.dart';
 import 'package:chama_projet/inventaire/livraison/creer_livraison.dart';
 import 'package:chama_projet/services/ligneOperation.dart';
 import 'package:flutter/material.dart';
@@ -251,6 +252,8 @@ class _LigneOperationState extends State<LigneOperation> {
                             clearText();
                             if (widget.page == "reception") {
                               Get.to(() => const CreerReception());
+                            } else if (widget.page == "transfert") {
+                              Get.to(() => const CreerTransfert());
                             } else {
                               Get.to(() => const CreerLivraison());
                             }

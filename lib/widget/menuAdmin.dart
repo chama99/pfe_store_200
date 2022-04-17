@@ -15,14 +15,15 @@ import 'card_role.dart';
 import 'card_user.dart';
 
 class MenuAdmin extends StatefulWidget {
-  String name, email, url;
+  String name, email, url, role;
   List acces;
   MenuAdmin(
       {Key? key,
       required this.email,
       required this.name,
       required this.acces,
-      required this.url})
+      required this.url,
+      required this.role})
       : super(key: key);
 
   @override
@@ -50,7 +51,7 @@ class _MenuAdminState extends State<MenuAdmin> {
           children: <Widget>[
             for (var x in widget.acces) ...[
               if (x == "Employés") ...[buildInputCardEmploye()],
-              if (x == "Devis") ...[buildInputCardDevis()],
+              if (x == "Devis") ...[buildInputCardDevis(widget.role)],
               if (x == "Contacts") ...[buildInputCardContact()],
               if (x == "Articles") ...[buildInputCardArtcile()],
               if (x == "Factures") ...[buildInputCardFacture()],

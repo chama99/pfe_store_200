@@ -13,6 +13,7 @@ import 'AjoutligneCommande.dart';
 
 class UpdateDevis extends StatefulWidget {
   List commande;
+  String role;
   String titre;
   String etat, client;
   double remise;
@@ -25,7 +26,8 @@ class UpdateDevis extends StatefulWidget {
       required this.commande,
       required this.remise,
       required this.total,
-      required this.montant})
+      required this.montant,
+      required this.role})
       : super(key: key);
 
   @override
@@ -98,6 +100,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                         remise: widget.remise,
                         total: widget.total,
                         montant: widget.montant,
+                        role: widget.role,
                       ),
                   // ignore: prefer_const_constructors
                   transitionDuration: Duration(seconds: 0)));
@@ -137,6 +140,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                       remise: widget.remise,
                                       total: widget.total,
                                       montant: widget.montant,
+                                      role: widget.role,
                                     ));
                               },
                               icon: const Icon(
@@ -193,6 +197,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                           remise: widget.remise,
                                           total: widget.total,
                                           montant: widget.montant,
+                                          role: widget.role,
                                         ));
                                   }
                                 },
@@ -455,7 +460,9 @@ class _UpdateDevisState extends State<UpdateDevis> {
 
           Devis().updateDevis(widget.titre, widget.client, widget.etat,
               calculMontat() - remise, widget.commande, remise, calculMontat());
-          Get.to(() => const ListDevis());
+          Get.to(() => ListDevis(
+                role: widget.role,
+              ));
         },
       ),
     );

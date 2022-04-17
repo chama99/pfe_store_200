@@ -1,6 +1,8 @@
+import 'package:chama_projet/inventaire/Transfert/listTransfert.dart';
 import 'package:chama_projet/inventaire/livraison/listLivraison.dart';
 import 'package:chama_projet/inventaire/reception/listReception.dart';
 import 'package:chama_projet/services/livraison.dart';
+import 'package:chama_projet/services/transfert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +18,9 @@ class ListInventaire extends StatefulWidget {
 class _ListInventaireState extends State<ListInventaire> {
   // ignore: non_constant_identifier_names
   List Listreception = [];
+  // ignore: non_constant_identifier_names
   List Listlivraison = [];
+  List listTransfert = [];
   @override
   void initState() {
     super.initState();
@@ -26,6 +30,7 @@ class _ListInventaireState extends State<ListInventaire> {
   fetchDatabaseList() async {
     dynamic resultant = await Reception().getReceptionList();
     dynamic resultant2 = await Livraison().getLivraisonList();
+    dynamic resultant3 = await Transfert().getTransfert();
 
     if (resultant == null) {
       // ignore: avoid_print
@@ -34,6 +39,7 @@ class _ListInventaireState extends State<ListInventaire> {
       setState(() {
         Listreception = resultant;
         Listlivraison = resultant2;
+        listTransfert = resultant3;
       });
     }
   }
@@ -102,7 +108,9 @@ class _ListInventaireState extends State<ListInventaire> {
                   margin: const EdgeInsets.all(20),
                   child: Card(
                       child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() => const ListTransfert());
+                    },
                     splashColor: const Color.fromARGB(255, 3, 56, 109),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -126,7 +134,7 @@ class _ListInventaireState extends State<ListInventaire> {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 primary: Colors.indigo),
-                            child: const Text("Traiter"),
+                            child: Text("${listTransfert.length} A Traiter"),
                             onPressed: null,
                           ),
                         )

@@ -1,5 +1,5 @@
 // ignore: file_names
-// ignore_for_file: must_be_immutable, file_names, duplicate_ignore
+// ignore_for_file: must_be_immutable, file_names, duplicate_ignore, non_constant_identifier_names, prefer_typing_uninitialized_variables
 
 import 'package:chama_projet/facture.dart/creer_facture.dart';
 
@@ -8,6 +8,7 @@ import 'package:chama_projet/services/lignefact.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../services/article.dart';
 import '../widget/toast.dart';
 
 class LigneFacture extends StatefulWidget {
@@ -22,7 +23,7 @@ class _LigneFactureState extends State<LigneFacture> {
   final _formKey = GlobalKey<FormState>();
   var article;
   List lignFact = [];
-  List listItem = ["store12", "store15"];
+
   final lib = TextEditingController();
   final comp = TextEditingController();
   final etq = TextEditingController();
@@ -40,8 +41,14 @@ class _LigneFactureState extends State<LigneFacture> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    fetchDatabaseList();
+  }
+
+  @override
   void dispose() {
-    // Clean up the controller when the widget is disposed.
     lib.dispose();
     etq.dispose();
     comp.dispose();
@@ -49,6 +56,23 @@ class _LigneFactureState extends State<LigneFacture> {
     prix.dispose();
 
     super.dispose();
+  }
+
+  List ListArticle = [];
+
+  fetchDatabaseList() async {
+    dynamic resultant = await Article().getArticleListByTyoeservice();
+
+    if (resultant == null) {
+      // ignore: avoid_print
+      print('Unable to retrieve');
+    } else {
+      setState(() {
+        for (var i = 0; i < resultant.length; i++) {
+          ListArticle.add(resultant[i]["nom"]);
+        }
+      });
+    }
   }
 
   @override
@@ -93,7 +117,7 @@ class _LigneFactureState extends State<LigneFacture> {
                             article = newValue.toString();
                           });
                         },
-                        items: listItem.map((valueItem) {
+                        items: ListArticle.map((valueItem) {
                           return DropdownMenuItem(
                             value: valueItem,
                             child: Text(valueItem),

@@ -1,53 +1,49 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, file_names, must_be_immutable
+// ignore_for_file: file_names, must_be_immutable, non_constant_identifier_names
 
 import 'dart:convert';
 
-import 'package:chama_projet/devis.dart/updateDevis.dart';
-import 'package:chama_projet/services/devis.dart';
+import 'package:chama_projet/inventaire/Transfert/update_transfert.dart';
+
+import 'package:chama_projet/services/transfert.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../widget/toast.dart';
+import '../../widget/toast.dart';
 
-class AjoutCommande extends StatefulWidget {
-  String titre, client, etat;
-  String role;
-  double remise;
-  List commande;
-  double total, montant;
-  AjoutCommande(
+class AjoutoperationTran extends StatefulWidget {
+  List ListOperation;
+  String titre, etat, date, transf;
+  AjoutoperationTran(
       {Key? key,
       required this.titre,
-      required this.client,
       required this.etat,
-      required this.commande,
-      required this.total,
-      required this.remise,
-      required this.montant,
-      required this.role})
+      required this.date,
+      required this.ListOperation,
+      required this.transf})
       : super(key: key);
 
   @override
-  State<AjoutCommande> createState() => _AjoutCommandeState();
+  State<AjoutoperationTran> createState() => _AjoutoperationTranState();
 }
 
-class _AjoutCommandeState extends State<AjoutCommande> {
+class _AjoutoperationTranState extends State<AjoutoperationTran> {
   final _formKey = GlobalKey<FormState>();
+  // ignore: prefer_typing_uninitialized_variables
   var article;
+
   List listItem = ["store12", "store15"];
-  final ref = TextEditingController();
-  final des = TextEditingController();
+  final colis = TextEditingController();
+  final colisDes = TextEditingController();
+  final appartenant = TextEditingController();
+  final fait = TextEditingController();
   final unite = TextEditingController();
-  final qt = TextEditingController();
-  final prix = TextEditingController();
-  List list = [];
 
   clearText() {
-    ref.clear();
-    des.clear();
+    colis.clear();
+    appartenant.clear();
+    fait.clear();
     unite.clear();
-    qt.clear();
-    prix.clear();
 
     article = null;
   }
@@ -55,27 +51,12 @@ class _AjoutCommandeState extends State<AjoutCommande> {
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    ref.dispose();
-    des.dispose();
+    colis.dispose();
+    appartenant.dispose();
+    fait.dispose();
     unite.dispose();
-    qt.dispose();
-    prix.dispose();
 
     super.dispose();
-  }
-
-  addcomm() {
-    var a = {
-      ref.text,
-      article,
-      des.text,
-      unite.text,
-      int.parse(qt.text),
-      double.parse(prix.text),
-      "20%",
-      int.parse(qt.text) * double.parse(prix.text)
-    };
-    return a;
   }
 
   @override
@@ -83,7 +64,7 @@ class _AjoutCommandeState extends State<AjoutCommande> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange,
-        title: const Text("Ajouter Ligne de la commande"),
+        title: const Text("Ajouter Ligne de opérations"),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -95,29 +76,6 @@ class _AjoutCommandeState extends State<AjoutCommande> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: ref,
-                    decoration: InputDecoration(
-                      hintText: 'réf',
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.white,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
                   child: Container(
                     width: 320,
                     decoration: BoxDecoration(
@@ -125,7 +83,7 @@ class _AjoutCommandeState extends State<AjoutCommande> {
                         border: Border.all(color: Colors.grey, width: 1)),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton(
-                        hint: const Text("Article"),
+                        hint: const Text("Article "),
                         dropdownColor: Colors.white,
                         icon: const Padding(
                           padding: EdgeInsets.only(left: 15),
@@ -156,9 +114,67 @@ class _AjoutCommandeState extends State<AjoutCommande> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    controller: des,
+                    controller: colis,
                     decoration: InputDecoration(
-                      hintText: 'description',
+                      hintText: 'Colis source',
+                      filled: true,
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide:
+                            const BorderSide(color: Colors.orange, width: 1.5),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: const BorderSide(
+                          color: Colors.white,
+                          width: 1.5,
+                        ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Veuillez entrer  colis de destination";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: colisDes,
+                    decoration: InputDecoration(
+                      hintText: 'Colis de destination',
+                      filled: true,
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide:
+                            const BorderSide(color: Colors.orange, width: 1.5),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: const BorderSide(
+                          color: Colors.white,
+                          width: 1.5,
+                        ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Veuillez entrer  colis de destination";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: appartenant,
+                    decoration: InputDecoration(
+                      hintText: 'Appartenant à',
                       filled: true,
                       fillColor: Colors.white,
                       focusedBorder: OutlineInputBorder(
@@ -179,10 +195,33 @@ class _AjoutCommandeState extends State<AjoutCommande> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    controller: fait,
+                    decoration: InputDecoration(
+                      hintText: 'Fait',
+                      filled: true,
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide:
+                            const BorderSide(color: Colors.orange, width: 1.5),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: const BorderSide(
+                          color: Colors.orange,
+                          width: 1.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
                     controller: unite,
-                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      hintText: 'unité',
+                      hintText: 'Unité de mesure',
                       filled: true,
                       fillColor: Colors.white,
                       focusedBorder: OutlineInputBorder(
@@ -198,54 +237,12 @@ class _AjoutCommandeState extends State<AjoutCommande> {
                         ),
                       ),
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: qt,
-                    decoration: InputDecoration(
-                      hintText: 'quantite',
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.orange,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: prix,
-                    decoration: InputDecoration(
-                      hintText: 'prix',
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.orange,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Veuillez entrer unité de mesure";
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 Row(
@@ -254,41 +251,32 @@ class _AjoutCommandeState extends State<AjoutCommande> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          var a = ({
-                            'réf': ref.text,
-                            'Article': article,
-                            'Description': des.text,
-                            'Unite': int.parse(unite.text),
-                            'Quantite': int.parse(qt.text),
-                            'prix': double.parse(prix.text),
-                            'taxe': "20%",
-                            'sous-total':
-                                int.parse(qt.text) * double.parse(prix.text)
-                          });
-
-                          var data = json.decode(json.encode(a));
-
-                          widget.commande.add(data);
                           if (article != null) {
-                            Devis().updateDevis(
+                            var a = ({
+                              'Article': article,
+                              'Colis source': colis.text,
+                              'Colis de destination': colisDes.text,
+                              'Appartenant': appartenant.text,
+                              'Fait': fait.text,
+                              'Unite': int.parse(unite.text),
+                            });
+
+                            var data = json.decode(json.encode(a));
+                            widget.ListOperation.add(data);
+                            Transfert().updateTransfert(
                                 widget.titre,
-                                widget.client,
+                                "Atelier:Réception",
                                 widget.etat,
-                                widget.total,
-                                widget.commande,
-                                widget.remise,
-                                widget.montant);
+                                DateTime.parse(widget.date),
+                                widget.ListOperation,
+                                widget.transf);
                             clearText();
-                            Get.to(() => UpdateDevis(
-                                  titre: widget.titre,
-                                  client: widget.client,
-                                  etat: widget.etat,
-                                  total: widget.total,
-                                  commande: widget.commande,
-                                  remise: widget.remise,
-                                  montant: widget.montant,
-                                  role: widget.role,
-                                ));
+                            Get.to(() => UpdateTransfert(
+                                titre: widget.titre,
+                                OperationList: widget.ListOperation,
+                                transf: widget.transf,
+                                etat: widget.etat,
+                                date: widget.date));
                           } else {
                             showToast("veuillez sélectionner Article ");
                           }

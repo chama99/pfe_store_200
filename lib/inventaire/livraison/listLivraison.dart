@@ -1,12 +1,13 @@
+// ignore_for_file: file_names
+
 import 'package:chama_projet/inventaire/livraison/creer_livraison.dart';
 import 'package:chama_projet/services/livraison.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../services/reception.dart';
 import '../../widget/boitedialogue.dart';
-import '../reception./details_reception.dart';
+
 import 'dtail_livraison.dart';
 
 class ListLivraison extends StatefulWidget {

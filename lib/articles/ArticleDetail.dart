@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, must_be_immutable, non_constant_identifier_names, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 import 'edit_article.dart';
@@ -9,7 +11,6 @@ class ArticleDetail extends StatefulWidget {
       cat,
       data,
       reference_interne,
-      prix_vente,
       taxes_a_la_vente,
       prix_dachat,
       sale_prix,
@@ -25,7 +26,6 @@ class ArticleDetail extends StatefulWidget {
     required this.cat,
     required this.data,
     required this.reference_interne,
-    required this.prix_vente,
     required this.taxes_a_la_vente,
     required this.prix_dachat,
     required this.sale_prix,
@@ -78,8 +78,18 @@ class _ArticleDetailState extends State<ArticleDetail> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => EditArticle(
-                              nom: widget.nom,
-                            )));
+                            nom: widget.nom,
+                            type: widget.type,
+                            role: widget.role,
+                            cat: widget.cat,
+                            data: widget.data,
+                            reference_interne: widget.reference_interne,
+                            taxes_a_la_vente: widget.taxes_a_la_vente,
+                            prix_dachat: widget.prix_dachat,
+                            sale_prix: widget.sale_prix,
+                            prix_de_vente: widget.prix_de_vente,
+                            unite: widget.unite,
+                            image: widget.image)));
               },
               child: Text(
                 "Modifier".toUpperCase(),
@@ -158,9 +168,6 @@ class _ArticleDetailState extends State<ArticleDetail> {
                               ),
                               textfield(
                                 hintText: widget.reference_interne,
-                              ),
-                              textfield(
-                                hintText: widget.prix_vente,
                               ),
                               textfield(
                                 hintText: widget.prix_dachat,
