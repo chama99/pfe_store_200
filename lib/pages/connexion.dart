@@ -2,9 +2,10 @@
 
 import 'package:chama_projet/services/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto/crypto.dart';
 
 import 'package:flutter/material.dart';
-
+import 'dart:convert' show utf8;
 import '../widget/InputDeco_design.dart';
 import '../widget/menuAdmin.dart';
 import '../widget/toast.dart';
@@ -63,7 +64,9 @@ class _connexion extends State<Connexion> {
         List acces = value.data()!["acces"];
         String url = value.data()!["image"];
         String role = value.data()!["role"];
-        if (e == email && m == mdp) {
+        List<int> bytes = mdp.toString().codeUnits;
+        var tmdp = utf8.decode(bytes);
+        if (e == email && m == tmdp) {
           Navigator.push(
               context,
               MaterialPageRoute(

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, duplicate_ignore
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -120,8 +122,7 @@ class PdfApi {
 
   static Future<File> saveFile(PdfDocument document) async {
     final path = await getApplicationDocumentsDirectory();
-    final fileName =
-        path.path + ' /Invoice${DateTime.now().toIso8601String()}.pdf';
+    final fileName = path.path + ' ${DateTime.now().toIso8601String()}.pdf';
     final file = File(fileName);
     file.writeAsBytes(document.save());
     document.dispose();

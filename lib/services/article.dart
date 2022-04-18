@@ -22,8 +22,8 @@ class Article {
     }
   }
 
-  Future<void> addArticle(nom, type, role, cat, data, reference_interne,
-      taxes_a_la_vente, prix_dachat, sale_prix, prix_de_vente, unite, url) {
+  Future<void> addArticle(nom, type, role, cat, data, referenceinterne,
+      taxesalavente, prixdachat, saleprix, prixdevente, unite, url, qt) {
     return article
         .doc(nom)
         .set({
@@ -32,13 +32,14 @@ class Article {
           'role': role,
           'cat': cat,
           'code_a_barre': data,
-          'reference_interne': reference_interne,
-          'taxes_a_la_vente': taxes_a_la_vente,
-          'prix_dachat': prix_dachat,
-          'sale_prix': sale_prix,
-          'prix_de_vente': prix_de_vente,
+          'reference_interne': referenceinterne,
+          'taxes_a_la_vente': taxesalavente,
+          'prix_dachat': prixdachat,
+          'sale_prix': saleprix,
+          'prix_de_vente': prixdevente,
           'unite': unite,
           'image': url,
+          'Quantité': qt
         })
         // ignore: avoid_print
         .then((value) => print('Article Added'))
@@ -46,8 +47,8 @@ class Article {
         .catchError((error) => print('Failed to Add article: $error'));
   }
 
-  Future<void> updateArticle(nom, type, role, cat, data, reference_interne,
-      taxes_a_la_vente, prix_dachat, sale_prix, prix_de_vente, unite, url) {
+  Future<void> updateArticle(nom, type, role, cat, data, referenceinterne,
+      taxesalavente, prixdachat, saleprix, prixdevente, unite, url, qt) {
     return article
         .doc(nom)
         .update({
@@ -56,13 +57,14 @@ class Article {
           'role': role,
           'cat': cat,
           'code_a_barre': data,
-          'reference_interne': reference_interne,
-          'taxes_a_la_vente': taxes_a_la_vente,
-          'prix_dachat': prix_dachat,
-          'sale_prix': sale_prix,
-          'prix_de_vente': prix_de_vente,
+          'reference_interne': referenceinterne,
+          'taxes_a_la_vente': taxesalavente,
+          'prix_dachat': prixdachat,
+          'sale_prix': saleprix,
+          'prix_de_vente': prixdevente,
           'unite': unite,
           'image': url,
+          'Quantité': qt
         })
         // ignore: avoid_print
         .then((value) => print("Article Updated"))
@@ -99,7 +101,27 @@ class Article {
     }
   }
 
-  Future getArticleListByTyoeservice() async {
+  Future getArticleListByTypeVendu() async {
+    List itemsListNom = [];
+
+    try {
+      await article.get().then((querySnapshot) {
+        querySnapshot.docs.map((element) {
+          Map a = element.data() as Map<String, dynamic>;
+          if (a['type'] == "Peut être vendu") {
+            itemsListNom.add(a);
+          }
+        }).toList();
+      });
+      return itemsListNom;
+    } catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future getArticleListByTypeservice() async {
     List itemsListNom = [];
 
     try {
@@ -119,14 +141,54 @@ class Article {
     }
   }
 
-  Future getArticleListByTyid(id) async {
+  Future getArticleListByTypestock() async {
     List itemsListNom = [];
 
     try {
       await article.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
-          if (a['nom'] == "id") {
+          if (a['role'] == "Article stockable") {
+            itemsListNom.add(a);
+          }
+        }).toList();
+      });
+      return itemsListNom;
+    } catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future getArticleListByTypeconsom() async {
+    List itemsListNom = [];
+
+    try {
+      await article.get().then((querySnapshot) {
+        querySnapshot.docs.map((element) {
+          Map a = element.data() as Map<String, dynamic>;
+          if (a['role'] == "Article consommable") {
+            itemsListNom.add(a);
+          }
+        }).toList();
+      });
+      return itemsListNom;
+    } catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+      return null;
+    }
+  }
+
+  getArticleListByTyid(id) {
+    List itemsListNom = [];
+
+    try {
+      article.get().then((querySnapshot) {
+        querySnapshot.docs.map((element) {
+          Map a = element.data() as Map<String, dynamic>;
+          if (a['nom'] == id) {
             itemsListNom.add(a);
           }
         }).toList();

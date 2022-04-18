@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, deprecated_member_use
+// ignore_for_file: unused_import, deprecated_member_use, must_be_immutable
 
 // ignore: avoid_web_libraries_in_flutter
 
@@ -92,7 +92,6 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
       setState(() {
         userContactList = resultant;
         commandeList = resultant2;
-        Commande().deleteCommande();
       });
     }
   }
@@ -501,6 +500,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
             } else {
               showToast("veuillez sélectionner client");
             }
+            Commande().deleteCommande();
           }
         },
       ),

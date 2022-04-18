@@ -79,6 +79,8 @@ dependencies:
   cache_manager: ^1.0.0+4
   barcode: ^2.2.0
   flutter_barcode_scanner: ^2.0.0
+  crypto: ^3.0.1
+  flutter_string_encryption: ^0.3.1
  
 
  

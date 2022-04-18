@@ -27,6 +27,7 @@ class EditArticle extends StatefulWidget {
       prix_de_vente,
       unite;
   String image;
+  int qt;
   EditArticle({
     Key? key,
     required this.nom,
@@ -41,6 +42,7 @@ class EditArticle extends StatefulWidget {
     required this.prix_de_vente,
     required this.unite,
     required this.image,
+    required this.qt,
   }) : super(key: key);
 
   @override
@@ -119,7 +121,6 @@ class _EditContactState extends State<EditArticle> {
                       )
                     ]),
                   ),
-
                   Padding(
                     padding: const EdgeInsets.only(
                         bottom: 20, left: 1, right: 1, top: 10),
@@ -176,7 +177,19 @@ class _EditContactState extends State<EditArticle> {
                       }).toList(),
                     ),
                   ),
-
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: TextFormField(
+                      initialValue: widget.qt.toString(),
+                      autofocus: false,
+                      onChanged: (value) => widget.qt = int.parse(value),
+                      decoration: buildInputDecoration(
+                        Icons.web_stories,
+                        "Quantité",
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 10.0),
                     child: TextFormField(
@@ -190,10 +203,6 @@ class _EditContactState extends State<EditArticle> {
                       ),
                     ),
                   ),
-
-                  // ignore: avoid_unnece
-
-                  // ignore: avoid_unnece
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 10.0),
                     child: TextFormField(
@@ -220,7 +229,6 @@ class _EditContactState extends State<EditArticle> {
                       ),
                     ),
                   ),
-
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -242,7 +250,8 @@ class _EditContactState extends State<EditArticle> {
                                     widget.sale_prix,
                                     widget.prix_de_vente,
                                     widget.unite,
-                                    widget.image);
+                                    widget.image,
+                                    widget.qt);
                               } else {
                                 uploadImage(
                                   widget.nom,
@@ -352,19 +361,19 @@ class _EditContactState extends State<EditArticle> {
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
         Article().updateArticle(
-          nom,
-          type,
-          role,
-          cat,
-          data,
-          referenceInterne,
-          taxesALaVente,
-          prixDachat,
-          salePrix,
-          prixDeVente,
-          unite,
-          uploadPath,
-        );
+            nom,
+            type,
+            role,
+            cat,
+            data,
+            referenceInterne,
+            taxesALaVente,
+            prixDachat,
+            salePrix,
+            prixDeVente,
+            unite,
+            uploadPath,
+            widget.qt);
       });
     } catch (e) {
       // ignore: avoid_print

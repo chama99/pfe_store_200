@@ -258,7 +258,7 @@ class _AjoutCommandeState extends State<AjoutCommande> {
                             'réf': ref.text,
                             'Article': article,
                             'Description': des.text,
-                            'Unite': int.parse(unite.text),
+                            'Unite': unite.text,
                             'Quantite': int.parse(qt.text),
                             'prix': double.parse(prix.text),
                             'taxe': "20%",

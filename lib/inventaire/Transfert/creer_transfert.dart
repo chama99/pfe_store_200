@@ -74,7 +74,7 @@ class _CreerTransfertState extends State<CreerTransfert> {
     final number = Random().nextInt(20);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Créer un Reception"),
+        title: const Text("Créer "),
         backgroundColor: Colors.orange,
       ),
       body: RefreshIndicator(

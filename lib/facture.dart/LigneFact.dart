@@ -61,7 +61,7 @@ class _LigneFactureState extends State<LigneFacture> {
   List ListArticle = [];
 
   fetchDatabaseList() async {
-    dynamic resultant = await Article().getArticleListByTyoeservice();
+    dynamic resultant = await Article().getArticleListByTypeVendu();
 
     if (resultant == null) {
       // ignore: avoid_print

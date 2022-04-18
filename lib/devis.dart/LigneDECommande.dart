@@ -2,6 +2,7 @@
 
 import 'package:chama_projet/services/article.dart';
 import 'package:chama_projet/services/commande.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,7 +20,7 @@ class LigneCommande extends StatefulWidget {
 
 class _LigneCommandeState extends State<LigneCommande> {
   final _formKey = GlobalKey<FormState>();
-  var article;
+
   List listItem = ["store12", "store15"];
   final ref = TextEditingController();
   final des = TextEditingController();
@@ -33,9 +34,10 @@ class _LigneCommandeState extends State<LigneCommande> {
     unite.clear();
     qt.clear();
     prix.clear();
-
-    article = null;
   }
+
+  CollectionReference articles =
+      FirebaseFirestore.instance.collection('Articles');
 
   @override
   void dispose() {
@@ -57,9 +59,9 @@ class _LigneCommandeState extends State<LigneCommande> {
   }
 
   List ListArticle = [];
-
+  var article;
   fetchDatabaseList() async {
-    dynamic resultant = await Article().getArticleListByTyoeservice();
+    dynamic resultant = await Article().getArticleListByTypeVendu();
 
     if (resultant == null) {
       // ignore: avoid_print
@@ -68,6 +70,7 @@ class _LigneCommandeState extends State<LigneCommande> {
       setState(() {
         for (var i = 0; i < resultant.length; i++) {
           ListArticle.add(resultant[i]["nom"]);
+          article = resultant[i]["nom"];
         }
       });
     }
@@ -76,229 +79,321 @@ class _LigneCommandeState extends State<LigneCommande> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.orange,
-        title: const Text("Ajouter Ligne de le commande"),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(30),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: ref,
-                    decoration: InputDecoration(
-                      hintText: 'réf',
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.white,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Veuillez entrer  réf ";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 320,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Colors.grey, width: 1)),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        hint: const Text("Article "),
-                        dropdownColor: Colors.white,
-                        icon: const Padding(
-                          padding: EdgeInsets.only(left: 15),
-                          child: Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.orange,
-                          ),
-                        ),
-                        style:
-                            const TextStyle(fontSize: 20, color: Colors.black),
-                        iconSize: 40,
-                        value: article,
-                        onChanged: (newValue) {
-                          setState(() {
-                            article = newValue.toString();
-                          });
-                        },
-                        items: ListArticle.map((valueItem) {
-                          return DropdownMenuItem(
-                            value: valueItem,
-                            child: Text(valueItem),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: des,
-                    decoration: InputDecoration(
-                      hintText: 'Description',
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.orange,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: unite,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      hintText: 'Unité',
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.orange,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: qt,
-                    decoration: InputDecoration(
-                      hintText: 'Quantité',
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.orange,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Veuillez entrer Quantité ";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: prix,
-                    decoration: InputDecoration(
-                      hintText: 'Prix unitaire',
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.orange,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Veuillez entrer Prix unitaire";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          if (article != null) {
-                            Commande().addCommande(
-                                ref.text,
-                                article,
-                                des.text,
-                                int.parse(unite.text),
-                                int.parse(qt.text),
-                                double.parse(prix.text),
-                                "20 %",
-                                int.parse(qt.text) * double.parse(prix.text));
-                            clearText();
-                            Get.to(() => CreeDevisPage(
-                                  role: widget.role,
-                                ));
-                          } else {
-                            showToast("veuillez sélectionner Article ");
-                          }
-                        }
-                      },
-                      child: const Text(
-                        "Ajouter",
-                        style: TextStyle(fontSize: 25),
-                      ),
-                      style: ElevatedButton.styleFrom(primary: Colors.orange),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
+        appBar: AppBar(
+          backgroundColor: Colors.orange,
+          title: const Text("Ajouter Ligne de le commande"),
         ),
-      ),
-    );
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const Center(
+                child: Text(
+                  "Article :",
+                  style: TextStyle(fontSize: 20, letterSpacing: 3),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 320,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: Colors.grey, width: 1)),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      hint: const Text("Article "),
+                      dropdownColor: Colors.white,
+                      icon: const Padding(
+                        padding: EdgeInsets.only(left: 15),
+                        child: Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.orange,
+                        ),
+                      ),
+                      style: const TextStyle(fontSize: 20, color: Colors.black),
+                      iconSize: 40,
+                      value: article,
+                      onChanged: (newValue) {
+                        setState(() {
+                          article = newValue.toString();
+                        });
+                      },
+                      items: ListArticle.map((valueItem) {
+                        return DropdownMenuItem(
+                          value: valueItem,
+                          child: Text(valueItem),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ),
+              Form(
+                key: _formKey,
+                child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                    future: FirebaseFirestore.instance
+                        .collection('Articles')
+                        .doc(article)
+                        .get(),
+                    builder: (_, snapshot) {
+                      if (snapshot.hasError) {
+                        // ignore: avoid_print
+                        print('Something Went Wrong');
+                      }
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      var data = snapshot.data!.data();
+                      var quant = data!['Quantité'];
+                      var prixv = data['prix_de_vente'];
+                      var unitev = data['unite'];
+                      var refv = data['reference_interne'];
+                      var nom = data['nom'];
+                      var code = data['code_a_barre'];
+                      var type = data['type'];
+                      var role = data['role'];
+                      var cat = data['cat'];
+                      var taxesalavente = data['taxes_a_la_vente'];
+                      var prixdachat = data['prix_dachat'];
+                      var saleprix = data['sale_prix'];
+                      var url = data['image'];
+
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Center(
+                            child: Text(
+                              "Réferance :",
+                              style: TextStyle(fontSize: 20, letterSpacing: 3),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              initialValue: refv,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                      color: Colors.orange, width: 1.5),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                    color: Colors.white,
+                                    width: 1.5,
+                                  ),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Veuillez entrer  réf ";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          const Center(
+                            child: Text(
+                              "Description :",
+                              style: TextStyle(fontSize: 20, letterSpacing: 3),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: des,
+                              decoration: InputDecoration(
+                                hintText: 'Description',
+                                filled: true,
+                                fillColor: Colors.white,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                      color: Colors.orange, width: 1.5),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                    color: Colors.orange,
+                                    width: 1.5,
+                                  ),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Veuillez écrire une  description";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          const Center(
+                            child: Text(
+                              "Unité :",
+                              style: TextStyle(fontSize: 20, letterSpacing: 3),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              initialValue: unitev,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                      color: Colors.orange, width: 1.5),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                    color: Colors.orange,
+                                    width: 1.5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Center(
+                            child: Text(
+                              "Quantité :",
+                              style: TextStyle(fontSize: 20, letterSpacing: 3),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: qt,
+                              decoration: InputDecoration(
+                                hintText: 'Quantité',
+                                filled: true,
+                                fillColor: Colors.white,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                      color: Colors.orange, width: 1.5),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                    color: Colors.orange,
+                                    width: 1.5,
+                                  ),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Veuillez entrer Quantité ";
+                                }
+                                if (int.parse(value) > quant) {
+                                  return "Vous avez dépassé la quantité ";
+                                }
+
+                                return null;
+                              },
+                            ),
+                          ),
+                          const Center(
+                            child: Text(
+                              "Prix unitaire :",
+                              style: TextStyle(fontSize: 20, letterSpacing: 3),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              initialValue: prixv,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                      color: Colors.orange, width: 1.5),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                    color: Colors.orange,
+                                    width: 1.5,
+                                  ),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Veuillez entrer Prix unitaire";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    int r = int.parse(qt.text);
+                                    int q = quant - r;
+                                    Article().updateArticle(
+                                        article,
+                                        type,
+                                        role,
+                                        cat,
+                                        code,
+                                        refv,
+                                        taxesalavente,
+                                        prixdachat,
+                                        saleprix,
+                                        prixv,
+                                        unitev,
+                                        url,
+                                        q);
+                                    if (article != null) {
+                                      Commande().addCommande(
+                                          refv,
+                                          article,
+                                          des.text,
+                                          unitev,
+                                          int.parse(qt.text),
+                                          double.parse(prixv),
+                                          "20 %",
+                                          int.parse(qt.text) *
+                                              double.parse(prixv));
+                                      clearText();
+                                      Get.to(() => CreeDevisPage(
+                                            role: widget.role,
+                                          ));
+                                    } else {
+                                      showToast(
+                                          "veuillez sélectionner Article ");
+                                    }
+                                  }
+                                },
+                                child: const Text(
+                                  "Ajouter",
+                                  style: TextStyle(fontSize: 25),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.orange),
+                              ),
+                            ],
+                          )
+                        ],
+                      );
+                    }),
+              )
+            ],
+          ),
+        ));
   }
 }

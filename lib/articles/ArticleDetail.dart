@@ -17,22 +17,23 @@ class ArticleDetail extends StatefulWidget {
       prix_de_vente,
       unite;
   String image;
-
-  ArticleDetail({
-    Key? key,
-    required this.nom,
-    required this.type,
-    required this.role,
-    required this.cat,
-    required this.data,
-    required this.reference_interne,
-    required this.taxes_a_la_vente,
-    required this.prix_dachat,
-    required this.sale_prix,
-    required this.prix_de_vente,
-    required this.unite,
-    required this.image,
-  }) : super(key: key);
+  int qt;
+  ArticleDetail(
+      {Key? key,
+      required this.nom,
+      required this.type,
+      required this.role,
+      required this.cat,
+      required this.data,
+      required this.reference_interne,
+      required this.taxes_a_la_vente,
+      required this.prix_dachat,
+      required this.sale_prix,
+      required this.prix_de_vente,
+      required this.unite,
+      required this.image,
+      required this.qt})
+      : super(key: key);
 
   @override
   State<ArticleDetail> createState() => _ArticleDetailState();
@@ -78,18 +79,20 @@ class _ArticleDetailState extends State<ArticleDetail> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => EditArticle(
-                            nom: widget.nom,
-                            type: widget.type,
-                            role: widget.role,
-                            cat: widget.cat,
-                            data: widget.data,
-                            reference_interne: widget.reference_interne,
-                            taxes_a_la_vente: widget.taxes_a_la_vente,
-                            prix_dachat: widget.prix_dachat,
-                            sale_prix: widget.sale_prix,
-                            prix_de_vente: widget.prix_de_vente,
-                            unite: widget.unite,
-                            image: widget.image)));
+                              nom: widget.nom,
+                              type: widget.type,
+                              role: widget.role,
+                              cat: widget.cat,
+                              data: widget.data,
+                              reference_interne: widget.reference_interne,
+                              taxes_a_la_vente: widget.taxes_a_la_vente,
+                              prix_dachat: widget.prix_dachat,
+                              sale_prix: widget.sale_prix,
+                              prix_de_vente: widget.prix_de_vente,
+                              unite: widget.unite,
+                              image: widget.image,
+                              qt: widget.qt,
+                            )));
               },
               child: Text(
                 "Modifier".toUpperCase(),

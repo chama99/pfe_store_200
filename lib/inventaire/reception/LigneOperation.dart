@@ -6,6 +6,7 @@ import 'package:chama_projet/services/ligneOperation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../services/article.dart';
 import '../../widget/toast.dart';
 import 'creer_reception.dart';
 
@@ -22,7 +23,6 @@ class _LigneOperationState extends State<LigneOperation> {
   // ignore: prefer_typing_uninitialized_variables
   var article;
 
-  List listItem = ["store12", "store15"];
   final colis = TextEditingController();
   final colisDes = TextEditingController();
   final appartenant = TextEditingController();
@@ -47,6 +47,42 @@ class _LigneOperationState extends State<LigneOperation> {
     unite.dispose();
 
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    fetchDatabaseList();
+  }
+
+  List ListArticle = [];
+
+  fetchDatabaseList() async {
+    dynamic resultants = await Article().getArticleListByTypeservice();
+    dynamic resultantc = await Article().getArticleListByTypeconsom();
+    dynamic resultantsk = await Article().getArticleListByTypestock();
+
+    if (resultants == null) {
+      // ignore: avoid_print
+      print('Unable to retrieve');
+    } else {
+      setState(() {
+        if (widget.page == "transfert") {
+          for (var i = 0; i < resultants.length; i++) {
+            ListArticle.add(resultants[i]["nom"]);
+          }
+        } else if (widget.page == "livraison") {
+          for (var i = 0; i < resultantc.length; i++) {
+            ListArticle.add(resultantc[i]["nom"]);
+          }
+        } else {
+          for (var i = 0; i < resultantsk.length; i++) {
+            ListArticle.add(resultantsk[i]["nom"]);
+          }
+        }
+      });
+    }
   }
 
   @override
@@ -91,7 +127,7 @@ class _LigneOperationState extends State<LigneOperation> {
                             article = newValue.toString();
                           });
                         },
-                        items: listItem.map((valueItem) {
+                        items: ListArticle.map((valueItem) {
                           return DropdownMenuItem(
                             value: valueItem,
                             child: Text(valueItem),

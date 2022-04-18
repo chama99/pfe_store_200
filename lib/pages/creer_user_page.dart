@@ -2,9 +2,11 @@
 
 // ignore: avoid_web_libraries_in_flutter
 
+import 'dart:convert';
 import 'dart:io';
 import 'package:chama_projet/pages/listUser.dart';
 import 'package:chama_projet/services/user.dart';
+import 'package:crypto/crypto.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -408,11 +410,15 @@ class _AddUserPageState extends State<AddUserPage> {
                                           email = emailController.text;
                                           password = passwordController.text;
                                           role = ch;
+                                          var pass = sha1
+                                              .convert(utf8.encode(password))
+                                              .toString();
+
                                           if (imageFile == null) {
                                             User().addUser(
                                                 email,
                                                 nom,
-                                                password,
+                                                pass,
                                                 role,
                                                 "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
                                                 acces);

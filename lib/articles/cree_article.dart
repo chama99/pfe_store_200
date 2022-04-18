@@ -70,7 +70,7 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
     "Accessoires/verrou",
     "Accessoires somfoy"
   ];
-  List listItem2 = ["Jours", "Litres", "ML", "Piéces", "Kg"];
+  List listItem2 = ["Litres", "ML", "Piéces", "Kg"];
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
 
@@ -81,6 +81,7 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
   final prix_dachatController = TextEditingController();
   final sale_prixController = TextEditingController();
   final prix_de_venteController = TextEditingController();
+  final quantite_controller = TextEditingController();
   final value = false;
   bool isHiddenPassword = true;
   late String dropdown1;
@@ -354,6 +355,25 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                           padding: const EdgeInsets.only(
                               bottom: 15, left: 10, right: 10),
                           child: TextFormField(
+                            controller: quantite_controller,
+                            keyboardType: TextInputType.number,
+                            decoration: buildInputDecoration(
+                              Icons.web_stories,
+                              "Quantité",
+                              color: Colors.white,
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Veuillez entrer quentité';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: 15, left: 10, right: 10),
+                          child: TextFormField(
                             controller: taxes_a_la_venteController,
                             keyboardType: TextInputType.number,
                             decoration: buildInputDecoration(
@@ -500,7 +520,8 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                       sale_prix,
                       prix_de_vente,
                       unite,
-                      "http://www.ipsgroup.fr/wp-content/uploads/2013/12/default_image_01-1024x1024-1140x642.png");
+                      "http://www.ipsgroup.fr/wp-content/uploads/2013/12/default_image_01-1024x1024-1140x642.png",
+                      int.parse(quantite_controller.text));
                 } else {
                   uploadImage(nom);
                 }
@@ -587,19 +608,19 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
         Article().addArticle(
-          nom,
-          type,
-          role,
-          cat,
-          data,
-          reference_interne,
-          taxes_a_la_vente,
-          prix_dachat,
-          sale_prix,
-          prix_de_vente,
-          unite,
-          uploadPath,
-        );
+            nom,
+            type,
+            role,
+            cat,
+            data,
+            reference_interne,
+            taxes_a_la_vente,
+            prix_dachat,
+            sale_prix,
+            prix_de_vente,
+            unite,
+            uploadPath,
+            int.parse(quantite_controller.text));
         //type = '';
       });
     } catch (e) {

@@ -156,6 +156,8 @@ class _listArticleState extends State<listArticle> {
                                                     ['unite'],
                                                 image: userArticleList[index]
                                                     ['image'],
+                                                qt: userArticleList[index]
+                                                    ["Quantité"],
                                               )));
                                 },
                                 splashColor:
@@ -167,7 +169,7 @@ class _listArticleState extends State<listArticle> {
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          article["titre"],
+                                          article["nom"],
                                           "Êtes-vous sûr de vouloir supprimer cette article",
                                           "article")
                                     },
