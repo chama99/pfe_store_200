@@ -1,8 +1,10 @@
+// ignore_for_file: prefer_final_fields, deprecated_member_use, avoid_print, prefer_is_not_empty, unused_local_variable
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -47,16 +49,18 @@ class _CalanderState extends State<Calander> {
         Get.to(Details(
           docId: appointmentDetails.subject,
         ));
-      } else
+      } else {
         print("empty");
+      }
     } else {
       if (!calendarTapDetails.appointments!.isEmpty) {
         setState(() {
           numberEvents = calendarTapDetails.appointments!.length;
           appointements = calendarTapDetails.appointments;
         });
-      } else
+      } else {
         print("empty");
+      }
       setState(() {
         numberEvents = calendarTapDetails.appointments!.length;
       });

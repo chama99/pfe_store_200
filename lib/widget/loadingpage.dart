@@ -1,22 +1,23 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:async';
 
-import 'package:chama_projet/onboardingPage/Onboarding.dart';
-import 'package:chama_projet/pages/connexion.dart';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-
 import 'package:get_storage/get_storage.dart';
-import 'package:lottie/lottie.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+import '../onboardingPage/Onboarding.dart';
+import '../pages/connexion.dart';
+
+class LoadingPage extends StatefulWidget {
+  const LoadingPage({Key? key}) : super(key: key);
 
   @override
-  _TestState createState() => _TestState();
+  State<LoadingPage> createState() => _LoadingPageState();
 }
 
-class _TestState extends State<SplashScreen> {
+class _LoadingPageState extends State<LoadingPage> {
   var resultSeen = GetStorage().read("seen");
   @override
   void initState() {
@@ -35,16 +36,17 @@ class _TestState extends State<SplashScreen> {
       child: Scaffold(
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Image.asset("asset/logo.png"),
+          children: const [
+            Center(
+              child: SpinKitChasingDots(
+                color: Colors.orange,
+              ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: size.height * 0.1),
-              child: Container(
-                child: Lottie.asset('asset/loading.json',
-                    height: size.height * 0.35),
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "Déconnexion...",
+                style: TextStyle(fontSize: 20),
               ),
             ),
           ],

@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, deprecated_member_use
+// ignore_for_file: unused_import, deprecated_member_use, non_constant_identifier_names
 
 // ignore: avoid_web_libraries_in_flutter
 

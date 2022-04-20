@@ -32,37 +32,40 @@ class MenuAdmin extends StatefulWidget {
 
 class _MenuAdminState extends State<MenuAdmin> {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: NavBar(
-        name: widget.name,
-        email: widget.email,
-        url: widget.url,
-      ),
-      appBar: AppBar(
-        title: Text(widget.name),
-        backgroundColor: Colors.orange[400],
-      ),
-      backgroundColor: Colors.white,
-      body: Container(
-        margin: const EdgeInsets.all(30),
-        child: GridView.count(
-          crossAxisCount: 3,
-          children: <Widget>[
-            for (var x in widget.acces) ...[
-              if (x == "Employés") ...[buildInputCardEmploye()],
-              if (x == "Devis") ...[buildInputCardDevis(widget.role)],
-              if (x == "Contacts") ...[buildInputCardContact()],
-              if (x == "Articles") ...[buildInputCardArtcile()],
-              if (x == "Factures") ...[buildInputCardFacture()],
-              if (x == "Utilisateurs") ...[buildInputCardUser()],
-              if (x == "Applications") ...[buildInputCardRole()],
-              if (x == "Plan") ...[buildInputCardPlan()],
-              if (x == "Inventaire") ...[buildInputCardInventaire()],
-            ]
-          ],
+  Widget build(BuildContext context) => WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: Scaffold(
+          drawer: NavBar(
+            name: widget.name,
+            email: widget.email,
+            url: widget.url,
+          ),
+          appBar: AppBar(
+            title: Text(widget.name),
+            backgroundColor: Colors.orange[400],
+          ),
+          backgroundColor: Colors.white,
+          body: Container(
+            margin: const EdgeInsets.all(30),
+            child: GridView.count(
+              crossAxisCount: 3,
+              children: <Widget>[
+                for (var x in widget.acces) ...[
+                  if (x == "Employés") ...[buildInputCardEmploye()],
+                  if (x == "Devis") ...[buildInputCardDevis(widget.role)],
+                  if (x == "Contacts") ...[buildInputCardContact()],
+                  if (x == "Articles") ...[buildInputCardArtcile()],
+                  if (x == "Factures") ...[buildInputCardFacture()],
+                  if (x == "Utilisateurs") ...[buildInputCardUser()],
+                  if (x == "Applications") ...[buildInputCardRole()],
+                  if (x == "Plan") ...[buildInputCardPlan()],
+                  if (x == "Inventaire") ...[buildInputCardInventaire()],
+                ]
+              ],
+            ),
+          ),
         ),
-      ),
-    );
-  }
+      );
 }

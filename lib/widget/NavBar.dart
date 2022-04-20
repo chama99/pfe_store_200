@@ -1,6 +1,6 @@
 // ignore_for_file: must_be_immutable, file_names
 
-import 'package:chama_projet/pages/connexion.dart';
+import 'package:chama_projet/widget/loadingpage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -48,7 +48,7 @@ class NavBar extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.exit_to_app),
             title: const Text("Déconnexion"),
-            onTap: () => Get.to(() => const Connexion()),
+            onTap: () => Get.to(() => const LoadingPage()),
           ),
         ],
       ),

@@ -1,8 +1,10 @@
+// ignore_for_file: use_key_in_widget_constructors, non_constant_identifier_names, prefer_const_constructors, prefer_final_fields
+
 import 'package:chama_projet/onboardingPage/remember_controller.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+
 import 'package:lottie/lottie.dart';
 
 import '../pages/connexion.dart';

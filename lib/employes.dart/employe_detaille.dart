@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, must_be_immutable
+// ignore_for_file: file_names, must_be_immutable, unused_local_variable
 
 import 'package:chama_projet/employes.dart/update_employe.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +45,7 @@ class _EmployeDetailState extends State<EmployeDetail> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -78,7 +79,7 @@ class _EmployeDetailState extends State<EmployeDetail> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Container(
-                height: 450,
+                height: size.height * 0.70,
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
@@ -122,8 +123,8 @@ class _EmployeDetailState extends State<EmployeDetail> {
               ),
               Container(
                 padding: const EdgeInsets.all(10.0),
-                width: MediaQuery.of(context).size.width / 2,
-                height: MediaQuery.of(context).size.width / 2,
+                width: MediaQuery.of(context).size.width / 3,
+                height: MediaQuery.of(context).size.width / 3,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.white, width: 5),
                   shape: BoxShape.circle,
@@ -147,9 +148,9 @@ class HeaderCurvedContainer extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()..color = Colors.orange;
     Path path = Path()
-      ..relativeLineTo(0, 150)
-      ..quadraticBezierTo(size.width / 2, 225, size.width, 150)
-      ..relativeLineTo(0, -150)
+      ..relativeLineTo(0, 100)
+      ..quadraticBezierTo(size.width / 2, 150, size.width, 100)
+      ..relativeLineTo(0, -100)
       ..close();
     canvas.drawPath(path, paint);
   }

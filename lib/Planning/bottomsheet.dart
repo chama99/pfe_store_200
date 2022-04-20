@@ -1,8 +1,10 @@
+// ignore_for_file: sized_box_for_whitespace, unnecessary_brace_in_string_interps
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
@@ -30,7 +32,7 @@ bottomSheet(BuildContext context, List selectedItems) {
             child: Container(
               height: size.height * 0.85,
               decoration: BoxDecoration(
-                  color: Color(0xffe3eaef),
+                  color: const Color(0xffe3eaef),
                   borderRadius: BorderRadius.circular(20)),
               child: Padding(
                 padding: EdgeInsets.symmetric(
@@ -41,11 +43,11 @@ bottomSheet(BuildContext context, List selectedItems) {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text("Ajouter un plan de travaille  "),
+                          const Text("Ajouter un plan de travaille  "),
                           TextFormField(
                             controller: subjectController,
                             decoration: InputDecoration(
-                                label: Text("Sujet de plan"),
+                                label: const Text("Sujet de plan"),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20))),
                           ),
@@ -98,7 +100,7 @@ bottomSheet(BuildContext context, List selectedItems) {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("Date de debut de plan"),
+                              const Text("Date de debut de plan"),
                               SizedBox(
                                 width: size.width * 0.03,
                               ),
@@ -144,7 +146,7 @@ bottomSheet(BuildContext context, List selectedItems) {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("Date de fin de plan"),
+                              const Text("Date de fin de plan"),
                               SizedBox(
                                 width: size.width * 0.08,
                               ),
@@ -188,7 +190,7 @@ bottomSheet(BuildContext context, List selectedItems) {
                             ],
                           ),
                           isLoading
-                              ? CircularProgressIndicator()
+                              ? const CircularProgressIndicator()
                               : Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
@@ -199,7 +201,7 @@ bottomSheet(BuildContext context, List selectedItems) {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(15)),
-                                          padding: EdgeInsets.all(15),
+                                          padding: const EdgeInsets.all(15),
                                         ),
                                         onPressed: () {
                                           Get.back();
@@ -215,7 +217,7 @@ bottomSheet(BuildContext context, List selectedItems) {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(15)),
-                                          padding: EdgeInsets.all(15),
+                                          padding: const EdgeInsets.all(15),
                                         ),
                                         onPressed: () async {
                                           setState(() {
@@ -237,7 +239,7 @@ bottomSheet(BuildContext context, List selectedItems) {
                                             isDone = true;
                                           });
                                         },
-                                        child: Text("Confirmer")),
+                                        child: const Text("Confirmer")),
                                   ],
                                 ),
                         ],
@@ -266,7 +268,7 @@ Column doneAddPlanning(Size size) {
             primary: Colors.blueAccent,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            padding: EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
           ),
           onPressed: () {
             Get.back();

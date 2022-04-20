@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, unused_local_variable
+// ignore_for_file: file_names, unused_local_variable, must_be_immutable
 
 import 'package:chama_projet/services/devis.dart';
 import 'package:chama_projet/widget/toast.dart';

@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, unused_import
 
 import 'package:chama_projet/services/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
