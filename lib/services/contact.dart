@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:chama_projet/widget/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -12,7 +14,20 @@ class Contact {
       await employe.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
-          itemsList.add(a);
+          var b = ({
+            'id': element.reference.id,
+            'email': a['email'],
+            'name': a['name'],
+            'type': a['type'],
+            'image': a['image'],
+            'portable professionnel': a['portable professionnel'],
+            'Adresse professionnelle': a['Adresse professionnelle'],
+            'Etiquette': a['Etiquette'],
+          });
+
+          // ignore: unused_local_variable
+          var c = json.decode(json.encode(b));
+          itemsList.add(c);
         }).toList();
       });
       return itemsList;
@@ -23,10 +38,11 @@ class Contact {
     }
   }
 
-  Future<void> addContact(email, nom, tel, adresse, type, etiquette, url) {
+  Future<void> addContact(id, email, nom, tel, adresse, type, etiquette, url) {
     return employe
-        .doc(nom)
+        .doc(id)
         .set({
+          'id': id,
           'email': email,
           'name': nom,
           'type': type,
@@ -42,10 +58,12 @@ class Contact {
             (error) => showToast("Échec de l'ajout du contact : $error"));
   }
 
-  Future<void> updateContact(email, nom, tel, adresse, type, etiquette, url) {
+  Future<void> updateContact(
+      id, email, nom, tel, adresse, type, etiquette, url) {
     return employe
-        .doc(nom)
+        .doc(id)
         .update({
+          'id': id,
           'email': email,
           'portable professionnel': tel,
           'Adresse professionnelle': adresse,

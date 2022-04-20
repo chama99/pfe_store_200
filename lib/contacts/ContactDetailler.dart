@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'edit_contact.dart';
 
 class ContactDetail extends StatefulWidget {
-  String email, nom, tel, adresse, image, role;
+  String email, nom, tel, adresse, image, role, id;
   ContactDetail({
     Key? key,
+    required this.id,
     required this.image,
     required this.email,
     required this.nom,
@@ -61,6 +62,7 @@ class _ContactDetailState extends State<ContactDetail> {
                     MaterialPageRoute(
                         builder: (context) => EditContact(
                               nom: widget.nom,
+                              id: widget.id,
                             )));
               },
               child: Text(

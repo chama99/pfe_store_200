@@ -1,39 +1,40 @@
-// ignore_for_file: file_names, unused_local_variable, camel_case_types
+// ignore_for_file: file_names, unused_local_variable
 
-import 'package:chama_projet/services/article.dart';
-
+import 'package:chama_projet/facture.dart/creer_facture.dart';
+import 'package:chama_projet/facture.dart/detille_facture.dart';
+import 'package:chama_projet/services/facture.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'package:intl/intl.dart';
 import '../widget/boitedialogue.dart';
-import 'ArticleDetail.dart';
-import 'cree_article.dart';
 
-class listArticle extends StatefulWidget {
-  const listArticle({Key? key}) : super(key: key);
-
+class ListAchat extends StatefulWidget {
+  const ListAchat({Key? key}) : super(key: key);
   @override
-  _listArticleState createState() => _listArticleState();
+  _ListAchatState createState() => _ListAchatState();
 }
 
-class _listArticleState extends State<listArticle> {
+class _ListAchatState extends State<ListAchat> {
   TextEditingController searchcontroller = TextEditingController();
   TextEditingController editingController = TextEditingController();
-  List userArticleList = [];
+  // ignore: non_constant_identifier_names
+  List ListFact = [];
   @override
   void initState() {
     super.initState();
-
     fetchDatabaseList();
   }
 
   fetchDatabaseList() async {
-    dynamic resultant = await Article().getArticlesList();
+    dynamic resultant = await Facture().getFacturesList();
 
     if (resultant == null) {
       // ignore: avoid_print
       print('Unable to retrieve');
     } else {
       setState(() {
-        userArticleList = resultant;
+        ListFact = resultant;
       });
     }
   }
@@ -42,7 +43,7 @@ class _listArticleState extends State<listArticle> {
   var length;
 
   // ignore: unnecessary_new
-  Widget appBarTitle = const Text("Articles");
+  Widget appBarTitle = const Text("Factures");
   Icon actionIcon = const Icon(Icons.search);
   @override
   Widget build(BuildContext context) {
@@ -57,8 +58,7 @@ class _listArticleState extends State<listArticle> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CreeArticlePage()));
-                  print(userArticleList);
+                          builder: (context) => const CreeFacturePage()));
                 },
                 child: Text(
                   "Créer".toUpperCase(),
@@ -102,89 +102,74 @@ class _listArticleState extends State<listArticle> {
                 ),
               ),
               Expanded(
-                child: userArticleList.isEmpty
+                child: ListFact.isEmpty
                     ? const Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.orange),
+                        ),
                       )
                     : RefreshIndicator(
                         onRefresh: () {
                           Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
-                                  pageBuilder: (a, b, c) => const listArticle(),
+                                  pageBuilder: (a, b, c) => const ListAchat(),
                                   transitionDuration:
                                       const Duration(seconds: 0)));
                           // ignore: void_checks
                           return Future.value(false);
                         },
                         child: ListView.builder(
-                            itemCount: userArticleList.length,
+                            itemCount: ListFact.length,
                             itemBuilder: (context, index) {
-                              final article = userArticleList[index];
+                              final facture = ListFact[index];
                               return Card(
                                   child: InkWell(
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ArticleDetail(
-                                                id: userArticleList[index]
-                                                    ['id'],
-                                                nom: userArticleList[index]
-                                                    ['nom'],
-                                                type: userArticleList[index]
-                                                    ['type'],
-                                                role: userArticleList[index]
-                                                    ['role'],
-                                                cat: userArticleList[index]
-                                                    ['cat'],
-                                                data: userArticleList[index]
-                                                    ['code_a_barre'],
-                                                reference_interne:
-                                                    userArticleList[index]
-                                                        ['reference_interne'],
-                                                taxes_a_la_vente:
-                                                    userArticleList[index]
-                                                        ['taxes_a_la_vente'],
-                                                prix_dachat:
-                                                    userArticleList[index]
-                                                        ['prix_dachat'],
-                                                sale_prix:
-                                                    userArticleList[index]
-                                                        ['sale_prix'],
-                                                prix_de_vente:
-                                                    userArticleList[index]
-                                                        ['prix_de_vente'],
-                                                unite: userArticleList[index]
-                                                    ['unite'],
-                                                image: userArticleList[index]
-                                                    ['image'],
-                                                qt: userArticleList[index]
-                                                    ["Quantité"],
-                                              )));
+                                  Get.to(
+                                    () => DetailFacture(
+                                      titre: facture['titre'],
+                                      client: facture['client'],
+                                      etat: facture['etat'],
+                                      date1: facture["date de facturation"]
+                                          .toDate()
+                                          .toString(),
+                                      date2: facture["date d'intervention"]
+                                          .toDate()
+                                          .toString(),
+                                      adrss: facture["adresse d'intervention"],
+                                      total: facture['total'],
+                                      order: 20,
+                                      listfact: facture["ligne facture"],
+                                      montant: facture["montant"],
+                                    ),
+                                  );
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),
                                 child: ListTile(
-                                  title: Text(article['nom']),
-                                  subtitle: Text(article['cat']),
+                                  title: Text(facture["etat"]),
+                                  subtitle: Text(
+                                      // ignore: unnecessary_string_interpolations
+                                      "${facture["date de facturation"].toDate().toString()}       ${facture["total"]}£"),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          article["id"],
-                                          "Êtes-vous sûr de vouloir supprimer cette article",
-                                          "article")
+                                          facture["titre"],
+                                          "Êtes-vous sûr de vouloir supprimer cette facture",
+                                          "facture")
                                     },
                                     icon: const Icon(
                                       Icons.delete,
                                       color: Colors.red,
                                     ),
                                   ),
-                                  leading: CircleAvatar(
-                                    radius: 20.0,
-                                    backgroundImage:
-                                        NetworkImage(article['image']),
+                                  leading: Text(
+                                    facture["titre"],
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ));
@@ -196,13 +181,19 @@ class _listArticleState extends State<listArticle> {
   }
 
   void filterSearchResults(String query) {
-    final suggestions = userArticleList.where((article) {
-      final nom = article['nom'].toLowerCase();
+    final suggestions = ListFact.where((facture) {
+      final namemploye = facture['titre'].toLowerCase();
       final input = query.toLowerCase();
-      return nom.contains(input);
+      return namemploye.contains(input);
     }).toList();
     setState(() {
-      userArticleList = suggestions;
+      ListFact = suggestions;
     });
+  }
+
+  String formattedDate(timeStamp) {
+    var dateFromTimeStamp =
+        DateTime.fromMicrosecondsSinceEpoch(timeStamp.seconds * 1000);
+    return DateFormat('dd-MM-yyyy').format(dateFromTimeStamp);
   }
 }

@@ -11,6 +11,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_azure_b2c/GUIDGenerator.dart';
 import 'package:flutter_multiselect/flutter_multiselect.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -61,6 +62,7 @@ class _CreeContactPageState extends State<CreeContactPage> {
     return b;
   }
 
+  final String uuid = GUIDGen.generate();
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
   XFile? imageFile;
@@ -298,8 +300,10 @@ class _CreeContactPageState extends State<CreeContactPage> {
                                         tel = telp.text;
                                         adresse = adressee.text;
                                         type = radio;
+                                        etiquette = etiquettetroller.text;
                                         if (imageFile == null) {
                                           Contact().addContact(
+                                              uuid,
                                               email,
                                               nom,
                                               tel,
@@ -402,8 +406,8 @@ class _CreeContactPageState extends State<CreeContactPage> {
       UploadTask uploadTask = ref.putFile(File(imageFile!.path));
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
-        Contact()
-            .addContact(email, nom, tel, adresse, type, etiquette, uploadPath);
+        Contact().addContact(
+            uuid, email, nom, tel, adresse, type, etiquette, uploadPath);
       });
     } catch (e) {
       // ignore: avoid_print

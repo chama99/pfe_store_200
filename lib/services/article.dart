@@ -11,6 +11,7 @@ class Article {
       await article.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
+
           itemsList.add(a);
         }).toList();
       });
@@ -22,14 +23,15 @@ class Article {
     }
   }
 
-  Future<void> addArticle(nom, type, role, cat, data, referenceinterne,
+  Future<void> addArticle(id, nom, type, role, cat, data, referenceinterne,
       taxesalavente, prixdachat, saleprix, prixdevente, unite, url, qt) {
     return article
-        .doc(nom)
+        .doc(id)
         .set({
-          'nom': nom,
-          'type': type,
-          'role': role,
+          'id_art': id,
+          'nom_art': nom,
+          'type_art': type,
+          'role_art': role,
           'cat': cat,
           'code_a_barre': data,
           'reference_interne': referenceinterne,
@@ -47,14 +49,15 @@ class Article {
         .catchError((error) => print('Failed to Add article: $error'));
   }
 
-  Future<void> updateArticle(nom, type, role, cat, data, referenceinterne,
+  Future<void> updateArticle(id, nom, type, role, cat, data, referenceinterne,
       taxesalavente, prixdachat, saleprix, prixdevente, unite, url, qt) {
     return article
-        .doc(nom)
+        .doc(id)
         .update({
-          'nom': nom,
-          'type': type,
-          'role': role,
+          'id_art': id,
+          'nom_art': nom,
+          'type_art': type,
+          'role_art': role,
           'cat': cat,
           'code_a_barre': data,
           'reference_interne': referenceinterne,

@@ -128,6 +128,8 @@ class _listContactState extends State<listContact> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => ContactDetail(
+                                                id: userContactList[index]
+                                                    ['id'],
                                                 image: userContactList[index]
                                                     ['image'],
                                                 email: userContactList[index]

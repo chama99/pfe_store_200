@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_azure_b2c/GUIDGenerator.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -43,6 +44,7 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
   String choix1 = "Peut être vendu";
   String choix2 = "Peut être acheté";
   String choix3 = "Peut être inséré dans un note de frais";
+  final String uuid = GUIDGen.generate();
   var role = '';
   var type = '';
   var nom = "";
@@ -509,6 +511,7 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                 unite = chhh;
                 if (imageFile == null) {
                   Article().addArticle(
+                      uuid,
                       nom,
                       type,
                       role,
@@ -608,6 +611,7 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
         Article().addArticle(
+            uuid,
             nom,
             type,
             role,

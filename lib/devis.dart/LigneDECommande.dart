@@ -146,6 +146,8 @@ class _LigneCommandeState extends State<LigneCommande> {
                         );
                       }
                       var data = snapshot.data!.data();
+                      var id = snapshot.data!.reference.id;
+
                       var quant = data!['Quantité'];
                       var prixv = data['prix_de_vente'];
                       var unitev = data['unite'];
@@ -345,6 +347,7 @@ class _LigneCommandeState extends State<LigneCommande> {
                                     int r = int.parse(qt.text);
                                     int q = quant - r;
                                     Article().updateArticle(
+                                        id,
                                         article,
                                         type,
                                         role,

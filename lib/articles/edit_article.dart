@@ -15,7 +15,8 @@ import '../services/article.dart';
 import '../widget/InputDeco_design.dart';
 
 class EditArticle extends StatefulWidget {
-  String nom,
+  String id,
+      nom,
       type,
       role,
       cat,
@@ -30,6 +31,7 @@ class EditArticle extends StatefulWidget {
   int qt;
   EditArticle({
     Key? key,
+    required this.id,
     required this.nom,
     required this.type,
     required this.role,
@@ -239,6 +241,7 @@ class _EditContactState extends State<EditArticle> {
                             if (_formKey.currentState!.validate()) {
                               if (imageFile == null) {
                                 Article().updateArticle(
+                                    widget.id,
                                     widget.nom,
                                     widget.type,
                                     widget.role,
@@ -254,6 +257,7 @@ class _EditContactState extends State<EditArticle> {
                                     widget.qt);
                               } else {
                                 uploadImage(
+                                  widget.id,
                                   widget.nom,
                                   widget.type,
                                   widget.role,
@@ -336,7 +340,8 @@ class _EditContactState extends State<EditArticle> {
   }
 
   uploadImage(
-    String nom,
+    id,
+    nom,
     type,
     role,
     cat,
@@ -361,6 +366,7 @@ class _EditContactState extends State<EditArticle> {
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
         Article().updateArticle(
+            id,
             nom,
             type,
             role,

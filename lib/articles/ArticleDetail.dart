@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'edit_article.dart';
 
 class ArticleDetail extends StatefulWidget {
-  String nom,
+  String id,
+      nom,
       type,
       role,
       cat,
@@ -20,6 +21,7 @@ class ArticleDetail extends StatefulWidget {
   int qt;
   ArticleDetail(
       {Key? key,
+      required this.id,
       required this.nom,
       required this.type,
       required this.role,
@@ -79,6 +81,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => EditArticle(
+                              id: widget.id,
                               nom: widget.nom,
                               type: widget.type,
                               role: widget.role,

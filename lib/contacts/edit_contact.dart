@@ -13,9 +13,10 @@ import '../widget/InputDeco_design.dart';
 import 'contact_home_page.dart';
 
 class EditContact extends StatefulWidget {
-  final String nom;
+  final String nom, id;
   // ignore: prefer_const_constructors_in_immutables
-  EditContact({Key? key, required this.nom}) : super(key: key);
+  EditContact({Key? key, required this.nom, required this.id})
+      : super(key: key);
 
   @override
   _EditContactState createState() => _EditContactState();
@@ -183,8 +184,15 @@ class _EditContactState extends State<EditContact> {
                                 // Validate returns true if the form is valid, otherwise false.
                                 if (_formKey.currentState!.validate()) {
                                   if (imageFile == null) {
-                                    Contact().updateContact(email, nom, tel,
-                                        adresse, type, etiquette, url);
+                                    Contact().updateContact(
+                                        widget.id,
+                                        email,
+                                        nom,
+                                        tel,
+                                        adresse,
+                                        type,
+                                        etiquette,
+                                        url);
                                   } else {
                                     uploadImage(email, widget.nom, tel, adresse,
                                         type, etiquette);
@@ -272,7 +280,7 @@ class _EditContactState extends State<EditContact> {
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
         Contact().updateContact(
-            email, nom, tel, adresse, type, etiquette, uploadPath);
+            widget.id, email, nom, tel, adresse, type, etiquette, uploadPath);
       });
     } catch (e) {
       // ignore: avoid_print

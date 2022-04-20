@@ -300,6 +300,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_azure_b2c:
+    dependency: "direct main"
+    description:
+      name: flutter_azure_b2c
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.7"
   flutter_barcode_scanner:
     dependency: "direct main"
     description:
@@ -562,6 +569,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+  msal_js:
+    dependency: transitive
+    description:
+      name: msal_js
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.14.0"
   ndialog:
     dependency: "direct main"
     description:
