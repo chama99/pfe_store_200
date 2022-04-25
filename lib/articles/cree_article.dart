@@ -511,17 +511,17 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                 unite = chhh;
                 if (imageFile == null) {
                   Article().addArticle(
-                      uuid,
+                      nom,
                       nom,
                       type,
                       role,
                       cat,
                       data,
-                      reference_interne,
-                      taxes_a_la_vente,
-                      prix_dachat,
-                      sale_prix,
-                      prix_de_vente,
+                      int.parse(reference_interne),
+                      int.parse(taxes_a_la_vente),
+                      double.parse(prix_dachat),
+                      int.parse(sale_prix),
+                      double.parse(prix_de_vente),
                       unite,
                       "http://www.ipsgroup.fr/wp-content/uploads/2013/12/default_image_01-1024x1024-1140x642.png",
                       int.parse(quantite_controller.text));
@@ -539,7 +539,7 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
               });
             } else {
               showToast(
-                  "veuillez sélectionner un type darticle , catégorie darticle et unite de mesure ");
+                  "veuillez sélectionner un type darticle ou catégorie darticle ou unite de mesure ");
             }
           }
         },
@@ -611,7 +611,7 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
         Article().addArticle(
-            uuid,
+            nom,
             nom,
             type,
             role,

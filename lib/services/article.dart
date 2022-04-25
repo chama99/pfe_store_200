@@ -75,6 +75,16 @@ class Article {
         .catchError((error) => print("Failed to update article: $error"));
   }
 
+  Future<void> updateQuantite(id, qt) {
+    return article
+        .doc(id)
+        .update({'Quantité': qt})
+        // ignore: avoid_print
+        .then((value) => print("Article Updated"))
+        // ignore: avoid_print
+        .catchError((error) => print("Failed to update article: $error"));
+  }
+
   Future<void> deleteArticle(id) {
     // print("Employe Deleted $id");
     return article
@@ -93,7 +103,7 @@ class Article {
       await article.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
-          itemsListNom.add(a['nom']);
+          itemsListNom.add(a['nom_art']);
         }).toList();
       });
       return itemsListNom;
@@ -111,8 +121,8 @@ class Article {
       await article.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
-          if (a['type'] == "Peut être vendu") {
-            itemsListNom.add(a);
+          if (a['type_art'] == "Peut être vendu") {
+            itemsListNom.add(a["nom_art"]);
           }
         }).toList();
       });
@@ -131,7 +141,7 @@ class Article {
       await article.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
-          if (a['role'] == "Service") {
+          if (a['role_art'] == "Service") {
             itemsListNom.add(a);
           }
         }).toList();
@@ -151,7 +161,7 @@ class Article {
       await article.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
-          if (a['role'] == "Article stockable") {
+          if (a['role_art'] == "Article stockable") {
             itemsListNom.add(a);
           }
         }).toList();
@@ -171,7 +181,7 @@ class Article {
       await article.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
-          if (a['role'] == "Article consommable") {
+          if (a['role_art'] == "Article consommable") {
             itemsListNom.add(a);
           }
         }).toList();
@@ -184,14 +194,54 @@ class Article {
     }
   }
 
-  getArticleListByTyid(id) {
+  Future getArticleListByid(id) async {
     List itemsListNom = [];
 
     try {
-      article.get().then((querySnapshot) {
+      await article.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
-          if (a['nom'] == id) {
+          if (a['id_art'] == id) {
+            itemsListNom.add(a["Quantité"]);
+          }
+        }).toList();
+      });
+      return itemsListNom;
+    } catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future getArticleListByid2(nom) async {
+    List itemsListNom = [];
+
+    try {
+      await article.get().then((querySnapshot) {
+        querySnapshot.docs.map((element) {
+          Map a = element.data() as Map<String, dynamic>;
+          if (a['nom_art'] == nom) {
+            itemsListNom.add(a["id_art"]);
+          }
+        }).toList();
+      });
+      return itemsListNom;
+    } catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future getArticleListByid3(id) async {
+    List itemsListNom = [];
+
+    try {
+      await article.get().then((querySnapshot) {
+        querySnapshot.docs.map((element) {
+          Map a = element.data() as Map<String, dynamic>;
+          if (a['id_art'] == id) {
             itemsListNom.add(a);
           }
         }).toList();

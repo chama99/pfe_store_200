@@ -123,7 +123,7 @@ class _ListReceptionState extends State<ListReception> {
                                   child: InkWell(
                                 onTap: () {
                                   Get.to(() => ReceptionDetaile(
-                                      titre: recp["titre"],
+                                      titre: recp["IdRecp"],
                                       typeoperation: recp["type d'operation"],
                                       etat: recp["etat"],
                                       receptions: recp["reception"],
@@ -144,7 +144,7 @@ class _ListReceptionState extends State<ListReception> {
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          recp["titre"],
+                                          recp["IdRecp"],
                                           "Êtes-vous sûr de vouloir supprimer ce produit",
                                           "reception")
                                     },
@@ -154,7 +154,7 @@ class _ListReceptionState extends State<ListReception> {
                                     ),
                                   ),
                                   leading: Text(
-                                    recp["titre"],
+                                    recp["IdRecp"],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -169,7 +169,7 @@ class _ListReceptionState extends State<ListReception> {
 
   void filterSearchResults(String query) {
     final suggestions = Listreception.where((recp) {
-      final namemploye = recp['titre'].toLowerCase();
+      final namemploye = recp['IdRecp'].toLowerCase();
       final input = query.toLowerCase();
       return namemploye.contains(input);
     }).toList();

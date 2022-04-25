@@ -1,12 +1,14 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, file_names, must_be_immutable
+// ignore_for_file: prefer_typing_uninitialized_variables, file_names, must_be_immutable, non_constant_identifier_names
 
 import 'dart:convert';
 
 import 'package:chama_projet/devis.dart/updateDevis.dart';
 import 'package:chama_projet/services/devis.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../services/article.dart';
 import '../widget/toast.dart';
 
 class AjoutCommande extends StatefulWidget {
@@ -34,7 +36,7 @@ class AjoutCommande extends StatefulWidget {
 class _AjoutCommandeState extends State<AjoutCommande> {
   final _formKey = GlobalKey<FormState>();
   var article;
-  List listItem = ["store12", "store15"];
+
   final ref = TextEditingController();
   final des = TextEditingController();
   final unite = TextEditingController();
@@ -64,6 +66,29 @@ class _AjoutCommandeState extends State<AjoutCommande> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+
+    fetchDatabaseList();
+  }
+
+  List ListArticle = [];
+
+  fetchDatabaseList() async {
+    dynamic resultant = await Article().getArticleListByTypeVendu();
+
+    if (resultant == null) {
+      // ignore: avoid_print
+      print('Unable to retrieve');
+    } else {
+      setState(() {
+        ListArticle = resultant;
+        article = resultant[0];
+      });
+    }
+  }
+
   addcomm() {
     var a = {
       ref.text,
@@ -81,232 +106,222 @@ class _AjoutCommandeState extends State<AjoutCommande> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.orange,
-        title: const Text("Ajouter Ligne de la commande"),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(30),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: ref,
-                    decoration: InputDecoration(
-                      hintText: 'réf',
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.white,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 320,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Colors.grey, width: 1)),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        hint: const Text("Article"),
-                        dropdownColor: Colors.white,
-                        icon: const Padding(
-                          padding: EdgeInsets.only(left: 15),
-                          child: Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.orange,
-                          ),
-                        ),
-                        style:
-                            const TextStyle(fontSize: 20, color: Colors.black),
-                        iconSize: 40,
-                        value: article,
-                        onChanged: (newValue) {
-                          setState(() {
-                            article = newValue.toString();
-                          });
-                        },
-                        items: listItem.map((valueItem) {
-                          return DropdownMenuItem(
-                            value: valueItem,
-                            child: Text(valueItem),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: des,
-                    decoration: InputDecoration(
-                      hintText: 'description',
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.orange,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: unite,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      hintText: 'unité',
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.orange,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: qt,
-                    decoration: InputDecoration(
-                      hintText: 'quantite',
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.orange,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: prix,
-                    decoration: InputDecoration(
-                      hintText: 'prix',
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.orange,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          var a = ({
-                            'réf': ref.text,
-                            'Article': article,
-                            'Description': des.text,
-                            'Unite': unite.text,
-                            'Quantite': int.parse(qt.text),
-                            'prix': double.parse(prix.text),
-                            'taxe': "20%",
-                            'sous-total':
-                                int.parse(qt.text) * double.parse(prix.text)
-                          });
-
-                          var data = json.decode(json.encode(a));
-
-                          widget.commande.add(data);
-                          if (article != null) {
-                            Devis().updateDevis(
-                                widget.titre,
-                                widget.client,
-                                widget.etat,
-                                widget.total,
-                                widget.commande,
-                                widget.remise,
-                                widget.montant);
-                            clearText();
-                            Get.to(() => UpdateDevis(
-                                  titre: widget.titre,
-                                  client: widget.client,
-                                  etat: widget.etat,
-                                  total: widget.total,
-                                  commande: widget.commande,
-                                  remise: widget.remise,
-                                  montant: widget.montant,
-                                  role: widget.role,
-                                ));
-                          } else {
-                            showToast("veuillez sélectionner Article ");
-                          }
-                        }
-                      },
-                      child: const Text(
-                        "Ajouter",
-                        style: TextStyle(fontSize: 25),
-                      ),
-                      style: ElevatedButton.styleFrom(primary: Colors.orange),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
+        appBar: AppBar(
+          backgroundColor: Colors.orange,
+          title: const Text("Ajouter Ligne de la commande"),
         ),
-      ),
-    );
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const Center(
+                child: Text(
+                  "Article :",
+                  style: TextStyle(fontSize: 20, letterSpacing: 3),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 320,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: Colors.grey, width: 1)),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      hint: const Text("Article "),
+                      dropdownColor: Colors.white,
+                      icon: const Padding(
+                        padding: EdgeInsets.only(left: 15),
+                        child: Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.orange,
+                        ),
+                      ),
+                      style: const TextStyle(fontSize: 20, color: Colors.black),
+                      iconSize: 40,
+                      value: article,
+                      onChanged: (newValue) {
+                        setState(() {
+                          article = newValue.toString();
+                        });
+                      },
+                      items: ListArticle.map((valueItem) {
+                        return DropdownMenuItem(
+                          value: valueItem,
+                          child: Text(valueItem),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ),
+              Form(
+                key: _formKey,
+                child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                    future: FirebaseFirestore.instance
+                        .collection('Articles')
+                        .doc(article)
+                        .get(),
+                    builder: (_, snapshot) {
+                      if (snapshot.hasError) {
+                        // ignore: avoid_print
+                        print('Something Went Wrong');
+                      }
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      var data = snapshot.data!.data();
+                      var id = snapshot.data!.reference.id;
+
+                      var quant = data!['Quantité'];
+                      var prixv = data['prix_de_vente'];
+                      var unitev = data['unite'];
+                      var refv = data['reference_interne'];
+
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Center(
+                            child: Text(
+                              "Description :",
+                              style: TextStyle(fontSize: 20, letterSpacing: 3),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: des,
+                              decoration: InputDecoration(
+                                hintText: 'Description',
+                                filled: true,
+                                fillColor: Colors.white,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                      color: Colors.orange, width: 1.5),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                    color: Colors.orange,
+                                    width: 1.5,
+                                  ),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Veuillez écrire une  description";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          const Center(
+                            child: Text(
+                              "Quantité :",
+                              style: TextStyle(fontSize: 20, letterSpacing: 3),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: qt,
+                              decoration: InputDecoration(
+                                hintText: 'Quantité',
+                                filled: true,
+                                fillColor: Colors.white,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                      color: Colors.orange, width: 1.5),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                    color: Colors.orange,
+                                    width: 1.5,
+                                  ),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Veuillez entrer Quantité ";
+                                }
+                                if (int.parse(value) > quant) {
+                                  return "Vous avez dépassé la quantité ";
+                                }
+
+                                return null;
+                              },
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    int r = int.parse(qt.text);
+                                    int q = quant - r;
+                                    Article().updateQuantite(id, q);
+                                    var a = ({
+                                      'réf': refv,
+                                      'Article': id,
+                                      'Description': des.text,
+                                      'Unite': unitev,
+                                      'Quantite': int.parse(qt.text),
+                                      'prix': prixv,
+                                      'taxe': "20%",
+                                      'sous-total': int.parse(qt.text) * prixv
+                                    });
+
+                                    var data = json.decode(json.encode(a));
+
+                                    widget.commande.add(data);
+                                    if (article != null) {
+                                      Devis().updateDevis(
+                                          widget.titre,
+                                          widget.client,
+                                          widget.etat,
+                                          widget.total,
+                                          widget.commande,
+                                          widget.remise,
+                                          widget.montant);
+                                      clearText();
+                                      Get.to(() => UpdateDevis(
+                                            titre: widget.titre,
+                                            client: widget.client,
+                                            etat: widget.etat,
+                                            total: widget.total,
+                                            commande: widget.commande,
+                                            remise: widget.remise,
+                                            montant: widget.montant,
+                                            role: widget.role,
+                                          ));
+                                    } else {
+                                      showToast(
+                                          "veuillez sélectionner Article ");
+                                    }
+                                  }
+                                },
+                                child: const Text(
+                                  "Ajouter",
+                                  style: TextStyle(fontSize: 25),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.orange),
+                              ),
+                            ],
+                          )
+                        ],
+                      );
+                    }),
+              )
+            ],
+          ),
+        ));
   }
 }

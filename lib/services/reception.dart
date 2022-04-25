@@ -27,7 +27,7 @@ class Reception {
     return reception
         .doc(titre)
         .set({
-          'titre': titre,
+          'IdRecp': titre,
           "type d'operation": type,
           'etat': etat,
           'date prévue': date,
@@ -46,7 +46,6 @@ class Reception {
     return reception
         .doc(titre)
         .update({
-          'titre': titre,
           "type d'operation": type,
           'etat': etat,
           'date prévue': date,

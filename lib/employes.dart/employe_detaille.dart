@@ -4,11 +4,10 @@ import 'package:chama_projet/employes.dart/update_employe.dart';
 import 'package:flutter/material.dart';
 
 class EmployeDetail extends StatefulWidget {
-  String email, nom, tel, adresse, image;
+  String nom, tel, adresse, id;
   EmployeDetail({
     Key? key,
-    required this.image,
-    required this.email,
+    required this.id,
     required this.nom,
     required this.tel,
     required this.adresse,
@@ -21,7 +20,7 @@ class EmployeDetail extends StatefulWidget {
 class _EmployeDetailState extends State<EmployeDetail> {
   Widget textfield({@required hintText}) {
     return Material(
-      elevation: 4,
+      elevation: 2,
       shadowColor: Colors.indigo,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -60,6 +59,7 @@ class _EmployeDetailState extends State<EmployeDetail> {
                     MaterialPageRoute(
                         builder: (context) => UpdateEmployePage(
                               nom: widget.nom,
+                              id: widget.id,
                             )));
               },
               child: Text(
@@ -76,85 +76,45 @@ class _EmployeDetailState extends State<EmployeDetail> {
         alignment: Alignment.center,
         children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                height: size.height * 0.70,
                 width: double.infinity,
-                margin: const EdgeInsets.symmetric(horizontal: 10),
+                margin: const EdgeInsets.all(20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    textfield(
-                      hintText: widget.email,
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Text(
+                        widget.nom,
+                        style: const TextStyle(
+                          fontSize: 35,
+                          letterSpacing: 1.5,
+                          color: Colors.orange,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
-                    textfield(
-                      hintText: widget.adresse,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: textfield(
+                        hintText: widget.adresse,
+                      ),
                     ),
-                    textfield(
-                      hintText: widget.tel,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: textfield(
+                        hintText: widget.tel,
+                      ),
                     ),
                   ],
                 ),
               )
             ],
           ),
-          CustomPaint(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-            ),
-            painter: HeaderCurvedContainer(),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Text(
-                  widget.nom,
-                  style: const TextStyle(
-                    fontSize: 35,
-                    letterSpacing: 1.5,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                width: MediaQuery.of(context).size.width / 3,
-                height: MediaQuery.of(context).size.width / 3,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 5),
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(widget.image),
-                  ),
-                ),
-              ),
-            ],
-          ),
         ],
       ),
     );
   }
-}
-
-class HeaderCurvedContainer extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()..color = Colors.orange;
-    Path path = Path()
-      ..relativeLineTo(0, 100)
-      ..quadraticBezierTo(size.width / 2, 150, size.width, 100)
-      ..relativeLineTo(0, -100)
-      ..close();
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

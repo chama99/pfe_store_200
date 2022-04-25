@@ -83,11 +83,13 @@ class _UpdateLivraisonState extends State<UpdateLivraison> {
                       IconButton(
                         onPressed: () {
                           Get.to(() => AjoutoperationLiv(
-                              titre: widget.titre,
-                              etat: widget.etat,
-                              date: widget.date,
-                              ListOperation: widget.OperationList,
-                              livraison: widget.livraison));
+                                titre: widget.titre,
+                                etat: widget.etat,
+                                date: widget.date,
+                                ListOperation: widget.OperationList,
+                                livraison: widget.livraison,
+                                page: "Livraison",
+                              ));
                         },
                         icon: const Icon(
                           Icons.add,

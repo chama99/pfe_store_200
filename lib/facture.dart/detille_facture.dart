@@ -16,7 +16,7 @@ class DetailFacture extends StatefulWidget {
   final double order;
   List listfact;
   double montant;
-
+  int res;
   double total;
   DetailFacture(
       {Key? key,
@@ -29,7 +29,8 @@ class DetailFacture extends StatefulWidget {
       required this.total,
       required this.order,
       required this.listfact,
-      required this.montant})
+      required this.montant,
+      required this.res})
       : super(key: key);
 
   @override
@@ -60,6 +61,7 @@ class _DetailFactureState extends State<DetailFacture> {
                         montant: widget.montant,
                         date1: widget.date1,
                         date2: widget.date2,
+                        res: widget.res,
                       ));
                 } else {
                   showToast("Ne peut pas modifier cette facture");

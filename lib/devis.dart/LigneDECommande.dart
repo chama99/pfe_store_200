@@ -36,9 +36,6 @@ class _LigneCommandeState extends State<LigneCommande> {
     prix.clear();
   }
 
-  CollectionReference articles =
-      FirebaseFirestore.instance.collection('Articles');
-
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -68,10 +65,8 @@ class _LigneCommandeState extends State<LigneCommande> {
       print('Unable to retrieve');
     } else {
       setState(() {
-        for (var i = 0; i < resultant.length; i++) {
-          ListArticle.add(resultant[i]["nom"]);
-          article = resultant[i]["nom"];
-        }
+        ListArticle = resultant;
+        article = resultant[0];
       });
     }
   }
@@ -152,53 +147,11 @@ class _LigneCommandeState extends State<LigneCommande> {
                       var prixv = data['prix_de_vente'];
                       var unitev = data['unite'];
                       var refv = data['reference_interne'];
-                      var nom = data['nom'];
-                      var code = data['code_a_barre'];
-                      var type = data['type'];
-                      var role = data['role'];
-                      var cat = data['cat'];
-                      var taxesalavente = data['taxes_a_la_vente'];
-                      var prixdachat = data['prix_dachat'];
-                      var saleprix = data['sale_prix'];
-                      var url = data['image'];
+                      var nom = data['nom_art'];
 
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Center(
-                            child: Text(
-                              "Réferance :",
-                              style: TextStyle(fontSize: 20, letterSpacing: 3),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              initialValue: refv,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: const BorderSide(
-                                      color: Colors.orange, width: 1.5),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: const BorderSide(
-                                    color: Colors.white,
-                                    width: 1.5,
-                                  ),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Veuillez entrer  réf ";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
                           const Center(
                             child: Text(
                               "Description :",
@@ -232,35 +185,6 @@ class _LigneCommandeState extends State<LigneCommande> {
                                 }
                                 return null;
                               },
-                            ),
-                          ),
-                          const Center(
-                            child: Text(
-                              "Unité :",
-                              style: TextStyle(fontSize: 20, letterSpacing: 3),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              initialValue: unitev,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: const BorderSide(
-                                      color: Colors.orange, width: 1.5),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: const BorderSide(
-                                    color: Colors.orange,
-                                    width: 1.5,
-                                  ),
-                                ),
-                              ),
                             ),
                           ),
                           const Center(
@@ -303,41 +227,6 @@ class _LigneCommandeState extends State<LigneCommande> {
                               },
                             ),
                           ),
-                          const Center(
-                            child: Text(
-                              "Prix unitaire :",
-                              style: TextStyle(fontSize: 20, letterSpacing: 3),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              initialValue: prixv,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: const BorderSide(
-                                      color: Colors.orange, width: 1.5),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: const BorderSide(
-                                    color: Colors.orange,
-                                    width: 1.5,
-                                  ),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Veuillez entrer Prix unitaire";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -346,21 +235,7 @@ class _LigneCommandeState extends State<LigneCommande> {
                                   if (_formKey.currentState!.validate()) {
                                     int r = int.parse(qt.text);
                                     int q = quant - r;
-                                    Article().updateArticle(
-                                        id,
-                                        article,
-                                        type,
-                                        role,
-                                        cat,
-                                        code,
-                                        refv,
-                                        taxesalavente,
-                                        prixdachat,
-                                        saleprix,
-                                        prixv,
-                                        unitev,
-                                        url,
-                                        q);
+                                    Article().updateQuantite(id, q);
                                     if (article != null) {
                                       Commande().addCommande(
                                           refv,
@@ -368,10 +243,9 @@ class _LigneCommandeState extends State<LigneCommande> {
                                           des.text,
                                           unitev,
                                           int.parse(qt.text),
-                                          double.parse(prixv),
+                                          prixv,
                                           "20 %",
-                                          int.parse(qt.text) *
-                                              double.parse(prixv));
+                                          int.parse(qt.text) * prixv);
                                       clearText();
                                       Get.to(() => CreeDevisPage(
                                             role: widget.role,

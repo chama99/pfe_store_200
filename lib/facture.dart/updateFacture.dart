@@ -21,6 +21,7 @@ class UpdateFacture extends StatefulWidget {
   double montant;
   List listfact;
   String date1, date2;
+  int res;
 
   double total;
   UpdateFacture(
@@ -34,7 +35,8 @@ class UpdateFacture extends StatefulWidget {
       required this.listfact,
       required this.montant,
       required this.date1,
-      required this.date2})
+      required this.date2,
+      required this.res})
       : super(key: key);
 
   @override
@@ -128,6 +130,7 @@ class _UpdateFactureState extends State<UpdateFacture> {
                         montant: widget.montant,
                         date1: widget.date1,
                         date2: widget.date2,
+                        res: widget.res,
                       ),
                   // ignore: prefer_const_constructors
                   transitionDuration: Duration(seconds: 0)));
@@ -160,16 +163,18 @@ class _UpdateFactureState extends State<UpdateFacture> {
                             IconButton(
                               onPressed: () {
                                 Get.to(() => AjoutLigneFacture(
-                                    titre: widget.titre,
-                                    commande: widget.listfact,
-                                    adresse: widget.adrss,
-                                    client: widget.client,
-                                    date1: widget.date1,
-                                    date2: widget.date2,
-                                    etat: widget.etat,
-                                    montant: widget.montant,
-                                    remise: remise,
-                                    total: widget.total));
+                                      titre: widget.titre,
+                                      commande: widget.listfact,
+                                      adresse: widget.adrss,
+                                      client: widget.client,
+                                      date1: widget.date1,
+                                      date2: widget.date2,
+                                      etat: widget.etat,
+                                      montant: widget.montant,
+                                      remise: remise,
+                                      total: widget.total,
+                                      res: widget.res,
+                                    ));
                               },
                               icon: const Icon(
                                 Icons.add,
@@ -217,17 +222,19 @@ class _UpdateFactureState extends State<UpdateFacture> {
                                         "Veuillez entrer Numéro de ligne");
                                   } else {
                                     Get.to(() => ModifieLignFact(
-                                        titre: widget.titre,
-                                        commande: widget.listfact,
-                                        num: int.parse(n.text),
-                                        adresse: widget.adrss,
-                                        client: widget.client,
-                                        date1: widget.date1,
-                                        date2: widget.date2,
-                                        etat: widget.etat,
-                                        montant: widget.montant,
-                                        remise: remise,
-                                        total: widget.total));
+                                          titre: widget.titre,
+                                          commande: widget.listfact,
+                                          num: int.parse(n.text),
+                                          adresse: widget.adrss,
+                                          client: widget.client,
+                                          date1: widget.date1,
+                                          date2: widget.date2,
+                                          etat: widget.etat,
+                                          montant: widget.montant,
+                                          remise: remise,
+                                          total: widget.total,
+                                          res: widget.res,
+                                        ));
                                   }
                                 },
                                 icon: const Icon(
@@ -313,50 +320,50 @@ class _UpdateFactureState extends State<UpdateFacture> {
                           ),
                         ),
                         Row(
-                          children: [
-                            const Padding(
+                          children: const [
+                            Padding(
                               padding: EdgeInsets.all(13),
                               child: Text(
-                                "Client",
+                                "Client :",
                                 style:
                                     TextStyle(fontSize: 15, letterSpacing: 3),
                               ),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 38),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(
-                                      color: Colors.grey, width: 1.5)),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  dropdownColor: Colors.white,
-                                  icon: const Padding(
-                                    padding: EdgeInsets.only(left: 115),
-                                    child: Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Colors.orange,
-                                    ),
-                                  ),
-                                  style: const TextStyle(
-                                      fontSize: 20, color: Colors.black),
-                                  iconSize: 40,
-                                  value: widget.client,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      widget.client = newValue.toString();
-                                    });
-                                  },
-                                  items: userContactList.map((valueItem) {
-                                    return DropdownMenuItem(
-                                      value: valueItem,
-                                      child: Text(valueItem),
-                                    );
-                                  }).toList(),
+                          ],
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 0),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border:
+                                  Border.all(color: Colors.grey, width: 1.5)),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              dropdownColor: Colors.white,
+                              icon: const Padding(
+                                padding: EdgeInsets.only(left: 115),
+                                child: Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.orange,
                                 ),
                               ),
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.black),
+                              iconSize: 40,
+                              value: widget.client,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  widget.client = newValue.toString();
+                                });
+                              },
+                              items: userContactList.map((valueItem) {
+                                return DropdownMenuItem(
+                                  value: valueItem,
+                                  child: Text(valueItem),
+                                );
+                              }).toList(),
                             ),
-                          ],
+                          ),
                         ),
                         Row(
                           children: [
@@ -450,7 +457,7 @@ class _UpdateFactureState extends State<UpdateFacture> {
                                 margin: const EdgeInsets.only(
                                     top: 30, right: 13, left: 13, bottom: 10),
                                 child: const Text(
-                                  "Modifier une remise",
+                                  "Remise",
                                   style:
                                       TextStyle(fontSize: 15, letterSpacing: 3),
                                 ),
@@ -460,7 +467,10 @@ class _UpdateFactureState extends State<UpdateFacture> {
                                   margin: const EdgeInsets.only(
                                       left: 10, right: 65, top: 30),
                                   child: TextFormField(
-                                    controller: Contolleremise,
+                                    initialValue: "${widget.res}%",
+                                    onChanged: (value) {
+                                      widget.res = int.parse(value);
+                                    },
                                     decoration: InputDecoration(
                                       hintText: 'valeur %',
                                       filled: true,
@@ -531,14 +541,14 @@ class _UpdateFactureState extends State<UpdateFacture> {
                                         style: const TextStyle(fontSize: 20),
                                       ),
                                       Text(
-                                        "Remise: $remise",
+                                        "Remise: ${widget.res / 100}",
                                         style: const TextStyle(fontSize: 20),
                                       ),
                                       const Divider(
                                         color: Colors.black,
                                       ),
                                       Text(
-                                        "Total: ${calculMontat() - remise}",
+                                        "Total: ${(calculMontat() * (1 + 0.2)) * (1 - (widget.res / 100))}",
                                         style: const TextStyle(fontSize: 20),
                                       ),
                                     ],

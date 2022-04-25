@@ -22,7 +22,7 @@ class LigneFacture extends StatefulWidget {
 
 class _LigneFactureState extends State<LigneFacture> {
   final _formKey = GlobalKey<FormState>();
-  var article;
+
   List lignFact = [];
 
   final lib = TextEditingController();
@@ -37,8 +37,6 @@ class _LigneFactureState extends State<LigneFacture> {
     etq.clear();
     qt.clear();
     prix.clear();
-
-    article = null;
   }
 
   @override
@@ -60,7 +58,7 @@ class _LigneFactureState extends State<LigneFacture> {
   }
 
   List ListArticle = [];
-
+  var article;
   fetchDatabaseList() async {
     dynamic resultant = await Article().getArticleListByTypeVendu();
 
@@ -69,10 +67,8 @@ class _LigneFactureState extends State<LigneFacture> {
       print('Unable to retrieve');
     } else {
       setState(() {
-        for (var i = 0; i < resultant.length; i++) {
-          ListArticle.add(resultant[i]["nom"]);
-          article = resultant[i]["nom"];
-        }
+        ListArticle = resultant;
+        article = resultant[0];
       });
     }
   }
@@ -116,7 +112,7 @@ class _LigneFactureState extends State<LigneFacture> {
                     value: article,
                     onChanged: (newValue) {
                       setState(() {
-                        article = newValue.toString();
+                        article = newValue;
                       });
                     },
                     items: ListArticle.map((valueItem) {
@@ -151,10 +147,10 @@ class _LigneFactureState extends State<LigneFacture> {
                     var prixv = data['prix_de_vente'];
                     var unitev = data['unite'];
                     var refv = data['reference_interne'];
-                    var nom = data['nom'];
+                    var nom = data['nom_art'];
                     var code = data['code_a_barre'];
-                    var type = data['type'];
-                    var role = data['role'];
+                    var type = data['type_art'];
+                    var role = data['role_art'];
                     var cat = data['cat'];
                     var taxesalavente = data['taxes_a_la_vente'];
                     var prixdachat = data['prix_dachat'];
@@ -268,39 +264,6 @@ class _LigneFactureState extends State<LigneFacture> {
                             },
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            initialValue: prixv,
-                            onChanged: (value) {
-                              prixv = value;
-                            },
-                            decoration: InputDecoration(
-                              hintText: 'Prix ',
-                              filled: true,
-                              fillColor: Colors.white,
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                    color: Colors.orange, width: 1.5),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                  color: Colors.orange,
-                                  width: 1.5,
-                                ),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Veuillez entrer Prix ";
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -314,9 +277,8 @@ class _LigneFactureState extends State<LigneFacture> {
                                         comp.text,
                                         etq.text,
                                         int.parse(qt.text),
-                                        double.parse(prixv),
-                                        int.parse(qt.text) *
-                                            double.parse(prixv));
+                                        prixv,
+                                        int.parse(qt.text) * prixv);
                                     clearText();
                                     Get.to(() => const CreeFacturePage());
                                   } else {

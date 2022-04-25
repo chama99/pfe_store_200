@@ -63,8 +63,7 @@ class _CreeContactPageState extends State<CreeContactPage> {
   }
 
   final String uuid = GUIDGen.generate();
-  firebase_storage.FirebaseStorage storage =
-      firebase_storage.FirebaseStorage.instance;
+
   XFile? imageFile;
 
   final ImagePicker picker = ImagePicker();
@@ -307,9 +306,9 @@ class _CreeContactPageState extends State<CreeContactPage> {
                                               email,
                                               nom,
                                               tel,
-                                              adresse,
+                                              adressee.text,
                                               type,
-                                              etiquette,
+                                              etiquettetroller.text,
                                               "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
                                         } else {
                                           uploadImage(email);
@@ -406,8 +405,8 @@ class _CreeContactPageState extends State<CreeContactPage> {
       UploadTask uploadTask = ref.putFile(File(imageFile!.path));
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
-        Contact().addContact(
-            uuid, email, nom, tel, adresse, type, etiquette, uploadPath);
+        Contact().addContact(uuid, email, nom, tel, adressee.text, type,
+            etiquettetroller.text, uploadPath);
       });
     } catch (e) {
       // ignore: avoid_print

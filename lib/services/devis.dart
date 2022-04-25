@@ -28,7 +28,7 @@ class Devis {
     return devis
         .doc(titre)
         .set({
-          'titre': titre,
+          'idDevis': titre,
           'client': client,
           'etat': etat,
           'total': total,
@@ -48,7 +48,6 @@ class Devis {
     return devis
         .doc(titre)
         .update({
-          'titre': titre,
           'client': client,
           'etat': etat,
           'total': total,
@@ -82,7 +81,7 @@ class Devis {
       await devis.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
-          itemsListNom.add(a['titre']);
+          itemsListNom.add(a['idDevis']);
         }).toList();
       });
       return itemsListNom;

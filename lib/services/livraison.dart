@@ -27,7 +27,7 @@ class Livraison {
     return livraisonn
         .doc(titre)
         .set({
-          'titre': titre,
+          'IdLiv': titre,
           "type d'operation": type,
           'etat': etat,
           'date prévue': date,
@@ -46,7 +46,6 @@ class Livraison {
     return livraisonn
         .doc(titre)
         .update({
-          'titre': titre,
           "type d'operation": type,
           'etat': etat,
           'date prévue': date,

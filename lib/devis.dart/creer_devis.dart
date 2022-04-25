@@ -1,30 +1,21 @@
-// ignore_for_file: unused_import, deprecated_member_use, must_be_immutable
-
 // ignore: avoid_web_libraries_in_flutter
 
+// ignore_for_file: must_be_immutable
+
 import 'dart:async';
-import 'dart:io';
+
 import 'dart:math';
 
 import 'package:chama_projet/services/commande.dart';
 import 'package:chama_projet/services/contact.dart';
 import 'package:chama_projet/services/devis.dart';
 import 'package:chama_projet/widget/toast.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_multiselect/flutter_multiselect.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:get/get.dart';
 
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
-
-import '../services/employe.dart';
-import '../widget/InputDeco_design.dart';
 import 'LigneDECommande.dart';
 import 'listDevis.dart';
 
@@ -71,7 +62,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
         double r = double.parse(ch) as double;
 
         // ignore: unnecessary_cast
-        remisee = r / 100 as double;
+        remisee = r;
       });
     });
   }
@@ -444,18 +435,18 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                         style: const TextStyle(fontSize: 20),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                    const Padding(
+                                      padding: EdgeInsets.all(8.0),
                                       child: Text(
-                                        "Taxes: $taxe",
-                                        style: const TextStyle(fontSize: 20),
+                                        "Taxes: 0.2",
+                                        style: TextStyle(fontSize: 20),
                                       ),
                                     ),
                                     const Divider(
                                       color: Colors.black,
                                     ),
                                     Text(
-                                      "Total:  ${calculMontat() - remisee}",
+                                      "Total:  ${(calculMontat() * (1 + 0.2)) * (1 - (remisee / 100))}",
                                       style: const TextStyle(fontSize: 20),
                                     ),
                                   ],

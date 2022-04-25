@@ -66,7 +66,7 @@ class _connexion extends State<Connexion> {
         String role = value.data()!["role"];
         List<int> bytes = mdp.toString().codeUnits;
         var tmdp = utf8.decode(bytes);
-        if (e == email && m == tmdp) {
+        if (e == email && m == mdp) {
           Navigator.push(
               context,
               MaterialPageRoute(

@@ -50,7 +50,7 @@ class _EditContactState extends State<EditContact> {
           child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
             future: FirebaseFirestore.instance
                 .collection('contacts')
-                .doc(widget.nom)
+                .doc(widget.id)
                 .get(),
             builder: (_, snapshot) {
               if (snapshot.hasError) {
@@ -68,7 +68,7 @@ class _EditContactState extends State<EditContact> {
               var adresse = data['Adresse professionnelle'];
               var type = data['type'];
               var url = data['image'];
-              var etiquette = data['etiquette'];
+              var etiquette = data['Etiquette'];
               // ignore: unused_local_variable
               var nom = data['name'];
 
@@ -163,9 +163,9 @@ class _EditContactState extends State<EditContact> {
                       Container(
                         margin: const EdgeInsets.symmetric(vertical: 10.0),
                         child: TextFormField(
-                          initialValue: adresse,
+                          initialValue: etiquette,
                           autofocus: false,
-                          onChanged: (value) => adresse = value,
+                          onChanged: (value) => etiquette = value,
                           decoration: buildInputDecoration(
                             Icons.vertical_distribute_sharp,
                             "Etiquette",

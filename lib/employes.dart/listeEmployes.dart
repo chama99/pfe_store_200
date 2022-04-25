@@ -128,10 +128,8 @@ class _listEmployeState extends State<listEmploye> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => EmployeDetail(
-                                                image: userProfilesList[index]
-                                                    ['image'],
-                                                email: userProfilesList[index]
-                                                    ['email'],
+                                                id: userProfilesList[index]
+                                                    ['IdEmp'],
                                                 nom: userProfilesList[index]
                                                     ['name'],
                                                 tel: userProfilesList[index]
@@ -144,12 +142,11 @@ class _listEmployeState extends State<listEmploye> {
                                     const Color.fromARGB(255, 3, 56, 109),
                                 child: ListTile(
                                   title: Text(employe["name"]),
-                                  subtitle: Text(employe["email"]),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          employe["name"],
+                                          employe["IdEmp"],
                                           "Êtes-vous sûr de vouloir supprimer cet employé",
                                           "employé")
                                     },
@@ -157,11 +154,6 @@ class _listEmployeState extends State<listEmploye> {
                                       Icons.delete,
                                       color: Colors.red,
                                     ),
-                                  ),
-                                  leading: CircleAvatar(
-                                    radius: 20.0,
-                                    backgroundImage:
-                                        NetworkImage(employe['image']),
                                   ),
                                 ),
                               ));

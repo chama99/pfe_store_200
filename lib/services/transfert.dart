@@ -27,7 +27,7 @@ class Transfert {
     return transfert
         .doc(titre)
         .set({
-          'titre': titre,
+          'IdTran': titre,
           "type d'operation": type,
           'etat': etat,
           'date prévue': date,
@@ -45,7 +45,6 @@ class Transfert {
     return transfert
         .doc(titre)
         .update({
-          'titre': titre,
           "type d'operation": type,
           'etat': etat,
           'date prévue': date,

@@ -30,6 +30,7 @@ class _UpdateReceptionState extends State<UpdateReception> {
   final n = TextEditingController();
   List receptionList = ["Stock1", "Stock2", "Stock3", "Stock4"];
   List listItem2 = ["Brouillon", "En attente", "Prêt"];
+  String ch = "Réception";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,11 +81,13 @@ class _UpdateReceptionState extends State<UpdateReception> {
                       IconButton(
                         onPressed: () {
                           Get.to(() => Ajoutoperation(
-                              titre: widget.titre,
-                              etat: widget.etat,
-                              date: widget.date,
-                              ListOperation: widget.OperationList,
-                              reception: widget.reception));
+                                titre: widget.titre,
+                                etat: widget.etat,
+                                date: widget.date,
+                                ListOperation: widget.OperationList,
+                                reception: widget.reception,
+                                page: ch,
+                              ));
                         },
                         icon: const Icon(
                           Icons.add,

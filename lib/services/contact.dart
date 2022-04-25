@@ -14,20 +14,8 @@ class Contact {
       await employe.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
-          var b = ({
-            'id': element.reference.id,
-            'email': a['email'],
-            'name': a['name'],
-            'type': a['type'],
-            'image': a['image'],
-            'portable professionnel': a['portable professionnel'],
-            'Adresse professionnelle': a['Adresse professionnelle'],
-            'Etiquette': a['Etiquette'],
-          });
 
-          // ignore: unused_local_variable
-          var c = json.decode(json.encode(b));
-          itemsList.add(c);
+          itemsList.add(a);
         }).toList();
       });
       return itemsList;

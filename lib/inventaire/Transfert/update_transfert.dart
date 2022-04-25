@@ -83,11 +83,13 @@ class _UpdateTransfertState extends State<UpdateTransfert> {
                       IconButton(
                         onPressed: () {
                           Get.to(() => AjoutoperationTran(
-                              titre: widget.titre,
-                              etat: widget.etat,
-                              date: widget.date,
-                              ListOperation: widget.OperationList,
-                              transf: widget.transf));
+                                titre: widget.titre,
+                                etat: widget.etat,
+                                date: widget.date,
+                                ListOperation: widget.OperationList,
+                                transf: widget.transf,
+                                page: "Transfert",
+                              ));
                         },
                         icon: const Icon(
                           Icons.add,

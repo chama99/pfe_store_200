@@ -69,20 +69,20 @@ class _LigneOperationState extends State<LigneOperation> {
       print('Unable to retrieve');
     } else {
       setState(() {
-        if (widget.page == "transfert") {
+        if (widget.page == "Transfert") {
           for (var i = 0; i < resultants.length; i++) {
-            ListArticle.add(resultants[i]["nom"]);
-            article = resultants[i]["nom"];
+            ListArticle.add(resultants[i]["nom_art"]);
+            article = resultants[i]["nom_art"];
           }
-        } else if (widget.page == "livraison") {
+        } else if (widget.page == "Livraison") {
           for (var i = 0; i < resultantc.length; i++) {
-            ListArticle.add(resultantc[i]["nom"]);
-            article = resultantc[i]["nom"];
+            ListArticle.add(resultantc[i]["nom_art"]);
+            article = resultantc[i]["nom_art"];
           }
         } else {
           for (var i = 0; i < resultantsk.length; i++) {
-            ListArticle.add(resultantsk[i]["nom"]);
-            article = resultantsk[i]["nom"];
+            ListArticle.add(resultantsk[i]["nom_art"]);
+            article = resultantsk[i]["nom_art"];
           }
         }
       });
@@ -141,217 +141,189 @@ class _LigneOperationState extends State<LigneOperation> {
                 ),
               ),
             ),
-            Form(
-              key: _formKey,
-              child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                  future: FirebaseFirestore.instance
-                      .collection('Articles')
-                      .doc(article)
-                      .get(),
-                  builder: (_, snapshot) {
-                    if (snapshot.hasError) {
-                      // ignore: avoid_print
-                      print('Something Went Wrong');
-                    }
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    var data = snapshot.data!.data();
-                    var quant = data!['Quantité'];
-                    var prixv = data['prix_de_vente'];
-                    var unitev = data['unite'];
-                    var refv = data['reference_interne'];
-                    var nom = data['nom'];
-                    var code = data['code_a_barre'];
-                    var type = data['type'];
-                    var role = data['role'];
-                    var cat = data['cat'];
-                    var taxesalavente = data['taxes_a_la_vente'];
-                    var prixdachat = data['prix_dachat'];
-                    var saleprix = data['sale_prix'];
-                    var url = data['image'];
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            controller: colis,
-                            decoration: InputDecoration(
-                              hintText: 'Colis source',
-                              filled: true,
-                              fillColor: Colors.white,
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                    color: Colors.orange, width: 1.5),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                  color: Colors.white,
-                                  width: 1.5,
+            if (article != null) ...[
+              Form(
+                key: _formKey,
+                child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                    future: FirebaseFirestore.instance
+                        .collection('Articles')
+                        .doc(article)
+                        .get(),
+                    builder: (_, snapshot) {
+                      if (snapshot.hasError) {
+                        // ignore: avoid_print
+                        print('Something Went Wrong');
+                      }
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      var data = snapshot.data!.data();
+                      var quant = data!['Quantité'];
+                      var prixv = data['prix_de_vente'];
+                      var unitev = data['unite'];
+                      var refv = data['reference_interne'];
+                      var nom = data['nom'];
+                      var code = data['code_a_barre'];
+                      var type = data['type'];
+                      var role = data['role'];
+                      var cat = data['cat'];
+                      var taxesalavente = data['taxes_a_la_vente'];
+                      var prixdachat = data['prix_dachat'];
+                      var saleprix = data['sale_prix'];
+                      var url = data['image'];
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: colis,
+                              decoration: InputDecoration(
+                                hintText: 'Colis source',
+                                filled: true,
+                                fillColor: Colors.white,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                      color: Colors.orange, width: 1.5),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                    color: Colors.white,
+                                    width: 1.5,
+                                  ),
                                 ),
                               ),
-                            ),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Veuillez entrer  colis de destination";
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            controller: colisDes,
-                            decoration: InputDecoration(
-                              hintText: 'Colis de destination',
-                              filled: true,
-                              fillColor: Colors.white,
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                    color: Colors.orange, width: 1.5),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                  color: Colors.white,
-                                  width: 1.5,
-                                ),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Veuillez entrer  colis de destination";
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            controller: appartenant,
-                            decoration: InputDecoration(
-                              hintText: 'Appartenant à',
-                              filled: true,
-                              fillColor: Colors.white,
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                    color: Colors.orange, width: 1.5),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                  color: Colors.orange,
-                                  width: 1.5,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            controller: fait,
-                            decoration: InputDecoration(
-                              hintText: 'Fait',
-                              filled: true,
-                              fillColor: Colors.white,
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                    color: Colors.orange, width: 1.5),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                  color: Colors.orange,
-                                  width: 1.5,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            initialValue: unitev,
-                            onChanged: (value) {
-                              unitev = value;
-                            },
-                            decoration: InputDecoration(
-                              hintText: 'Unité de mesure',
-                              filled: true,
-                              fillColor: Colors.white,
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                    color: Colors.orange, width: 1.5),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                  color: Colors.orange,
-                                  width: 1.5,
-                                ),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Veuillez entrer unité de mesure";
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  if (article != null) {
-                                    CommandeOperation().addCommdeop(
-                                        colis.text,
-                                        colisDes.text,
-                                        article,
-                                        appartenant.text,
-                                        fait.text,
-                                        unitev);
-                                    clearText();
-                                    if (widget.page == "reception") {
-                                      Get.to(() => const CreerReception());
-                                    } else if (widget.page == "transfert") {
-                                      Get.to(() => const CreerTransfert());
-                                    } else {
-                                      Get.to(() => const CreerLivraison());
-                                    }
-                                  } else {
-                                    showToast("veuillez sélectionner Article ");
-                                  }
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Veuillez entrer  colis de destination";
                                 }
+                                return null;
                               },
-                              child: const Text(
-                                "Ajouter",
-                                style: TextStyle(fontSize: 25),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.orange),
                             ),
-                          ],
-                        )
-                      ],
-                    );
-                  }),
-            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: colisDes,
+                              decoration: InputDecoration(
+                                hintText: 'Colis de destination',
+                                filled: true,
+                                fillColor: Colors.white,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                      color: Colors.orange, width: 1.5),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                    color: Colors.white,
+                                    width: 1.5,
+                                  ),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Veuillez entrer  colis de destination";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: appartenant,
+                              decoration: InputDecoration(
+                                hintText: 'Appartenant à',
+                                filled: true,
+                                fillColor: Colors.white,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                      color: Colors.orange, width: 1.5),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                    color: Colors.orange,
+                                    width: 1.5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: fait,
+                              decoration: InputDecoration(
+                                hintText: 'Fait',
+                                filled: true,
+                                fillColor: Colors.white,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                      color: Colors.orange, width: 1.5),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(
+                                    color: Colors.orange,
+                                    width: 1.5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    if (article != null) {
+                                      CommandeOperation().addCommdeop(
+                                          colis.text,
+                                          colisDes.text,
+                                          article,
+                                          appartenant.text,
+                                          fait.text,
+                                          unitev);
+                                      clearText();
+                                      if (widget.page == "Réception") {
+                                        Get.to(() => const CreerReception());
+                                      } else if (widget.page == "Transfert") {
+                                        Get.to(() => const CreerTransfert());
+                                      } else {
+                                        Get.to(() => const CreerLivraison());
+                                      }
+                                    } else {
+                                      showToast(
+                                          "veuillez sélectionner Article ");
+                                    }
+                                  }
+                                },
+                                child: const Text(
+                                  "Ajouter",
+                                  style: TextStyle(fontSize: 25),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.orange),
+                              ),
+                            ],
+                          )
+                        ],
+                      );
+                    }),
+              ),
+            ] else ...[
+              const Text(""),
+            ]
           ],
         ),
       ),

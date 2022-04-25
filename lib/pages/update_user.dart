@@ -148,36 +148,7 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            bottom: 20, left: 70, right: 70, top: 10),
-                        child: DropdownButton(
-                          dropdownColor: Colors.white,
-                          icon: const Padding(
-                            padding: EdgeInsets.only(left: 45),
-                            child: Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.orange,
-                            ),
-                          ),
-                          style: const TextStyle(
-                              fontSize: 20, color: Colors.black),
-                          iconSize: 40,
-                          value: ch,
-                          hint: Text(role),
-                          onChanged: (newValue) {
-                            setState(() {
-                              ch = newValue.toString();
-                            });
-                          },
-                          items: listItem.map((valueItem) {
-                            return DropdownMenuItem(
-                              value: valueItem,
-                              child: Text(valueItem),
-                            );
-                          }).toList(),
-                        ),
-                      ),
+
                       // ignore: avoid_unnecessary_containers
                       Container(
                         child: Row(
@@ -187,9 +158,6 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
                               onPressed: () {
                                 // Validate returns true if the form is valid, otherwise false.
                                 if (_formKey.currentState!.validate()) {
-                                  if (ch != null) {
-                                    role = ch;
-                                  }
                                   if (imageFile == null) {
                                     User().updateUser(
                                         email, mdp, role, url, widget.acces);

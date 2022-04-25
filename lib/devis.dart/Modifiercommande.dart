@@ -2,8 +2,11 @@
 
 import 'package:chama_projet/devis.dart/updateDevis.dart';
 import 'package:chama_projet/services/devis.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../services/article.dart';
 
 class ModifierCommande extends StatefulWidget {
   String titre, client, etat, role;
@@ -34,9 +37,34 @@ class _ModifierCommandeState extends State<ModifierCommande> {
   List listItem = ["store12", "store15"];
 
   List list = [];
+  @override
+  void initState() {
+    super.initState();
+
+    fetchDatabaseList();
+  }
+
+  List ListArticle = [];
+
+  fetchDatabaseList() async {
+    dynamic resultant = await Article()
+        .getArticleListByid(widget.commande[widget.num]["Article"]);
+
+    if (resultant == null) {
+      // ignore: avoid_print
+      print('Unable to retrieve');
+    } else {
+      setState(() {
+        ListArticle = resultant;
+      });
+    }
+  }
+
+  var qt = 0;
 
   @override
   Widget build(BuildContext context) {
+    qt = widget.commande[widget.num]["Quantite"];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange,
@@ -50,67 +78,9 @@ class _ModifierCommandeState extends State<ModifierCommande> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    initialValue: '${widget.commande[widget.num]["réf"]}',
-                    onChanged: (value) {
-                      widget.commande[widget.num]["réf"] = value;
-                    },
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.white,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 320,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Colors.grey, width: 1)),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        dropdownColor: Colors.white,
-                        icon: const Padding(
-                          padding: EdgeInsets.only(left: 15),
-                          child: Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.orange,
-                          ),
-                        ),
-                        style:
-                            const TextStyle(fontSize: 20, color: Colors.black),
-                        iconSize: 40,
-                        value: "${widget.commande[widget.num]["Article"]}",
-                        onChanged: (newValue) {
-                          setState(() {
-                            widget.commande[widget.num]["Article"] =
-                                newValue.toString();
-                          });
-                        },
-                        items: listItem.map((valueItem) {
-                          return DropdownMenuItem(
-                            value: valueItem,
-                            child: Text(valueItem),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
+                Text(
+                  "Article : ${widget.commande[widget.num]["Article"]} ",
+                  style: const TextStyle(fontSize: 20),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -141,62 +111,10 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    initialValue: '${widget.commande[widget.num]["Unite"]}',
-                    onChanged: (value) {
-                      widget.commande[widget.num]["Unite"] = int.parse(value);
-                    },
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.orange,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
                     keyboardType: TextInputType.number,
-                    initialValue: '${widget.commande[widget.num]["Quantite"]}',
+                    initialValue: '$qt',
                     onChanged: (value) {
-                      widget.commande[widget.num]["Quantite"] =
-                          int.parse(value);
-                    },
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.orange,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    initialValue: '${widget.commande[widget.num]["prix"]}',
-                    onChanged: (value) {
-                      widget.commande[widget.num]["prix"] = double.parse(value);
+                      qt = int.parse(value);
                     },
                     decoration: InputDecoration(
                       filled: true,
@@ -221,6 +139,10 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
+                        int q = ListArticle[0] - qt;
+                        Article().updateQuantite(
+                            widget.commande[widget.num]["Article"], q);
+                        widget.commande[widget.num]["Quantite"] = qt;
                         widget.commande[widget.num]["sous-total"] =
                             widget.commande[widget.num]["Quantite"] *
                                 widget.commande[widget.num]["prix"];

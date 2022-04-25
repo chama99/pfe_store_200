@@ -177,7 +177,8 @@ class _AddUserPageState extends State<AddUserPage> {
                         children: [
                           Container(
                             margin: const EdgeInsets.only(
-                                left: 15, bottom: 10, right: 10),
+                              bottom: 10,
+                            ),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 border:
@@ -187,7 +188,7 @@ class _AddUserPageState extends State<AddUserPage> {
                                 hint: const Text("Nom de l'employé "),
                                 dropdownColor: Colors.white,
                                 icon: const Padding(
-                                  padding: EdgeInsets.only(left: 115),
+                                  padding: EdgeInsets.only(left: 120),
                                   child: Icon(
                                     Icons.arrow_drop_down,
                                     color: Colors.orange,
@@ -418,7 +419,7 @@ class _AddUserPageState extends State<AddUserPage> {
                                             User().addUser(
                                                 email,
                                                 nom,
-                                                pass,
+                                                password,
                                                 role,
                                                 "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
                                                 acces);

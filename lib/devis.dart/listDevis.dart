@@ -138,7 +138,7 @@ class _ListDevisState extends State<ListDevis> {
                                   child: InkWell(
                                 onTap: () {
                                   Get.to(() => DevisDetailler(
-                                        titre: devis["titre"],
+                                        titre: devis["idDevis"],
                                         client: devis["client"],
                                         etat: devis["etat"],
                                         commande: devis["commande"],
@@ -161,7 +161,7 @@ class _ListDevisState extends State<ListDevis> {
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          devis["titre"],
+                                          devis["idDevis"],
                                           "Êtes-vous sûr de vouloir supprimer ce devis",
                                           "devis")
                                     },
@@ -171,7 +171,7 @@ class _ListDevisState extends State<ListDevis> {
                                     ),
                                   ),
                                   leading: Text(
-                                    devis["titre"],
+                                    devis["idDevis"],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -186,7 +186,7 @@ class _ListDevisState extends State<ListDevis> {
 
   void filterSearchResults(String query) {
     final suggestions = Listdevis.where((devis) {
-      final namemploye = devis['titre'].toLowerCase();
+      final namemploye = devis['idDevis'].toLowerCase();
       final input = query.toLowerCase();
       return namemploye.contains(input);
     }).toList();

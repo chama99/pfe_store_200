@@ -35,7 +35,11 @@ class _CreerLivraisonState extends State<CreerLivraison> {
   var operation;
   // ignore: prefer_typing_uninitialized_variables
   var reception;
-  List listItem = ["Atelier:Livraison", "Atelier:Réception"];
+  List listItem = [
+    "Atelier:Livraison",
+    "Atelier:Réception",
+    "Atelier:Transfert interne"
+  ];
   List listItem2 = ["Brouillon", "En attente", "Prêt"];
   List list = [];
 
@@ -114,7 +118,7 @@ class _CreerLivraisonState extends State<CreerLivraison> {
                           child: InkWell(
                             onTap: () {
                               Get.to(() => LigneOperation(
-                                    page: "livraison",
+                                    page: "Livraison",
                                   ));
                             },
                             child: const Text(
@@ -174,47 +178,47 @@ class _CreerLivraisonState extends State<CreerLivraison> {
                           ),
                         ),
                         Row(
-                          children: [
-                            const Padding(
+                          children: const [
+                            Padding(
                               padding: EdgeInsets.only(left: 10, top: 30),
                               child: Text(
-                                "Type d'opération",
+                                "Type d'opération :",
                                 style:
                                     TextStyle(fontSize: 15, letterSpacing: 3),
                               ),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 30),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(
-                                      color: Colors.grey, width: 1.5)),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  dropdownColor: Colors.white,
-                                  icon: const Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Colors.orange,
-                                  ),
-                                  style: const TextStyle(
-                                      fontSize: 20, color: Colors.black),
-                                  iconSize: 40,
-                                  value: operation,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      operation = newValue.toString();
-                                    });
-                                  },
-                                  items: listItem.map((valueItem) {
-                                    return DropdownMenuItem(
-                                      value: valueItem,
-                                      child: Text(valueItem),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            ),
                           ],
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 30),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border:
+                                  Border.all(color: Colors.grey, width: 1.5)),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              dropdownColor: Colors.white,
+                              icon: const Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.orange,
+                              ),
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.black),
+                              iconSize: 40,
+                              value: operation,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  operation = newValue.toString();
+                                });
+                              },
+                              items: listItem.map((valueItem) {
+                                return DropdownMenuItem(
+                                  value: valueItem,
+                                  child: Text(valueItem),
+                                );
+                              }).toList(),
+                            ),
+                          ),
                         ),
                         Row(
                           children: [

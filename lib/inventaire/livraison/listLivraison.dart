@@ -125,7 +125,7 @@ class _ListLivraisonState extends State<ListLivraison> {
                                   child: InkWell(
                                 onTap: () {
                                   Get.to(() => LivraisonDetaile(
-                                      titre: liv["titre"],
+                                      titre: liv["IdLiv"],
                                       typeoperation: liv["type d'operation"],
                                       etat: liv["etat"],
                                       livraison: liv["Adresse de livraison"],
@@ -145,7 +145,7 @@ class _ListLivraisonState extends State<ListLivraison> {
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          liv["titre"],
+                                          liv["IdLiv"],
                                           "Êtes-vous sûr de vouloir supprimer ce produit",
                                           "livraison")
                                     },
@@ -155,7 +155,7 @@ class _ListLivraisonState extends State<ListLivraison> {
                                     ),
                                   ),
                                   leading: Text(
-                                    liv["titre"],
+                                    liv["IdLiv"],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -170,7 +170,7 @@ class _ListLivraisonState extends State<ListLivraison> {
 
   void filterSearchResults(String query) {
     final suggestions = Listlivraison.where((liv) {
-      final namemploye = liv['titre'].toLowerCase();
+      final namemploye = liv['IdLiv'].toLowerCase();
       final input = query.toLowerCase();
       return namemploye.contains(input);
     }).toList();

@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 class ModifieLignFact extends StatefulWidget {
   String titre;
   List commande;
-  int num;
+  int num, res;
   String client, etat, date1, date2, adresse;
   double total, remise, montant;
   ModifieLignFact(
@@ -23,7 +23,8 @@ class ModifieLignFact extends StatefulWidget {
       required this.etat,
       required this.montant,
       required this.remise,
-      required this.total})
+      required this.total,
+      required this.res})
       : super(key: key);
 
   @override
@@ -270,16 +271,18 @@ class _ModifieLignFactState extends State<ModifieLignFact> {
                               widget.montant);
                           clearText();
                           Get.to(() => UpdateFacture(
-                              titre: widget.titre,
-                              client: widget.client,
-                              etat: widget.etat,
-                              adrss: widget.adresse,
-                              total: widget.total,
-                              order: 20,
-                              listfact: widget.commande,
-                              montant: widget.montant,
-                              date1: widget.date1,
-                              date2: widget.date2));
+                                titre: widget.titre,
+                                client: widget.client,
+                                etat: widget.etat,
+                                adrss: widget.adresse,
+                                total: widget.total,
+                                order: 20,
+                                listfact: widget.commande,
+                                montant: widget.montant,
+                                date1: widget.date1,
+                                date2: widget.date2,
+                                res: widget.res,
+                              ));
                         }
                       },
                       child: const Text(

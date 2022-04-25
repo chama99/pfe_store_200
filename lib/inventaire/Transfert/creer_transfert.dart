@@ -116,7 +116,7 @@ class _CreerTransfertState extends State<CreerTransfert> {
                           child: InkWell(
                             onTap: () {
                               Get.to(() => LigneOperation(
-                                    page: "transfert",
+                                    page: "Transfert",
                                   ));
                             },
                             child: const Text(

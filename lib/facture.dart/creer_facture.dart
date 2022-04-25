@@ -81,7 +81,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
         double r = double.parse(ch) as double;
 
         // ignore: unnecessary_cast
-        remisee = r / 100 as double;
+        remisee = r;
       });
     });
   }
@@ -102,7 +102,6 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
       setState(() {
         userContactList = resultant;
         commandeList = resultant2;
-        CommandeFact().deleteCommde();
       });
     }
   }
@@ -267,50 +266,50 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                           ),
                         ),
                         Row(
-                          children: [
-                            const Padding(
+                          children: const [
+                            Padding(
                               padding: EdgeInsets.all(13),
                               child: Text(
-                                "Client",
+                                "Client :",
                                 style:
                                     TextStyle(fontSize: 15, letterSpacing: 3),
                               ),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 38),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(
-                                      color: Colors.grey, width: 1.5)),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  dropdownColor: Colors.white,
-                                  icon: const Padding(
-                                    padding: EdgeInsets.only(left: 115),
-                                    child: Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Colors.orange,
-                                    ),
-                                  ),
-                                  style: const TextStyle(
-                                      fontSize: 20, color: Colors.black),
-                                  iconSize: 40,
-                                  value: client,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      client = newValue.toString();
-                                    });
-                                  },
-                                  items: userContactList.map((valueItem) {
-                                    return DropdownMenuItem(
-                                      value: valueItem,
-                                      child: Text(valueItem),
-                                    );
-                                  }).toList(),
+                          ],
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 0),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border:
+                                  Border.all(color: Colors.grey, width: 1.5)),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              dropdownColor: Colors.white,
+                              icon: const Padding(
+                                padding: EdgeInsets.only(left: 115),
+                                child: Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.orange,
                                 ),
                               ),
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.black),
+                              iconSize: 40,
+                              value: client,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  client = newValue.toString();
+                                });
+                              },
+                              items: userContactList.map((valueItem) {
+                                return DropdownMenuItem(
+                                  value: valueItem,
+                                  child: Text(valueItem),
+                                );
+                              }).toList(),
                             ),
-                          ],
+                          ),
                         ),
                         Row(
                           children: [
@@ -520,7 +519,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                                         color: Colors.black,
                                       ),
                                       Text(
-                                        "Total: ${calculMontat() - remisee}",
+                                        "Total: ${(calculMontat() * (1 + 0.2)) * (1 - (remisee / 100))}",
                                         style: const TextStyle(fontSize: 20),
                                       ),
                                     ],
@@ -572,6 +571,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
             } else {
               showToast("veuillez sélectionner client ");
             }
+            CommandeFact().deleteCommde();
           }
         },
       ),

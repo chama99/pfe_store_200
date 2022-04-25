@@ -129,13 +129,13 @@ class _listArticleState extends State<listArticle> {
                                       MaterialPageRoute(
                                           builder: (context) => ArticleDetail(
                                                 id: userArticleList[index]
-                                                    ['id'],
+                                                    ['id_art'],
                                                 nom: userArticleList[index]
-                                                    ['nom'],
+                                                    ['nom_art'],
                                                 type: userArticleList[index]
-                                                    ['type'],
+                                                    ['type_art'],
                                                 role: userArticleList[index]
-                                                    ['role'],
+                                                    ['role_art'],
                                                 cat: userArticleList[index]
                                                     ['cat'],
                                                 data: userArticleList[index]
@@ -166,13 +166,13 @@ class _listArticleState extends State<listArticle> {
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),
                                 child: ListTile(
-                                  title: Text(article['nom']),
+                                  title: Text(article['nom_art']),
                                   subtitle: Text(article['cat']),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          article["id"],
+                                          article["id_art"],
                                           "Êtes-vous sûr de vouloir supprimer cette article",
                                           "article")
                                     },

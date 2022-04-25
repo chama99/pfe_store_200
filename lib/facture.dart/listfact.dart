@@ -126,21 +126,22 @@ class _ListFactureState extends State<ListFacture> {
                                 onTap: () {
                                   Get.to(
                                     () => DetailFacture(
-                                      titre: facture['titre'],
-                                      client: facture['client'],
-                                      etat: facture['etat'],
-                                      date1: facture["date de facturation"]
-                                          .toDate()
-                                          .toString(),
-                                      date2: facture["date d'intervention"]
-                                          .toDate()
-                                          .toString(),
-                                      adrss: facture["adresse d'intervention"],
-                                      total: facture['total'],
-                                      order: 20,
-                                      listfact: facture["ligne facture"],
-                                      montant: facture["montant"],
-                                    ),
+                                        titre: facture['IdFact'],
+                                        client: facture['client'],
+                                        etat: facture['etat'],
+                                        date1: facture["date de facturation"]
+                                            .toDate()
+                                            .toString(),
+                                        date2: facture["date d'intervention"]
+                                            .toDate()
+                                            .toString(),
+                                        adrss:
+                                            facture["adresse d'intervention"],
+                                        total: facture['total'],
+                                        order: 20,
+                                        listfact: facture["ligne facture"],
+                                        montant: facture["montant"],
+                                        res: facture['remise']),
                                   );
                                 },
                                 splashColor:
@@ -154,7 +155,7 @@ class _ListFactureState extends State<ListFacture> {
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          facture["titre"],
+                                          facture["IdFact"],
                                           "Êtes-vous sûr de vouloir supprimer cette facture",
                                           "facture")
                                     },
@@ -164,7 +165,7 @@ class _ListFactureState extends State<ListFacture> {
                                     ),
                                   ),
                                   leading: Text(
-                                    facture["titre"],
+                                    facture["IdFact"],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -179,7 +180,7 @@ class _ListFactureState extends State<ListFacture> {
 
   void filterSearchResults(String query) {
     final suggestions = ListFact.where((facture) {
-      final namemploye = facture['titre'].toLowerCase();
+      final namemploye = facture['IdFact'].toLowerCase();
       final input = query.toLowerCase();
       return namemploye.contains(input);
     }).toList();

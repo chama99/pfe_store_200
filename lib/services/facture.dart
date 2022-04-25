@@ -28,7 +28,7 @@ class Facture {
     return devis
         .doc(titre)
         .set({
-          'titre': titre,
+          'IdFact': titre,
           'client': client,
           'etat': etat,
           'date de facturation': date1,
@@ -51,7 +51,6 @@ class Facture {
     return devis
         .doc(titre)
         .update({
-          'titre': titre,
           'client': client,
           'etat': etat,
           'date de facturation': date1,

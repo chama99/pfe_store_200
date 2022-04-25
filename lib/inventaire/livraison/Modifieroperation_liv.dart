@@ -28,7 +28,7 @@ class ModifierOperationLiv extends StatefulWidget {
 
 class _ModifierOperationLivState extends State<ModifierOperationLiv> {
   final _formKey = GlobalKey<FormState>();
-  List listItem = ["store12", "store15"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,42 +44,16 @@ class _ModifierOperationLivState extends State<ModifierOperationLiv> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 320,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Colors.grey, width: 1)),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        hint: const Text("Article "),
-                        dropdownColor: Colors.white,
-                        icon: const Padding(
-                          padding: EdgeInsets.only(left: 15),
-                          child: Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.orange,
-                          ),
-                        ),
-                        style:
-                            const TextStyle(fontSize: 20, color: Colors.black),
-                        iconSize: 40,
-                        value: widget.ligneOperation[widget.num]["Article"],
-                        onChanged: (newValue) {
-                          setState(() {
-                            widget.ligneOperation[widget.num]["Article"] =
-                                newValue.toString();
-                          });
-                        },
-                        items: listItem.map((valueItem) {
-                          return DropdownMenuItem(
-                            value: valueItem,
-                            child: Text(valueItem),
-                          );
-                        }).toList(),
-                      ),
-                    ),
+                Text(
+                  "Article :${widget.ligneOperation[widget.num]["Article"]}",
+                  style: const TextStyle(
+                      fontSize: 20, color: Colors.indigo, letterSpacing: 3),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Text(
+                    "Colis source :",
+                    style: TextStyle(fontSize: 15, letterSpacing: 3),
                   ),
                 ),
                 Padding(
@@ -108,6 +82,10 @@ class _ModifierOperationLivState extends State<ModifierOperationLiv> {
                     ),
                   ),
                 ),
+                const Text(
+                  "Colis de destination :",
+                  style: TextStyle(fontSize: 15, letterSpacing: 3),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
@@ -133,6 +111,10 @@ class _ModifierOperationLivState extends State<ModifierOperationLiv> {
                       ),
                     ),
                   ),
+                ),
+                const Text(
+                  "Appartenant a  :",
+                  style: TextStyle(fontSize: 15, letterSpacing: 3),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -160,6 +142,10 @@ class _ModifierOperationLivState extends State<ModifierOperationLiv> {
                     ),
                   ),
                 ),
+                const Text(
+                  "Fait :",
+                  style: TextStyle(fontSize: 15, letterSpacing: 3),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
@@ -185,10 +171,13 @@ class _ModifierOperationLivState extends State<ModifierOperationLiv> {
                     ),
                   ),
                 ),
+                const Text(
+                  "Unité :",
+                  style: TextStyle(fontSize: 15, letterSpacing: 3),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    keyboardType: TextInputType.number,
                     initialValue:
                         widget.ligneOperation[widget.num]["Unite"].toString(),
                     onChanged: (value) => widget.ligneOperation[widget.num]

@@ -5,20 +5,11 @@ import 'package:flutter/material.dart';
 import 'edit_article.dart';
 
 class ArticleDetail extends StatefulWidget {
-  String id,
-      nom,
-      type,
-      role,
-      cat,
-      data,
-      reference_interne,
-      taxes_a_la_vente,
-      prix_dachat,
-      sale_prix,
-      prix_de_vente,
-      unite;
+  String id, nom, type, role, cat, data, unite;
+  int reference_interne, sale_prix;
+  double prix_dachat, prix_de_vente;
   String image;
-  int qt;
+  int qt, taxes_a_la_vente;
   ArticleDetail(
       {Key? key,
       required this.id,
@@ -173,10 +164,10 @@ class _ArticleDetailState extends State<ArticleDetail> {
                                 hintText: widget.data,
                               ),
                               textfield(
-                                hintText: widget.reference_interne,
+                                hintText: "${widget.reference_interne}",
                               ),
                               textfield(
-                                hintText: widget.prix_dachat,
+                                hintText: "${widget.prix_dachat}",
                               ),
                               textfield(
                                 hintText: widget.unite,

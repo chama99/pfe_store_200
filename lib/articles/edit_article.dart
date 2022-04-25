@@ -15,20 +15,12 @@ import '../services/article.dart';
 import '../widget/InputDeco_design.dart';
 
 class EditArticle extends StatefulWidget {
-  String id,
-      nom,
-      type,
-      role,
-      cat,
-      data,
-      reference_interne,
-      taxes_a_la_vente,
-      prix_dachat,
-      sale_prix,
-      prix_de_vente,
-      unite;
+  String id, nom, type, role, cat, data, unite;
+  int reference_interne, sale_prix;
+  double prix_dachat, prix_de_vente;
   String image;
   int qt;
+  int taxes_a_la_vente;
   EditArticle({
     Key? key,
     required this.id,
@@ -195,9 +187,10 @@ class _EditContactState extends State<EditArticle> {
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 10.0),
                     child: TextFormField(
-                      initialValue: widget.taxes_a_la_vente,
+                      initialValue: "${widget.taxes_a_la_vente}",
                       autofocus: false,
-                      onChanged: (value) => widget.taxes_a_la_vente = value,
+                      onChanged: (value) =>
+                          widget.taxes_a_la_vente = int.parse(value),
                       decoration: buildInputDecoration(
                         Icons.monetization_on,
                         "taxes à la vente",
@@ -208,9 +201,9 @@ class _EditContactState extends State<EditArticle> {
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 10.0),
                     child: TextFormField(
-                      initialValue: widget.sale_prix,
+                      initialValue: "${widget.sale_prix}",
                       autofocus: false,
-                      onChanged: (value) => widget.sale_prix = value,
+                      onChanged: (value) => widget.sale_prix = int.parse(value),
                       decoration: buildInputDecoration(
                         Icons.monetization_on,
                         "sale prix",
@@ -221,9 +214,10 @@ class _EditContactState extends State<EditArticle> {
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 10.0),
                     child: TextFormField(
-                      initialValue: widget.prix_de_vente,
+                      initialValue: "${widget.prix_de_vente}",
                       autofocus: false,
-                      onChanged: (value) => widget.prix_de_vente = value,
+                      onChanged: (value) =>
+                          widget.prix_de_vente = double.parse(value),
                       decoration: buildInputDecoration(
                         Icons.monetization_on,
                         "prix de vente",

@@ -125,7 +125,7 @@ class _ListTransfertState extends State<ListTransfert> {
                                   child: InkWell(
                                 onTap: () {
                                   Get.to(() => TransfertDetaile(
-                                      titre: trans["titre"],
+                                      titre: trans["IdTran"],
                                       typeoperation: trans["type d'operation"],
                                       etat: trans["etat"],
                                       transf: trans["transfert à"],
@@ -146,7 +146,7 @@ class _ListTransfertState extends State<ListTransfert> {
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          trans["titre"],
+                                          trans["IdTran"],
                                           "Êtes-vous sûr de vouloir supprimer ce produit",
                                           "transfert")
                                     },
@@ -156,7 +156,7 @@ class _ListTransfertState extends State<ListTransfert> {
                                     ),
                                   ),
                                   leading: Text(
-                                    trans["titre"],
+                                    trans["IdTran"],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -171,7 +171,7 @@ class _ListTransfertState extends State<ListTransfert> {
 
   void filterSearchResults(String query) {
     final suggestions = ListTransf.where((trans) {
-      final namemploye = trans['titre'].toLowerCase();
+      final namemploye = trans['IdTran'].toLowerCase();
       final input = query.toLowerCase();
       return namemploye.contains(input);
     }).toList();
