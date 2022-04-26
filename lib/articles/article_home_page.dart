@@ -88,7 +88,7 @@ class _listArticleState extends State<listArticle> {
                         borderSide:
                             const BorderSide(color: Colors.orange, width: 1.5),
                       ),
-                      labelText: "Search",
+                      labelText: "Rechercher",
                       labelStyle: const TextStyle(
                           fontSize: 20.0,
                           color: Color.fromARGB(255, 102, 102, 102)),

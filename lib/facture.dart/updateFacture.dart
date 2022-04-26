@@ -70,16 +70,6 @@ class _UpdateFactureState extends State<UpdateFacture> {
   void initState() {
     super.initState();
     fetchDatabaseList();
-    streamController.stream.listen((item) {
-      setState(() {
-        var ch = item.substring(0, item.indexOf("%"));
-        // ignore: unnecessary_cast
-        double r = double.parse(ch) as double;
-
-        // ignore: unnecessary_cast
-        remise = r / 100 as double;
-      });
-    });
   }
 
   List userContactList = [];
@@ -449,77 +439,6 @@ class _UpdateFactureState extends State<UpdateFacture> {
                           ),
                         ),
                         Container(
-                          margin: const EdgeInsets.only(bottom: 40),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(
-                                    top: 30, right: 13, left: 13, bottom: 10),
-                                child: const Text(
-                                  "Remise",
-                                  style:
-                                      TextStyle(fontSize: 15, letterSpacing: 3),
-                                ),
-                              ),
-                              Flexible(
-                                child: Container(
-                                  margin: const EdgeInsets.only(
-                                      left: 10, right: 65, top: 30),
-                                  child: TextFormField(
-                                    initialValue: "${widget.res}%",
-                                    onChanged: (value) {
-                                      widget.res = int.parse(value);
-                                    },
-                                    decoration: InputDecoration(
-                                      hintText: 'valeur %',
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: const BorderSide(
-                                            color: Colors.orange, width: 1.5),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: const BorderSide(
-                                          color: Colors.orange,
-                                          width: 1.5,
-                                        ),
-                                      ),
-                                    ),
-                                    validator: (value) {
-                                      if (!RegExp("%").hasMatch(value!)) {
-                                        return "Veuillez\nentrer\nvaleur\navec % ";
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                // Validate returns true if the form is valid, otherwise false.
-                                if (_formKey.currentState!.validate()) {
-                                  streamController.add(Contolleremise.text);
-                                }
-                              },
-                              child: const Text(
-                                "Ajouter",
-                                style: TextStyle(fontSize: 18.0),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.orange),
-                            ),
-                          ],
-                        ),
-                        Container(
                           margin: const EdgeInsets.only(top: 20),
                           child: Row(
                             children: [
@@ -581,9 +500,9 @@ class _UpdateFactureState extends State<UpdateFacture> {
               DateTime.parse(widget.date1),
               DateTime.parse(widget.date2),
               widget.adrss,
-              calculMontat() - remise,
+              (calculMontat() * (1 + 0.2)) * (1 - (widget.res / 100)),
               widget.listfact,
-              remise,
+              widget.res,
               calculMontat());
           Get.to(() => const ListFacture());
         },

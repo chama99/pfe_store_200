@@ -1,10 +1,9 @@
 // ignore_for_file: file_names, unused_local_variable
 
 import 'package:chama_projet/facture.dart/creer_facture.dart';
-import 'package:chama_projet/facture.dart/detille_facture.dart';
+
 import 'package:chama_projet/services/facture.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import 'package:intl/intl.dart';
 import '../widget/boitedialogue.dart';
@@ -126,26 +125,7 @@ class _ListAchatState extends State<ListAchat> {
                               final facture = ListFact[index];
                               return Card(
                                   child: InkWell(
-                                onTap: () {
-                                  Get.to(
-                                    () => DetailFacture(
-                                      titre: facture['titre'],
-                                      client: facture['client'],
-                                      etat: facture['etat'],
-                                      date1: facture["date de facturation"]
-                                          .toDate()
-                                          .toString(),
-                                      date2: facture["date d'intervention"]
-                                          .toDate()
-                                          .toString(),
-                                      adrss: facture["adresse d'intervention"],
-                                      total: facture['total'],
-                                      order: 20,
-                                      listfact: facture["ligne facture"],
-                                      montant: facture["montant"],
-                                    ),
-                                  );
-                                },
+                                onTap: () {},
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),
                                 child: ListTile(

@@ -65,7 +65,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
   var taxe = 0.00;
   var total = 0.00;
   // ignore: prefer_typing_uninitialized_variables
-  late double remisee = 0.00;
+  int remisee = 0;
   // ignore: prefer_final_fields
   StreamController<String> _streamController = StreamController();
 
@@ -78,7 +78,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
       setState(() {
         var ch = item.substring(0, item.indexOf("%"));
         // ignore: unnecessary_cast
-        double r = double.parse(ch) as double;
+        int r = int.parse(ch);
 
         // ignore: unnecessary_cast
         remisee = r;
