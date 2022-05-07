@@ -1,11 +1,11 @@
 import 'package:chama_projet/widget/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CommandeFact {
+class CommandeAchat {
   final CollectionReference commande =
-      FirebaseFirestore.instance.collection('commandefact');
+      FirebaseFirestore.instance.collection('CommandesAchat');
 
-  Future getCommList() async {
+  Future getCommandesList() async {
     List itemsList = [];
 
     try {
@@ -23,16 +23,17 @@ class CommandeFact {
     }
   }
 
-  Future<void> addCommde(refv, unitev, lib, article, qt, prix, soustotal) {
+  Future<void> addCommande(
+      ref, article, des, unite, qt, prix, taxe, soustotal) {
     return commande
         .add({
-          'réf': refv,
+          'réf': ref,
           'Article': article,
-          'Description': lib,
-          'Unite': unitev,
+          'Description': des,
+          'Unite': unite,
           'Quantite': qt,
           'prix': prix,
-          'taxe': "20%",
+          'taxe': taxe,
           'sous-total': soustotal
         })
         // ignore: avoid_print
@@ -42,7 +43,7 @@ class CommandeFact {
             (error) => showToast("Échec de l'ajout de la commande:$error"));
   }
 
-  Future<void> deleteCommde() {
+  Future<void> deleteCommande() {
     // print("Employe Deleted $id");
     return commande.get().then((snapshot) {
       for (DocumentSnapshot ds in snapshot.docs) {

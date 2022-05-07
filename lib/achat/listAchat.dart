@@ -1,12 +1,12 @@
 // ignore_for_file: file_names, unused_local_variable
 
-import 'package:chama_projet/facture.dart/creer_facture.dart';
-
-import 'package:chama_projet/services/facture.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:intl/intl.dart';
+import '../services/achat.dart';
 import '../widget/boitedialogue.dart';
+import 'creer_achat.dart';
 
 class ListAchat extends StatefulWidget {
   const ListAchat({Key? key}) : super(key: key);
@@ -18,7 +18,7 @@ class _ListAchatState extends State<ListAchat> {
   TextEditingController searchcontroller = TextEditingController();
   TextEditingController editingController = TextEditingController();
   // ignore: non_constant_identifier_names
-  List ListFact = [];
+  List Listachat = [];
   @override
   void initState() {
     super.initState();
@@ -26,14 +26,14 @@ class _ListAchatState extends State<ListAchat> {
   }
 
   fetchDatabaseList() async {
-    dynamic resultant = await Facture().getFacturesList();
+    dynamic resultant = await Achat().getAchatList();
 
     if (resultant == null) {
       // ignore: avoid_print
       print('Unable to retrieve');
     } else {
       setState(() {
-        ListFact = resultant;
+        Listachat = resultant;
       });
     }
   }
@@ -42,7 +42,7 @@ class _ListAchatState extends State<ListAchat> {
   var length;
 
   // ignore: unnecessary_new
-  Widget appBarTitle = const Text("Factures");
+  Widget appBarTitle = const Text("Achats");
   Icon actionIcon = const Icon(Icons.search);
   @override
   Widget build(BuildContext context) {
@@ -54,10 +54,7 @@ class _ListAchatState extends State<ListAchat> {
               padding: const EdgeInsets.only(top: 20, right: 30),
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CreeFacturePage()));
+                  Get.to(() => const CreerAchat());
                 },
                 child: Text(
                   "Créer".toUpperCase(),
@@ -101,7 +98,7 @@ class _ListAchatState extends State<ListAchat> {
                 ),
               ),
               Expanded(
-                child: ListFact.isEmpty
+                child: Listachat.isEmpty
                     ? const Center(
                         child: CircularProgressIndicator(
                           valueColor:
@@ -120,24 +117,24 @@ class _ListAchatState extends State<ListAchat> {
                           return Future.value(false);
                         },
                         child: ListView.builder(
-                            itemCount: ListFact.length,
+                            itemCount: Listachat.length,
                             itemBuilder: (context, index) {
-                              final facture = ListFact[index];
+                              final achat = Listachat[index];
                               return Card(
                                   child: InkWell(
                                 onTap: () {},
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),
                                 child: ListTile(
-                                  title: Text(facture["etat"]),
+                                  title: Text(achat["etat"]),
                                   subtitle: Text(
                                       // ignore: unnecessary_string_interpolations
-                                      "${facture["date de facturation"].toDate().toString()}       ${facture["total"]}£"),
+                                      "${achat["date de facturation"].toDate().toString()}       ${achat["total"]}£"),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          facture["titre"],
+                                          achat["titre"],
                                           "Êtes-vous sûr de vouloir supprimer cette facture",
                                           "facture")
                                     },
@@ -147,7 +144,7 @@ class _ListAchatState extends State<ListAchat> {
                                     ),
                                   ),
                                   leading: Text(
-                                    facture["titre"],
+                                    achat["titre"],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -161,13 +158,13 @@ class _ListAchatState extends State<ListAchat> {
   }
 
   void filterSearchResults(String query) {
-    final suggestions = ListFact.where((facture) {
-      final namemploye = facture['titre'].toLowerCase();
+    final suggestions = Listachat.where((achat) {
+      final namemploye = achat['titre'].toLowerCase();
       final input = query.toLowerCase();
       return namemploye.contains(input);
     }).toList();
     setState(() {
-      ListFact = suggestions;
+      Listachat = suggestions;
     });
   }
 

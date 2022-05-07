@@ -411,15 +411,16 @@ class _AddUserPageState extends State<AddUserPage> {
                                           email = emailController.text;
                                           password = passwordController.text;
                                           role = ch;
-                                          var pass = sha1
-                                              .convert(utf8.encode(password))
-                                              .toString();
+                                          final strBytes =
+                                              utf8.encode(password);
+                                          final base64String =
+                                              base64.encode(strBytes);
 
                                           if (imageFile == null) {
                                             User().addUser(
                                                 email,
                                                 nom,
-                                                password,
+                                                base64String,
                                                 role,
                                                 "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
                                                 acces);

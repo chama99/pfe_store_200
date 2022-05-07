@@ -4,6 +4,7 @@
 import 'dart:async';
 
 import 'package:chama_projet/facture.dart/listfact.dart';
+import 'package:chama_projet/services/autofacture.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,29 +15,29 @@ import '../services/lignefact.dart';
 import '../widget/toast.dart';
 import 'AjoutLigneFact.dart';
 import 'ModifierLigneFact.dart';
+import 'listfactdevis.dart';
 
 class UpdateFacture extends StatefulWidget {
-  String titre, client, etat, adrss;
-  final double order;
+  String id, titre, client, etat, page;
+
   double montant;
   List listfact;
-  String date1, date2;
+  String date1;
   int res;
 
   double total;
   UpdateFacture(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.client,
       required this.etat,
-      required this.adrss,
       required this.total,
-      required this.order,
       required this.listfact,
       required this.montant,
       required this.date1,
-      required this.date2,
-      required this.res})
+      required this.res,
+      required this.page})
       : super(key: key);
 
   @override
@@ -49,7 +50,7 @@ class _UpdateFactureState extends State<UpdateFacture> {
   final _formKey = GlobalKey<FormState>();
   // ignore: prefer_typing_uninitialized_variables
 
-  List listItem = ["Brouillon", "Comptabilisé"];
+  List listItem = ["Brouillon", "Payée", "Avoir"];
   double remise = 0.00;
   // ignore: non_constant_identifier_names
   final Contolleremise = TextEditingController();
@@ -72,6 +73,7 @@ class _UpdateFactureState extends State<UpdateFacture> {
     fetchDatabaseList();
   }
 
+  DateTime dataTime = DateTime.now();
   List userContactList = [];
   List commandeList = [];
 
@@ -110,17 +112,16 @@ class _UpdateFactureState extends State<UpdateFacture> {
               PageRouteBuilder(
                   // ignore: prefer_const_constructors
                   pageBuilder: (a, b, c) => UpdateFacture(
+                        id: widget.id,
                         titre: widget.titre,
                         client: widget.client,
                         etat: widget.etat,
-                        adrss: widget.adrss,
                         total: widget.total,
-                        order: widget.order,
                         listfact: widget.listfact,
                         montant: widget.montant,
                         date1: widget.date1,
-                        date2: widget.date2,
                         res: widget.res,
+                        page: widget.page,
                       ),
                   // ignore: prefer_const_constructors
                   transitionDuration: Duration(seconds: 0)));
@@ -153,17 +154,17 @@ class _UpdateFactureState extends State<UpdateFacture> {
                             IconButton(
                               onPressed: () {
                                 Get.to(() => AjoutLigneFacture(
+                                      id: widget.id,
                                       titre: widget.titre,
                                       commande: widget.listfact,
-                                      adresse: widget.adrss,
                                       client: widget.client,
                                       date1: widget.date1,
-                                      date2: widget.date2,
                                       etat: widget.etat,
                                       montant: widget.montant,
                                       remise: remise,
                                       total: widget.total,
                                       res: widget.res,
+                                      page: widget.page,
                                     ));
                               },
                               icon: const Icon(
@@ -212,18 +213,18 @@ class _UpdateFactureState extends State<UpdateFacture> {
                                         "Veuillez entrer Numéro de ligne");
                                   } else {
                                     Get.to(() => ModifieLignFact(
+                                          id: widget.id,
                                           titre: widget.titre,
                                           commande: widget.listfact,
                                           num: int.parse(n.text),
-                                          adresse: widget.adrss,
                                           client: widget.client,
                                           date1: widget.date1,
-                                          date2: widget.date2,
                                           etat: widget.etat,
                                           montant: widget.montant,
                                           remise: remise,
                                           total: widget.total,
                                           res: widget.res,
+                                          page: widget.page,
                                         ));
                                   }
                                 },
@@ -244,39 +245,25 @@ class _UpdateFactureState extends State<UpdateFacture> {
                                   label: Text("Numéro de ligne"),
                                 ),
                                 DataColumn(
-                                  label: Text(
-                                    "Article",
-                                  ),
+                                  label: Text("réf"),
                                 ),
                                 DataColumn(
-                                  label: Text(
-                                    "Libélle",
-                                  ),
+                                  label: Text("Article"),
                                 ),
                                 DataColumn(
-                                  label: Text(
-                                    "Compte analytique",
-                                  ),
+                                  label: Text("Description"),
                                 ),
                                 DataColumn(
-                                  label: Text(
-                                    "Étiquette analytique",
-                                  ),
+                                  label: Text(" Unité"),
                                 ),
                                 DataColumn(
-                                  label: Text(
-                                    "Quantité",
-                                  ),
+                                  label: Text("Quantité"),
                                 ),
                                 DataColumn(
-                                  label: Text(
-                                    "Prix ",
-                                  ),
+                                  label: Text("Prix Unitaire"),
                                 ),
                                 DataColumn(
-                                  label: Text(
-                                    "TVA",
-                                  ),
+                                  label: Text("TVA"),
                                 ),
                                 DataColumn(
                                   label: Text("Sous-total"),
@@ -289,13 +276,13 @@ class _UpdateFactureState extends State<UpdateFacture> {
                                   DataRow(cells: [
                                     DataCell(Text("$i")),
                                     DataCell(
-                                        Text(widget.listfact[i]['Article'])),
+                                        Text("${widget.listfact[i]['réf']}")),
                                     DataCell(
-                                        Text(widget.listfact[i]['Libélle'])),
+                                        Text(widget.listfact[i]['Article'])),
                                     DataCell(Text(
-                                        "${widget.listfact[i]['Compte analytique']}")),
-                                    DataCell(Text(
-                                        "${widget.listfact[i]['Etiquette analytique']}")),
+                                        widget.listfact[i]['Description'])),
+                                    DataCell(
+                                        Text("${widget.listfact[i]['Unite']}")),
                                     DataCell(Text(
                                         "${widget.listfact[i]['Quantite']}")),
                                     DataCell(
@@ -401,43 +388,19 @@ class _UpdateFactureState extends State<UpdateFacture> {
                             ),
                           ],
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 40, bottom: 40),
-                          child: Row(
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.all(20),
-                                child: Text(
-                                  "Adresse d'intervention",
-                                  style:
-                                      TextStyle(fontSize: 15, letterSpacing: 3),
-                                ),
+                        Row(
+                          children: const [
+                            Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Text(
+                                "Date de facturations",
+                                style:
+                                    TextStyle(fontSize: 15, letterSpacing: 3),
                               ),
-                              Flexible(
-                                child: TextFormField(
-                                  initialValue: widget.adrss,
-                                  onChanged: (value) => widget.adrss = value,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(
-                                          color: Colors.orange, width: 1.5),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(
-                                        color: Colors.orange,
-                                        width: 1.5,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
+                        Container(child: buildDatePicker(dataTime)),
                         Container(
                           margin: const EdgeInsets.only(top: 20),
                           child: Row(
@@ -493,18 +456,29 @@ class _UpdateFactureState extends State<UpdateFacture> {
         ),
         child: const Text("Modifier"),
         onPressed: () {
-          Facture().updateFacture(
-              widget.titre,
-              widget.client,
-              widget.etat,
-              DateTime.parse(widget.date1),
-              DateTime.parse(widget.date2),
-              widget.adrss,
-              (calculMontat() * (1 + 0.2)) * (1 - (widget.res / 100)),
-              widget.listfact,
-              widget.res,
-              calculMontat());
-          Get.to(() => const ListFacture());
+          if (widget.page == "nouvellefacture") {
+            Facture().updateFacture(
+                widget.id,
+                widget.client,
+                widget.etat,
+                dataTime,
+                (calculMontat() * (1 + 0.2)) * (1 - (widget.res / 100)),
+                widget.listfact,
+                widget.res,
+                calculMontat());
+            Get.to(() => const ListFacture());
+          } else {
+            AutoFacture().updateFacture(
+                widget.id,
+                widget.client,
+                widget.etat,
+                dataTime.toString().substring(0, 10),
+                (calculMontat() * (1 + 0.2)) * (1 - (widget.res / 100)),
+                widget.listfact,
+                widget.res,
+                calculMontat());
+            Get.to(() => const ListFactureDev());
+          }
         },
       ),
     );

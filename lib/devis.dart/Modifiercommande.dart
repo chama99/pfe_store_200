@@ -9,13 +9,14 @@ import 'package:get/get.dart';
 import '../services/article.dart';
 
 class ModifierCommande extends StatefulWidget {
-  String titre, client, etat, role;
+  String titre, client, etat, role, id, date;
   int num;
-  double remise;
+  int remise;
   List commande;
   double total, montant;
   ModifierCommande(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.client,
       required this.etat,
@@ -24,7 +25,8 @@ class ModifierCommande extends StatefulWidget {
       required this.remise,
       required this.montant,
       required this.num,
-      required this.role})
+      required this.role,
+      required this.date})
       : super(key: key);
 
   @override
@@ -147,7 +149,7 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                             widget.commande[widget.num]["Quantite"] *
                                 widget.commande[widget.num]["prix"];
                         Devis().updateDevis(
-                            widget.titre,
+                            widget.id,
                             widget.client,
                             widget.etat,
                             widget.total,
@@ -156,6 +158,7 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                             widget.montant);
 
                         Get.to(() => UpdateDevis(
+                              id: widget.id,
                               titre: widget.titre,
                               client: widget.client,
                               etat: widget.etat,
@@ -164,6 +167,7 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                               remise: widget.remise,
                               montant: widget.montant,
                               role: widget.role,
+                              date: widget.date,
                             ));
                       },
                       child: const Text(

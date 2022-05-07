@@ -85,7 +85,29 @@ class Contact {
       await employe.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
-          itemsListNom.add(a['name']);
+          if (a["type"] == "client") {
+            itemsListNom.add(a['name']);
+          }
+        }).toList();
+      });
+      return itemsListNom;
+    } catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future getContactListByFour() async {
+    List itemsListNom = [];
+
+    try {
+      await employe.get().then((querySnapshot) {
+        querySnapshot.docs.map((element) {
+          Map a = element.data() as Map<String, dynamic>;
+          if (a["type"] == "fournisseur") {
+            itemsListNom.add(a['name']);
+          }
         }).toList();
       });
       return itemsListNom;

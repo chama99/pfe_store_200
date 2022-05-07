@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 
 import 'package:flutter/material.dart';
-import 'dart:convert' show utf8;
+import 'dart:convert' show base64, utf8;
 import '../widget/InputDeco_design.dart';
 import '../widget/menuAdmin.dart';
 import '../widget/toast.dart';
@@ -65,8 +65,9 @@ class _connexion extends State<Connexion> {
         String url = value.data()!["image"];
         String role = value.data()!["role"];
         List<int> bytes = mdp.toString().codeUnits;
-        var tmdp = utf8.decode(bytes);
-        if (e == email && m == mdp) {
+        var decodeBytes = base64.decode(mdp);
+        var decodeString = utf8.decode(decodeBytes);
+        if (e == email && m == decodeString) {
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -163,21 +164,6 @@ class _connexion extends State<Connexion> {
                             }
                             return null;
                           },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            bottom: 18, left: 10, right: 10),
-                        child: InkWell(
-                          onTap: () {},
-                          child: Text(
-                            "Mot de passe oublié ?".toUpperCase(),
-                            style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.indigo,
-                                letterSpacing: 1.7),
-                            textAlign: TextAlign.left,
-                          ),
                         ),
                       ),
                       SizedBox(

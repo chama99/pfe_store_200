@@ -143,6 +143,7 @@ class _LigneFactureState extends State<LigneFacture> {
                       );
                     }
                     var data = snapshot.data!.data();
+                    var id = snapshot.data!.reference.id;
                     var quant = data!['Quantité'];
                     var prixv = data['prix_de_vente'];
                     var unitev = data['unite'];
@@ -164,7 +165,7 @@ class _LigneFactureState extends State<LigneFacture> {
                           child: TextFormField(
                             controller: lib,
                             decoration: InputDecoration(
-                              hintText: 'Libellé',
+                              hintText: 'Description',
                               filled: true,
                               fillColor: Colors.white,
                               focusedBorder: OutlineInputBorder(
@@ -186,52 +187,6 @@ class _LigneFactureState extends State<LigneFacture> {
                               }
                               return null;
                             },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            controller: comp,
-                            decoration: InputDecoration(
-                              hintText: 'Compte analytique',
-                              filled: true,
-                              fillColor: Colors.white,
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                    color: Colors.orange, width: 1.5),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                  color: Colors.orange,
-                                  width: 1.5,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            controller: etq,
-                            decoration: InputDecoration(
-                              hintText: 'Étiquette analytique',
-                              filled: true,
-                              fillColor: Colors.white,
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                    color: Colors.orange, width: 1.5),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                  color: Colors.orange,
-                                  width: 1.5,
-                                ),
-                              ),
-                            ),
                           ),
                         ),
                         Padding(
@@ -260,6 +215,9 @@ class _LigneFactureState extends State<LigneFacture> {
                               if (value!.isEmpty) {
                                 return "Veuillez entrer Quantité ";
                               }
+                              if (int.parse(value) > quant) {
+                                return "Vous avez dépassé la quantité ";
+                              }
                               return null;
                             },
                           ),
@@ -271,11 +229,14 @@ class _LigneFactureState extends State<LigneFacture> {
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   if (article != null) {
+                                    int r = int.parse(qt.text);
+                                    int q = quant - r;
+                                    Article().updateQuantite(id, q);
                                     CommandeFact().addCommde(
+                                        refv,
+                                        unitev,
                                         lib.text,
                                         article,
-                                        comp.text,
-                                        etq.text,
                                         int.parse(qt.text),
                                         prixv,
                                         int.parse(qt.text) * prixv);

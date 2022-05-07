@@ -12,14 +12,15 @@ import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 import '../services/pdf_devis.dart';
 
 class DevisDetailler extends StatefulWidget {
-  String titre, client, etat, role;
-  double remise;
+  String titre, client, etat, role, id;
+  int remise;
   List commande;
   double total, montant;
   String date;
   DevisDetailler(
       {Key? key,
       required this.titre,
+      required this.id,
       required this.client,
       required this.etat,
       required this.commande,
@@ -50,6 +51,7 @@ class _DevisDetaillerState extends State<DevisDetailler> {
               onTap: () {
                 if (widget.etat == "Devis" && widget.role == "Admin") {
                   Get.to(() => UpdateDevis(
+                        id: widget.id,
                         titre: widget.titre,
                         client: widget.client,
                         etat: widget.etat,
@@ -58,6 +60,7 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                         total: widget.total,
                         montant: widget.montant,
                         role: widget.role,
+                        date: widget.date,
                       ));
                 } else {
                   showToast("Ne peut pas modifier ce devis");
@@ -205,26 +208,29 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 8, top: 30),
-                      child: Text(
-                        "Total =",
-                        style: TextStyle(fontSize: 20, letterSpacing: 3),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(left: 8, top: 30),
+                        child: Text(
+                          "Total =",
+                          style: TextStyle(fontSize: 20, letterSpacing: 3),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8, top: 30),
-                      child: Text(
-                        "${widget.total}£",
-                        style: const TextStyle(
-                            color: Colors.indigo,
-                            fontSize: 25,
-                            letterSpacing: 3),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8, top: 30),
+                        child: Text(
+                          "${widget.total}£",
+                          style: const TextStyle(
+                              color: Colors.indigo,
+                              fontSize: 25,
+                              letterSpacing: 3),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Row(
                   children: [
@@ -236,7 +242,7 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                       padding: const EdgeInsets.only(top: 8.0),
                       child: SfSignaturePad(
                         key: keySignaturePad,
-                        backgroundColor: Colors.yellow[100],
+                        backgroundColor: Color.fromARGB(255, 255, 255, 255),
                       ),
                     ),
                   ],

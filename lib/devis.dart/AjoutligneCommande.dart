@@ -12,13 +12,14 @@ import '../services/article.dart';
 import '../widget/toast.dart';
 
 class AjoutCommande extends StatefulWidget {
-  String titre, client, etat;
-  String role;
-  double remise;
+  String titre, client, etat, id;
+  String role, date;
+  int remise;
   List commande;
   double total, montant;
   AjoutCommande(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.client,
       required this.etat,
@@ -26,7 +27,8 @@ class AjoutCommande extends StatefulWidget {
       required this.total,
       required this.remise,
       required this.montant,
-      required this.role})
+      required this.role,
+      required this.date})
       : super(key: key);
 
   @override
@@ -283,7 +285,7 @@ class _AjoutCommandeState extends State<AjoutCommande> {
                                     widget.commande.add(data);
                                     if (article != null) {
                                       Devis().updateDevis(
-                                          widget.titre,
+                                          widget.id,
                                           widget.client,
                                           widget.etat,
                                           widget.total,
@@ -292,6 +294,7 @@ class _AjoutCommandeState extends State<AjoutCommande> {
                                           widget.montant);
                                       clearText();
                                       Get.to(() => UpdateDevis(
+                                            id: widget.id,
                                             titre: widget.titre,
                                             client: widget.client,
                                             etat: widget.etat,
@@ -300,6 +303,7 @@ class _AjoutCommandeState extends State<AjoutCommande> {
                                             remise: widget.remise,
                                             montant: widget.montant,
                                             role: widget.role,
+                                            date: widget.date,
                                           ));
                                     } else {
                                       showToast(

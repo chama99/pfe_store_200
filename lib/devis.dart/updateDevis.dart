@@ -5,21 +5,25 @@ import 'dart:async';
 import 'package:chama_projet/devis.dart/Modifiercommande.dart';
 import 'package:chama_projet/devis.dart/listDevis.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_azure_b2c/GUIDGenerator.dart';
 import 'package:get/get.dart';
 
+import '../services/autofacture.dart';
 import '../services/devis.dart';
+import '../services/facture.dart';
 import '../widget/toast.dart';
 import 'AjoutligneCommande.dart';
 
 class UpdateDevis extends StatefulWidget {
   List commande;
-  String role;
-  String titre;
+  String role, date;
+  String titre, id;
   String etat, client;
-  double remise;
+  int remise;
   double total, montant;
   UpdateDevis(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.client,
       required this.etat,
@@ -27,7 +31,8 @@ class UpdateDevis extends StatefulWidget {
       required this.remise,
       required this.total,
       required this.montant,
-      required this.role})
+      required this.role,
+      required this.date})
       : super(key: key);
 
   @override
@@ -41,7 +46,8 @@ class _UpdateDevisState extends State<UpdateDevis> {
   // ignore: prefer_typing_uninitialized_variables
 
   List listItem = ["Devis", "Bon de commande"];
-  double remise = 0.00;
+  int remise = 0;
+  final String uuid = GUIDGen.generate();
   // ignore: non_constant_identifier_names
   final Contolleremise = TextEditingController();
   final n = TextEditingController();
@@ -59,23 +65,40 @@ class _UpdateDevisState extends State<UpdateDevis> {
   @override
   void initState() {
     super.initState();
-
+    fetchDatabaseList();
     streamController.stream.listen((item) {
       setState(() {
         var ch = item.substring(0, item.indexOf("%"));
         // ignore: unnecessary_cast
-        double r = double.parse(ch) as double;
-
+        int r = int.parse(ch);
         // ignore: unnecessary_cast
-        remise = r / 100 as double;
+        remise = r;
       });
     });
+  }
+
+  List fact = [];
+  List facta = [];
+  fetchDatabaseList() async {
+    dynamic resf = await Facture().getFacturesList();
+    dynamic resfa = await AutoFacture().getFacturesList();
+
+    if (resf == null) {
+      // ignore: avoid_print
+      print('Unable to retrieve');
+    } else {
+      setState(() {
+        fact = resf;
+        facta = resfa;
+      });
+    }
   }
 
   var taxe = 0.00;
 
   @override
   Widget build(BuildContext context) {
+    var lf = fact.length + facta.length;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -93,6 +116,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
               PageRouteBuilder(
                   // ignore: prefer_const_constructors
                   pageBuilder: (a, b, c) => UpdateDevis(
+                        id: widget.id,
                         titre: widget.titre,
                         client: widget.client,
                         etat: widget.etat,
@@ -101,6 +125,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                         total: widget.total,
                         montant: widget.montant,
                         role: widget.role,
+                        date: widget.date,
                       ),
                   // ignore: prefer_const_constructors
                   transitionDuration: Duration(seconds: 0)));
@@ -133,6 +158,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                             IconButton(
                               onPressed: () {
                                 Get.to(() => AjoutCommande(
+                                      id: widget.id,
                                       titre: widget.titre,
                                       client: widget.client,
                                       etat: widget.etat,
@@ -141,6 +167,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                       total: widget.total,
                                       montant: widget.montant,
                                       role: widget.role,
+                                      date: widget.date,
                                     ));
                               },
                               icon: const Icon(
@@ -189,6 +216,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                         "Veuillez entrer Numéro de ligne");
                                   } else {
                                     Get.to(() => ModifierCommande(
+                                          id: widget.id,
                                           num: int.parse(n.text),
                                           titre: widget.titre,
                                           client: widget.client,
@@ -198,6 +226,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                           total: widget.total,
                                           montant: widget.montant,
                                           role: widget.role,
+                                          date: widget.date,
                                         ));
                                   }
                                 },
@@ -345,7 +374,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                 child: TextFormField(
                                   controller: Contolleremise,
                                   decoration: InputDecoration(
-                                    hintText: '${widget.remise * 100}%',
+                                    hintText: '${widget.remise}%',
                                     filled: true,
                                     fillColor: Colors.white,
                                     focusedBorder: OutlineInputBorder(
@@ -383,6 +412,13 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                 // Validate returns true if the form is valid, otherwise false.
                                 if (_formKey.currentState!.validate()) {
                                   streamController.add(Contolleremise.text);
+                                  var ch = Contolleremise.text.substring(
+                                      0, Contolleremise.text.indexOf("%"));
+                                  // ignore: unnecessary_cast
+                                  remise = int.parse(ch);
+                                  // ignore: unnecessary_cast
+
+                                  widget.remise = remise;
                                 }
                               },
                               child: const Text(
@@ -416,7 +452,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                        "Remise:$remise ",
+                                        "Remise:${widget.remise / 100} ",
                                         style: const TextStyle(fontSize: 20),
                                       ),
                                     ),
@@ -431,7 +467,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                       color: Colors.black,
                                     ),
                                     Text(
-                                      "Total: ${(calculMontat() + 0.2) - remise}",
+                                      "Total: ${(calculMontat() * (1 + 0.2)) * (1 - (widget.remise / 100))}",
                                       style: const TextStyle(fontSize: 20),
                                     ),
                                   ],
@@ -458,11 +494,30 @@ class _UpdateDevisState extends State<UpdateDevis> {
         onPressed: () {
           // Validate returns true if the form is valid, otherwise false.
 
-          Devis().updateDevis(widget.titre, widget.client, widget.etat,
-              calculMontat() - remise, widget.commande, remise, calculMontat());
+          Devis().updateDevis(
+              widget.id,
+              widget.client,
+              widget.etat,
+              (calculMontat() * (1 + 0.2)) * (1 - (widget.remise / 100)),
+              widget.commande,
+              widget.remise,
+              calculMontat());
           Get.to(() => ListDevis(
                 role: widget.role,
               ));
+          if (widget.etat == "Bon de commande") {
+            AutoFacture().addFacture(
+                uuid,
+                "Facture N°${lf + 1}",
+                widget.titre,
+                widget.client,
+                "Brouillon",
+                widget.date,
+                (calculMontat() * (1 + 0.2)) * (1 - (widget.remise / 100)),
+                widget.commande,
+                widget.remise,
+                calculMontat());
+          }
         },
       ),
     );

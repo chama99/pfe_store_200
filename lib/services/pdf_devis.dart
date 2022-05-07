@@ -55,7 +55,7 @@ class PdDevis {
         "Total= $total £", PdfStandardFont(PdfFontFamily.helvetica, 30),
         brush: PdfBrushes.black,
         bounds:
-            Rect.fromLTWH(pageSize.width - 360, pageSize.height - 200, 0, 0));
+            Rect.fromLTWH(pageSize.width - 300, pageSize.height - 300, 0, 0));
   }
 
   static void drawGrid(PdfPage page, List cmmd) {

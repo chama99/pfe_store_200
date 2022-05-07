@@ -1,15 +1,15 @@
 import 'package:chama_projet/widget/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Facture {
-  final CollectionReference devis =
-      FirebaseFirestore.instance.collection('Nouvellefactures');
+class AutoFacture {
+  final CollectionReference autofact =
+      FirebaseFirestore.instance.collection('AutoFacture');
 
   Future getFacturesList() async {
     List itemsList = [];
 
     try {
-      await devis.get().then((querySnapshot) {
+      await autofact.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           itemsList.add(a);
@@ -23,13 +23,14 @@ class Facture {
     }
   }
 
-  Future<void> addFacture(titre, numero, client, etat, date1, total,
+  Future<void> addFacture(titre, numero, numdev, client, etat, date1, total,
       ligneCommande, remise, montant) {
-    return devis
+    return autofact
         .doc(titre)
         .set({
           'IdFact': titre,
           'numfact': numero,
+          'numdevis': numdev,
           'client': client,
           'etat': etat,
           'date de facturation': date1,
@@ -47,7 +48,7 @@ class Facture {
 
   Future<void> updateFacture(
       titre, client, etat, date1, total, ligneCommande, remise, montant) {
-    return devis
+    return autofact
         .doc(titre)
         .update({
           'client': client,
@@ -67,7 +68,7 @@ class Facture {
 
   Future<void> deleteFacture(id) {
     // print("Employe Deleted $id");
-    return devis
+    return autofact
         .doc(id)
         .delete()
         // ignore: avoid_print
@@ -81,7 +82,7 @@ class Facture {
     List itemsListNom = [];
 
     try {
-      await devis.get().then((querySnapshot) {
+      await autofact.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           itemsListNom.add(a['ligne facture']);

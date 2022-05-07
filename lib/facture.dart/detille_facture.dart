@@ -12,25 +12,24 @@ import '../services/pdf_api.dart';
 import '../widget/toast.dart';
 
 class DetailFacture extends StatefulWidget {
-  String titre, client, etat, date1, date2, adrss;
-  final double order;
+  String id, titre, client, etat, date1, page;
+
   List listfact;
   double montant;
   int res;
   double total;
   DetailFacture(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.client,
       required this.etat,
       required this.date1,
-      required this.date2,
-      required this.adrss,
       required this.total,
-      required this.order,
       required this.listfact,
       required this.montant,
-      required this.res})
+      required this.res,
+      required this.page})
       : super(key: key);
 
   @override
@@ -49,19 +48,18 @@ class _DetailFactureState extends State<DetailFacture> {
             padding: const EdgeInsets.only(top: 20, right: 30),
             child: InkWell(
               onTap: () {
-                if (widget.etat == "Brouillon") {
+                if (widget.etat == "Brouillon" || widget.etat == "Avoir") {
                   Get.to(() => UpdateFacture(
+                        id: widget.id,
                         titre: widget.titre,
                         client: widget.client,
                         etat: widget.etat,
-                        adrss: widget.adrss,
                         total: widget.total,
-                        order: widget.order,
                         listfact: widget.listfact,
                         montant: widget.montant,
                         date1: widget.date1,
-                        date2: widget.date2,
                         res: widget.res,
+                        page: widget.page,
                       ));
                 } else {
                   showToast("Ne peut pas modifier cette facture");
@@ -141,39 +139,25 @@ class _DetailFactureState extends State<DetailFacture> {
                       child: DataTable(
                         columns: const [
                           DataColumn(
-                            label: Text(
-                              "Article",
-                            ),
+                            label: Text("réf"),
                           ),
                           DataColumn(
-                            label: Text(
-                              "Libélle",
-                            ),
+                            label: Text("Article"),
                           ),
                           DataColumn(
-                            label: Text(
-                              "Compte analytique",
-                            ),
+                            label: Text("Description"),
                           ),
                           DataColumn(
-                            label: Text(
-                              "Étiquette analytique",
-                            ),
+                            label: Text(" Unité"),
                           ),
                           DataColumn(
-                            label: Text(
-                              "Quantité",
-                            ),
+                            label: Text("Quantité"),
                           ),
                           DataColumn(
-                            label: Text(
-                              "Prix ",
-                            ),
+                            label: Text("Prix Unitaire"),
                           ),
                           DataColumn(
-                            label: Text(
-                              "TVA",
-                            ),
+                            label: Text("TVA"),
                           ),
                           DataColumn(
                             label: Text("Sous-total"),
@@ -182,12 +166,10 @@ class _DetailFactureState extends State<DetailFacture> {
                         rows: [
                           for (var i = 0; i < widget.listfact.length; i++) ...[
                             DataRow(cells: [
+                              DataCell(Text("${widget.listfact[i]['réf']}")),
                               DataCell(Text(widget.listfact[i]['Article'])),
-                              DataCell(Text(widget.listfact[i]['Libélle'])),
-                              DataCell(Text(
-                                  "${widget.listfact[i]['Compte analytique']}")),
-                              DataCell(Text(
-                                  "${widget.listfact[i]['Etiquette analytique']}")),
+                              DataCell(Text(widget.listfact[i]['Description'])),
+                              DataCell(Text("${widget.listfact[i]['Unite']}")),
                               DataCell(
                                   Text("${widget.listfact[i]['Quantite']}")),
                               DataCell(Text("${widget.listfact[i]['prix']}")),
@@ -201,24 +183,27 @@ class _DetailFactureState extends State<DetailFacture> {
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 8, top: 30),
-                      child: Text(
-                        "Total =",
-                        style: TextStyle(fontSize: 20, letterSpacing: 3),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(left: 8, top: 30),
+                        child: Text(
+                          "Total =",
+                          style: TextStyle(fontSize: 20, letterSpacing: 3),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8, top: 30),
-                      child: Text(
-                        "${widget.total}£",
-                        style:
-                            const TextStyle(color: Colors.indigo, fontSize: 25),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8, top: 30),
+                        child: Text(
+                          "${widget.total}£",
+                          style: const TextStyle(
+                              color: Colors.indigo, fontSize: 25),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Row(
                   children: [
@@ -228,7 +213,7 @@ class _DetailFactureState extends State<DetailFacture> {
                     ),
                     SfSignaturePad(
                       key: keySignaturePad,
-                      backgroundColor: Colors.yellow[100],
+                      backgroundColor: Color.fromARGB(255, 255, 255, 255),
                     ),
                   ],
                 ),
@@ -257,14 +242,13 @@ class _DetailFactureState extends State<DetailFacture> {
     final image = await keySignaturePad.currentState?.toImage();
     final imageSignature = await image!.toByteData(format: ImageByteFormat.png);
     final file = await PdfApi.generatePDF(
-      order: widget.order,
       imageSignature: imageSignature!,
       commnd: widget.listfact,
       titre: widget.titre,
       client: widget.client,
       date1: widget.date1,
-      date2: widget.date2,
-      adrss: widget.adrss,
+      montant: widget.montant,
+      remise: widget.res,
       total: widget.total,
     );
     Navigator.of(context).pop();

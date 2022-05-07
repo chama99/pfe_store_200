@@ -1,30 +1,33 @@
 // ignore_for_file: file_names, must_be_immutable
 
 import 'package:chama_projet/facture.dart/updateFacture.dart';
+import 'package:chama_projet/services/autofacture.dart';
 import 'package:chama_projet/services/facture.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../services/article.dart';
+
 class ModifieLignFact extends StatefulWidget {
-  String titre;
+  String titre, id, page;
   List commande;
   int num, res;
-  String client, etat, date1, date2, adresse;
+  String client, etat, date1;
   double total, remise, montant;
   ModifieLignFact(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.commande,
       required this.num,
-      required this.adresse,
       required this.client,
       required this.date1,
-      required this.date2,
       required this.etat,
       required this.montant,
       required this.remise,
       required this.total,
-      required this.res})
+      required this.res,
+      required this.page})
       : super(key: key);
 
   @override
@@ -37,36 +40,34 @@ class _ModifieLignFactState extends State<ModifieLignFact> {
   var article;
   List lignFact = [];
 
-  final lib = TextEditingController();
-  final comp = TextEditingController();
-  final etq = TextEditingController();
-  final qt = TextEditingController();
-  final prix = TextEditingController();
-
-  clearText() {
-    lib.clear();
-    comp.clear();
-    etq.clear();
-    qt.clear();
-    prix.clear();
-
-    article = null;
-  }
-
   @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    lib.dispose();
-    etq.dispose();
-    comp.dispose();
-    qt.dispose();
-    prix.dispose();
+  void initState() {
+    super.initState();
 
-    super.dispose();
+    fetchDatabaseList();
   }
+
+  List ListArticle = [];
+
+  fetchDatabaseList() async {
+    dynamic resultant = await Article()
+        .getArticleListByid(widget.commande[widget.num]["Article"]);
+
+    if (resultant == null) {
+      // ignore: avoid_print
+      print('Unable to retrieve');
+    } else {
+      setState(() {
+        ListArticle = resultant;
+      });
+    }
+  }
+
+  var qt = 0;
 
   @override
   Widget build(BuildContext context) {
+    qt = widget.commande[widget.num]["Quantite"];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange,
@@ -88,18 +89,18 @@ class _ModifieLignFactState extends State<ModifieLignFact> {
                 const Padding(
                   padding: EdgeInsets.only(top: 30),
                   child: Text(
-                    "Libélle :",
+                    "Description:",
                     style: TextStyle(fontSize: 15, letterSpacing: 3),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    initialValue: widget.commande[widget.num]["Libélle"],
+                    initialValue: widget.commande[widget.num]["Description"],
                     onChanged: (value) =>
-                        widget.commande[widget.num]["Libélle"] = value,
+                        widget.commande[widget.num]["Description"] = value,
                     decoration: InputDecoration(
-                      hintText: 'Libellé',
+                      hintText: 'Description',
                       filled: true,
                       fillColor: Colors.white,
                       focusedBorder: OutlineInputBorder(
@@ -111,66 +112,6 @@ class _ModifieLignFactState extends State<ModifieLignFact> {
                         borderRadius: BorderRadius.circular(5),
                         borderSide: const BorderSide(
                           color: Colors.white,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const Text(
-                  "Compte analytique :",
-                  style: TextStyle(fontSize: 15, letterSpacing: 3),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    initialValue: widget.commande[widget.num]
-                        ["Compte analytique"],
-                    onChanged: (value) => widget.commande[widget.num]
-                        ["Compte analytique"] = value,
-                    decoration: InputDecoration(
-                      hintText: 'Compte analytique',
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.orange,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const Text(
-                  "Etiquette analytique :",
-                  style: TextStyle(fontSize: 15, letterSpacing: 3),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    initialValue: widget.commande[widget.num]
-                        ["Etiquette analytique"],
-                    onChanged: (value) => widget.commande[widget.num]
-                        ["Etiquette analytique"] = value,
-                    decoration: InputDecoration(
-                      hintText: 'Étiquette analytique',
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            const BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(
-                          color: Colors.orange,
                           width: 1.5,
                         ),
                       ),
@@ -214,33 +155,46 @@ class _ModifieLignFactState extends State<ModifieLignFact> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
+                          int q = ListArticle[0] - qt;
+                          Article().updateQuantite(
+                              widget.commande[widget.num]["Article"], q);
+
                           widget.commande[widget.num]["sous-total"] =
                               widget.commande[widget.num]["prix"] *
                                   widget.commande[widget.num]["Quantite"];
-                          Facture().updateFacture(
-                              widget.titre,
-                              widget.client,
-                              widget.etat,
-                              DateTime.parse(widget.date1),
-                              DateTime.parse(widget.date2),
-                              widget.adresse,
-                              widget.total,
-                              widget.commande,
-                              widget.remise,
-                              widget.montant);
-                          clearText();
+                          if (widget.page == "nouvellefacture") {
+                            Facture().updateFacture(
+                                widget.id,
+                                widget.client,
+                                widget.etat,
+                                DateTime.parse(widget.date1),
+                                widget.total,
+                                widget.commande,
+                                widget.remise,
+                                widget.montant);
+                          } else {
+                            AutoFacture().updateFacture(
+                                widget.id,
+                                widget.client,
+                                widget.etat,
+                                DateTime.parse(widget.date1),
+                                widget.total,
+                                widget.commande,
+                                widget.remise,
+                                widget.montant);
+                          }
+
                           Get.to(() => UpdateFacture(
+                                id: widget.id,
                                 titre: widget.titre,
                                 client: widget.client,
                                 etat: widget.etat,
-                                adrss: widget.adresse,
                                 total: widget.total,
-                                order: 20,
                                 listfact: widget.commande,
                                 montant: widget.montant,
                                 date1: widget.date1,
-                                date2: widget.date2,
                                 res: widget.res,
+                                page: widget.page,
                               ));
                         }
                       },

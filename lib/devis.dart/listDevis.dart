@@ -138,7 +138,8 @@ class _ListDevisState extends State<ListDevis> {
                                   child: InkWell(
                                 onTap: () {
                                   Get.to(() => DevisDetailler(
-                                        titre: devis["idDevis"],
+                                        titre: devis["numdevis"],
+                                        id: devis["idDevis"],
                                         client: devis["client"],
                                         etat: devis["etat"],
                                         commande: devis["commande"],
@@ -147,7 +148,8 @@ class _ListDevisState extends State<ListDevis> {
                                         montant: devis["montant"],
                                         date: devis["date de devis"]
                                             .toDate()
-                                            .toString(),
+                                            .toString()
+                                            .substring(0, 10),
                                         role: widget.role,
                                       ));
                                 },
@@ -156,7 +158,7 @@ class _ListDevisState extends State<ListDevis> {
                                 child: ListTile(
                                   title: Text(devis["etat"]),
                                   subtitle: Text(
-                                      "${devis["date de devis"].toDate().toString()}               ${devis["total"]}£"),
+                                      "${devis["date de devis"].toDate().toString().substring(0, 10)}               ${devis["total"]}£"),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(
@@ -171,7 +173,7 @@ class _ListDevisState extends State<ListDevis> {
                                     ),
                                   ),
                                   leading: Text(
-                                    devis["idDevis"],
+                                    devis["numdevis"],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -186,7 +188,7 @@ class _ListDevisState extends State<ListDevis> {
 
   void filterSearchResults(String query) {
     final suggestions = Listdevis.where((devis) {
-      final namemploye = devis['idDevis'].toLowerCase();
+      final namemploye = devis['numdevis'].toLowerCase();
       final input = query.toLowerCase();
       return namemploye.contains(input);
     }).toList();

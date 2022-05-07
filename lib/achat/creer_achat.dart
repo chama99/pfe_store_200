@@ -1,110 +1,42 @@
-// ignore: avoid_web_libraries_in_flutter
-
-// ignore_for_file: must_be_immutable
-
-import 'dart:async';
-
-import 'dart:math';
-
-import 'package:chama_projet/services/autofacture.dart';
-import 'package:chama_projet/services/commande.dart';
+import 'package:chama_projet/services/commandeachat.dart';
 import 'package:chama_projet/services/contact.dart';
-import 'package:chama_projet/services/devis.dart';
-import 'package:chama_projet/widget/toast.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_azure_b2c/GUIDGenerator.dart';
 
-import 'package:get/get.dart';
-
-import '../services/facture.dart';
-import 'LigneDECommande.dart';
-import 'listDevis.dart';
-
-class CreeDevisPage extends StatefulWidget {
-  String role;
-  CreeDevisPage({Key? key, required this.role}) : super(key: key);
+class CreerAchat extends StatefulWidget {
+  const CreerAchat({Key? key}) : super(key: key);
 
   @override
-  _CreeDevisPageState createState() => _CreeDevisPageState();
+  State<CreerAchat> createState() => _CreerAchatState();
 }
 
-class _CreeDevisPageState extends State<CreeDevisPage> {
-  // ignore: non_constant_identifier_names
-  final Contolleremise = TextEditingController();
-  DateTime dataTime = DateTime.now();
-  int? sortColumnIndex;
-  bool isAscending = false;
-
+class _CreerAchatState extends State<CreerAchat> {
   final _formKey = GlobalKey<FormState>();
-  final titre = TextEditingController();
-
-  // ignore: prefer_typing_uninitialized_variables
-  var client;
-  // ignore: prefer_typing_uninitialized_variables
+  DateTime dataTime = DateTime.now();
+  List listItem = ["Demande de prix", "Commande fournisseur"];
+  var fournisseur;
   var etat;
-  List listItem = ["Devis", "Bon de commande"];
-
-  var taxe = 0.00;
-  var total = 0.00;
-  // ignore: prefer_typing_uninitialized_variables
-  late int remisee = 0;
-  // ignore: prefer_final_fields
-  StreamController<String> _streamController = StreamController();
-  final String uuid = GUIDGen.generate();
-  bool test = false;
+  List commandeList = [];
+  List userContactList = [];
   @override
   void initState() {
     super.initState();
     fetchDatabaseList();
-    _streamController.stream.listen((item) {
-      setState(() {
-        var ch = item.substring(0, item.indexOf("%"));
-        // ignore: unnecessary_cast
-        int r = int.parse(ch);
-
-        // ignore: unnecessary_cast
-        remisee = r;
-      });
-    });
   }
 
-  List userContactList = [];
-  List commandeList = [];
-  List listTotal = [];
-  List list = [];
-  List devis = [];
-  List fact = [];
-  List facta = [];
   fetchDatabaseList() async {
-    dynamic resultant = await Contact().getContactListByNom();
-    dynamic resultant2 = await Commande().getCommandesList();
-    dynamic resd = await Devis().getDevisList();
-    dynamic resf = await Facture().getFacturesList();
-    dynamic resfa = await AutoFacture().getFacturesList();
-
+    dynamic resultant = await CommandeAchat().getCommandesList();
+    dynamic resc = await Contact().getContactListByFour();
     if (resultant == null) {
       // ignore: avoid_print
       print('Unable to retrieve');
     } else {
       setState(() {
-        userContactList = resultant;
-        commandeList = resultant2;
-        devis = resd;
-        fact = resf;
-        facta = resfa;
+        commandeList = resultant;
+        userContactList = resc;
       });
     }
   }
-
-  addList() {
-    for (var i = 0; i < commandeList.length; i++) {
-      list.add(commandeList[i]);
-    }
-  }
-
-  var ch = "Nouveau";
 
   calculMontat() {
     var montant = 0.00;
@@ -114,21 +46,11 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
     return montant;
   }
 
-  late String dropdown;
-  @override
-  void dispose() {
-    _streamController.close();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final number = Random().nextInt(20);
-    var l = devis.length;
-    var lf = fact.length + facta.length;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Créer Un Devis"),
+        title: const Text("Demande d'achat"),
         backgroundColor: Colors.orange,
       ),
       body: RefreshIndicator(
@@ -137,9 +59,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
               context,
               PageRouteBuilder(
                   // ignore: prefer_const_constructors
-                  pageBuilder: (a, b, c) => CreeDevisPage(
-                        role: widget.role,
-                      ),
+                  pageBuilder: (a, b, c) => CreerAchat(),
                   // ignore: prefer_const_constructors
                   transitionDuration: Duration(seconds: 0)));
           // ignore: void_checks
@@ -159,25 +79,9 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                         child: ListView(
                       children: [
                         Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Text(
-                              ch,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 30,
-                                  color: Colors.grey),
-                            )),
-                        Padding(
                           padding: const EdgeInsets.all(13),
                           child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LigneCommande(
-                                            role: widget.role,
-                                          )));
-                            },
+                            onTap: () {},
                             child: const Text(
                               "Ajouter Lignes de la commande",
                               style: TextStyle(
@@ -192,40 +96,30 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                           scrollDirection: Axis.horizontal,
                           child: SingleChildScrollView(
                             child: DataTable(
-                              sortAscending: isAscending,
-                              sortColumnIndex: sortColumnIndex,
-                              columns: [
+                              columns: const [
                                 DataColumn(
-                                  label: const Text("réf"),
-                                  onSort: onSort,
+                                  label: Text("réf"),
                                 ),
                                 DataColumn(
-                                  label: const Text("Article"),
-                                  onSort: onSort,
+                                  label: Text("Article"),
                                 ),
                                 DataColumn(
-                                  label: const Text("Description"),
-                                  onSort: onSort,
+                                  label: Text("Description"),
                                 ),
                                 DataColumn(
-                                  label: const Text("Unité"),
-                                  onSort: onSort,
+                                  label: Text("Unité"),
                                 ),
                                 DataColumn(
-                                  label: const Text("Quantité"),
-                                  onSort: onSort,
+                                  label: Text("Quantité"),
                                 ),
                                 DataColumn(
-                                  label: const Text("Prix unitaire"),
-                                  onSort: onSort,
+                                  label: Text("Prix unitaire"),
                                 ),
                                 DataColumn(
-                                  label: const Text("Taxes"),
-                                  onSort: onSort,
+                                  label: Text("Taxes"),
                                 ),
                                 DataColumn(
-                                  label: const Text("Sous-total"),
-                                  onSort: onSort,
+                                  label: Text("Sous-total"),
                                 )
                               ],
                               rows: [
@@ -257,7 +151,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                             Padding(
                               padding: EdgeInsets.all(13),
                               child: Text(
-                                "Client :",
+                                "Fournisseur :",
                                 style:
                                     TextStyle(fontSize: 15, letterSpacing: 3),
                               ),
@@ -283,10 +177,10 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                               style: const TextStyle(
                                   fontSize: 20, color: Colors.black),
                               iconSize: 40,
-                              value: client,
+                              value: fournisseur,
                               onChanged: (newValue) {
                                 setState(() {
-                                  client = newValue.toString();
+                                  fournisseur = newValue.toString();
                                 });
                               },
                               items: userContactList.map((valueItem) {
@@ -349,7 +243,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                             Padding(
                               padding: EdgeInsets.all(20),
                               child: Text(
-                                "Date de devis",
+                                "Date de la commande",
                                 style:
                                     TextStyle(fontSize: 15, letterSpacing: 3),
                               ),
@@ -357,71 +251,6 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                           ],
                         ),
                         Container(child: buildDatePicker(dataTime)),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  top: 30, right: 13, left: 13, bottom: 40),
-                              child: const Text(
-                                "Remise",
-                                style:
-                                    TextStyle(fontSize: 15, letterSpacing: 3),
-                              ),
-                            ),
-                            Flexible(
-                              child: Container(
-                                margin:
-                                    const EdgeInsets.only(left: 45, right: 65),
-                                child: TextFormField(
-                                  controller: Contolleremise,
-                                  decoration: InputDecoration(
-                                    hintText: 'valeur %',
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(
-                                          color: Colors.orange, width: 1.5),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(
-                                        color: Colors.orange,
-                                        width: 1.5,
-                                      ),
-                                    ),
-                                  ),
-                                  validator: (value) {
-                                    if (!RegExp("%").hasMatch(value!)) {
-                                      return "Veuillez entrer\n  valeur avec % ";
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                // Validate returns true if the form is valid, otherwise false.
-                                if (_formKey.currentState!.validate()) {
-                                  _streamController.add(Contolleremise.text);
-                                }
-                              },
-                              child: const Text(
-                                "Ajouter",
-                                style: TextStyle(fontSize: 18.0),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.orange),
-                            ),
-                          ],
-                        ),
                         Row(
                           children: [
                             Container(
@@ -441,13 +270,6 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                       "Montant HT: ${calculMontat()}",
                                       style: const TextStyle(fontSize: 20),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Remise: $remisee",
-                                        style: const TextStyle(fontSize: 20),
-                                      ),
-                                    ),
                                     const Padding(
                                       padding: EdgeInsets.all(8.0),
                                       child: Text(
@@ -459,7 +281,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                       color: Colors.black,
                                     ),
                                     Text(
-                                      "Total:  ${(calculMontat() * (1 + 0.2)) * (1 - (remisee / 100))}",
+                                      "Total:  ${(calculMontat() * (1 + 0.2))}",
                                       style: const TextStyle(fontSize: 20),
                                     ),
                                   ],
@@ -477,63 +299,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
           ],
         ),
       ),
-      bottomNavigationBar: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          maximumSize: const Size(double.infinity, 50),
-          primary: Colors.indigo,
-        ),
-        child: const Text("Saufgarder"),
-        onPressed: () {
-          // Validate returns true if the form is valid, otherwise false.
-          if (_formKey.currentState!.validate()) {
-            if (client != null) {
-              if (etat != null) {
-                addList();
-                if (etat == "Bon de commande") {
-                  AutoFacture().addFacture(
-                      uuid,
-                      "Facture N°${lf + 1}",
-                      "Devis N°${l + 1}",
-                      client,
-                      "Brouillon",
-                      dataTime.toString().substring(0, 10),
-                      (calculMontat() * (1 + 0.2)) * (1 - (remisee / 100)),
-                      list,
-                      remisee,
-                      calculMontat());
-                }
-                Devis().addDevis(
-                    uuid,
-                    "Devis N°${l + 1}",
-                    client,
-                    etat,
-                    (calculMontat() * (1 + 0.2)) * (1 - (remisee / 100)),
-                    list,
-                    remisee,
-                    calculMontat(),
-                    dataTime);
-
-                Get.to(() => ListDevis(
-                      role: widget.role,
-                    ));
-              } else {
-                showToast("veuillez sélectionner état");
-              }
-            } else {
-              showToast("veuillez sélectionner client");
-            }
-            Commande().deleteCommande();
-          }
-        },
-      ),
     );
-  }
-
-  void onSort(int columnIndex, bool ascending) {
-    setState(() {
-      sortColumnIndex = columnIndex;
-      isAscending = ascending;
-    });
   }
 
   Widget buildDatePicker(date) => SizedBox(

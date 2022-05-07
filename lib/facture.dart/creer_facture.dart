@@ -20,6 +20,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_azure_b2c/GUIDGenerator.dart';
 import 'package:flutter_multiselect/flutter_multiselect.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -39,7 +40,8 @@ class CreeFacturePage extends StatefulWidget {
 
 class _CreeFacturePageState extends State<CreeFacturePage> {
   DateTime dataTime = DateTime.now();
-  DateTime dataTime2 = DateTime.now();
+
+  final String uuid = GUIDGen.generate();
 
   // ignore: non_constant_identifier_names
   final Contolleremise = TextEditingController();
@@ -60,7 +62,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
   var client;
   // ignore: prefer_typing_uninitialized_variables
   var etat;
-  List listItem = ["Brouillon", "Comptabilisé"];
+  List listItem = ["Brouillon", "Payée", "Avoir"];
 
   var taxe = 0.00;
   var total = 0.00;
@@ -90,10 +92,11 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
   List commandeList = [];
 
   List list = [];
-
+  List fact = [];
   fetchDatabaseList() async {
     dynamic resultant = await Contact().getContactListByNom();
     dynamic resultant2 = await CommandeFact().getCommList();
+    dynamic resultf = await Facture().getFacturesList();
 
     if (resultant == null) {
       // ignore: avoid_print
@@ -102,6 +105,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
       setState(() {
         userContactList = resultant;
         commandeList = resultant2;
+        fact = resultf;
       });
     }
   }
@@ -131,6 +135,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
 
   @override
   Widget build(BuildContext context) {
+    var l = fact.length;
     final number = Random().nextInt(20);
     return Scaffold(
       appBar: AppBar(
@@ -208,19 +213,19 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                               sortColumnIndex: sortColumnIndex,
                               columns: [
                                 DataColumn(
+                                  label: const Text("réf"),
+                                  onSort: onSort,
+                                ),
+                                DataColumn(
                                   label: const Text("Article"),
                                   onSort: onSort,
                                 ),
                                 DataColumn(
-                                  label: const Text("Libélle"),
+                                  label: const Text("Description"),
                                   onSort: onSort,
                                 ),
                                 DataColumn(
-                                  label: const Text("Compte analytique"),
-                                  onSort: onSort,
-                                ),
-                                DataColumn(
-                                  label: const Text(" Étiquette analytique"),
+                                  label: const Text(" Unité"),
                                   onSort: onSort,
                                 ),
                                 DataColumn(
@@ -228,7 +233,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                                   onSort: onSort,
                                 ),
                                 DataColumn(
-                                  label: const Text("Prix "),
+                                  label: const Text("Prix Unitaire"),
                                   onSort: onSort,
                                 ),
                                 DataColumn(
@@ -245,13 +250,12 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                                     i < commandeList.length;
                                     i++) ...[
                                   DataRow(cells: [
+                                    DataCell(Text("${commandeList[i]['réf']}")),
                                     DataCell(
                                         Text("${commandeList[i]['Article']}")),
-                                    DataCell(Text(commandeList[i]['Libélle'])),
-                                    DataCell(Text(
-                                        commandeList[i]['Compte analytique'])),
-                                    DataCell(Text(commandeList[i]
-                                        ['Etiquette analytique'])),
+                                    DataCell(
+                                        Text(commandeList[i]['Description'])),
+                                    DataCell(Text(commandeList[i]['Unite'])),
                                     DataCell(
                                         Text("${commandeList[i]['Quantite']}")),
                                     DataCell(
@@ -370,55 +374,6 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                           ],
                         ),
                         Container(child: buildDatePicker(dataTime)),
-                        Container(
-                          margin: const EdgeInsets.only(top: 40, bottom: 40),
-                          child: Row(
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.all(20),
-                                child: Text(
-                                  "Adresse d'intervention",
-                                  style:
-                                      TextStyle(fontSize: 15, letterSpacing: 3),
-                                ),
-                              ),
-                              Flexible(
-                                child: TextFormField(
-                                  controller: adresse,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(
-                                          color: Colors.orange, width: 1.5),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(
-                                        color: Colors.orange,
-                                        width: 1.5,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.all(20),
-                              child: Text(
-                                "Date d'intervention",
-                                style:
-                                    TextStyle(fontSize: 15, letterSpacing: 3),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(child: buildDatePicker(dataTime2)),
                         Container(
                           margin: const EdgeInsets.only(top: 40, bottom: 40),
                           child: Row(
@@ -553,13 +508,12 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
             if (client != null) {
               if (etat != null) {
                 Facture().addFacture(
-                    ch,
+                    uuid,
+                    "Facture N° ${l + 1}",
                     client,
                     etat,
                     dataTime,
-                    dataTime2,
-                    adresse.text,
-                    calculMontat() - remisee,
+                    (calculMontat() * (1 + 0.2)) * (1 - (remisee / 100)),
                     list,
                     remisee,
                     calculMontat());

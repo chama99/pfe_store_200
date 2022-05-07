@@ -4,6 +4,7 @@
 import 'dart:convert';
 
 import 'package:chama_projet/facture.dart/updateFacture.dart';
+import 'package:chama_projet/services/autofacture.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,24 +14,24 @@ import '../services/facture.dart';
 import '../widget/toast.dart';
 
 class AjoutLigneFacture extends StatefulWidget {
-  String titre;
+  String titre, id, page;
   List commande;
   int res;
-  String client, etat, date1, date2, adresse;
+  String client, etat, date1;
   double total, remise, montant;
   AjoutLigneFacture(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.commande,
-      required this.adresse,
       required this.client,
       required this.date1,
-      required this.date2,
       required this.etat,
       required this.montant,
       required this.remise,
       required this.total,
-      required this.res})
+      required this.res,
+      required this.page})
       : super(key: key);
 
   @override
@@ -178,7 +179,7 @@ class AjoutLigneFactureState extends State<AjoutLigneFacture> {
                             child: TextFormField(
                               controller: lib,
                               decoration: InputDecoration(
-                                hintText: 'Libellé',
+                                hintText: 'Description',
                                 filled: true,
                                 fillColor: Colors.white,
                                 focusedBorder: OutlineInputBorder(
@@ -196,56 +197,10 @@ class AjoutLigneFactureState extends State<AjoutLigneFacture> {
                               ),
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return "Veuillez entrer  libellé ";
+                                  return "Veuillez entrer  description ";
                                 }
                                 return null;
                               },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: comp,
-                              decoration: InputDecoration(
-                                hintText: 'Compte analytique',
-                                filled: true,
-                                fillColor: Colors.white,
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: const BorderSide(
-                                      color: Colors.orange, width: 1.5),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: const BorderSide(
-                                    color: Colors.orange,
-                                    width: 1.5,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: etq,
-                              decoration: InputDecoration(
-                                hintText: 'Étiquette analytique',
-                                filled: true,
-                                fillColor: Colors.white,
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: const BorderSide(
-                                      color: Colors.orange, width: 1.5),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: const BorderSide(
-                                    color: Colors.orange,
-                                    width: 1.5,
-                                  ),
-                                ),
-                              ),
                             ),
                           ),
                           Padding(
@@ -286,10 +241,10 @@ class AjoutLigneFactureState extends State<AjoutLigneFacture> {
                                   if (_formKey.currentState!.validate()) {
                                     if (article != null) {
                                       var a = ({
-                                        'Libélle': lib.text,
+                                        'Description': lib.text,
                                         'Article': article,
-                                        'Compte analytique': comp.text,
-                                        'Etiquette analytique': etq.text,
+                                        'Unite': unitev,
+                                        'réf': refv,
                                         'Quantite': int.parse(qt.text),
                                         'prix': prixv,
                                         'sous-total':
@@ -298,30 +253,39 @@ class AjoutLigneFactureState extends State<AjoutLigneFacture> {
 
                                       var data = json.decode(json.encode(a));
                                       widget.commande.add(data);
-                                      Facture().updateFacture(
-                                          widget.titre,
-                                          widget.client,
-                                          widget.etat,
-                                          DateTime.parse(widget.date1),
-                                          DateTime.parse(widget.date2),
-                                          widget.adresse,
-                                          widget.total,
-                                          widget.commande,
-                                          widget.remise,
-                                          widget.montant);
+                                      if (widget.page == "nouvellefacture") {
+                                        Facture().updateFacture(
+                                            widget.id,
+                                            widget.client,
+                                            widget.etat,
+                                            DateTime.parse(widget.date1),
+                                            widget.total,
+                                            widget.commande,
+                                            widget.remise,
+                                            widget.montant);
+                                      } else {
+                                        AutoFacture().updateFacture(
+                                            widget.id,
+                                            widget.client,
+                                            widget.etat,
+                                            DateTime.parse(widget.date1),
+                                            widget.total,
+                                            widget.commande,
+                                            widget.remise,
+                                            widget.montant);
+                                      }
                                       clearText();
                                       Get.to(() => UpdateFacture(
+                                            id: widget.id,
                                             titre: widget.titre,
                                             client: widget.client,
                                             etat: widget.etat,
-                                            adrss: widget.adresse,
                                             total: widget.total,
-                                            order: 20,
                                             listfact: widget.commande,
                                             montant: widget.montant,
                                             date1: widget.date1,
-                                            date2: widget.date2,
                                             res: widget.res,
+                                            page: widget.page,
                                           ));
                                     } else {
                                       showToast(

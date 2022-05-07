@@ -1,20 +1,21 @@
 // ignore_for_file: file_names, unused_local_variable
 
-import 'package:chama_projet/facture.dart/creer_facture.dart';
 import 'package:chama_projet/facture.dart/detille_facture.dart';
-
 import 'package:chama_projet/services/facture.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class ListFacture extends StatefulWidget {
-  const ListFacture({Key? key}) : super(key: key);
+import '../services/autofacture.dart';
+
+class ListFactureDev extends StatefulWidget {
+  const ListFactureDev({Key? key}) : super(key: key);
   @override
-  _ListFactureState createState() => _ListFactureState();
+  _ListFactureDevState createState() => _ListFactureDevState();
 }
 
-class _ListFactureState extends State<ListFacture> {
+class _ListFactureDevState extends State<ListFactureDev> {
   TextEditingController searchcontroller = TextEditingController();
   TextEditingController editingController = TextEditingController();
   // ignore: non_constant_identifier_names
@@ -26,15 +27,20 @@ class _ListFactureState extends State<ListFacture> {
   }
 
   var i = 0;
+  List fact = [];
+  List test = [];
   fetchDatabaseList() async {
-    dynamic resultant = await Facture().getFacturesList();
+    dynamic resfa = await AutoFacture().getFacturesList();
 
-    if (resultant == null) {
+    dynamic resf = await Facture().getFacturesList();
+
+    if (resfa == null) {
       // ignore: avoid_print
       print('Unable to retrieve');
     } else {
       setState(() {
-        ListFact = resultant;
+        fact = resf;
+        ListFact = resfa;
       });
     }
   }
@@ -45,30 +51,13 @@ class _ListFactureState extends State<ListFacture> {
   // ignore: unnecessary_new
   Widget appBarTitle = const Text("Factures");
   Icon actionIcon = const Icon(Icons.search);
+
   @override
   Widget build(BuildContext context) {
+    var l = fact.length;
     return Scaffold(
         appBar: AppBar(
           title: appBarTitle,
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 20, right: 30),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CreeFacturePage()));
-                },
-                child: Text(
-                  "Créer".toUpperCase(),
-                  style: const TextStyle(
-                      fontSize: 15, color: Colors.white, letterSpacing: 3),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ),
-          ],
           backgroundColor: Colors.orange,
         ),
         body: Container(
@@ -111,7 +100,8 @@ class _ListFactureState extends State<ListFacture> {
                           Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
-                                  pageBuilder: (a, b, c) => const ListFacture(),
+                                  pageBuilder: (a, b, c) =>
+                                      const ListFactureDev(),
                                   transitionDuration:
                                       const Duration(seconds: 0)));
                           // ignore: void_checks
@@ -124,26 +114,24 @@ class _ListFactureState extends State<ListFacture> {
                                   itemCount: ListFact.length,
                                   itemBuilder: (context, index) {
                                     final facture = ListFact[index];
+                                    l = l + 1;
                                     return Card(
                                         child: InkWell(
                                       onTap: () {
                                         Get.to(
                                           () => DetailFacture(
                                               id: facture["IdFact"],
-                                              titre: facture['numfact'],
+                                              titre: facture["numfact"],
                                               client: facture['client'],
                                               etat: facture['etat'],
-                                              date1:
-                                                  facture["date de facturation"]
-                                                      .toDate()
-                                                      .toString()
-                                                      .substring(0, 10),
+                                              date1: facture[
+                                                  "date de facturation"],
                                               total: facture['total'],
                                               listfact:
                                                   facture["ligne facture"],
                                               montant: facture["montant"],
                                               res: facture['remise'],
-                                              page: "nouvellefacture"),
+                                              page: "autofacture"),
                                         );
                                       },
                                       splashColor:
@@ -152,9 +140,14 @@ class _ListFactureState extends State<ListFacture> {
                                         title: Text(facture["etat"]),
                                         subtitle: Text(
                                             // ignore: unnecessary_string_interpolations
-                                            "${facture["date de facturation"].toDate().toString().substring(0, 10)}     ${facture["total"]}£"),
+                                            "${facture["date de facturation"]}     ${facture["total"]}£"),
                                         leading: Text(
                                           facture["numfact"],
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        trailing: Text(
+                                          facture["numdevis"],
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -172,7 +165,7 @@ class _ListFactureState extends State<ListFacture> {
 
   void filterSearchResults(String query) {
     final suggestions = ListFact.where((facture) {
-      final namemploye = facture['numfact'].toLowerCase();
+      final namemploye = facture['numdevis'].toLowerCase();
       final input = query.toLowerCase();
       return namemploye.contains(input);
     }).toList();

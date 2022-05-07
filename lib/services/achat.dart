@@ -1,15 +1,15 @@
 import 'package:chama_projet/widget/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Devis {
-  final CollectionReference devis =
-      FirebaseFirestore.instance.collection('devis');
+class Achat {
+  final CollectionReference achat =
+      FirebaseFirestore.instance.collection('achat');
 
-  Future getDevisList() async {
+  Future getAchatList() async {
     List itemsList = [];
 
     try {
-      await devis.get().then((querySnapshot) {
+      await achat.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           itemsList.add(a);
@@ -23,34 +23,13 @@ class Devis {
     }
   }
 
-  Future getDevisBonCommd() async {
-    List itemsList = [];
-
-    try {
-      await devis.get().then((querySnapshot) {
-        querySnapshot.docs.map((element) {
-          Map a = element.data() as Map<String, dynamic>;
-          if (a["etat"] == "Bon de commande") {
-            itemsList.add(a);
-          }
-        }).toList();
-      });
-      return itemsList;
-    } catch (e) {
-      // ignore: avoid_print
-      print(e.toString());
-      return null;
-    }
-  }
-
-  Future<void> addDevis(
-      titre, num, client, etat, total, ligneCommande, remise, montant, date) {
-    return devis
+  Future<void> addAchat(
+      titre, client, etat, total, ligneCommande, remise, montant, date) {
+    return achat
         .doc(titre)
         .set({
-          'idDevis': titre,
-          'numdevis': num,
-          'client': client,
+          'idAchat': titre,
+          'fournisseur': client,
           'etat': etat,
           'total': total,
           'commande': ligneCommande,
@@ -59,17 +38,17 @@ class Devis {
           'date de devis': date,
         })
         // ignore: avoid_print
-        .then((value) => showToast('devis ajouté'))
+        .then((value) => showToast('achat ajouté'))
         // ignore: avoid_print
         .catchError(
-            (error) => showToast("Échec de l'ajout de l'appareil : $error"));
+            (error) => showToast("Échec de achat de l'appareil : $error"));
   }
 
-  Future<void> updateDevis(titre, client, etat, total, cmd, remise, montant) {
-    return devis
+  Future<void> updateAchat(titre, client, etat, total, cmd, remise, montant) {
+    return achat
         .doc(titre)
         .update({
-          'client': client,
+          'fournisseur': client,
           'etat': etat,
           'total': total,
           'commande': cmd,
@@ -77,32 +56,32 @@ class Devis {
           'montant': montant
         })
         // ignore: avoid_print
-        .then((value) => showToast("devis mis à jour"))
+        .then((value) => showToast("achat mis à jour"))
         // ignore: avoid_print
         .catchError((error) =>
             showToast("Échec de la mise à jour de l'appareil : $error"));
   }
 
-  Future<void> deleteDevis(id) {
+  Future<void> deleteAchat(id) {
     // print("Employe Deleted $id");
-    return devis
+    return achat
         .doc(id)
         .delete()
         // ignore: avoid_print
-        .then((value) => showToast('Devis supprimée'))
+        .then((value) => showToast('achat supprimée'))
         // ignore: avoid_print
         .catchError((error) =>
             showToast("Échec de la suppression de l'appareil : $error"));
   }
 
-  Future getDevisListByNom() async {
+  Future getAchatListByNom() async {
     List itemsListNom = [];
 
     try {
-      await devis.get().then((querySnapshot) {
+      await achat.get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
-          itemsListNom.add(a['idDevis']);
+          itemsListNom.add(a['idAchat']);
         }).toList();
       });
       return itemsListNom;

@@ -7,6 +7,7 @@ import 'package:chama_projet/widget/card_inventaire.dart';
 
 import 'package:flutter/material.dart';
 
+import 'card_achat.dart';
 import 'card_devis.dart';
 import 'card_employe.dart';
 import 'card_facture.dart';
@@ -54,6 +55,7 @@ class _MenuAdminState extends State<MenuAdmin> {
               children: <Widget>[
                 for (var x in widget.acces) ...[
                   if (x == "Employés") ...[buildInputCardEmploye()],
+                  if (x == "Achats") ...[buildInputCardAchat()],
                   if (x == "Devis") ...[buildInputCardDevis(widget.role)],
                   if (x == "Contacts") ...[buildInputCardContact()],
                   if (x == "Articles") ...[buildInputCardArtcile()],
