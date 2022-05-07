@@ -74,7 +74,7 @@ class _CalanderState extends State<Calander> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text("plan"),
+          title: const Text("plan"),
           actions: [
             PopupMenuButton(
               itemBuilder: (context) => [
@@ -96,8 +96,8 @@ class _CalanderState extends State<Calander> {
                                 ? Colors.green.withOpacity(0.5)
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(15)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
                           child: Text("afficher par jour "),
                         )),
                   ),
@@ -120,8 +120,8 @@ class _CalanderState extends State<Calander> {
                                 ? Colors.green.withOpacity(0.5)
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(15)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
                           child: Text("afficher par semaine "),
                         )),
                   ),
@@ -141,7 +141,7 @@ class _CalanderState extends State<Calander> {
                                 ? Colors.green.withOpacity(0.5)
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(15)),
-                        child: Text("afficher par mois ")),
+                        child: const Text("afficher par mois ")),
                   ),
                 ),
               ],
@@ -153,20 +153,20 @@ class _CalanderState extends State<Calander> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ElevatedButton(onPressed: () {}, child: Text("Planifié")),
+                ElevatedButton(onPressed: () {}, child: const Text("Planifié")),
                 ElevatedButton(
                   onPressed: () {},
-                  child: Text("Démarrer"),
+                  child: const Text("Démarrer"),
                   style: ElevatedButton.styleFrom(primary: Colors.orange),
                 ),
                 ElevatedButton(
                   onPressed: () {},
-                  child: Text("Terminé"),
+                  child: const Text("Terminé"),
                   style: ElevatedButton.styleFrom(primary: Colors.green),
                 ),
                 ElevatedButton(
                   onPressed: () {},
-                  child: Text("Annuler"),
+                  child: const Text("Annuler"),
                   style: ElevatedButton.styleFrom(primary: Colors.red),
                 ),
               ],

@@ -213,7 +213,7 @@ class _DetailFactureState extends State<DetailFacture> {
                     ),
                     SfSignaturePad(
                       key: keySignaturePad,
-                      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                     ),
                   ],
                 ),

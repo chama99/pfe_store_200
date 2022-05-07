@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 Card buildInputCardAchat() {
   return Card(
-    color: Color.fromARGB(255, 166, 243, 177),
+    color: const Color.fromARGB(255, 228, 169, 40),
     margin: const EdgeInsets.all(8.0),
     child: InkWell(
       onTap: () {
@@ -16,7 +16,7 @@ Card buildInputCardAchat() {
           mainAxisSize: MainAxisSize.min,
           children: const <Widget>[
             Icon(
-              Icons.add_chart,
+              Icons.shopping_bag_outlined,
               size: 70,
               color: Colors.white,
             ),

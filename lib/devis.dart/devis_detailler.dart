@@ -242,7 +242,8 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                       padding: const EdgeInsets.only(top: 8.0),
                       child: SfSignaturePad(
                         key: keySignaturePad,
-                        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                        backgroundColor:
+                            const Color.fromARGB(255, 255, 255, 255),
                       ),
                     ),
                   ],

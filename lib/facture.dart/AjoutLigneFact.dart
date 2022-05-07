@@ -1,5 +1,5 @@
 // ignore: file_names
-// ignore_for_file: must_be_immutable, file_names, duplicate_ignore, prefer_typing_uninitialized_variables
+// ignore_for_file: must_be_immutable, file_names, duplicate_ignore, prefer_typing_uninitialized_variables, non_constant_identifier_names, unused_local_variable
 
 import 'dart:convert';
 

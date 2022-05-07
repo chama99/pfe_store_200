@@ -58,7 +58,6 @@ class _listArticleState extends State<listArticle> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => const CreeArticlePage()));
-                  print(userArticleList);
                 },
                 child: Text(
                   "Créer".toUpperCase(),
