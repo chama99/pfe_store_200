@@ -147,7 +147,7 @@ class _MultiSelectionState extends State<MultiSelection> {
                                               ),
                                               Text(
                                                 list[index][0],
-                                                style: TextStyle(fontSize: 25),
+                                                
                                               ),
                                             ],
                                           ),

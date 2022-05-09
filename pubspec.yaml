@@ -79,6 +79,7 @@ dependencies:
   cache_manager: ^1.0.0+4
   barcode: ^2.2.0
   flutter_barcode_scanner: ^2.0.0
+  flutter_calendar_carousel: ^2.1.0
  
 
  

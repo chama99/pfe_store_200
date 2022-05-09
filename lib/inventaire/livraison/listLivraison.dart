@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../../services/reception.dart';
 import '../../widget/boitedialogue.dart';
-import '../reception./details_reception.dart';
+//import '../reception./details_reception.dart';
 import 'dtail_livraison.dart';
 
 class ListLivraison extends StatefulWidget {

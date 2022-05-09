@@ -6,9 +6,20 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
+import '../widget/drop_down.dart';
+
 bottomSheet(BuildContext context, List selectedItems) {
+  const List<String> timeList = [
+    "09:00 - 16:00",
+    "09:00 - 19:00",
+    "08:00 - 17:00",
+    "07:00 - 15:00",
+  ];
+  print(selectedItems);
+  final event = selectedItems[0];
   DateTime dateTimeStart = DateTime.now();
-  TextEditingController subjectController = TextEditingController();
+  TextEditingController subjectController =
+      TextEditingController(text: event['subject']);
   DateTime dateTimeEnd = DateTime.now();
   bool dateTimeStartSelected = false;
   bool dateTimeEndSelected = false;
@@ -41,11 +52,13 @@ bottomSheet(BuildContext context, List selectedItems) {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text("Ajouter un plan de travaille  "),
+                          const Text("Modifier un plan de travaille "),
                           TextFormField(
+                            //initialValue: event['subject'],
                             controller: subjectController,
+
                             decoration: InputDecoration(
-                                label: Text("Sujet de plan"),
+                                //label: Text("Sujet de plan"),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20))),
                           ),
@@ -106,7 +119,8 @@ bottomSheet(BuildContext context, List selectedItems) {
                                   onPressed: () {
                                     showDatePicker(
                                             context: context,
-                                            initialDate: DateTime.now(),
+                                            initialDate: DateTime.parse(
+                                                selectedItems[1]),
                                             firstDate: DateTime(2022),
                                             lastDate: DateTime(2023))
                                         .then((value) {
@@ -116,37 +130,35 @@ bottomSheet(BuildContext context, List selectedItems) {
                                       });
                                     });
                                   },
-                                  child: Text(DateFormat('yyyy-MM-dd')
-                                      .format(dateTimeStart))),
-                              SizedBox(
-                                width: size.width * 0.01,
-                              ),
-                              if (dateTimeStartSelected) ...[
-                                ElevatedButton(
-                                    onPressed: () {
-                                      showTimePicker(
-                                        context: context,
-                                        initialTime: TimeOfDay.now(),
-                                      ).then((value) {
-                                        setState(() {
-                                          dateTimeStart = dateTimeStart.add(
-                                              Duration(
-                                                  hours: value!.hour,
-                                                  minutes: value.minute));
-                                        });
-                                      });
-                                    },
-                                    child: Text(DateFormat('HH:mm')
-                                        .format(dateTimeStart))),
-                              ]
+                                  child: Text(DateFormat('yyyy-MM-dd').format(
+                                      DateTime.parse(selectedItems[1])))),
                             ],
                           ),
+                          if (dateTimeStartSelected) ...[
+                            ElevatedButton(
+                                onPressed: () {
+                                  showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
+                                  ).then((value) {
+                                    setState(() {
+                                      dateTimeStart = dateTimeStart.add(
+                                          Duration(
+                                              hours: value!.hour,
+                                              minutes: value.minute));
+                                    });
+                                  });
+                                },
+                                child: Text(
+                                  DateFormat("HH:mm").format(dateTimeStart),
+                                ))
+                          ],
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text("Date de fin de plan"),
                               SizedBox(
-                                width: size.width * 0.08,
+                                width: size.width * 0.03,
                               ),
                               ElevatedButton(
                                   onPressed: () {
@@ -162,33 +174,37 @@ bottomSheet(BuildContext context, List selectedItems) {
                                       });
                                     });
                                   },
-                                  child: Text(DateFormat('yyyy-MM-dd')
-                                      .format(dateTimeEnd))),
+                                  child: Text(DateFormat('yyyy-MM-dd').format(
+                                      DateTime.parse(selectedItems[2])))),
                               SizedBox(
                                 width: size.width * 0.01,
                               ),
-                              if (dateTimeEndSelected) ...[
-                                ElevatedButton(
-                                    onPressed: () {
-                                      showTimePicker(
-                                        context: context,
-                                        initialTime: TimeOfDay.now(),
-                                      ).then((value) {
-                                        setState(() {
-                                          dateTimeEnd = dateTimeEnd.add(
-                                              Duration(
-                                                  hours: value!.hour,
-                                                  minutes: value.minute));
-                                        });
-                                      });
-                                    },
-                                    child: Text(DateFormat('HH:mm')
-                                        .format(dateTimeEnd))),
-                              ]
                             ],
                           ),
+                          if (dateTimeEndSelected) ...[
+                            // ElevatedButton(
+                            //     onPressed: () {
+                            //       showTimePicker(
+                            //         context: context,
+                            //         initialTime: TimeOfDay.now(),
+                            //       ).then((value) {
+                            //         setState(() {
+                            //           dateTimeEnd = dateTimeEnd.add(
+                            //               Duration(
+                            //                   hours: value!.hour,
+                            //                   minutes: value.minute));
+                            //         });
+                            //       });
+                            //     },
+                            //     child: Text(DateFormat("HH:mm").format(dateTimeEnd),),)
+                            dropDown(timeList, (String? value) {
+                               setState(() {
+                                    
+                                    });
+                            }),
+                          ],
                           isLoading
-                              ? CircularProgressIndicator()
+                              ? const CircularProgressIndicator()
                               : Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
@@ -229,7 +245,7 @@ bottomSheet(BuildContext context, List selectedItems) {
                                             'endTime': dateTimeEnd,
                                             'subject': subjectController.text,
                                             'state': "Planifié",
-                                            "owners": selectedItems,
+                                            "owners": event['client'],
                                             "client": hint
                                           });
                                           setState(() {
@@ -237,7 +253,7 @@ bottomSheet(BuildContext context, List selectedItems) {
                                             isDone = true;
                                           });
                                         },
-                                        child: Text("Confirmer")),
+                                        child: const Text("Confirmer")),
                                   ],
                                 ),
                         ],
@@ -247,6 +263,19 @@ bottomSheet(BuildContext context, List selectedItems) {
           );
         });
       });
+}
+
+Widget dropDown(
+  List<String> items,
+  void Function(String?) fnChange, {
+  String oneItem = "Choissiez un client",
+}) {
+  return AppDropdownInput<String>(
+    options: items,
+    value: oneItem,
+    onChanged: fnChange,
+    getLabel: (String value) => value,
+  );
 }
 
 Column doneAddPlanning(Size size) {
