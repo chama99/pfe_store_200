@@ -1,9 +1,18 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'dart:convert';
+
+import 'package:chama_projet/achat/listAchat.dart';
+import 'package:chama_projet/services/achat.dart';
 import 'package:chama_projet/services/commandeachat.dart';
 import 'package:chama_projet/services/contact.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_azure_b2c/GUIDGenerator.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import '../widget/toast.dart';
+import 'lignedemande.dart';
 
 class CreerAchat extends StatefulWidget {
   const CreerAchat({Key? key}) : super(key: key);
@@ -20,15 +29,18 @@ class _CreerAchatState extends State<CreerAchat> {
   var etat;
   List commandeList = [];
   List userContactList = [];
+  final String uuid = GUIDGen.generate();
   @override
   void initState() {
     super.initState();
     fetchDatabaseList();
   }
 
+  List Acht = [];
   fetchDatabaseList() async {
     dynamic resultant = await CommandeAchat().getCommandesList();
     dynamic resc = await Contact().getContactListByFour();
+    dynamic resa = await Achat().getAchatList();
     if (resultant == null) {
       // ignore: avoid_print
       print('Unable to retrieve');
@@ -36,6 +48,7 @@ class _CreerAchatState extends State<CreerAchat> {
       setState(() {
         commandeList = resultant;
         userContactList = resc;
+        Acht = resa;
       });
     }
   }
@@ -48,8 +61,38 @@ class _CreerAchatState extends State<CreerAchat> {
     return montant;
   }
 
+  List list = [];
+  addList() {
+    for (var i = 0; i < commandeList.length; i++) {
+      list.add(commandeList[i]);
+    }
+  }
+
+  Future sendEmail(
+      {required String email,
+      required String subject,
+      required String message}) async {
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final reponse = await http.post(url,
+        headers: {
+          'origin': 'http://localhost',
+          'Content-Type': 'application/json'
+        },
+        body: json.encode({
+          'service_id': 'service_uhhmp3o',
+          'template_id': 'template_7qb4pue',
+          'user_id': 'YamFh0mEzNIrNPlPc',
+          'template_params': {
+            'user_email': email,
+            'user_subject': subject,
+            'user_message': message
+          }
+        }));
+  }
+
   @override
   Widget build(BuildContext context) {
+    var l = Acht.length;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Demande d'achat"),
@@ -90,7 +133,9 @@ class _CreerAchatState extends State<CreerAchat> {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 0),
                                   child: InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Get.to(() => const LigneDemande());
+                                    },
                                     child: Container(
                                       margin: const EdgeInsets.all(10),
                                       decoration: BoxDecoration(
@@ -245,7 +290,7 @@ class _CreerAchatState extends State<CreerAchat> {
                                 ),
                                 Container(
                                   margin: const EdgeInsets.only(
-                                      left: 73, bottom: 15),
+                                      left: 0, bottom: 15),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5),
                                       border: Border.all(
@@ -343,6 +388,22 @@ class _CreerAchatState extends State<CreerAchat> {
                               ],
                             ),
                           ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              maximumSize: const Size(double.infinity, 50),
+                              primary: Colors.orange,
+                            ),
+                            child: const Text("Envoyer par email"),
+                            onPressed: () {
+                              // Validate returns true if the form is valid, otherwise false.
+                              if (_formKey.currentState!.validate()) {
+                                sendEmail(
+                                    email: fournisseur,
+                                    subject: etat,
+                                    message: "jjgj");
+                              }
+                            },
+                          ),
                         ],
                       )),
                     ],
@@ -352,6 +413,40 @@ class _CreerAchatState extends State<CreerAchat> {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          maximumSize: const Size(double.infinity, 50),
+          primary: const Color.fromARGB(255, 62, 75, 146),
+        ),
+        child: const Text("Sauvegarder"),
+        onPressed: () {
+          // Validate returns true if the form is valid, otherwise false.
+          if (_formKey.currentState!.validate()) {
+            if (fournisseur != null) {
+              if (etat != null) {
+                addList();
+
+                Achat().addAchat(
+                    uuid,
+                    "Produit N°${l + 1}",
+                    fournisseur,
+                    etat,
+                    (calculMontat() * (1 + 0.2)),
+                    list,
+                    calculMontat(),
+                    dataTime);
+
+                Get.to(() => const ListAchat());
+              } else {
+                showToast("veuillez sélectionner état");
+              }
+            } else {
+              showToast("veuillez sélectionner fournisseur");
+            }
+            CommandeAchat().deleteCommande();
+          }
+        },
       ),
     );
   }

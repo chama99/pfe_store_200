@@ -129,12 +129,12 @@ class _ListAchatState extends State<ListAchat> {
                                   title: Text(achat["etat"]),
                                   subtitle: Text(
                                       // ignore: unnecessary_string_interpolations
-                                      "${achat["date de facturation"].toDate().toString()}       ${achat["total"]}£"),
+                                      "${achat["date d'achat"].toDate().toString()}       ${achat["total"]}£"),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          achat["titre"],
+                                          achat["numachat"],
                                           "Êtes-vous sûr de vouloir supprimer cette facture",
                                           "facture")
                                     },
@@ -144,7 +144,7 @@ class _ListAchatState extends State<ListAchat> {
                                     ),
                                   ),
                                   leading: Text(
-                                    achat["titre"],
+                                    achat["numachat"],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -159,7 +159,7 @@ class _ListAchatState extends State<ListAchat> {
 
   void filterSearchResults(String query) {
     final suggestions = Listachat.where((achat) {
-      final namemploye = achat['titre'].toLowerCase();
+      final namemploye = achat['numachat'].toLowerCase();
       final input = query.toLowerCase();
       return namemploye.contains(input);
     }).toList();

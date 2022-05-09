@@ -9,12 +9,13 @@ import '../../widget/toast.dart';
 import 'ModifierLigneOperation.dart';
 
 class UpdateReception extends StatefulWidget {
-  String titre;
+  String titre, id;
   List OperationList;
   String reception, etat;
   String date;
   UpdateReception(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.OperationList,
       required this.reception,
@@ -50,6 +51,7 @@ class _UpdateReceptionState extends State<UpdateReception> {
               PageRouteBuilder(
                   // ignore: prefer_const_constructors
                   pageBuilder: (a, b, c) => UpdateReception(
+                        id: widget.id,
                         titre: widget.titre,
                         OperationList: widget.OperationList,
                         reception: widget.reception,
@@ -81,6 +83,7 @@ class _UpdateReceptionState extends State<UpdateReception> {
                       IconButton(
                         onPressed: () {
                           Get.to(() => Ajoutoperation(
+                                id: widget.id,
                                 titre: widget.titre,
                                 etat: widget.etat,
                                 date: widget.date,
@@ -137,6 +140,7 @@ class _UpdateReceptionState extends State<UpdateReception> {
                               showToast("Veuillez entrer Numéro de ligne");
                             } else {
                               Get.to(() => ModifierOperation(
+                                    id: widget.id,
                                     titre: widget.titre,
                                     reception: widget.reception,
                                     etat: widget.etat,
@@ -310,7 +314,7 @@ class _UpdateReceptionState extends State<UpdateReception> {
         child: const Text("Modifier"),
         onPressed: () {
           Reception().updateReception(
-              widget.titre,
+              widget.id,
               "Atelier:Réception",
               widget.etat,
               DateTime.parse(widget.date),

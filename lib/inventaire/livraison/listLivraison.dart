@@ -125,7 +125,8 @@ class _ListLivraisonState extends State<ListLivraison> {
                                   child: InkWell(
                                 onTap: () {
                                   Get.to(() => LivraisonDetaile(
-                                      titre: liv["IdLiv"],
+                                      id: liv["IdLiv"],
+                                      titre: liv["numliv"],
                                       typeoperation: liv["type d'operation"],
                                       etat: liv["etat"],
                                       livraison: liv["Adresse de livraison"],
@@ -140,7 +141,7 @@ class _ListLivraisonState extends State<ListLivraison> {
                                   title: Text(liv["etat"]),
                                   subtitle: Text(
                                       // ignore: unnecessary_string_interpolations
-                                      "${liv["date prévue"].toDate().toString()}"),
+                                      "${liv["date prévue"].toDate().toString().substring(0, 10)}"),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(
@@ -155,7 +156,7 @@ class _ListLivraisonState extends State<ListLivraison> {
                                     ),
                                   ),
                                   leading: Text(
-                                    liv["IdLiv"],
+                                    liv["numliv"],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -170,7 +171,7 @@ class _ListLivraisonState extends State<ListLivraison> {
 
   void filterSearchResults(String query) {
     final suggestions = Listlivraison.where((liv) {
-      final namemploye = liv['IdLiv'].toLowerCase();
+      final namemploye = liv['numliv'].toLowerCase();
       final input = query.toLowerCase();
       return namemploye.contains(input);
     }).toList();

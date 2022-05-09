@@ -10,10 +10,11 @@ import 'package:get/get.dart';
 class ModifierOperationTran extends StatefulWidget {
   int num;
   List ligneOperation;
-  String titre, date;
+  String titre, date, id;
   String transf, etat;
   ModifierOperationTran(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.transf,
       required this.etat,
@@ -177,13 +178,14 @@ class _ModifierOperationTranState extends State<ModifierOperationTran> {
                     ElevatedButton(
                       onPressed: () {
                         Transfert().updateTransfert(
-                            widget.titre,
+                            widget.id,
                             "Atelier:Livraison",
                             widget.etat,
                             DateTime.parse(widget.date),
                             widget.ligneOperation,
                             widget.transf);
                         Get.to(() => UpdateTransfert(
+                            id: widget.id,
                             titre: widget.titre,
                             OperationList: widget.ligneOperation,
                             transf: widget.transf,

@@ -23,11 +23,13 @@ class Livraison {
     }
   }
 
-  Future<void> addLivraison(titre, type, etat, date, ligneOperation, adresse) {
+  Future<void> addLivraison(
+      id, titre, type, etat, date, ligneOperation, adresse) {
     return livraisonn
-        .doc(titre)
+        .doc(id)
         .set({
-          'IdLiv': titre,
+          'IdLiv': id,
+          'numliv': titre,
           "type d'operation": type,
           'etat': etat,
           'date prévue': date,

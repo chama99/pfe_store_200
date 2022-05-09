@@ -23,11 +23,13 @@ class Reception {
     }
   }
 
-  Future<void> addReception(titre, type, etat, date, ligneOperation, recept) {
+  Future<void> addReception(
+      id, titre, type, etat, date, ligneOperation, recept) {
     return reception
-        .doc(titre)
+        .doc(id)
         .set({
-          'IdRecp': titre,
+          'IdRecp': id,
+          'numrecp': titre,
           "type d'operation": type,
           'etat': etat,
           'date prévue': date,

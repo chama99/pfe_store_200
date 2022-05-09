@@ -11,9 +11,10 @@ class ModifierOperationLiv extends StatefulWidget {
   int num;
   List ligneOperation;
   String titre, date;
-  String livraison, etat;
+  String livraison, etat, id;
   ModifierOperationLiv(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.livraison,
       required this.etat,
@@ -207,13 +208,14 @@ class _ModifierOperationLivState extends State<ModifierOperationLiv> {
                     ElevatedButton(
                       onPressed: () {
                         Livraison().updateLivraison(
-                            widget.titre,
+                            widget.id,
                             "Atelier:Livraison",
                             widget.etat,
                             DateTime.parse(widget.date),
                             widget.ligneOperation,
                             widget.livraison);
                         Get.to(() => UpdateLivraison(
+                            id: widget.id,
                             titre: widget.titre,
                             OperationList: widget.ligneOperation,
                             livraison: widget.livraison,

@@ -24,18 +24,18 @@ class Achat {
   }
 
   Future<void> addAchat(
-      titre, client, etat, total, ligneCommande, remise, montant, date) {
+      titre, numa, client, etat, total, ligneCommande, montant, date) {
     return achat
         .doc(titre)
         .set({
           'idAchat': titre,
+          'numachat': numa,
           'fournisseur': client,
           'etat': etat,
           'total': total,
           'commande': ligneCommande,
-          'remise': remise,
           'montant': montant,
-          'date de devis': date,
+          "date d'achat": date,
         })
         // ignore: avoid_print
         .then((value) => showToast('achat ajouté'))
@@ -44,7 +44,7 @@ class Achat {
             (error) => showToast("Échec de achat de l'appareil : $error"));
   }
 
-  Future<void> updateAchat(titre, client, etat, total, cmd, remise, montant) {
+  Future<void> updateAchat(titre, client, etat, total, cmd, montant) {
     return achat
         .doc(titre)
         .update({
@@ -52,7 +52,6 @@ class Achat {
           'etat': etat,
           'total': total,
           'commande': cmd,
-          'remise': remise,
           'montant': montant
         })
         // ignore: avoid_print

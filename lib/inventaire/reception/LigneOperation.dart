@@ -100,15 +100,18 @@ class _LigneOperationState extends State<LigneOperation> {
         child: Column(
           children: [
             const Center(
-              child: Text(
-                "Article :",
-                style: TextStyle(fontSize: 20, letterSpacing: 3),
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  "Article :",
+                  style: TextStyle(fontSize: 20, letterSpacing: 3),
+                ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8),
               child: Container(
-                width: 320,
+                width: 365,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(color: Colors.grey, width: 1)),

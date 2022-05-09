@@ -7,12 +7,13 @@ import 'package:get/get.dart';
 import '../../widget/toast.dart';
 
 class ReceptionDetaile extends StatefulWidget {
-  String titre, typeoperation, etat, date;
+  String titre, typeoperation, etat, date, id;
   String receptions;
   // ignore: non_constant_identifier_names
   List LigneOperations;
   ReceptionDetaile(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.typeoperation,
       required this.etat,
@@ -39,6 +40,7 @@ class _ReceptionDetaileState extends State<ReceptionDetaile> {
               onTap: () {
                 if (widget.etat == "Brouillon" || widget.etat == "En attente") {
                   Get.to(() => UpdateReception(
+                        id: widget.id,
                         titre: widget.titre,
                         OperationList: widget.LigneOperations,
                         reception: widget.receptions,

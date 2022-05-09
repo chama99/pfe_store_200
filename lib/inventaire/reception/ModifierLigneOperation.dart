@@ -8,10 +8,11 @@ import 'package:get/get.dart';
 class ModifierOperation extends StatefulWidget {
   int num;
   List ligneOperation;
-  String titre, date;
+  String titre, date, id;
   String reception, etat;
   ModifierOperation(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.reception,
       required this.etat,
@@ -175,13 +176,14 @@ class _ModifierOperationState extends State<ModifierOperation> {
                     ElevatedButton(
                       onPressed: () {
                         Reception().updateReception(
-                            widget.titre,
+                            widget.id,
                             "Atelier:Réception",
                             widget.etat,
                             DateTime.parse(widget.date),
                             widget.ligneOperation,
                             widget.reception);
                         Get.to(() => UpdateReception(
+                            id: widget.id,
                             titre: widget.titre,
                             OperationList: widget.ligneOperation,
                             reception: widget.reception,

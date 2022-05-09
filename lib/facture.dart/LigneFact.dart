@@ -83,16 +83,19 @@ class _LigneFactureState extends State<LigneFacture> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const Center(
-              child: Text(
-                "Article :",
-                style: TextStyle(fontSize: 20, letterSpacing: 3),
+            const Padding(
+              padding: EdgeInsets.all(20),
+              child: Center(
+                child: Text(
+                  "Article :",
+                  style: TextStyle(fontSize: 20, letterSpacing: 3),
+                ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                width: 320,
+                width: 365,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(color: Colors.grey, width: 1)),
@@ -160,6 +163,15 @@ class _LigneFactureState extends State<LigneFacture> {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        const Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Center(
+                            child: Text(
+                              "Description :",
+                              style: TextStyle(fontSize: 20, letterSpacing: 3),
+                            ),
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
@@ -183,10 +195,19 @@ class _LigneFactureState extends State<LigneFacture> {
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Veuillez entrer  libellé ";
+                                return "Veuillez entrer  description ";
                               }
                               return null;
                             },
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Center(
+                            child: Text(
+                              "Quantité :",
+                              style: TextStyle(fontSize: 20, letterSpacing: 3),
+                            ),
                           ),
                         ),
                         Padding(
@@ -218,6 +239,49 @@ class _LigneFactureState extends State<LigneFacture> {
                               if (int.parse(value) > quant) {
                                 return "Vous avez dépassé la quantité ";
                               }
+                              return null;
+                            },
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Text(
+                              "Prix :",
+                              style: TextStyle(fontSize: 20, letterSpacing: 3),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            initialValue: "$prixv £",
+                            onChanged: (Value) {
+                              prixv = double.parse(Value);
+                            },
+                            decoration: InputDecoration(
+                              hintText: 'Prix',
+                              filled: true,
+                              fillColor: Colors.white,
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: const BorderSide(
+                                    color: Colors.orange, width: 1.5),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: const BorderSide(
+                                  color: Colors.orange,
+                                  width: 1.5,
+                                ),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Veuillez entrer prix ";
+                              }
+
                               return null;
                             },
                           ),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'listfact.dart';
 import 'listfactdevis.dart';
+import 'dart:ui' as ui;
 
 class ListFactt extends StatefulWidget {
   const ListFactt({Key? key}) : super(key: key);
@@ -73,21 +74,24 @@ class _ListFacttState extends State<ListFactt> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        const Padding(
-                          padding: EdgeInsets.all(15),
+                        Padding(
+                          padding: const EdgeInsets.all(15),
                           child: Center(
                             child: Text("Les factures à partir les devis",
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold,
                                     fontSize: 30,
-                                    color: Colors.indigo)),
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            "Atelier",
-                            style: TextStyle(fontSize: 15),
+                                    foreground: Paint()
+                                      ..shader = ui.Gradient.linear(
+                                        const Offset(0, 20),
+                                        const Offset(150, 20),
+                                        <Color>[
+                                          const Color.fromARGB(
+                                              255, 232, 86, 18),
+                                          const Color.fromARGB(
+                                              255, 194, 178, 27),
+                                        ],
+                                      ))),
                           ),
                         ),
                         Center(
@@ -113,20 +117,21 @@ class _ListFacttState extends State<ListFactt> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: Text("Les nouvelles Factures",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
                                   fontSize: 30,
-                                  color: Colors.indigo)),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            "Atelier",
-                            style: TextStyle(fontSize: 15),
-                          ),
+                                  foreground: Paint()
+                                    ..shader = ui.Gradient.linear(
+                                      const Offset(0, 20),
+                                      const Offset(150, 20),
+                                      <Color>[
+                                        const Color.fromARGB(255, 232, 86, 18),
+                                        const Color.fromARGB(255, 194, 178, 27),
+                                      ],
+                                    ))),
                         ),
                         Center(
                           child: ElevatedButton(

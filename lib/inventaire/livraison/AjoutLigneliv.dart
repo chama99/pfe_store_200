@@ -15,9 +15,10 @@ import '../../widget/toast.dart';
 
 class AjoutoperationLiv extends StatefulWidget {
   List ListOperation;
-  String titre, etat, date, livraison, page;
+  String titre, etat, date, livraison, page, id;
   AjoutoperationLiv(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.etat,
       required this.date,
@@ -301,7 +302,7 @@ class _AjoutoperationLivState extends State<AjoutoperationLiv> {
                                       var data = json.decode(json.encode(a));
                                       widget.ListOperation.add(data);
                                       Livraison().updateLivraison(
-                                          widget.titre,
+                                          widget.id,
                                           "Atelier:Réception",
                                           widget.etat,
                                           DateTime.parse(widget.date),
@@ -309,6 +310,7 @@ class _AjoutoperationLivState extends State<AjoutoperationLiv> {
                                           widget.livraison);
                                       clearText();
                                       Get.to(() => UpdateLivraison(
+                                          id: widget.id,
                                           titre: widget.titre,
                                           OperationList: widget.ListOperation,
                                           livraison: widget.livraison,

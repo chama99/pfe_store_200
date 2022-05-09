@@ -12,12 +12,13 @@ import '../../widget/toast.dart';
 import 'Modifieroperation_liv.dart';
 
 class UpdateLivraison extends StatefulWidget {
-  String titre;
+  String titre, id;
   List OperationList;
   String livraison, etat;
   String date;
   UpdateLivraison(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.OperationList,
       required this.livraison,
@@ -52,6 +53,7 @@ class _UpdateLivraisonState extends State<UpdateLivraison> {
               PageRouteBuilder(
                   // ignore: prefer_const_constructors
                   pageBuilder: (a, b, c) => UpdateLivraison(
+                        id: widget.id,
                         titre: widget.titre,
                         OperationList: widget.OperationList,
                         livraison: widget.livraison,
@@ -83,6 +85,7 @@ class _UpdateLivraisonState extends State<UpdateLivraison> {
                       IconButton(
                         onPressed: () {
                           Get.to(() => AjoutoperationLiv(
+                                id: widget.id,
                                 titre: widget.titre,
                                 etat: widget.etat,
                                 date: widget.date,
@@ -139,6 +142,7 @@ class _UpdateLivraisonState extends State<UpdateLivraison> {
                               showToast("Veuillez entrer Numéro de ligne");
                             } else {
                               Get.to(() => ModifierOperationLiv(
+                                    id: widget.id,
                                     titre: widget.titre,
                                     livraison: widget.livraison,
                                     etat: widget.etat,
@@ -308,7 +312,7 @@ class _UpdateLivraisonState extends State<UpdateLivraison> {
         child: const Text("Modifier"),
         onPressed: () {
           Livraison().updateLivraison(
-              widget.titre,
+              widget.id,
               "Atelier:Réception",
               widget.etat,
               DateTime.parse(widget.date),

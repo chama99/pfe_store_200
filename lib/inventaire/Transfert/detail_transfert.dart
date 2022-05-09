@@ -7,12 +7,13 @@ import 'package:get/get.dart';
 import '../../widget/toast.dart';
 
 class TransfertDetaile extends StatefulWidget {
-  String titre, typeoperation, etat, date;
+  String titre, typeoperation, etat, date, id;
   String transf;
   // ignore: non_constant_identifier_names
   List LigneOperations;
   TransfertDetaile(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.typeoperation,
       required this.etat,
@@ -39,6 +40,7 @@ class _TransfertDetaileState extends State<TransfertDetaile> {
               onTap: () {
                 if (widget.etat == "Brouillon" || widget.etat == "En attente") {
                   Get.to(() => UpdateTransfert(
+                      id: widget.id,
                       titre: widget.titre,
                       OperationList: widget.LigneOperations,
                       transf: widget.transf,

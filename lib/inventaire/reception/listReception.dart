@@ -123,7 +123,8 @@ class _ListReceptionState extends State<ListReception> {
                                   child: InkWell(
                                 onTap: () {
                                   Get.to(() => ReceptionDetaile(
-                                      titre: recp["IdRecp"],
+                                      id: recp["IdRecp"],
+                                      titre: recp["numrecp"],
                                       typeoperation: recp["type d'operation"],
                                       etat: recp["etat"],
                                       receptions: recp["reception"],
@@ -139,7 +140,7 @@ class _ListReceptionState extends State<ListReception> {
                                   title: Text(recp["etat"]),
                                   subtitle: Text(
                                       // ignore: unnecessary_string_interpolations
-                                      "${recp["date prévue"].toDate().toString()}"),
+                                      "${recp["date prévue"].toDate().toString().substring(0, 10)}"),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(
@@ -154,7 +155,7 @@ class _ListReceptionState extends State<ListReception> {
                                     ),
                                   ),
                                   leading: Text(
-                                    recp["IdRecp"],
+                                    recp["numrecp"],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -169,7 +170,7 @@ class _ListReceptionState extends State<ListReception> {
 
   void filterSearchResults(String query) {
     final suggestions = Listreception.where((recp) {
-      final namemploye = recp['IdRecp'].toLowerCase();
+      final namemploye = recp['numrecp'].toLowerCase();
       final input = query.toLowerCase();
       return namemploye.contains(input);
     }).toList();

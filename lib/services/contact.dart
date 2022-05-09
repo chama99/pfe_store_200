@@ -104,7 +104,7 @@ class Contact {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           if (a["type"] == "fournisseur") {
-            itemsListNom.add(a['name']);
+            itemsListNom.add(a['email']);
           }
         }).toList();
       });

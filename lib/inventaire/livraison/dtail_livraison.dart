@@ -7,12 +7,13 @@ import 'package:get/get.dart';
 import '../../widget/toast.dart';
 
 class LivraisonDetaile extends StatefulWidget {
-  String titre, typeoperation, etat, date;
+  String id, titre, typeoperation, etat, date;
   String livraison;
   // ignore: non_constant_identifier_names
   List LigneOperations;
   LivraisonDetaile(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.typeoperation,
       required this.etat,
@@ -39,6 +40,7 @@ class _LivraisonDetaileState extends State<LivraisonDetaile> {
               onTap: () {
                 if (widget.etat == "Brouillon" || widget.etat == "En attente") {
                   Get.to(() => UpdateLivraison(
+                      id: widget.id,
                       titre: widget.titre,
                       OperationList: widget.LigneOperations,
                       livraison: widget.livraison,

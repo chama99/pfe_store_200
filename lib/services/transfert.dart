@@ -23,11 +23,13 @@ class Transfert {
     }
   }
 
-  Future<void> addTransfert(titre, type, etat, date, ligneOperation, trf) {
+  Future<void> addTransfert(
+      titre, numt, type, etat, date, ligneOperation, trf) {
     return transfert
         .doc(titre)
         .set({
           'IdTran': titre,
+          'numtran': numt,
           "type d'operation": type,
           'etat': etat,
           'date prévue': date,

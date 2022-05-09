@@ -1,24 +1,24 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, file_names, non_constant_identifier_names, unused_local_variable
 
 import 'package:chama_projet/services/article.dart';
-import 'package:chama_projet/services/commande.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../services/commandeachat.dart';
 import '../widget/toast.dart';
-import 'creer_devis.dart';
+import 'creer_achat.dart';
 
 // ignore: must_be_immutable
-class LigneCommande extends StatefulWidget {
-  String role;
-  LigneCommande({Key? key, required this.role}) : super(key: key);
+class LigneDemande extends StatefulWidget {
+  const LigneDemande({Key? key}) : super(key: key);
 
   @override
-  State<LigneCommande> createState() => _LigneCommandeState();
+  State<LigneDemande> createState() => _LigneDemandeState();
 }
 
-class _LigneCommandeState extends State<LigneCommande> {
+class _LigneDemandeState extends State<LigneDemande> {
   final _formKey = GlobalKey<FormState>();
 
   List listItem = ["store12", "store15"];
@@ -58,7 +58,7 @@ class _LigneCommandeState extends State<LigneCommande> {
   List ListArticle = [];
   var article;
   fetchDatabaseList() async {
-    dynamic resultant = await Article().getArticleListByTypeVendu();
+    dynamic resultant = await Article().getArticleListByNom();
 
     if (resultant == null) {
       // ignore: avoid_print
@@ -81,19 +81,16 @@ class _LigneCommandeState extends State<LigneCommande> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.all(20),
-                child: Center(
-                  child: Text(
-                    "Article :",
-                    style: TextStyle(fontSize: 20, letterSpacing: 3),
-                  ),
+              const Center(
+                child: Text(
+                  "Article :",
+                  style: TextStyle(fontSize: 20, letterSpacing: 3),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  width: 368,
+                  width: 320,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(color: Colors.grey, width: 1)),
@@ -102,7 +99,7 @@ class _LigneCommandeState extends State<LigneCommande> {
                       hint: const Text("Article "),
                       dropdownColor: Colors.white,
                       icon: const Padding(
-                        padding: EdgeInsets.only(left: 20),
+                        padding: EdgeInsets.only(left: 15),
                         child: Icon(
                           Icons.arrow_drop_down,
                           color: Colors.orange,
@@ -230,46 +227,6 @@ class _LigneCommandeState extends State<LigneCommande> {
                               },
                             ),
                           ),
-                          const Center(
-                            child: Text(
-                              "Prix :",
-                              style: TextStyle(fontSize: 20, letterSpacing: 3),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              initialValue: "$prixv £",
-                              onChanged: (Value) {
-                                prixv = double.parse(Value);
-                              },
-                              decoration: InputDecoration(
-                                hintText: 'Prix',
-                                filled: true,
-                                fillColor: Colors.white,
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: const BorderSide(
-                                      color: Colors.orange, width: 1.5),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: const BorderSide(
-                                    color: Colors.orange,
-                                    width: 1.5,
-                                  ),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Veuillez entrer prix ";
-                                }
-
-                                return null;
-                              },
-                            ),
-                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -280,7 +237,7 @@ class _LigneCommandeState extends State<LigneCommande> {
                                     int q = quant - r;
                                     Article().updateQuantite(id, q);
                                     if (article != null) {
-                                      Commande().addCommande(
+                                      CommandeAchat().addCommande(
                                           refv,
                                           article,
                                           des.text,
@@ -290,13 +247,11 @@ class _LigneCommandeState extends State<LigneCommande> {
                                           "20 %",
                                           int.parse(qt.text) * prixv);
                                       clearText();
-                                      Get.to(() => CreeDevisPage(
-                                            role: widget.role,
-                                          ));
                                     } else {
                                       showToast(
                                           "veuillez sélectionner Article ");
                                     }
+                                    Get.to(() => const CreerAchat());
                                   }
                                 },
                                 child: const Text(

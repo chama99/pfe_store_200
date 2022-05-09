@@ -12,12 +12,13 @@ import 'package:get/get.dart';
 import '../../widget/toast.dart';
 
 class UpdateTransfert extends StatefulWidget {
-  String titre;
+  String titre, id;
   List OperationList;
   String transf, etat;
   String date;
   UpdateTransfert(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.OperationList,
       required this.transf,
@@ -52,6 +53,7 @@ class _UpdateTransfertState extends State<UpdateTransfert> {
               PageRouteBuilder(
                   // ignore: prefer_const_constructors
                   pageBuilder: (a, b, c) => UpdateTransfert(
+                        id: widget.id,
                         titre: widget.titre,
                         OperationList: widget.OperationList,
                         transf: widget.transf,
@@ -83,6 +85,7 @@ class _UpdateTransfertState extends State<UpdateTransfert> {
                       IconButton(
                         onPressed: () {
                           Get.to(() => AjoutoperationTran(
+                                id: widget.id,
                                 titre: widget.titre,
                                 etat: widget.etat,
                                 date: widget.date,
@@ -139,6 +142,7 @@ class _UpdateTransfertState extends State<UpdateTransfert> {
                               showToast("Veuillez entrer Numéro de ligne");
                             } else {
                               Get.to(() => ModifierOperationTran(
+                                  id: widget.id,
                                   titre: widget.titre,
                                   transf: widget.transf,
                                   etat: widget.etat,
@@ -307,7 +311,7 @@ class _UpdateTransfertState extends State<UpdateTransfert> {
         child: const Text("Modifier"),
         onPressed: () {
           Transfert().updateTransfert(
-              widget.titre,
+              widget.id,
               "Atelier:Réception",
               widget.etat,
               DateTime.parse(widget.date),

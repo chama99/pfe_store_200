@@ -15,9 +15,10 @@ import '../../widget/toast.dart';
 
 class AjoutoperationTran extends StatefulWidget {
   List ListOperation;
-  String titre, etat, date, transf, page;
+  String titre, etat, date, transf, page, id;
   AjoutoperationTran(
       {Key? key,
+      required this.id,
       required this.titre,
       required this.etat,
       required this.date,
@@ -300,7 +301,7 @@ class _AjoutoperationTranState extends State<AjoutoperationTran> {
                                       var data = json.decode(json.encode(a));
                                       widget.ListOperation.add(data);
                                       Transfert().updateTransfert(
-                                          widget.titre,
+                                          widget.id,
                                           "Atelier:Réception",
                                           widget.etat,
                                           DateTime.parse(widget.date),
@@ -308,6 +309,7 @@ class _AjoutoperationTranState extends State<AjoutoperationTran> {
                                           widget.transf);
                                       clearText();
                                       Get.to(() => UpdateTransfert(
+                                          id: widget.id,
                                           titre: widget.titre,
                                           OperationList: widget.ListOperation,
                                           transf: widget.transf,
