@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,12 +16,54 @@ class MultiSelection extends StatefulWidget {
 }
 
 class _MultiSelectionState extends State<MultiSelection> {
+  TextEditingController editingController = TextEditingController();
+  List listTechs = [];
   List selectedItems = [];
   bool isMultiSelectionEnabled = false;
+  List backUpListTechs = [];
+  List employees = [];
+
+  List object = [];
+  bool _isLoading = true;
   String getSelectedItemCount() {
     return selectedItems.isNotEmpty
         ? selectedItems.length.toString() + " technecien selectionné"
         : "aucune technecien  ";
+  }
+
+// Future getData() async {
+//     QuerySnapshot querySnapshot = await _collectionRef
+//         //.where('owners', arrayContainsAny: [widget.techName])
+//         .get();
+//     return querySnapshot.docs.map((doc) => doc.data()).toList();
+//   }
+  fetchDatabaseList() async {
+    QuerySnapshot resultant = await data
+        .collection('users')
+        .where("role", isEqualTo: "Technicien")
+        .get();
+    var techs = resultant.docs.map((doc) => doc.data()).toList();
+    //print(techs);
+
+    if (techs == null) {
+      // ignore: avoid_print
+      setState(() {
+        _isLoading = false;
+      });
+      print('Unable to retrieve');
+    } else {
+      setState(() {
+        listTechs = techs;
+        backUpListTechs = techs;
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  initState() {
+    fetchDatabaseList();
+    super.initState();
   }
 
   void doMultiSelection(String contactModel) {
@@ -35,93 +78,99 @@ class _MultiSelectionState extends State<MultiSelection> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.orange,
         centerTitle: true,
-        title: Text("Planing des Technicien"),
+        title: const Text("Planing des Technicien"),
       ),
-      body: Column(
-        children: [
-          Visibility(
-            visible: isMultiSelectionEnabled,
-            child: Container(
-              height: 70,
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        selectedItems.clear();
-                        isMultiSelectionEnabled = false;
-                        setState(() {});
-                      },
-                      icon: Icon(Icons.close)),
-                  Text(
-                    "${getSelectedItemCount()}",
-                    style: TextStyle(fontSize: 16),
+      body: _isLoading
+          ? const CupertinoActivityIndicator()
+          : Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextField(
+                    onChanged: _runFilter,
+                    controller: editingController,
+                    decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: const BorderSide(
+                              color: Colors.orange, width: 1.5),
+                        ),
+                        labelText: "recherche",
+                        labelStyle: const TextStyle(
+                            fontSize: 20.0,
+                            color: Color.fromARGB(255, 102, 102, 102)),
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          color: Colors.orange,
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                        )),
                   ),
-                  ElevatedButton.icon(
-                      onPressed: () {
-                        Get.to(AddPlanning(
-                          selectedItems: selectedItems,
-                        ));
+                ),
+                Visibility(
+                  visible: isMultiSelectionEnabled,
+                  child: SizedBox(
+                    height: 70,
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              selectedItems.clear();
+                              isMultiSelectionEnabled = false;
+                              setState(() {});
+                            },
+                            icon: const Icon(Icons.close)),
+                        Text(
+                          getSelectedItemCount(),
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        ElevatedButton.icon(
+                            onPressed: () {
+                              Get.to(AddPlanning(
+                                selectedItems: selectedItems,
+                              ));
 
-                        setState(() {
-                          isMultiSelectionEnabled = false;
-                        });
-                      },
-                      label: Text("Plan"),
-                      icon: const Icon(
-                        Icons.add,
-                      )),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-                stream: data
-                    .collection('users')
-                    .where("role", isEqualTo: "Technicien")
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    List list = [];
-                    List employees = snapshot.data!.docs.toList();
-
-                    for (var employee in employees) {
-                      List object = [];
-                      object.add(employee.reference.id);
-                      object.add(employee.get("image"));
-                      list.add(object);
-                    }
-
-                    return ListView.builder(
-                        itemCount: employees.length,
+                              setState(() {
+                                isMultiSelectionEnabled = false;
+                              });
+                            },
+                            label: Text("Plan"),
+                            icon: const Icon(
+                              Icons.add,
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                    child: ListView.builder(
+                        itemCount: listTechs.length,
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: InkWell(
                               onTap: () {
                                 if (isMultiSelectionEnabled) {
-                                  doMultiSelection(list[index][0]);
-                                } else
+                                  doMultiSelection(listTechs[index][0]);
+                                } else {
                                   Get.to(Calander(
-                                    techName: list[index][0],
+                                    username: listTechs[index]['email'],
+                                    techName: listTechs[index]['name'],
                                   ));
+                                }
                               },
                               onLongPress: () {
                                 isMultiSelectionEnabled = true;
-                                doMultiSelection(list[index][0]);
+                                doMultiSelection(listTechs[index][0]);
                               },
                               child: Stack(
                                 alignment: Alignment.centerRight,
@@ -132,31 +181,29 @@ class _MultiSelectionState extends State<MultiSelection> {
                                           color: Colors.green.withOpacity(0.2),
                                           borderRadius:
                                               BorderRadius.circular(12)),
-                                      child: Container(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: [
-                                              CircleAvatar(
-                                                backgroundImage: NetworkImage(
-                                                    "${list[index][1]}"),
-                                                radius: 40,
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                list[index][0],
-                                                style: TextStyle(fontSize: 25),
-                                              ),
-                                            ],
-                                          ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            CircleAvatar(
+                                              backgroundImage: NetworkImage(
+                                                  "${listTechs[index]['image']}"),
+                                              radius: 40,
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              listTechs[index]["email"],
+                                            ),
+                                          ],
                                         ),
                                       )),
                                   Visibility(
                                       visible: isMultiSelectionEnabled,
                                       child: Icon(
-                                        selectedItems.contains(list[index][0])
+                                        selectedItems
+                                                .contains(listTechs[index][0])
                                             ? Icons.check_circle
                                             : Icons.radio_button_unchecked,
                                         size: 30,
@@ -166,14 +213,45 @@ class _MultiSelectionState extends State<MultiSelection> {
                               ),
                             ),
                           );
-                        });
-                  }
-                  return Center(child: CircularProgressIndicator());
-                }),
-          ),
-        ],
-      ),
+                        }))
+              ],
+            ),
     ));
+  }
+
+  // void filterSearchResults(String query) {
+  //   if (editingController.text == "") {
+  //     setState(() => listTechs = backUpListTechs);
+  //   } else {
+  //     backUpListTechs = listTechs;
+  //     final suggestions = listTechs.where((employe) {
+  //       final String namemploye = employe['name'].toLowerCase();
+  //       final String input = query.toLowerCase();
+  //       return namemploye.startsWith(input);
+  //     }).toList();
+  //     setState(() {
+  //       listTechs = suggestions;
+  //     });
+  //   }
+  // }
+
+  void _runFilter(String enteredKeyword) {
+    List<Object?> results = [];
+    if (enteredKeyword.isEmpty) {
+      results = backUpListTechs;
+    } else {
+      results = listTechs.where((employe) {
+        final String namemploye = employe['name'].toLowerCase();
+        final String input = enteredKeyword.toLowerCase();
+        return namemploye.startsWith(input);
+      }).toList();
+    }
+
+    // Refresh the UI
+    setState(() {
+      listTechs = results;
+    });
+    print("=>>>>>>$listTechs");
   }
 }
 

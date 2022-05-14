@@ -1,8 +1,10 @@
 // ignore_for_file: must_be_immutable, file_names
 
-import 'package:chama_projet/widget/loadingpage.dart';
+import 'package:chama_projet/pages/connexion.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../pages/chats_page.dart';
 
 class NavBar extends StatelessWidget {
   String name;
@@ -39,16 +41,19 @@ class NavBar extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.message),
-            title: const Text("Messages"),
-            // ignore: avoid_returning_null_for_void
-            onTap: () => null,
-          ),
+              leading: const Icon(Icons.message),
+              title: const Text("Messages"),
+              // ignore: avoid_returning_null_for_void
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatsPage(email: email),
+                  ))),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.exit_to_app),
             title: const Text("Déconnexion"),
-            onTap: () => Get.to(() => const LoadingPage()),
+            onTap: () => Get.to(() => const Connexion()),
           ),
         ],
       ),

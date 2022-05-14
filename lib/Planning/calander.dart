@@ -1,294 +1,234 @@
-// ignore_for_file: prefer_final_fields, deprecated_member_use, avoid_print, prefer_is_not_empty, unused_local_variable
-
+import 'package:chama_projet/Planning/plan.dart';
+import 'package:chama_projet/widget/alertdialog_create_plan.dart';
+import 'package:chama_projet/widget/plan_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-
-import 'bottomsheet.dart';
-import 'details.dart';
-import 'plan.dart';
+import 'package:flutter_calendar_carousel/classes/event.dart';
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 
 var data = FirebaseFirestore.instance;
 
 class Calander extends StatefulWidget {
   final String techName;
-  const Calander({Key? key, required this.techName}) : super(key: key);
+  final String username;
+  const Calander({Key? key, required this.techName, required this.username})
+      : super(key: key);
 
   @override
   _CalanderState createState() => _CalanderState();
 }
 
 class _CalanderState extends State<Calander> {
-  late CalendarController _controller = CalendarController();
   int numberEvents = 0;
   List? appointements = [];
-  @override
-  void initState() {
-    super.initState();
+  List plans = [];
+  Widget _lowerHalf = const SizedBox();
+  final CollectionReference _collectionRef =
+      FirebaseFirestore.instance.collection('plan');
+
+  EventList<Event> _markedDateMap = EventList<Event>(events: {
+    DateTime(2022, 4, 10): [],
+  });
+  DateTime ts = DateTime(2022);
+  Future<List> getData() async {
+    QuerySnapshot querySnapshot = await _collectionRef.where('owners',
+        arrayContainsAny: [widget.techName, widget.username]).get();
+    return querySnapshot.docs.map((doc) {
+      return doc;
+    }).toList();
   }
 
-  void tap(CalendarTapDetails calendarTapDetails) {
-    /* final Appointment appointmentDetails = calendarTapDetails.appointments![0];
-    if (appointmentDetails != []) {
-      Get.to(Details(
-        docId: appointmentDetails.subject,
-      ));
-    } else
-      print("empty");*/
-    /*   print(calendarTapDetails.appointments);*/
-    if (_controller.view == CalendarView.week ||
-        _controller.view == CalendarView.day) {
-      if (!calendarTapDetails.appointments.isNull) {
-        final Appointment appointmentDetails =
-            calendarTapDetails.appointments![0];
+  prepareData() {
+    _markedDateMap = EventList<Event>(events: {
+      DateTime(2022, 4, 10): [],
+    });
+    getData().then((value) {
+      for (int i = 0; i < value.length; i++) {
+        print("ID => ${value[i].id}");
+        print("data => ${value[i].data()}");
+        //print(value[i]['id']);
+        var data = value[i].data();
+        plans.add(data);
+        ts = DateTime.parse(data['startTime'].toDate().toString());
+        //print("${value}");
+        _markedDateMap.add(
+            DateTime(ts.year, ts.month, ts.day),
+            Event(
+                date: DateTime(ts.year, ts.month, ts.day),
+                title: data['subject'],
+                dot: Container(
+                  height: 40,
+                  width: 40,
+                  color: Colors.red,
+                ),
+                description: value[i].id));
+      }
+      setState(() {});
+    });
+  }
 
-        Get.to(Details(
-          docId: appointmentDetails.subject,
-        ));
-      } else {
-        print("empty");
-      }
-    } else {
-      if (!calendarTapDetails.appointments!.isEmpty) {
-        setState(() {
-          numberEvents = calendarTapDetails.appointments!.length;
-          appointements = calendarTapDetails.appointments;
-        });
-      } else {
-        print("empty");
-      }
-      setState(() {
-        numberEvents = calendarTapDetails.appointments!.length;
-      });
-    }
+  callBack() async {
+    print("i've been called from the child yay ");
+    prepareData();
+  }
+
+  @override
+  initState() {
+    prepareData();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    var view = CalendarView.week;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.orange,
           centerTitle: true,
-          title: const Text("plan"),
+          title: const Text("Plan"),
           actions: [
-            PopupMenuButton(
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  onTap: () {
-                    _controller.view = CalendarView.day;
-                    setState(() {
-                      numberEvents = 0;
-                    });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                        alignment: Alignment.center,
-                        height: 60,
-                        width: 170,
-                        decoration: BoxDecoration(
-                            color: _controller.view == CalendarView.day
-                                ? Colors.green.withOpacity(0.5)
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(15)),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text("afficher par jour "),
-                        )),
-                  ),
-                ),
-                PopupMenuItem(
-                  onTap: () {
-                    _controller.view = CalendarView.week;
-                    setState(() {
-                      numberEvents = 0;
-                    });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                        alignment: Alignment.center,
-                        height: 60,
-                        width: 170,
-                        decoration: BoxDecoration(
-                            color: _controller.view == CalendarView.week
-                                ? Colors.green.withOpacity(0.5)
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(15)),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text("afficher par semaine "),
-                        )),
-                  ),
-                ),
-                PopupMenuItem(
-                  onTap: () {
-                    _controller.view = CalendarView.month;
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                        alignment: Alignment.center,
-                        height: 60,
-                        width: 170,
-                        decoration: BoxDecoration(
-                            color: _controller.view == CalendarView.month
-                                ? Colors.green.withOpacity(0.5)
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(15)),
-                        child: const Text("afficher par mois ")),
-                  ),
-                ),
-              ],
-            )
+            TextButton(
+                onPressed: () async {
+                  await showDialog(
+                      context: context,
+                      builder: (context) => AlertDialogPlan(
+                          allPlans: _markedDateMap,
+                          techName: widget.techName,
+                          callback: callBack));
+                },
+                child: const Text(
+                  "Créer",
+                  style: TextStyle(letterSpacing: 4, color: Colors.white),
+                )),
           ],
         ),
         body: Column(
           children: [
+            const SizedBox(
+              height: 10,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ElevatedButton(onPressed: () {}, child: const Text("Planifié")),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text("Démarrer"),
-                  style: ElevatedButton.styleFrom(primary: Colors.orange),
+                const SizedBox(
+                  width: 2,
                 ),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text("Terminé"),
-                  style: ElevatedButton.styleFrom(primary: Colors.green),
-                ),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text("Annuler"),
-                  style: ElevatedButton.styleFrom(primary: Colors.red),
-                ),
+                _container("Planifier", Colors.blue),
+                _container("Démarrer", Colors.orange),
+                _container("Terminer", Colors.green),
+                _container("Annuler", Colors.red),
+                const SizedBox(
+                  width: 2,
+                )
               ],
             ),
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                  stream: data.collection('plan').snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var test = snapshot.data!.docs.toList();
-                      List<Appointment> meetings = <Appointment>[];
-                      Color stateColor = Colors.transparent;
-                      for (var test1 in test) {
-                        switch (test1.get("state")) {
-                          case "Planifié":
-                            {
-                              stateColor = Colors.blue;
-                            }
-                            break;
-                          case "Demarreé":
-                            {
-                              stateColor = Colors.orange;
-                            }
-                            break;
-                          case "Termineé":
-                            {
-                              stateColor = Colors.green;
-                            }
-                            break;
-                          case "Annuleé":
-                            {
-                              stateColor = Colors.red;
-                            }
-                            break;
-                        }
-                        if (test1.get("owners").contains(widget.techName)) {
-                          meetings.add(Appointment(
-                              startTime: test1.get("startTime").toDate(),
-                              endTime: test1.get("endTime").toDate(),
-                              subject: test1.reference.id,
-                              color: stateColor));
-                        }
-                      }
-                      return SfCalendar(
-                        /*    monthViewSettings: MonthViewSettings(
-                            appointmentDisplayMode:
-                                MonthAppointmentDisplayMode.appointment),*/
-                        allowAppointmentResize: true,
-                        dataSource: Plan(meetings),
-                        controller: _controller,
-                        view: CalendarView.month,
-                        onTap: tap,
-                      );
-                    }
-                    return Center(child: CircularProgressIndicator());
-                  }),
-            ),
-            AnimatedContainer(
-              duration: Duration(milliseconds: 400),
-              height: numberEvents == 0 ? 0 : 300,
-              child: ListView.builder(
-                  itemCount: appointements!.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 90,
-                        decoration: BoxDecoration(
-                            color: appointements![index].color.withOpacity(0.6),
-                            borderRadius: BorderRadius.circular(12)),
-                        child: ListTile(
-                          onTap: () {
-                            setState(() {
-                              numberEvents = 0;
-                            });
-                            Get.to(Details(
-                              docId: appointements![index].subject,
-                            ));
-                          },
-                          title: Text("${appointements![index].subject}"),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: [
-                                  Text("Date de debut : "),
-                                  Text(DateFormat('yyyy-MM-dd hh:mm')
-                                      .format(appointements![index].startTime)),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: [
-                                  Text("Date de fin : "),
-                                  Text(DateFormat('yyyy-MM-dd hh:mm')
-                                      .format(appointements![index].endTime)),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-            )
+            _calendar(),
+            _lowerHalf,
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              numberEvents = 0;
-            });
-            bottomSheet(context, [widget.techName]);
-          },
-          child: Icon(Icons.add),
-        ),
       ),
+    );
+  }
+
+  Widget _calendar() {
+    return CalendarCarousel<Event>(
+      onDayPressed: (DateTime date, List<Event> events) {
+        if (events.isNotEmpty) {
+          print("from on pressed in calendar = > ${events[0].description}");
+          var _date = events[0]
+              .getDate()
+              .toString()
+              .substring(0, events[0].getDate().toString().indexOf(" "));
+          //var _altDate = DateTime.parse(_date);
+          var plan = plans.where((e) {
+            var _dt = DateTime.parse(e['startTime'].toDate().toString());
+            return DateTime(_dt.year, _dt.month, _dt.day) ==
+                events[0].getDate();
+          }).toList();
+          //print(" ++> a single event ,,,${plan[0].description}");
+          setState(() {
+            _lowerHalf = Stack(children: [
+              PlanCard(
+                  client: plan[0]['client'],
+                  subject: plan[0]['subject'],
+                  startTime: _date,
+                  status: plan[0]['state'].toString()),
+              Positioned(
+                  top: 0,
+                  right: 0,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PlanScreen(
+                                  event: plan[0],
+                                  planID: events[0].description!)));
+                    },
+                    child: const Icon(Icons.edit),
+                  )),
+            ]);
+          });
+        }
+      },
+      markedDatesMap: _markedDateMap,
+      selectedDateTime: DateTime.now(),
+      height: 420,
+      daysHaveCircularBorder: null,
+      markedDateIconBuilder: (Event event) {
+        MaterialColor statusColor = Colors.blue;
+        for (var e in plans) {
+          var date = DateTime.parse(e['startTime'].toDate().toString());
+          var _date = DateTime(date.year, date.month, date.day);
+          if (_date.compareTo(event.getDate()) == 0) {
+            switch (e['state']) {
+              case "Planifier":
+                {
+                  statusColor = Colors.blue;
+                }
+                break;
+              case "Demarrer":
+                {
+                  statusColor = Colors.orange;
+                }
+                break;
+              case "Terminer":
+                {
+                  statusColor = Colors.green;
+                }
+                break;
+              case "Annuler":
+                {
+                  statusColor = Colors.red;
+                }
+                break;
+            }
+          }
+        }
+
+        return Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40), color: statusColor),
+          height: 40,
+          width: 40,
+          child: Center(
+              child: Text(
+            event.getDate().day.toString(),
+            style: const TextStyle(color: Colors.white),
+          )),
+        );
+      },
+      todayButtonColor: Colors.teal,
+    );
+  }
+
+  Widget _container(String t, MaterialColor c) {
+    return Container(
+      decoration:
+          BoxDecoration(color: c, borderRadius: BorderRadius.circular(5)),
+      child: Padding(
+          padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
+          child: Text(t, style: const TextStyle(color: Colors.white))),
     );
   }
 }

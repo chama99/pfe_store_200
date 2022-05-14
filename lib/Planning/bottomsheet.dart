@@ -1,16 +1,25 @@
-// ignore_for_file: sized_box_for_whitespace, unnecessary_brace_in_string_interps
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
+import '../widget/drop_down.dart';
+
 bottomSheet(BuildContext context, List selectedItems) {
+  const List<String> timeList = [
+    "09:00 - 16:00",
+    "09:00 - 19:00",
+    "08:00 - 17:00",
+    "07:00 - 15:00",
+  ];
+  print(selectedItems);
+  final event = selectedItems[0];
   DateTime dateTimeStart = DateTime.now();
-  TextEditingController subjectController = TextEditingController();
+  TextEditingController subjectController =
+      TextEditingController(text: event['subject']);
   DateTime dateTimeEnd = DateTime.now();
   bool dateTimeStartSelected = false;
   bool dateTimeEndSelected = false;
@@ -32,7 +41,7 @@ bottomSheet(BuildContext context, List selectedItems) {
             child: Container(
               height: size.height * 0.85,
               decoration: BoxDecoration(
-                  color: const Color(0xffe3eaef),
+                  color: Color(0xffe3eaef),
                   borderRadius: BorderRadius.circular(20)),
               child: Padding(
                 padding: EdgeInsets.symmetric(
@@ -43,11 +52,13 @@ bottomSheet(BuildContext context, List selectedItems) {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          const Text("Ajouter un plan de travaille  "),
+                          const Text("Modifier un plan de travaille "),
                           TextFormField(
+                            //initialValue: event['subject'],
                             controller: subjectController,
+
                             decoration: InputDecoration(
-                                label: const Text("Sujet de plan"),
+                                //label: Text("Sujet de plan"),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20))),
                           ),
@@ -100,7 +111,7 @@ bottomSheet(BuildContext context, List selectedItems) {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text("Date de debut de plan"),
+                              Text("Date de debut de plan"),
                               SizedBox(
                                 width: size.width * 0.03,
                               ),
@@ -108,7 +119,8 @@ bottomSheet(BuildContext context, List selectedItems) {
                                   onPressed: () {
                                     showDatePicker(
                                             context: context,
-                                            initialDate: DateTime.now(),
+                                            initialDate: DateTime.parse(
+                                                selectedItems[1]),
                                             firstDate: DateTime(2022),
                                             lastDate: DateTime(2023))
                                         .then((value) {
@@ -118,37 +130,35 @@ bottomSheet(BuildContext context, List selectedItems) {
                                       });
                                     });
                                   },
-                                  child: Text(DateFormat('yyyy-MM-dd')
-                                      .format(dateTimeStart))),
-                              SizedBox(
-                                width: size.width * 0.01,
-                              ),
-                              if (dateTimeStartSelected) ...[
-                                ElevatedButton(
-                                    onPressed: () {
-                                      showTimePicker(
-                                        context: context,
-                                        initialTime: TimeOfDay.now(),
-                                      ).then((value) {
-                                        setState(() {
-                                          dateTimeStart = dateTimeStart.add(
-                                              Duration(
-                                                  hours: value!.hour,
-                                                  minutes: value.minute));
-                                        });
-                                      });
-                                    },
-                                    child: Text(DateFormat('HH:mm')
-                                        .format(dateTimeStart))),
-                              ]
+                                  child: Text(DateFormat('yyyy-MM-dd').format(
+                                      DateTime.parse(selectedItems[1])))),
                             ],
                           ),
+                          if (dateTimeStartSelected) ...[
+                            ElevatedButton(
+                                onPressed: () {
+                                  showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
+                                  ).then((value) {
+                                    setState(() {
+                                      dateTimeStart = dateTimeStart.add(
+                                          Duration(
+                                              hours: value!.hour,
+                                              minutes: value.minute));
+                                    });
+                                  });
+                                },
+                                child: Text(
+                                  DateFormat("HH:mm").format(dateTimeStart),
+                                ))
+                          ],
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text("Date de fin de plan"),
+                              Text("Date de fin de plan"),
                               SizedBox(
-                                width: size.width * 0.08,
+                                width: size.width * 0.03,
                               ),
                               ElevatedButton(
                                   onPressed: () {
@@ -164,31 +174,35 @@ bottomSheet(BuildContext context, List selectedItems) {
                                       });
                                     });
                                   },
-                                  child: Text(DateFormat('yyyy-MM-dd')
-                                      .format(dateTimeEnd))),
+                                  child: Text(DateFormat('yyyy-MM-dd').format(
+                                      DateTime.parse(selectedItems[2])))),
                               SizedBox(
                                 width: size.width * 0.01,
                               ),
-                              if (dateTimeEndSelected) ...[
-                                ElevatedButton(
-                                    onPressed: () {
-                                      showTimePicker(
-                                        context: context,
-                                        initialTime: TimeOfDay.now(),
-                                      ).then((value) {
-                                        setState(() {
-                                          dateTimeEnd = dateTimeEnd.add(
-                                              Duration(
-                                                  hours: value!.hour,
-                                                  minutes: value.minute));
-                                        });
-                                      });
-                                    },
-                                    child: Text(DateFormat('HH:mm')
-                                        .format(dateTimeEnd))),
-                              ]
                             ],
                           ),
+                          if (dateTimeEndSelected) ...[
+                            // ElevatedButton(
+                            //     onPressed: () {
+                            //       showTimePicker(
+                            //         context: context,
+                            //         initialTime: TimeOfDay.now(),
+                            //       ).then((value) {
+                            //         setState(() {
+                            //           dateTimeEnd = dateTimeEnd.add(
+                            //               Duration(
+                            //                   hours: value!.hour,
+                            //                   minutes: value.minute));
+                            //         });
+                            //       });
+                            //     },
+                            //     child: Text(DateFormat("HH:mm").format(dateTimeEnd),),)
+                            dropDown(timeList, (String? value) {
+                               setState(() {
+                                    
+                                    });
+                            }),
+                          ],
                           isLoading
                               ? const CircularProgressIndicator()
                               : Row(
@@ -201,7 +215,7 @@ bottomSheet(BuildContext context, List selectedItems) {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(15)),
-                                          padding: const EdgeInsets.all(15),
+                                          padding: EdgeInsets.all(15),
                                         ),
                                         onPressed: () {
                                           Get.back();
@@ -217,7 +231,7 @@ bottomSheet(BuildContext context, List selectedItems) {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(15)),
-                                          padding: const EdgeInsets.all(15),
+                                          padding: EdgeInsets.all(15),
                                         ),
                                         onPressed: () async {
                                           setState(() {
@@ -231,7 +245,7 @@ bottomSheet(BuildContext context, List selectedItems) {
                                             'endTime': dateTimeEnd,
                                             'subject': subjectController.text,
                                             'state': "Planifié",
-                                            "owners": selectedItems,
+                                            "owners": event['client'],
                                             "client": hint
                                           });
                                           setState(() {
@@ -251,6 +265,19 @@ bottomSheet(BuildContext context, List selectedItems) {
       });
 }
 
+Widget dropDown(
+  List<String> items,
+  void Function(String?) fnChange, {
+  String oneItem = "Choissiez un client",
+}) {
+  return AppDropdownInput<String>(
+    options: items,
+    value: oneItem,
+    onChanged: fnChange,
+    getLabel: (String value) => value,
+  );
+}
+
 Column doneAddPlanning(Size size) {
   return Column(
     children: [
@@ -268,7 +295,7 @@ Column doneAddPlanning(Size size) {
             primary: Colors.blueAccent,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            padding: const EdgeInsets.all(15),
+            padding: EdgeInsets.all(15),
           ),
           onPressed: () {
             Get.back();

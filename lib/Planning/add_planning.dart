@@ -1,9 +1,8 @@
-// ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors, sized_box_for_whitespace
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import 'bottomsheet.dart';
 import 'home_page_planning.dart';
@@ -35,9 +34,9 @@ class _AddPlanningState extends State<AddPlanning> {
                 children: [
                   IconButton(
                       onPressed: () {
-                        Get.to(const MultiSelection());
+                        Get.to(MultiSelection());
                       },
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.arrow_back,
                         color: Colors.white,
                       )),
