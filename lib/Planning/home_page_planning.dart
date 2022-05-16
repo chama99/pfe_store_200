@@ -9,7 +9,8 @@ import 'calander.dart';
 var data = FirebaseFirestore.instance;
 
 class MultiSelection extends StatefulWidget {
-  const MultiSelection({Key? key}) : super(key: key);
+  final String role;
+  const MultiSelection({Key? key, required this.role}) : super(key: key);
 
   @override
   _MultiSelectionState createState() => _MultiSelectionState();
@@ -157,59 +158,33 @@ class _MultiSelectionState extends State<MultiSelection> {
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
-                              onTap: () {
-                                if (isMultiSelectionEnabled) {
+                            child: Card(
+                              child: InkWell(
+                                onTap: () {
+                                  if (isMultiSelectionEnabled) {
+                                    doMultiSelection(listTechs[index][0]);
+                                  } else {
+                                    Get.to(Calander(
+                                        username: listTechs[index]['email'],
+                                        techName: listTechs[index]['name'],
+                                        role: widget.role));
+                                  }
+                                },
+                                onLongPress: () {
+                                  isMultiSelectionEnabled = true;
                                   doMultiSelection(listTechs[index][0]);
-                                } else {
-                                  Get.to(Calander(
-                                    username: listTechs[index]['email'],
-                                    techName: listTechs[index]['name'],
-                                  ));
-                                }
-                              },
-                              onLongPress: () {
-                                isMultiSelectionEnabled = true;
-                                doMultiSelection(listTechs[index][0]);
-                              },
-                              child: Stack(
-                                alignment: Alignment.centerRight,
-                                children: [
-                                  Container(
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                          color: Colors.green.withOpacity(0.2),
-                                          borderRadius:
-                                              BorderRadius.circular(12)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          children: [
-                                            CircleAvatar(
-                                              backgroundImage: NetworkImage(
-                                                  "${listTechs[index]['image']}"),
-                                              radius: 40,
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                              listTechs[index]["email"],
-                                            ),
-                                          ],
-                                        ),
-                                      )),
-                                  Visibility(
-                                      visible: isMultiSelectionEnabled,
-                                      child: Icon(
-                                        selectedItems
-                                                .contains(listTechs[index][0])
-                                            ? Icons.check_circle
-                                            : Icons.radio_button_unchecked,
-                                        size: 30,
-                                        color: Colors.green,
-                                      ))
-                                ],
+                                },
+                                splashColor:
+                                    const Color.fromARGB(255, 3, 56, 109),
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    radius: 20.0,
+                                    backgroundImage:
+                                        NetworkImage(listTechs[index]['image']),
+                                  ),
+                                  title: Text(listTechs[index]["name"]),
+                                  subtitle: Text(listTechs[index]["email"]),
+                                ),
                               ),
                             ),
                           );

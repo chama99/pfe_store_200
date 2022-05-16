@@ -1,7 +1,6 @@
 import 'package:chama_projet/Planning/home_page_planning.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 Card buildInputPlanning() {
   return Card(
@@ -9,7 +8,7 @@ Card buildInputPlanning() {
     margin: const EdgeInsets.all(8.0),
     child: InkWell(
       onTap: () {
-        Get.to(MultiSelection());
+        Get.to(const MultiSelection(role: "Technicien"));
       },
       splashColor: const Color.fromARGB(255, 3, 56, 109),
       child: Center(

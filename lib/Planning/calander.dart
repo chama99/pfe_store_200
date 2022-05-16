@@ -1,4 +1,4 @@
-import 'package:chama_projet/Planning/plan.dart';
+import 'package:chama_projet/Planning/plan_screen.dart';
 import 'package:chama_projet/widget/alertdialog_create_plan.dart';
 import 'package:chama_projet/widget/plan_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,9 +9,14 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 var data = FirebaseFirestore.instance;
 
 class Calander extends StatefulWidget {
+  final String role;
   final String techName;
   final String username;
-  const Calander({Key? key, required this.techName, required this.username})
+  const Calander(
+      {Key? key,
+      required this.techName,
+      required this.username,
+      required this.role})
       : super(key: key);
 
   @override
@@ -87,19 +92,23 @@ class _CalanderState extends State<Calander> {
           centerTitle: true,
           title: const Text("Plan"),
           actions: [
-            TextButton(
-                onPressed: () async {
-                  await showDialog(
-                      context: context,
-                      builder: (context) => AlertDialogPlan(
-                          allPlans: _markedDateMap,
-                          techName: widget.techName,
-                          callback: callBack));
-                },
-                child: const Text(
-                  "Créer",
-                  style: TextStyle(letterSpacing: 4, color: Colors.white),
-                )),
+            if (widget.role == "Admin")
+              TextButton(
+                  onPressed: () async {
+                    await showDialog(
+                        context: context,
+                        builder: (context) => AlertDialogPlan(
+                              allPlans: _markedDateMap,
+                              techName: widget.techName,
+                              callback: callBack,
+                              username: widget.username,
+                              role: widget.role,
+                            ));
+                  },
+                  child: const Text(
+                    "Créer",
+                    style: TextStyle(letterSpacing: 4, color: Colors.white),
+                  )),
           ],
         ),
         body: Column(
@@ -162,8 +171,12 @@ class _CalanderState extends State<Calander> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => PlanScreen(
-                                  event: plan[0],
-                                  planID: events[0].description!)));
+                                    event: plan[0],
+                                    planID: events[0].description!,
+                                    role: widget.role,
+                                    techName: widget.techName,
+                                    username: widget.username,
+                                  )));
                     },
                     child: const Icon(Icons.edit),
                   )),
@@ -218,7 +231,8 @@ class _CalanderState extends State<Calander> {
           )),
         );
       },
-      todayButtonColor: Colors.teal,
+      todayButtonColor: Colors.deepPurpleAccent,
+      todayBorderColor: Colors.deepPurpleAccent,
     );
   }
 

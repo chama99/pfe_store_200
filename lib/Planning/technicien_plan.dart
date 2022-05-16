@@ -1,4 +1,4 @@
-import 'package:chama_projet/Planning/plan.dart';
+import 'package:chama_projet/Planning/plan_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +6,13 @@ import 'package:getwidget/getwidget.dart';
 
 class TechnicienPlan extends StatefulWidget {
   final String loggedInUserMail;
-  final String username;
+  final String username, techName, role;
   const TechnicienPlan(
-      {Key? key, required this.loggedInUserMail, required this.username})
+      {Key? key,
+      required this.loggedInUserMail,
+      required this.username,
+      required this.techName,
+      required this.role})
       : super(key: key);
 
   @override
@@ -90,7 +94,12 @@ class _TechnicienPlanState extends State<TechnicienPlan> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => PlanScreen(
-                        event: list[index], planID: list[index].id)));
+                          event: list[index],
+                          planID: list[index].id,
+                          techName: widget.techName,
+                          username: widget.username,
+                          role: widget.role,
+                        )));
           },
           child: Align(
               alignment: Alignment.centerRight,

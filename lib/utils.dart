@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
 
 class Utils {
   static StreamTransformer<QuerySnapshot<Map<String, dynamic>>, List<T>>
@@ -27,9 +29,39 @@ class Utils {
     return date.toUtc();
   }
 
-  static DateTime toReadableDate(Timestamp t) {
-    var time = DateTime.parse(t.toDate().toString());
+  static String toReadableDate(t) {
+    if (t == null) {
+      return "";
+    }
+    var time;
+    if (t is Timestamp) {
+      time = DateTime.parse(t.toDate().toString());
+    } else {
+      time = DateTime.parse(t.toString());
+    }
+    String result = DateTime(time.year, time.month, time.day).toString();
+    return result.substring(0, result.indexOf(" "));
+  }
 
-    return DateTime(time.year, time.month, time.day);
+  static GetSnackBar SuccessSnackBar(
+      {String title = 'Success', required String message}) {
+    Get.log("[$title] $message");
+    return GetSnackBar(
+      titleText: Text(title.tr,
+          style: Get.textTheme.headline6!
+              .merge(TextStyle(color: Get.theme.primaryColor))),
+      messageText: Text(message,
+          style: Get.textTheme.caption!
+              .merge(TextStyle(color: Get.theme.primaryColor))),
+      snackPosition: SnackPosition.BOTTOM,
+      margin: const EdgeInsets.all(20),
+      backgroundColor: Colors.green,
+      icon: Icon(Icons.check_circle_outline,
+          size: 32, color: Get.theme.primaryColor),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+      borderRadius: 8,
+      dismissDirection: DismissDirection.horizontal,
+      duration: const Duration(seconds: 5),
+    );
   }
 }

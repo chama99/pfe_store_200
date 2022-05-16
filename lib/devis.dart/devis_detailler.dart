@@ -93,7 +93,7 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                           foreground: Paint()
                             ..style = PaintingStyle.stroke
                             ..strokeWidth = 1
-                            ..color = Colors.blue[700]!,
+                            ..color = Colors.black,
                         ),
                       ),
                       const Padding(
@@ -112,7 +112,7 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                             foreground: Paint()
                               ..style = PaintingStyle.stroke
                               ..strokeWidth = 1
-                              ..color = Colors.blue[700]!,
+                              ..color = Colors.black,
                           ),
                         ),
                       ),

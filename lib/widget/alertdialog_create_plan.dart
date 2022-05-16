@@ -1,8 +1,10 @@
+import 'package:chama_projet/Planning/calander.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
@@ -10,12 +12,14 @@ import 'drop_down.dart';
 
 class AlertDialogPlan extends StatefulWidget {
   final EventList<Event> allPlans;
-  final String techName;
+  final String techName, username, role;
   const AlertDialogPlan(
       {Key? key,
       required this.allPlans,
       required this.techName,
-      required this.callback})
+      required this.callback,
+      required this.username,
+      required this.role})
       : super(key: key);
   final VoidCallback callback;
   @override
@@ -98,7 +102,8 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
       "startTime": _beginDate,
       "state": "Planifier",
       "subject": sujet.text,
-      "owners": [widget.techName]
+      "owners": [widget.techName],
+      "time": heure
     }).then((_) {
       widget.callback();
       setState(() {
@@ -106,6 +111,10 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
         modalShow("Plan ajouter avec succès");
       });
     });
+    Get.to(() => Calander(
+        techName: widget.techName,
+        username: widget.username,
+        role: widget.role));
   }
 
   @override
@@ -136,13 +145,8 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
             "Créer un plan",
           ),
         ),
-        // insetPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-        // contentPadding: const EdgeInsets.all(10),
-        // scrollable: true,
-        // content: Builder(builder: (context) {
-
         body: Container(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -248,7 +252,8 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
               ),
               Center(
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: Colors.green),
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color.fromARGB(255, 62, 75, 146)),
                   onPressed: sauvgardePlan,
                   child: _buttonWidget,
                 ),

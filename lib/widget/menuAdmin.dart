@@ -62,8 +62,11 @@ class _MenuAdminState extends State<MenuAdmin> {
                   if (x == "Factures") ...[buildInputCardFacture()],
                   if (x == "Utilisateurs") ...[buildInputCardUser()],
                   if (x == "Applications") ...[buildInputCardRole()],
-                  if (x == "Plan") ...[buildInputCardPlan()],
+                  if (x == "Plan") ...[
+                    buildInputCardPlan(widget.role, widget.email, widget.name)
+                  ],
                   if (x == "Inventaire") ...[buildInputCardInventaire()],
+                  if (x == "Conges") ...[buildInputCardConges()]
                 ]
               ],
             ),

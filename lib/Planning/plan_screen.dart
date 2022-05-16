@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:chama_projet/Planning/calander.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:path/path.dart';
@@ -12,9 +14,16 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import '../utils.dart';
 
 class PlanScreen extends StatefulWidget {
+  final String role, techName, username;
   final String planID;
   final dynamic event;
-  const PlanScreen({Key? key, required this.event, required this.planID})
+  const PlanScreen(
+      {Key? key,
+      required this.event,
+      required this.planID,
+      required this.role,
+      required this.techName,
+      required this.username})
       : super(key: key);
 
   @override
@@ -23,6 +32,7 @@ class PlanScreen extends StatefulWidget {
 
 class _PlanScreenState extends State<PlanScreen> {
   ///---------State-------------
+  final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
   String _picturePath = "";
   dynamic _eventFromParent;
   List<bool> _buttons = [false, false, false];
@@ -42,21 +52,40 @@ class _PlanScreenState extends State<PlanScreen> {
 
   ///--------Methods--------------
   _renderButton() {
-    if (widget.event['state'] == "Demarrer") {
+    if (_planStatus == "Demarrer") {
       _planStatus = "Demarrer";
       _buttons = [true, false, true];
     }
-    if (widget.event['state'] == "Terminer") {
+    if (_planStatus == "Terminer") {
       _planStatus = "Terminer";
       _buttons = [true, true, true];
     }
-    if (widget.event['state'] == "Annuler") {
+    if (_planStatus == "Annuler") {
       _planStatus = "Annuler";
       _buttons = [true, true, true];
     }
     setState(() {});
   }
 
+  updatePlanStatus(String status, BuildContext context) async {
+    final refPlans = FirebaseFirestore.instance.collection("plan");
+    refPlans.doc(widget.planID).update({"state": status}).then((v) {
+      print("i had began");
+      _planStatus = status;
+      _renderButton();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.floating,
+        content: Row(children: const [
+          Icon(
+            Icons.check,
+            color: Colors.greenAccent,
+          ),
+          Spacer(),
+          Text('Plan a été mis a jour avec success ')
+        ]),
+      ));
+    });
+  }
   // String _getPlanStatus() {
   //   if (_buttons[0]) {
   //     return "Demarrer";
@@ -85,7 +114,7 @@ class _PlanScreenState extends State<PlanScreen> {
     }
 
     final refPlans = FirebaseFirestore.instance.collection("plan");
-    var x = await refPlans.doc(widget.planID).update({
+    await refPlans.doc(widget.planID).update({
       "state": _planStatus,
       "note": _noteController.text,
       "picture": _picturePath == "" ? "" : _picturePath
@@ -95,25 +124,49 @@ class _PlanScreenState extends State<PlanScreen> {
         _eventFromParent = _newEvent;
         _saveButtonContent = Text("Sauvgader", style: _rightTextStyle);
       });
+      _scaffoldkey.currentState!.showSnackBar(SnackBar(
+        content: Row(children: const [
+          Icon(
+            Icons.check,
+            color: Colors.greenAccent,
+          ),
+          Spacer(),
+          Text('Plan a été mis a jour avec success ')
+        ]),
+      ));
     }).onError((error, stackTrace) {
       setState(() {
         _saveButtonContent = Text("Sauvgader", style: _rightTextStyle);
       });
+      ScaffoldMessenger.of(cx).showSnackBar(SnackBar(
+        content: Row(children: [
+          const Icon(
+            Icons.check,
+            color: Colors.greenAccent,
+          ),
+          const SizedBox(width: 8),
+          Text('Probléme : ${error}')
+        ]),
+      ));
     });
   }
 
   ///---------InitState()-------
   @override
   void initState() {
+    if (widget.role == "Technicien") {
+      _buttons = [false, false, true];
+    }
     _eventFromParent = widget.event;
+    _planStatus = _eventFromParent['state'];
     _renderButton();
+    _noteController.text = _eventFromParent['note'] ?? "";
     super.initState();
   }
 
   ///---------UI---------------
   @override
   Widget build(BuildContext context) {
-    print("event => ${widget.planID}");
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.orange,
@@ -134,11 +187,16 @@ class _PlanScreenState extends State<PlanScreen> {
                         if (_buttons[0]) {
                           return;
                         }
+                        updatePlanStatus("Demarrer", context);
                         _planStatus = "Demarrer";
                         _buttons[0] = true;
                         _buttons[1] = false;
                         _buttons[2] = true;
                         setState(() {});
+                        Get.to(() => Calander(
+                            techName: widget.techName,
+                            username: widget.username,
+                            role: widget.role));
                       },
                       style: ElevatedButton.styleFrom(
                           primary: _buttons[0] ? Colors.grey : Colors.orange),
@@ -148,15 +206,22 @@ class _PlanScreenState extends State<PlanScreen> {
                         if (_buttons[1]) {
                           return;
                         }
-                        // if (!_buttons[1]) {
-                        //   _buttons[0] = _buttons[0];
-                        // }
-                        _planStatus = "Terminer";
+                        if (_noteController.text.isEmpty) {
+                          modalShow("Veuillez remplir les note", context,
+                              success: false);
+                          return;
+                        }
+                        updatePlanStatus("Terminer", context);
+                        //_planStatus = "Terminer";
                         _buttons[0] = true;
                         _buttons[1] = true;
                         _buttons[2] = true;
 
                         setState(() {});
+                        Get.to(() => Calander(
+                            techName: widget.techName,
+                            username: widget.username,
+                            role: widget.role));
                       },
                       style: ElevatedButton.styleFrom(
                           primary: _buttons[1] ? Colors.grey : Colors.green),
@@ -166,11 +231,16 @@ class _PlanScreenState extends State<PlanScreen> {
                         if (_buttons[2]) {
                           return;
                         }
+                        updatePlanStatus("Annuler", context);
                         _planStatus = "Annuler";
                         _buttons[0] = true;
                         _buttons[1] = true;
                         _buttons[2] = true;
                         setState(() {});
+                        Get.to(() => Calander(
+                            techName: widget.techName,
+                            username: widget.username,
+                            role: widget.role));
                       },
                       style: ElevatedButton.styleFrom(
                           primary: _buttons[2] ? Colors.grey : Colors.red),
@@ -215,8 +285,19 @@ class _PlanScreenState extends State<PlanScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text("Date de début :", style: _leftTextStyle),
+                  Text(Utils.toReadableDate(_eventFromParent['startTime']),
+                      style: _rightTextStyle)
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text("Date de fin :", style: _leftTextStyle),
                   Text(
-                      Utils.toReadableDate(_eventFromParent['startTime'])
+                      Utils.toReadableDate(_eventFromParent['endTime'])
                           .toString(),
                       style: _rightTextStyle)
                 ],
@@ -227,10 +308,8 @@ class _PlanScreenState extends State<PlanScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("Date de début :", style: _leftTextStyle),
-                  Text(
-                      Utils.toReadableDate(_eventFromParent['endTime'])
-                          .toString(),
+                  Text("Heure :", style: _leftTextStyle),
+                  Text(_eventFromParent['time'] ?? "--:--  --:--",
                       style: _rightTextStyle)
                 ],
               ),
