@@ -1,5 +1,5 @@
 import 'package:chama_projet/pages/congescreens/conge_screen.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,7 +8,7 @@ import '../Planning/home_page_planning.dart';
 
 Card buildInputCardPlan(String role, String email, String username) {
   return Card(
-    color: const Color.fromARGB(255, 141, 214, 209),
+    color: const Color.fromARGB(255, 237, 96, 96),
     margin: const EdgeInsets.all(8.0),
     child: InkWell(
       onTap: () {
@@ -41,7 +41,7 @@ Card buildInputCardPlan(String role, String email, String username) {
 
 Card buildInputCardConges() {
   return Card(
-    color: const Color.fromARGB(255, 117, 29, 54),
+    color: const Color.fromARGB(255, 239, 158, 181),
     margin: const EdgeInsets.all(8.0),
     child: InkWell(
       onTap: () {
@@ -53,7 +53,7 @@ Card buildInputCardConges() {
           mainAxisSize: MainAxisSize.min,
           children: const <Widget>[
             Icon(
-              CupertinoIcons.zzz,
+              Icons.calendar_today,
               size: 70,
               color: Colors.white,
             ),
