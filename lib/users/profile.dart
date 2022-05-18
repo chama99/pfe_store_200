@@ -1,12 +1,14 @@
 // ignore_for_file: file_names, must_be_immutable, unused_local_variable
 
-import 'package:chama_projet/pages/update_user.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class UtilisateurDetail extends StatefulWidget {
-  String email, nom, mdp, image, role, id, adr, tel;
+import 'modifierprof.dart';
+
+class Profile extends StatefulWidget {
+  String email, nom, mdp, image, role, id, adress, telef;
   List acces;
-  UtilisateurDetail({
+  Profile({
     Key? key,
     required this.id,
     required this.image,
@@ -15,15 +17,15 @@ class UtilisateurDetail extends StatefulWidget {
     required this.mdp,
     required this.role,
     required this.acces,
-    required this.tel,
-    required this.adr,
+    required this.adress,
+    required this.telef,
   }) : super(key: key);
 
   @override
-  State<UtilisateurDetail> createState() => _UtilisateurDetailState();
+  State<Profile> createState() => _ProfileState();
 }
 
-class _UtilisateurDetailState extends State<UtilisateurDetail> {
+class _ProfileState extends State<Profile> {
   Widget textfield({@required hintText}) {
     return Material(
       elevation: 4,
@@ -60,15 +62,11 @@ class _UtilisateurDetailState extends State<UtilisateurDetail> {
             padding: const EdgeInsets.only(top: 20, right: 30),
             child: InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => UpdateUserPage(
-                              id: widget.id,
-                              email: widget.email,
-                              nom: widget.nom,
-                              acces: widget.acces,
-                            )));
+                Get.to(() => UpdateProfil(
+                    id: widget.id,
+                    email: widget.email,
+                    nom: widget.nom,
+                    acces: widget.acces));
               },
               child: Text(
                 "Modifier".toUpperCase(),
@@ -110,13 +108,13 @@ class _UtilisateurDetailState extends State<UtilisateurDetail> {
                     Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: textfield(
-                        hintText: widget.adr,
+                        hintText: widget.adress,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: textfield(
-                        hintText: widget.tel,
+                        hintText: widget.telef,
                       ),
                     ),
                   ],

@@ -11,7 +11,7 @@ class Devis {
     List itemsList = [];
 
     try {
-      await devis.get().then((querySnapshot) {
+      await devis.orderBy("numdevis").get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           itemsList.add(a);

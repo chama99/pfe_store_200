@@ -11,18 +11,22 @@ import 'package:get/get.dart';
 import '../services/autofacture.dart';
 import '../services/devis.dart';
 import '../services/facture.dart';
+import '../widget/NavBottom.dart';
 import '../widget/toast.dart';
 import 'AjoutligneCommande.dart';
 
 class UpdateDevis extends StatefulWidget {
   List commande;
-  String role, date;
+  String role, date, idus, tel, adr;
   String titre, id;
   String etat, client;
   int remise;
   double total, montant;
+  String name, email, url;
+  List acces;
   UpdateDevis(
       {Key? key,
+      required this.idus,
       required this.id,
       required this.titre,
       required this.client,
@@ -32,7 +36,13 @@ class UpdateDevis extends StatefulWidget {
       required this.total,
       required this.montant,
       required this.role,
-      required this.date})
+      required this.date,
+      required this.email,
+      required this.name,
+      required this.acces,
+      required this.url,
+      required this.tel,
+      required this.adr})
       : super(key: key);
 
   @override
@@ -109,6 +119,15 @@ class _UpdateDevisState extends State<UpdateDevis> {
         ),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.tel,
+          adr: widget.adr,
+          id: widget.idus,
+          email: widget.email,
+          name: widget.name,
+          acces: widget.acces,
+          url: widget.url,
+          role: widget.role),
       body: RefreshIndicator(
         onRefresh: () {
           Navigator.pushReplacement(
@@ -116,6 +135,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
               PageRouteBuilder(
                   // ignore: prefer_const_constructors
                   pageBuilder: (a, b, c) => UpdateDevis(
+                        idus: widget.idus,
                         id: widget.id,
                         titre: widget.titre,
                         client: widget.client,
@@ -126,6 +146,12 @@ class _UpdateDevisState extends State<UpdateDevis> {
                         montant: widget.montant,
                         role: widget.role,
                         date: widget.date,
+                        email: widget.email,
+                        name: widget.name,
+                        acces: widget.acces,
+                        url: widget.url,
+                        adr: widget.adr,
+                        tel: widget.tel,
                       ),
                   // ignore: prefer_const_constructors
                   transitionDuration: Duration(seconds: 0)));
@@ -158,6 +184,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                             IconButton(
                               onPressed: () {
                                 Get.to(() => AjoutCommande(
+                                      idus: widget.idus,
                                       id: widget.id,
                                       titre: widget.titre,
                                       client: widget.client,
@@ -168,6 +195,12 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                       montant: widget.montant,
                                       role: widget.role,
                                       date: widget.date,
+                                      email: widget.email,
+                                      name: widget.name,
+                                      acces: widget.acces,
+                                      url: widget.url,
+                                      tel: widget.tel,
+                                      adr: widget.adr,
                                     ));
                               },
                               icon: const Icon(
@@ -216,6 +249,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                         "Veuillez entrer Numéro de ligne");
                                   } else {
                                     Get.to(() => ModifierCommande(
+                                          idus: widget.idus,
                                           id: widget.id,
                                           num: int.parse(n.text),
                                           titre: widget.titre,
@@ -227,6 +261,12 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                           montant: widget.montant,
                                           role: widget.role,
                                           date: widget.date,
+                                          email: widget.email,
+                                          name: widget.name,
+                                          acces: widget.acces,
+                                          url: widget.url,
+                                          tel: widget.tel,
+                                          adr: widget.adr,
                                         ));
                                   }
                                 },
@@ -482,43 +522,51 @@ class _UpdateDevisState extends State<UpdateDevis> {
                 ),
               ),
             )),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                maximumSize: const Size(double.infinity, 50),
+                primary: Colors.indigo,
+              ),
+              child: const Text("Modifier"),
+              onPressed: () {
+                // Validate returns true if the form is valid, otherwise false.
+
+                Devis().updateDevis(
+                    widget.id,
+                    widget.client,
+                    widget.etat,
+                    (calculMontat() * (1 + 0.2)) * (1 - (widget.remise / 100)),
+                    widget.commande,
+                    widget.remise,
+                    calculMontat());
+                Get.to(() => ListDevis(
+                      idus: widget.idus,
+                      role: widget.role,
+                      email: widget.email,
+                      name: widget.name,
+                      acces: widget.acces,
+                      url: widget.url,
+                      tel: widget.tel,
+                      adr: widget.adr,
+                    ));
+                if (widget.etat == "Bon de commande") {
+                  AutoFacture().addFacture(
+                      uuid,
+                      "Facture N°${lf + 1}",
+                      widget.titre,
+                      widget.client,
+                      "Brouillon",
+                      widget.date,
+                      (calculMontat() * (1 + 0.2)) *
+                          (1 - (widget.remise / 100)),
+                      widget.commande,
+                      widget.remise,
+                      calculMontat());
+                }
+              },
+            ),
           ],
         ),
-      ),
-      bottomNavigationBar: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          maximumSize: const Size(double.infinity, 50),
-          primary: Colors.indigo,
-        ),
-        child: const Text("Modifier"),
-        onPressed: () {
-          // Validate returns true if the form is valid, otherwise false.
-
-          Devis().updateDevis(
-              widget.id,
-              widget.client,
-              widget.etat,
-              (calculMontat() * (1 + 0.2)) * (1 - (widget.remise / 100)),
-              widget.commande,
-              widget.remise,
-              calculMontat());
-          Get.to(() => ListDevis(
-                role: widget.role,
-              ));
-          if (widget.etat == "Bon de commande") {
-            AutoFacture().addFacture(
-                uuid,
-                "Facture N°${lf + 1}",
-                widget.titre,
-                widget.client,
-                "Brouillon",
-                widget.date,
-                (calculMontat() * (1 + 0.2)) * (1 - (widget.remise / 100)),
-                widget.commande,
-                widget.remise,
-                calculMontat());
-          }
-        },
       ),
     );
   }

@@ -8,9 +8,19 @@ import '../../model/user.dart';
 class ChatHeaderWidget extends StatelessWidget {
   final List<User> users;
   final String currentUser;
-  const ChatHeaderWidget({
+  String name, email, url, role, id, tel, adr;
+  List acces;
+  ChatHeaderWidget({
+    required this.id,
     required this.users,
     required this.currentUser,
+    required this.email,
+    required this.name,
+    required this.acces,
+    required this.url,
+    required this.role,
+    required this.tel,
+    required this.adr,
     Key? key,
   }) : super(key: key);
 
@@ -61,8 +71,16 @@ class ChatHeaderWidget extends StatelessWidget {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => ChatPage(
+                              id: id,
                               user: users[index],
                               loggedInUserMail: currentUser,
+                              email: email,
+                              name: name,
+                              acces: acces,
+                              role: role,
+                              url: url,
+                              tel: tel,
+                              adr: adr,
                             ),
                           ));
                         },

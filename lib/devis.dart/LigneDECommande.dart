@@ -6,13 +6,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../widget/NavBottom.dart';
 import '../widget/toast.dart';
 import 'creer_devis.dart';
 
 // ignore: must_be_immutable
 class LigneCommande extends StatefulWidget {
-  String role;
-  LigneCommande({Key? key, required this.role}) : super(key: key);
+  String role, idus;
+  String name, email, url, tel, adr;
+  List acces;
+  LigneCommande(
+      {Key? key,
+      required this.idus,
+      required this.role,
+      required this.email,
+      required this.name,
+      required this.acces,
+      required this.url,
+      required this.adr,
+      required this.tel})
+      : super(key: key);
 
   @override
   State<LigneCommande> createState() => _LigneCommandeState();
@@ -78,6 +91,15 @@ class _LigneCommandeState extends State<LigneCommande> {
           backgroundColor: Colors.orange,
           title: const Text("Ajouter Ligne de le commande"),
         ),
+        bottomNavigationBar: NavBottom(
+            tel: widget.tel,
+            adr: widget.adr,
+            id: widget.idus,
+            email: widget.email,
+            name: widget.name,
+            acces: widget.acces,
+            url: widget.url,
+            role: widget.role),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -291,7 +313,14 @@ class _LigneCommandeState extends State<LigneCommande> {
                                           int.parse(qt.text) * prixv);
                                       clearText();
                                       Get.to(() => CreeDevisPage(
+                                            idus: widget.idus,
                                             role: widget.role,
+                                            email: widget.email,
+                                            acces: widget.acces,
+                                            name: widget.name,
+                                            url: widget.url,
+                                            tel: widget.tel,
+                                            adr: widget.adr,
                                           ));
                                     } else {
                                       showToast(

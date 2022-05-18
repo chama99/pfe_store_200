@@ -17,12 +17,25 @@ import 'package:flutter_azure_b2c/GUIDGenerator.dart';
 import 'package:get/get.dart';
 
 import '../services/facture.dart';
+import '../widget/NavBottom.dart';
 import 'LigneDECommande.dart';
 import 'listDevis.dart';
 
 class CreeDevisPage extends StatefulWidget {
   String role;
-  CreeDevisPage({Key? key, required this.role}) : super(key: key);
+  String name, email, url, idus, tel, adr;
+  List acces;
+  CreeDevisPage(
+      {Key? key,
+      required this.idus,
+      required this.role,
+      required this.email,
+      required this.name,
+      required this.acces,
+      required this.url,
+      required this.adr,
+      required this.tel})
+      : super(key: key);
 
   @override
   _CreeDevisPageState createState() => _CreeDevisPageState();
@@ -128,6 +141,15 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
         title: const Text("Créer Un Devis"),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.tel,
+          adr: widget.adr,
+          id: widget.idus,
+          email: widget.email,
+          name: widget.name,
+          acces: widget.acces,
+          url: widget.url,
+          role: widget.role),
       body: RefreshIndicator(
         onRefresh: () {
           Navigator.pushReplacement(
@@ -135,7 +157,14 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
               PageRouteBuilder(
                   // ignore: prefer_const_constructors
                   pageBuilder: (a, b, c) => CreeDevisPage(
+                        idus: widget.idus,
                         role: widget.role,
+                        acces: widget.acces,
+                        name: widget.name,
+                        url: widget.url,
+                        email: widget.email,
+                        tel: widget.tel,
+                        adr: widget.adr,
                       ),
                   // ignore: prefer_const_constructors
                   transitionDuration: Duration(seconds: 0)));
@@ -171,7 +200,14 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   LigneCommande(
+                                                    idus: widget.idus,
                                                     role: widget.role,
+                                                    email: widget.email,
+                                                    acces: widget.acces,
+                                                    name: widget.name,
+                                                    url: widget.url,
+                                                    tel: widget.tel,
+                                                    adr: widget.adr,
                                                   )));
                                     },
                                     child: Container(
@@ -525,6 +561,64 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                           ),
                         ],
                       )),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          maximumSize: const Size(double.infinity, 50),
+                          primary: const Color.fromARGB(255, 62, 75, 146),
+                        ),
+                        child: const Text("Sauvegarder"),
+                        onPressed: () {
+                          // Validate returns true if the form is valid, otherwise false.
+                          if (_formKey.currentState!.validate()) {
+                            if (client != null) {
+                              if (etat != null) {
+                                addList();
+                                if (etat == "Bon de commande") {
+                                  AutoFacture().addFacture(
+                                      uuid,
+                                      "Facture N°${lf + 1}",
+                                      "Devis N°${l + 1}",
+                                      client,
+                                      "Brouillon",
+                                      dataTime.toString().substring(0, 10),
+                                      (calculMontat() * (1 + 0.2)) *
+                                          (1 - (remisee / 100)),
+                                      list,
+                                      remisee,
+                                      calculMontat());
+                                }
+                                Devis().addDevis(
+                                    uuid,
+                                    "Devis N°${l + 1}",
+                                    client,
+                                    etat,
+                                    (calculMontat() * (1 + 0.2)) *
+                                        (1 - (remisee / 100)),
+                                    list,
+                                    remisee,
+                                    calculMontat(),
+                                    dataTime);
+
+                                Get.to(() => ListDevis(
+                                      idus: widget.idus,
+                                      role: widget.role,
+                                      email: widget.email,
+                                      acces: widget.acces,
+                                      name: widget.name,
+                                      url: widget.url,
+                                      tel: widget.tel,
+                                      adr: widget.adr,
+                                    ));
+                              } else {
+                                showToast("veuillez sélectionner état");
+                              }
+                            } else {
+                              showToast("veuillez sélectionner client");
+                            }
+                            Commande().deleteCommande();
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -532,55 +626,6 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          maximumSize: const Size(double.infinity, 50),
-          primary: const Color.fromARGB(255, 62, 75, 146),
-        ),
-        child: const Text("Sauvegarder"),
-        onPressed: () {
-          // Validate returns true if the form is valid, otherwise false.
-          if (_formKey.currentState!.validate()) {
-            if (client != null) {
-              if (etat != null) {
-                addList();
-                if (etat == "Bon de commande") {
-                  AutoFacture().addFacture(
-                      uuid,
-                      "Facture N°${lf + 1}",
-                      "Devis N°${l + 1}",
-                      client,
-                      "Brouillon",
-                      dataTime.toString().substring(0, 10),
-                      (calculMontat() * (1 + 0.2)) * (1 - (remisee / 100)),
-                      list,
-                      remisee,
-                      calculMontat());
-                }
-                Devis().addDevis(
-                    uuid,
-                    "Devis N°${l + 1}",
-                    client,
-                    etat,
-                    (calculMontat() * (1 + 0.2)) * (1 - (remisee / 100)),
-                    list,
-                    remisee,
-                    calculMontat(),
-                    dataTime);
-
-                Get.to(() => ListDevis(
-                      role: widget.role,
-                    ));
-              } else {
-                showToast("veuillez sélectionner état");
-              }
-            } else {
-              showToast("veuillez sélectionner client");
-            }
-            Commande().deleteCommande();
-          }
-        },
       ),
     );
   }

@@ -12,6 +12,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_azure_b2c/GUIDGenerator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,11 +32,17 @@ class AddUserPage extends StatefulWidget {
 class _AddUserPageState extends State<AddUserPage> {
   @override
   void initState() {
+    getData().then((client) {
+      for (int i = 0; i < client.length; i++) {
+        users.add(client[i]);
+      }
+    });
     super.initState();
 
     fetchDatabaseList();
   }
 
+  List users = [];
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
   XFile? imageFile;
@@ -52,7 +59,12 @@ class _AddUserPageState extends State<AddUserPage> {
   var r = "Poste occupé ";
   // ignore: prefer_typing_uninitialized_variables
   var nom;
-
+  final String uuid = GUIDGen.generate();
+  final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('employes');
+  String telephone = "";
+  String addresse = "";
+  List user = [];
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -76,6 +88,23 @@ class _AddUserPageState extends State<AddUserPage> {
       setState(() {
         NomsEmpList = resultant;
         EmailUser = resultant2;
+      });
+    }
+  }
+
+  Future getData() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await usersCollection.get();
+
+    return querySnapshot.docs.map((doc) => doc.data()).toList();
+  }
+
+  UserDonnes(String value) {
+    var user = users.where(((e) => e["name"] == value)).toList();
+    if (user.isNotEmpty) {
+      setState(() {
+        telephone = user[0]["portable professionnel"];
+        addresse = user[0]["Adresse professionnelle"];
       });
     }
   }
@@ -185,7 +214,10 @@ class _AddUserPageState extends State<AddUserPage> {
                                     Border.all(color: Colors.grey, width: 1.5)),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton(
-                                hint: const Text("Nom de l'employé "),
+                                hint: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: const Text("Nom de l'employé "),
+                                ),
                                 dropdownColor: Colors.white,
                                 icon: const Padding(
                                   padding: EdgeInsets.only(left: 120),
@@ -200,6 +232,7 @@ class _AddUserPageState extends State<AddUserPage> {
                                 value: nom,
                                 onChanged: (newValue) {
                                   setState(() {
+                                    UserDonnes(newValue.toString());
                                     nom = newValue.toString();
                                   });
                                 },
@@ -214,7 +247,8 @@ class _AddUserPageState extends State<AddUserPage> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                bottom: 15, left: 10, right: 10),
+                              bottom: 15,
+                            ),
                             child: TextFormField(
                               controller: emailController,
                               keyboardType: TextInputType.emailAddress,
@@ -238,7 +272,8 @@ class _AddUserPageState extends State<AddUserPage> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                bottom: 15, left: 10, right: 10),
+                              bottom: 15,
+                            ),
                             child: TextFormField(
                               controller: passwordController,
                               keyboardType: TextInputType.text,
@@ -292,14 +327,13 @@ class _AddUserPageState extends State<AddUserPage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: 20, left: 5, right: 5, top: 10),
+                            padding: const EdgeInsets.only(bottom: 20, top: 10),
                             child: TextFormField(
                               controller: confirmpassword,
                               keyboardType: TextInputType.text,
                               obscureText: _obscureText2,
                               decoration: InputDecoration(
-                                hintText: "Mot de passe",
+                                hintText: "Confirmer le mot de passe",
                                 filled: true,
                                 fillColor: Colors.white,
                                 prefixIcon: Icon(
@@ -401,49 +435,54 @@ class _AddUserPageState extends State<AddUserPage> {
                                     acces.add("Devis");
                                   }
 
-                                  if (_formKey.currentState!.validate() &&
-                                      nom != null) {
+                                  if (_formKey.currentState!.validate()) {
                                     if (VerificationUserByEmail(
                                             emailController.text, EmailUser) ==
                                         false) {
-                                      if (ch != null) {
-                                        setState(() {
-                                          email = emailController.text;
-                                          password = passwordController.text;
-                                          role = ch;
-                                          final strBytes =
-                                              utf8.encode(password);
-                                          final base64String =
-                                              base64.encode(strBytes);
+                                      if (nom != null) {
+                                        if (ch != null) {
+                                          setState(() {
+                                            email = emailController.text;
+                                            password = passwordController.text;
+                                            role = ch;
+                                            final strBytes =
+                                                utf8.encode(password);
+                                            final base64String =
+                                                base64.encode(strBytes);
 
-                                          if (imageFile == null) {
-                                            User().addUser(
-                                                email,
-                                                nom,
-                                                base64String,
-                                                role,
-                                                "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-                                                acces);
-                                          } else {
-                                            uploadImage(email, nom);
-                                          }
+                                            if (imageFile == null) {
+                                              User().addUser(
+                                                  uuid,
+                                                  email,
+                                                  nom,
+                                                  base64String,
+                                                  role,
+                                                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+                                                  acces,
+                                                  telephone,
+                                                  addresse);
+                                            } else {
+                                              uploadImage(
+                                                  email, nom, base64String);
+                                            }
 
-                                          clearText();
-                                          ch = null;
-                                          imageFile = null;
+                                            clearText();
+                                            ch = null;
+                                            imageFile = null;
 
-                                          Get.to(() => ListUser());
-                                        });
+                                            Get.to(() => ListUser());
+                                          });
+                                        } else {
+                                          showToast(
+                                              "veuillez sélectionner poste occupé ");
+                                        }
                                       } else {
-                                        showToast(
-                                            "veuillez sélectionner poste occupé ");
+                                        showToast("Email déja existé");
                                       }
                                     } else {
-                                      showToast("Email déja existé");
+                                      showToast(
+                                          "veuillez sélectionner Nom de l'employé");
                                     }
-                                  } else {
-                                    showToast(
-                                        "veuillez sélectionner Nom de l'employé");
                                   }
                                 },
                                 child: const Text(
@@ -511,7 +550,7 @@ class _AddUserPageState extends State<AddUserPage> {
     });
   }
 
-  uploadImage(String email, String n) async {
+  uploadImage(String email, String n, pass) async {
     // ignore: unused_local_variable
     final fileName = basename(imageFile!.path);
     // ignore: prefer_const_declarations
@@ -524,7 +563,8 @@ class _AddUserPageState extends State<AddUserPage> {
       UploadTask uploadTask = ref.putFile(File(imageFile!.path));
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
-        User().addUser(email, n, password, role, uploadPath, acces);
+        User().addUser(
+            uuid, email, n, pass, role, uploadPath, acces, telephone, addresse);
       });
     } catch (e) {
       print('error occured');

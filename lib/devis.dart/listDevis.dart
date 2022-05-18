@@ -1,19 +1,31 @@
 // ignore_for_file: file_names, unused_local_variable, must_be_immutable
 
 import 'package:chama_projet/services/devis.dart';
-import 'package:chama_projet/widget/toast.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../widget/NavBottom.dart';
 import '../widget/boitedialogue.dart';
 import 'creer_devis.dart';
 import 'devis_detailler.dart';
 
 class ListDevis extends StatefulWidget {
-  String role;
-  ListDevis({Key? key, required this.role}) : super(key: key);
+  String role, idus;
+  String name, email, url, tel, adr;
+  List acces;
+  ListDevis(
+      {Key? key,
+      required this.idus,
+      required this.role,
+      required this.email,
+      required this.name,
+      required this.acces,
+      required this.url,
+      required this.adr,
+      required this.tel})
+      : super(key: key);
 
   @override
   _ListDevisState createState() => _ListDevisState();
@@ -60,16 +72,19 @@ class _ListDevisState extends State<ListDevis> {
               padding: const EdgeInsets.only(top: 20, right: 30),
               child: InkWell(
                 onTap: () {
-                  if (widget.role == "Admin") {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CreeDevisPage(
-                                  role: widget.role,
-                                )));
-                  } else {
-                    showToast("Tu ne peux pas créer un devis");
-                  }
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CreeDevisPage(
+                                idus: widget.idus,
+                                role: widget.role,
+                                email: widget.email,
+                                acces: widget.acces,
+                                name: widget.name,
+                                url: widget.url,
+                                tel: widget.tel,
+                                adr: widget.adr,
+                              )));
                 },
                 child: Text(
                   "Créer".toUpperCase(),
@@ -82,6 +97,15 @@ class _ListDevisState extends State<ListDevis> {
           ],
           backgroundColor: Colors.orange,
         ),
+        bottomNavigationBar: NavBottom(
+            tel: widget.tel,
+            adr: widget.adr,
+            id: widget.idus,
+            email: widget.email,
+            name: widget.name,
+            acces: widget.acces,
+            url: widget.url,
+            role: widget.role),
         body: Container(
           margin: const EdgeInsets.all(10),
           child: Column(
@@ -123,7 +147,14 @@ class _ListDevisState extends State<ListDevis> {
                               context,
                               PageRouteBuilder(
                                   pageBuilder: (a, b, c) => ListDevis(
+                                        idus: widget.idus,
                                         role: widget.role,
+                                        email: widget.email,
+                                        acces: widget.acces,
+                                        name: widget.name,
+                                        url: widget.url,
+                                        adr: widget.adr,
+                                        tel: widget.tel,
                                       ),
                                   transitionDuration:
                                       const Duration(seconds: 0)));
@@ -138,6 +169,7 @@ class _ListDevisState extends State<ListDevis> {
                                   child: InkWell(
                                 onTap: () {
                                   Get.to(() => DevisDetailler(
+                                        idus: widget.idus,
                                         titre: devis["numdevis"],
                                         id: devis["idDevis"],
                                         client: devis["client"],
@@ -151,6 +183,12 @@ class _ListDevisState extends State<ListDevis> {
                                             .toString()
                                             .substring(0, 10),
                                         role: widget.role,
+                                        email: widget.email,
+                                        name: widget.name,
+                                        acces: widget.acces,
+                                        url: widget.url,
+                                        adr: widget.adr,
+                                        tel: widget.tel,
                                       ));
                                 },
                                 splashColor:

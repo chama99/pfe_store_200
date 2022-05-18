@@ -9,8 +9,20 @@ import '../chat_widgets/chat_header_widget.dart';
 import '../model/user.dart';
 
 class ChatsPage extends StatelessWidget {
-  final String email;
-  const ChatsPage({required this.email, Key? key}) : super(key: key);
+  final String email, id;
+  String name, url, role, tel, adr;
+  List acces;
+  ChatsPage(
+      {required this.id,
+      required this.email,
+      required this.name,
+      required this.acces,
+      required this.url,
+      required this.role,
+      required this.tel,
+      required this.adr,
+      Key? key})
+      : super(key: key);
   @override
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: Colors.orange,
@@ -34,8 +46,30 @@ class ChatsPage extends StatelessWidget {
                     } else {
                       return Column(
                         children: [
-                          ChatHeaderWidget(currentUser: email, users: users),
-                          ChatBodyWidget(currentUser: email, users: users)
+                          ChatHeaderWidget(
+                            id: id,
+                            currentUser: email,
+                            users: users,
+                            name: name,
+                            url: url,
+                            acces: acces,
+                            role: role,
+                            email: email,
+                            tel: tel,
+                            adr: adr,
+                          ),
+                          ChatBodyWidget(
+                            id: id,
+                            currentUser: email,
+                            users: users,
+                            email: email,
+                            name: name,
+                            url: url,
+                            acces: acces,
+                            role: role,
+                            tel: tel,
+                            adr: adr,
+                          )
                         ],
                       );
                     }

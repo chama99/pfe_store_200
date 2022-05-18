@@ -1,24 +1,22 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:convert';
-
-import 'package:chama_projet/pages/listUser.dart';
 import 'package:chama_projet/services/user.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:get/get.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import '../widget/InputDeco_design.dart';
 
-class UpdateUserPage extends StatefulWidget {
+class UpdateProfil extends StatefulWidget {
   final String nom, email, id;
   List acces;
   // ignore: prefer_const_constructors_in_immutables
-  UpdateUserPage(
+  UpdateProfil(
       {Key? key,
       required this.id,
       required this.email,
@@ -27,10 +25,10 @@ class UpdateUserPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  _UpdateUserPageState createState() => _UpdateUserPageState();
+  _UpdateProfilState createState() => _UpdateProfilState();
 }
 
-class _UpdateUserPageState extends State<UpdateUserPage> {
+class _UpdateProfilState extends State<UpdateProfil> {
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
   XFile? imageFile;
@@ -38,7 +36,6 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
   final ImagePicker picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
 
-  List listItem = ["Technicien", "Comptable"];
   // ignore: prefer_typing_uninitialized_variables
   var role;
   // ignore: prefer_typing_uninitialized_variables
@@ -49,7 +46,7 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Utilisateur / ${widget.nom}",
+          "${widget.nom}",
           style: const TextStyle(
             color: Colors.white,
           ),
@@ -75,10 +72,14 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
                 );
               }
               var data = snapshot.data!.data();
-              var mdp = data!['mot de passe'];
+              var tel = data!['telephone'];
+              var adr = data['adresse'];
               var email = data['email'];
               role = data['role'];
               var url = data['image'];
+              var nom = data['name'];
+              var mdp = data['mot de passe'];
+              var acces = data['acces'];
 
               return Center(
                 child: Padding(
@@ -144,16 +145,25 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
                       Container(
                         margin: const EdgeInsets.symmetric(vertical: 10.0),
                         child: TextFormField(
-                          initialValue: mdp,
+                          initialValue: adr,
                           autofocus: false,
-                          onChanged: (value) {
-                            final strBytes = utf8.encode(value);
-                            final base64String = base64.encode(strBytes);
-                            mdp = base64String;
-                          },
+                          onChanged: (value) => adr = value,
                           decoration: buildInputDecoration(
-                            Icons.lock,
-                            "Mot de passe",
+                            Icons.location_on,
+                            "Adresse",
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: TextFormField(
+                          initialValue: tel,
+                          autofocus: false,
+                          onChanged: (value) => tel = value,
+                          decoration: buildInputDecoration(
+                            Icons.phone,
+                            "Tél. portable professionnel",
                             color: Colors.white,
                           ),
                         ),
@@ -169,12 +179,11 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
                                 // Validate returns true if the form is valid, otherwise false.
                                 if (_formKey.currentState!.validate()) {
                                   if (imageFile == null) {
-                                    User().updateUser(widget.id, email, mdp,
-                                        role, url, widget.acces);
+                                    User().updateProf(
+                                        widget.id, email, adr, tel, url);
                                   } else {
-                                    uploadImage(email, mdp, role);
+                                    uploadImage(email, adr, tel, role);
                                   }
-                                  Get.to(() => const ListUser());
                                 }
                               },
                               child: const Text(
@@ -243,7 +252,7 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
     });
   }
 
-  uploadImage(String email, mdp, ch) async {
+  uploadImage(String email, adr, tel, ch) async {
     // ignore: unused_local_variable
     final fileName = basename(imageFile!.path);
     // ignore: prefer_const_declarations
@@ -254,10 +263,10 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
           .ref(destination)
           .child('$email/');
       UploadTask uploadTask = ref.putFile(File(imageFile!.path));
+
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
-        User()
-            .updateUser(widget.id, email, mdp, role, uploadPath, widget.acces);
+        User().updateProf(widget.id, email, adr, tel, uploadPath);
       });
     } catch (e) {
       // ignore: avoid_print

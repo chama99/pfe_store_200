@@ -6,15 +6,25 @@ import '../chat_widgets/messages_widget.dart';
 import '../chat_widgets/new_message_widget.dart';
 import '../chat_widgets/profile_header_widget.dart';
 import '../model/user.dart';
+import '../widget/NavBottom.dart';
 
 class ChatPage extends StatefulWidget {
   final User user;
-
+  String name, email, url, role, id, tel, adr;
+  List acces;
   final String loggedInUserMail;
 
-  const ChatPage({
+  ChatPage({
+    required this.id,
     required this.loggedInUserMail,
     required this.user,
+    required this.email,
+    required this.name,
+    required this.acces,
+    required this.url,
+    required this.role,
+    required this.tel,
+    required this.adr,
     Key? key,
   }) : super(key: key);
 
@@ -33,6 +43,16 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) => Scaffold(
         extendBodyBehindAppBar: true,
         backgroundColor: Colors.orange,
+        bottomNavigationBar: NavBottom(
+          id: widget.id,
+          email: widget.email,
+          name: widget.name,
+          acces: widget.acces,
+          url: widget.url,
+          role: widget.role,
+          tel: widget.tel,
+          adr: widget.adr,
+        ),
         body: SafeArea(
           child: Column(
             children: [

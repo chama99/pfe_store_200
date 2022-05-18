@@ -2,15 +2,24 @@
 
 import 'package:chama_projet/pages/connexion.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../pages/chats_page.dart';
 
 class NavBar extends StatelessWidget {
   String name;
-  String email;
+  String email, role, id;
   String url;
-  NavBar({Key? key, required this.name, required this.email, required this.url})
+  List acces;
+  NavBar(
+      {Key? key,
+      required this.id,
+      required this.name,
+      required this.email,
+      required this.url,
+      required this.role,
+      required this.acces})
       : super(key: key);
 
   @override
@@ -44,11 +53,7 @@ class NavBar extends StatelessWidget {
               leading: const Icon(Icons.message),
               title: const Text("Messages"),
               // ignore: avoid_returning_null_for_void
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatsPage(email: email),
-                  ))),
+              onTap: null),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.exit_to_app),

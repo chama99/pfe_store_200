@@ -6,16 +6,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class User {
   final CollectionReference user =
       FirebaseFirestore.instance.collection('users');
-  Future<void> addUser(email, name, password, role, url, acces) {
+  Future<void> addUser(
+      id, email, name, password, role, url, acces, telephone, adresse) {
     return user
-        .doc(email)
+        .doc(id)
         .set({
+          'IdUser': id,
           'email': email,
           'name': name,
           'mot de passe': password,
           'role': role,
           'image': url,
           'acces': acces,
+          'telephone': telephone,
+          'adresse': adresse
         })
         // ignore: avoid_print
         .then((value) => showToast("Utilisateur ajouté"))
@@ -60,9 +64,9 @@ class User {
     }
   }
 
-  Future<void> updateUser(email, mdp, role, url, acces) {
+  Future<void> updateUser(id, email, mdp, role, url, acces) {
     return user
-        .doc(email)
+        .doc(id)
         .update({
           'email': email,
           'mot de passe': mdp,
@@ -70,6 +74,18 @@ class User {
           'image': url,
           'acces': acces,
         })
+        // ignore: avoid_print
+        .then((value) => showToast("Mise à jour de l'utilisateur"))
+        // ignore: avoid_print
+        .catchError((error) =>
+            showToast("Échec de la mise à jour de l'utilisateur : $error"));
+  }
+
+  Future<void> updateProf(id, email, adr, phone, url) {
+    return user
+        .doc(id)
+        .update(
+            {'email': email, 'telephone': phone, 'adresse': adr, 'image': url})
         // ignore: avoid_print
         .then((value) => showToast("Mise à jour de l'utilisateur"))
         // ignore: avoid_print

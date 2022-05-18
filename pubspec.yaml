@@ -87,6 +87,7 @@ dependencies:
   flutter_azure_b2c: ^0.0.7
   getwidget: ^2.0.5
   flutter_calendar_carousel: ^2.1.0
+  curved_navigation_bar: ^1.0.3
  
 
  

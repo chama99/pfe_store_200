@@ -9,16 +9,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../services/article.dart';
+import '../widget/NavBottom.dart';
 import '../widget/toast.dart';
 
 class AjoutCommande extends StatefulWidget {
-  String titre, client, etat, id;
+  String titre, client, etat, id, idus, tel, adr;
   String role, date;
   int remise;
   List commande;
   double total, montant;
+  String name, email, url;
+  List acces;
   AjoutCommande(
       {Key? key,
+      required this.idus,
       required this.id,
       required this.titre,
       required this.client,
@@ -28,7 +32,13 @@ class AjoutCommande extends StatefulWidget {
       required this.remise,
       required this.montant,
       required this.role,
-      required this.date})
+      required this.date,
+      required this.email,
+      required this.name,
+      required this.acces,
+      required this.url,
+      required this.tel,
+      required this.adr})
       : super(key: key);
 
   @override
@@ -112,6 +122,15 @@ class _AjoutCommandeState extends State<AjoutCommande> {
           backgroundColor: Colors.orange,
           title: const Text("Ajouter Ligne de la commande"),
         ),
+        bottomNavigationBar: NavBottom(
+            tel: widget.tel,
+            adr: widget.adr,
+            id: widget.idus,
+            email: widget.email,
+            name: widget.name,
+            acces: widget.acces,
+            url: widget.url,
+            role: widget.role),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -294,6 +313,7 @@ class _AjoutCommandeState extends State<AjoutCommande> {
                                           widget.montant);
                                       clearText();
                                       Get.to(() => UpdateDevis(
+                                            idus: widget.idus,
                                             id: widget.id,
                                             titre: widget.titre,
                                             client: widget.client,
@@ -304,6 +324,12 @@ class _AjoutCommandeState extends State<AjoutCommande> {
                                             montant: widget.montant,
                                             role: widget.role,
                                             date: widget.date,
+                                            email: widget.email,
+                                            name: widget.name,
+                                            acces: widget.acces,
+                                            url: widget.url,
+                                            tel: widget.tel,
+                                            adr: widget.adr,
                                           ));
                                     } else {
                                       showToast(

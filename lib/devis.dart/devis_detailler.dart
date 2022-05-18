@@ -10,15 +10,19 @@ import 'package:open_file/open_file.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 import '../services/pdf_devis.dart';
+import '../widget/NavBottom.dart';
 
 class DevisDetailler extends StatefulWidget {
-  String titre, client, etat, role, id;
+  String titre, client, etat, role, id, idus;
   int remise;
   List commande;
   double total, montant;
   String date;
+  String name, email, url, adr, tel;
+  List acces;
   DevisDetailler(
       {Key? key,
+      required this.idus,
       required this.titre,
       required this.id,
       required this.client,
@@ -28,7 +32,13 @@ class DevisDetailler extends StatefulWidget {
       required this.remise,
       required this.montant,
       required this.date,
-      required this.role})
+      required this.role,
+      required this.email,
+      required this.name,
+      required this.acces,
+      required this.url,
+      required this.adr,
+      required this.tel})
       : super(key: key);
 
   @override
@@ -48,8 +58,9 @@ class _DevisDetaillerState extends State<DevisDetailler> {
             padding: const EdgeInsets.only(top: 20, right: 30),
             child: InkWell(
               onTap: () {
-                if (widget.etat == "Devis" && widget.role == "Admin") {
+                if (widget.etat == "Devis") {
                   Get.to(() => UpdateDevis(
+                        idus: widget.idus,
                         id: widget.id,
                         titre: widget.titre,
                         client: widget.client,
@@ -60,6 +71,12 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                         montant: widget.montant,
                         role: widget.role,
                         date: widget.date,
+                        email: widget.email,
+                        name: widget.name,
+                        acces: widget.acces,
+                        url: widget.url,
+                        tel: widget.tel,
+                        adr: widget.adr,
                       ));
                 } else {
                   showToast("Ne peut pas modifier ce devis");
@@ -76,6 +93,15 @@ class _DevisDetaillerState extends State<DevisDetailler> {
         ],
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.tel,
+          adr: widget.adr,
+          id: widget.idus,
+          email: widget.email,
+          name: widget.name,
+          acces: widget.acces,
+          url: widget.url,
+          role: widget.role),
       body: ListView(
         children: [
           Container(
@@ -306,18 +332,18 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                     ),
                   ],
                 ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    maximumSize: const Size(double.infinity, 50),
+                    primary: Colors.indigo,
+                  ),
+                  child: const Text("Convertir  au format PDF"),
+                  onPressed: onSubmit,
+                ),
               ],
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          maximumSize: const Size(double.infinity, 50),
-          primary: Colors.indigo,
-        ),
-        child: const Text("Convertir  au format PDF"),
-        onPressed: onSubmit,
       ),
     );
   }

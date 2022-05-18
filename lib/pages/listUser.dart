@@ -129,12 +129,15 @@ class _ListUserState extends State<ListUser> {
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               UtilisateurDetail(
+                                                id: user['IdUser'],
                                                 image: user['image'],
                                                 email: user['email'],
                                                 nom: user['name'],
                                                 mdp: user['mot de passe'],
                                                 role: user['role'],
                                                 acces: user['acces'],
+                                                tel: user['telephone'],
+                                                adr: user['adresse'],
                                               )));
                                 },
                                 splashColor:
@@ -146,7 +149,7 @@ class _ListUserState extends State<ListUser> {
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          user["email"],
+                                          user["IdUser"],
                                           "Êtes-vous sûr de vouloir supprimer cet utilisateur",
                                           "utilisateur")
                                     },

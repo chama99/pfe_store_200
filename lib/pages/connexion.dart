@@ -25,14 +25,40 @@ class _connexion extends State<Connexion> {
   TextEditingController id = TextEditingController();
 
   bool isHiddenPassword = true;
-
+  final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('users');
   final firestoreInstance = FirebaseFirestore.instance;
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   @override
   void initState() {
+    getData().then((client) {
+      for (int i = 0; i < client.length; i++) {
+        users.add(client[i]);
+      }
+    });
     super.initState();
     fetchDatabaseListByEmail();
+  }
+
+  List users = [];
+  String motp = "";
+  Future getData() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await usersCollection.get();
+
+    return querySnapshot.docs.map((doc) => doc.data()).toList();
+  }
+
+  String idu = "";
+  UserDonnes(String value) {
+    var user = users.where(((e) => e["email"] == value)).toList();
+    if (user.isNotEmpty) {
+      setState(() {
+        idu = user[0]["IdUser"];
+      });
+    }
+    return idu;
   }
 
   List useListByEmail = [];
@@ -56,27 +82,34 @@ class _connexion extends State<Connexion> {
         t = true;
       }
     }
+    var iduu = UserDonnes(e);
     if (t == true) {
-      firestoreInstance.collection("users").doc(e).get().then((value) {
+      firestoreInstance.collection("users").doc(iduu).get().then((value) {
         String email = value.data()!["email"];
         String mdp = value.data()!["mot de passe"];
         String name = value.data()!["name"];
         List acces = value.data()!["acces"];
         String url = value.data()!["image"];
         String role = value.data()!["role"];
+        String id = value.data()!["IdUser"];
+        String tel = value.data()!["telephone"];
+        String adr = value.data()!["adresse"];
         var decodeBytes = base64.decode(mdp);
         var decodeString = utf8.decode(decodeBytes);
 
-        if (e == email && m == decodeString) {
+        if (m == decodeString) {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => MenuAdmin(
+                        id: id,
                         email: email,
                         name: name,
                         acces: acces,
                         url: url,
                         role: role,
+                        tel: tel,
+                        adr: adr,
                       )));
         } else {
           showToast("Mauvais  mot de passe");

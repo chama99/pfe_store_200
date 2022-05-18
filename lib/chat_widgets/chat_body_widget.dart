@@ -8,10 +8,19 @@ import '../../model/user.dart';
 class ChatBodyWidget extends StatefulWidget {
   final List<User> users;
   final String currentUser;
-
-  const ChatBodyWidget({
+  String name, email, url, role, id, tel, adr;
+  List acces;
+  ChatBodyWidget({
     required this.currentUser,
     required this.users,
+    required this.email,
+    required this.name,
+    required this.acces,
+    required this.url,
+    required this.role,
+    required this.id,
+    required this.tel,
+    required this.adr,
     Key? key,
   }) : super(key: key);
 
@@ -85,8 +94,16 @@ class _ChatBodyWidgetState extends State<ChatBodyWidget> {
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ChatPage(
+                          id: widget.id,
                           user: user,
                           loggedInUserMail: widget.currentUser,
+                          email: widget.email,
+                          name: widget.name,
+                          acces: widget.acces,
+                          role: widget.role,
+                          url: widget.url,
+                          adr: widget.adr,
+                          tel: widget.tel,
                         ),
                       ));
                     },

@@ -7,15 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../services/article.dart';
+import '../widget/NavBottom.dart';
 
 class ModifierCommande extends StatefulWidget {
-  String titre, client, etat, role, id, date;
+  String titre, client, etat, role, id, date, tel, adr;
   int num;
   int remise;
   List commande;
   double total, montant;
+  String name, email, url, idus;
+  List acces;
   ModifierCommande(
       {Key? key,
+      required this.idus,
       required this.id,
       required this.titre,
       required this.client,
@@ -26,7 +30,13 @@ class ModifierCommande extends StatefulWidget {
       required this.montant,
       required this.num,
       required this.role,
-      required this.date})
+      required this.date,
+      required this.email,
+      required this.name,
+      required this.acces,
+      required this.url,
+      required this.adr,
+      required this.tel})
       : super(key: key);
 
   @override
@@ -72,6 +82,15 @@ class _ModifierCommandeState extends State<ModifierCommande> {
         backgroundColor: Colors.orange,
         title: Text("Modifier  Ligne de la commande ${widget.num}"),
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.tel,
+          adr: widget.adr,
+          id: widget.idus,
+          email: widget.email,
+          name: widget.name,
+          acces: widget.acces,
+          url: widget.url,
+          role: widget.role),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(30),
@@ -158,6 +177,7 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                             widget.montant);
 
                         Get.to(() => UpdateDevis(
+                              idus: widget.idus,
                               id: widget.id,
                               titre: widget.titre,
                               client: widget.client,
@@ -168,6 +188,12 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                               montant: widget.montant,
                               role: widget.role,
                               date: widget.date,
+                              email: widget.email,
+                              name: widget.name,
+                              acces: widget.acces,
+                              url: widget.url,
+                              adr: widget.adr,
+                              tel: widget.tel,
                             ));
                       },
                       child: const Text(
