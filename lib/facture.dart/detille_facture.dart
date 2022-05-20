@@ -79,26 +79,64 @@ class _DetailFactureState extends State<DetailFacture> {
       body: ListView(
         children: [
           Container(
-            margin: const EdgeInsets.only(top: 30, left: 10),
+            color: Colors.grey[200],
             child: Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Row(
+                    children: [
+                      Text(
+                        widget.titre,
+                        style: TextStyle(
+                          fontSize: 20,
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 1
+                            ..color = Colors.black,
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 50),
+                        child: Text("Sète,le",
+                            style: TextStyle(
+                              fontSize: 20,
+                            )),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 50),
+                        child: Text(
+                          widget.date1,
+                          style: TextStyle(
+                            fontSize: 20,
+                            foreground: Paint()
+                              ..style = PaintingStyle.stroke
+                              ..strokeWidth = 1
+                              ..color = Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 Row(
                   children: [
                     const Padding(
-                      padding: EdgeInsets.only(left: 8, top: 20),
+                      padding: EdgeInsets.only(left: 160, top: 40),
                       child: Text(
-                        "Client:",
-                        style: TextStyle(fontSize: 20, letterSpacing: 3),
+                        "Nom du Client:",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8, top: 20),
+                      padding: const EdgeInsets.only(left: 8, top: 40),
                       child: Text(
                         widget.client,
                         style: const TextStyle(
-                            color: Colors.indigo,
-                            fontSize: 25,
-                            letterSpacing: 3),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
                       ),
                     ),
                   ],
@@ -106,30 +144,22 @@ class _DetailFactureState extends State<DetailFacture> {
                 Row(
                   children: [
                     const Padding(
-                      padding: EdgeInsets.only(left: 8, top: 30),
+                      padding: EdgeInsets.only(left: 160, top: 10),
                       child: Text(
                         "État:",
-                        style: TextStyle(fontSize: 20, letterSpacing: 3),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8, top: 30),
+                      padding: const EdgeInsets.only(left: 8, top: 10),
                       child: Text(
                         widget.etat,
                         style: const TextStyle(
-                            color: Colors.indigo,
-                            fontSize: 25,
-                            letterSpacing: 3),
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 30),
-                  child: Text(
-                    "Lignes de facture :",
-                    style: TextStyle(fontSize: 20, letterSpacing: 3),
-                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 30),
@@ -137,6 +167,8 @@ class _DetailFactureState extends State<DetailFacture> {
                     scrollDirection: Axis.horizontal,
                     child: SingleChildScrollView(
                       child: DataTable(
+                        dataRowColor:
+                            MaterialStateProperty.resolveWith(_getDataRowColor),
                         columns: const [
                           DataColumn(
                             label: Text("réf"),
@@ -183,37 +215,70 @@ class _DetailFactureState extends State<DetailFacture> {
                     ),
                   ),
                 ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: 8, top: 30),
-                        child: Text(
-                          "Total =",
-                          style: TextStyle(fontSize: 20, letterSpacing: 3),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8, top: 30),
-                        child: Text(
-                          "${widget.total}£",
-                          style: const TextStyle(
-                              color: Colors.indigo, fontSize: 25),
-                        ),
-                      ),
-                    ],
-                  ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 60, left: 100),
+                  child: Table(
+                      defaultColumnWidth: const FixedColumnWidth(120.0),
+                      border: TableBorder.all(
+                          style: BorderStyle.solid,
+                          width: 0,
+                          color: Colors.grey),
+                      children: [
+                        TableRow(children: [
+                          Column(children: const [
+                            Text('Montant', style: TextStyle(fontSize: 15))
+                          ]),
+                          Container(
+                              color: Colors.orange[100],
+                              child: Column(
+                                  children: [Text('${widget.montant}£')])),
+                        ]),
+                        TableRow(children: [
+                          Column(children: const [
+                            Text('Remise ', style: TextStyle(fontSize: 15))
+                          ]),
+                          Container(
+                              color: Colors.orange[100],
+                              child:
+                                  Column(children: [Text('${widget.res}%')])),
+                        ]),
+                        TableRow(children: [
+                          Column(children: const [
+                            Text('Taxes', style: TextStyle(fontSize: 15))
+                          ]),
+                          Container(
+                              color: Colors.orange[100],
+                              child: Column(children: const [Text('20%')])),
+                        ]),
+                        TableRow(children: [
+                          Column(children: const [
+                            Text('Total', style: TextStyle(fontSize: 15))
+                          ]),
+                          Container(
+                              color: Colors.orange[100],
+                              child:
+                                  Column(children: [Text('${widget.total}£')])),
+                        ]),
+                      ]),
                 ),
-                Row(
+                Column(
                   children: [
-                    const Text(
-                      "Signature:",
-                      style: TextStyle(fontSize: 20, letterSpacing: 3),
+                    const Padding(
+                      padding: EdgeInsets.all(30),
+                      child: Text(
+                        "Signature:",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    SfSignaturePad(
-                      key: keySignaturePad,
-                      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 0, left: 20, right: 20),
+                      child: SfSignaturePad(
+                        key: keySignaturePad,
+                        backgroundColor:
+                            const Color.fromARGB(255, 255, 255, 255),
+                      ),
                     ),
                   ],
                 ),
@@ -253,5 +318,18 @@ class _DetailFactureState extends State<DetailFacture> {
     );
     Navigator.of(context).pop();
     await OpenFile.open(file.path);
+  }
+
+  Color _getDataRowColor(Set<MaterialState> states) {
+    const Set<MaterialState> interactiveStates = <MaterialState>{
+      MaterialState.pressed,
+      MaterialState.hovered,
+      MaterialState.focused,
+    };
+
+    if (states.any(interactiveStates.contains)) {
+      return Colors.blue;
+    }
+    return const Color.fromRGBO(255, 224, 178, 1);
   }
 }

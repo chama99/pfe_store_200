@@ -39,13 +39,13 @@ Card buildInputCardPlan(String role, String email, String username) {
   );
 }
 
-Card buildInputCardConges() {
+Card buildInputCardConges(String userID) {
   return Card(
     color: const Color.fromARGB(255, 239, 158, 181),
     margin: const EdgeInsets.all(8.0),
     child: InkWell(
       onTap: () {
-        Get.to(() => const CongeScreen());
+        Get.to(() => CongeScreen(userID: userID));
       },
       splashColor: const Color.fromARGB(255, 3, 56, 109),
       child: Center(

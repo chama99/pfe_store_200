@@ -96,8 +96,6 @@ class _TechnicienPlanState extends State<TechnicienPlan> {
                     builder: (context) => PlanScreen(
                           event: list[index],
                           planID: list[index].id,
-                          techName: widget.techName,
-                          username: widget.username,
                           role: widget.role,
                         )));
           },

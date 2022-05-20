@@ -60,4 +60,9 @@ class FirebaseApi {
       }
     }
   }
+
+  static Future<dynamic>? createNewLeave(String userID, String leaveDays) {
+    final refUsers = FirebaseFirestore.instance.collection("conge");
+    refUsers.doc(userID).update({"leaveDays": leaveDays});
+  }
 }

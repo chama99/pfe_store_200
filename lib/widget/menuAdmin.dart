@@ -7,7 +7,6 @@ import 'package:chama_projet/widget/card_inventaire.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../pages/connexion.dart';
 import 'NavBottom.dart';
 import 'card_achat.dart';
 import 'card_devis.dart';
@@ -123,36 +122,38 @@ class _MenuAdminState extends State<MenuAdmin> {
               role: widget.role),
           backgroundColor: Colors.white,
           body: Container(
-            margin: const EdgeInsets.all(30),
-            child: GridView.count(
-              crossAxisCount: 3,
-              children: <Widget>[
-                for (var x in widget.acces) ...[
-                  if (x == "Employés") ...[buildInputCardEmploye()],
-                  if (x == "Achats") ...[buildInputCardAchat()],
-                  if (x == "Devis") ...[
-                    buildInputCardDevis(
-                        widget.role,
-                        widget.email,
-                        widget.name,
-                        widget.url,
-                        widget.acces,
-                        widget.id,
-                        widget.tel,
-                        widget.adr)
-                  ],
-                  if (x == "Contacts") ...[buildInputCardContact()],
-                  if (x == "Articles") ...[buildInputCardArtcile()],
-                  if (x == "Factures") ...[buildInputCardFacture()],
-                  if (x == "Utilisateurs") ...[buildInputCardUser()],
-                  if (x == "Applications") ...[buildInputCardRole()],
-                  if (x == "Plan") ...[
-                    buildInputCardPlan(widget.role, widget.email, widget.name)
-                  ],
-                  if (x == "Inventaire") ...[buildInputCardInventaire()],
-                  if (x == "Conges") ...[buildInputCardConges()]
-                ]
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: GridView.count(
+                crossAxisCount: 3,
+                children: <Widget>[
+                  for (var x in widget.acces) ...[
+                    if (x == "Employés") ...[buildInputCardEmploye()],
+                    if (x == "Achats") ...[buildInputCardAchat()],
+                    if (x == "Devis") ...[
+                      buildInputCardDevis(
+                          widget.role,
+                          widget.email,
+                          widget.name,
+                          widget.url,
+                          widget.acces,
+                          widget.id,
+                          widget.tel,
+                          widget.adr)
+                    ],
+                    if (x == "Contacts") ...[buildInputCardContact()],
+                    if (x == "Articles") ...[buildInputCardArtcile()],
+                    if (x == "Factures") ...[buildInputCardFacture()],
+                    if (x == "Utilisateurs") ...[buildInputCardUser()],
+                    if (x == "Applications") ...[buildInputCardRole()],
+                    if (x == "Plan") ...[
+                      buildInputCardPlan(widget.role, widget.email, widget.name)
+                    ],
+                    if (x == "Inventaire") ...[buildInputCardInventaire()],
+                    if (x == "Conges") ...[buildInputCardConges(widget.id)]
+                  ]
+                ],
+              ),
             ),
           ),
         ),

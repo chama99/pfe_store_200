@@ -88,7 +88,20 @@ class _MultiSelectionState extends State<MultiSelection> {
         title: const Text("Planing des Technicien"),
       ),
       body: _isLoading
-          ? const CupertinoActivityIndicator()
+          ? Center(
+              child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                CupertinoActivityIndicator(
+                  radius: 20,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text("Chargement..", style: TextStyle(fontSize: 20)),
+              ],
+            ))
           : Column(
               children: [
                 Padding(
@@ -158,33 +171,59 @@ class _MultiSelectionState extends State<MultiSelection> {
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Card(
-                              child: InkWell(
-                                onTap: () {
-                                  if (isMultiSelectionEnabled) {
-                                    doMultiSelection(listTechs[index][0]);
-                                  } else {
-                                    Get.to(Calander(
-                                        username: listTechs[index]['email'],
-                                        techName: listTechs[index]['name'],
-                                        role: widget.role));
-                                  }
-                                },
-                                onLongPress: () {
-                                  isMultiSelectionEnabled = true;
+                            child: InkWell(
+                              onTap: () {
+                                if (isMultiSelectionEnabled) {
                                   doMultiSelection(listTechs[index][0]);
-                                },
-                                splashColor:
-                                    const Color.fromARGB(255, 3, 56, 109),
-                                child: ListTile(
-                                  leading: CircleAvatar(
-                                    radius: 20.0,
-                                    backgroundImage:
-                                        NetworkImage(listTechs[index]['image']),
-                                  ),
-                                  title: Text(listTechs[index]["name"]),
-                                  subtitle: Text(listTechs[index]["email"]),
-                                ),
+                                } else {
+                                  Get.to(Calander(
+                                      username: listTechs[index]['email'],
+                                      techName: listTechs[index]['name'],
+                                      role: widget.role));
+                                }
+                              },
+                              onLongPress: () {
+                                isMultiSelectionEnabled = true;
+                                doMultiSelection(listTechs[index][0]);
+                              },
+                              child: Stack(
+                                alignment: Alignment.centerRight,
+                                children: [
+                                  Container(
+                                      height: 100,
+                                      decoration: BoxDecoration(
+                                          color: Colors.green.withOpacity(0.2),
+                                          borderRadius:
+                                              BorderRadius.circular(12)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            CircleAvatar(
+                                              backgroundImage: NetworkImage(
+                                                  "${listTechs[index]['image']}"),
+                                              radius: 40,
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              listTechs[index]["email"],
+                                            ),
+                                          ],
+                                        ),
+                                      )),
+                                  Visibility(
+                                      visible: isMultiSelectionEnabled,
+                                      child: Icon(
+                                        selectedItems
+                                                .contains(listTechs[index][0])
+                                            ? Icons.check_circle
+                                            : Icons.radio_button_unchecked,
+                                        size: 30,
+                                        color: Colors.green,
+                                      ))
+                                ],
                               ),
                             ),
                           );

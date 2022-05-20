@@ -174,8 +174,6 @@ class _CalanderState extends State<Calander> {
                                     event: plan[0],
                                     planID: events[0].description!,
                                     role: widget.role,
-                                    techName: widget.techName,
-                                    username: widget.username,
                                   )));
                     },
                     child: const Icon(Icons.edit),

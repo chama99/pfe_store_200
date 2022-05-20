@@ -158,414 +158,466 @@ class _UpdateDevisState extends State<UpdateDevis> {
           // ignore: void_checks
           return Future.value(false);
         },
-        child: Column(
-          children: [
-            Expanded(
+        child: Container(
+          color: Colors.grey[200],
+          child: Column(
+            children: [
+              Expanded(
                 child: Form(
-              key: _formKey,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: ListView(
-                      children: [
-                        Row(
-                          children: [
-                            const Text(
-                              "Ajouter lignes de commande ",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  letterSpacing: 3,
-                                  color: Colors.indigo),
-                              textAlign: TextAlign.left,
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                Get.to(() => AjoutCommande(
-                                      idus: widget.idus,
-                                      id: widget.id,
-                                      titre: widget.titre,
-                                      client: widget.client,
-                                      etat: widget.etat,
-                                      commande: widget.commande,
-                                      remise: widget.remise,
-                                      total: widget.total,
-                                      montant: widget.montant,
-                                      role: widget.role,
-                                      date: widget.date,
-                                      email: widget.email,
-                                      name: widget.name,
-                                      acces: widget.acces,
-                                      url: widget.url,
-                                      tel: widget.tel,
-                                      adr: widget.adr,
-                                    ));
-                              },
-                              icon: const Icon(
-                                Icons.add,
-                                color: Colors.orange,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Text(
-                              "Modifier la commande Numéro :",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  letterSpacing: 3,
-                                  color: Colors.indigo),
-                              textAlign: TextAlign.left,
-                            ),
-                            Flexible(
-                              child: TextFormField(
-                                controller: n,
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: const BorderSide(
-                                        color: Colors.orange, width: 1.5),
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Expanded(
+                          child: ListView(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(top: 20),
+                            color: Colors.white,
+                            child: Column(
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(40),
+                                    color: Colors.orange[100],
                                   ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: const BorderSide(
-                                      color: Colors.orange,
-                                      width: 1.5,
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          Get.to(() => AjoutCommande(
+                                                idus: widget.idus,
+                                                id: widget.id,
+                                                titre: widget.titre,
+                                                client: widget.client,
+                                                etat: widget.etat,
+                                                commande: widget.commande,
+                                                remise: widget.remise,
+                                                total: widget.total,
+                                                montant: widget.montant,
+                                                role: widget.role,
+                                                date: widget.date,
+                                                email: widget.email,
+                                                name: widget.name,
+                                                acces: widget.acces,
+                                                url: widget.url,
+                                                tel: widget.tel,
+                                                adr: widget.adr,
+                                              ));
+                                        },
+                                        icon: const Icon(
+                                          Icons.add,
+                                          color: Colors.orange,
+                                        ),
+                                      ),
+                                      const Text(
+                                        "Ajouter lignes de commande ",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            letterSpacing: 3,
+                                            color: Colors.indigo),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(40),
+                                    color: Colors.orange[100],
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Flexible(
+                                        child: IconButton(
+                                          onPressed: () {
+                                            if (n.text.isEmpty) {
+                                              showToast(
+                                                  "Veuillez entrer Numéro de ligne");
+                                            } else {
+                                              Get.to(() => ModifierCommande(
+                                                    idus: widget.idus,
+                                                    id: widget.id,
+                                                    num: int.parse(n.text),
+                                                    titre: widget.titre,
+                                                    client: widget.client,
+                                                    etat: widget.etat,
+                                                    commande: widget.commande,
+                                                    remise: widget.remise,
+                                                    total: widget.total,
+                                                    montant: widget.montant,
+                                                    role: widget.role,
+                                                    date: widget.date,
+                                                    email: widget.email,
+                                                    name: widget.name,
+                                                    acces: widget.acces,
+                                                    url: widget.url,
+                                                    tel: widget.tel,
+                                                    adr: widget.adr,
+                                                  ));
+                                            }
+                                          },
+                                          icon: const Icon(
+                                            Icons.edit,
+                                            color: Colors.orange,
+                                          ),
+                                        ),
+                                      ),
+                                      const Text(
+                                        "Modifier la commande Numéro :",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            letterSpacing: 3,
+                                            color: Colors.indigo),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 20, top: 10, bottom: 10),
+                                          child: TextFormField(
+                                            controller: n,
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                borderSide: const BorderSide(
+                                                    color: Colors.orange,
+                                                    width: 1.5),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.orange,
+                                                  width: 1.5,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: SingleChildScrollView(
+                                    child: DataTable(
+                                      sortAscending: isAscending,
+                                      sortColumnIndex: sortColumnIndex,
+                                      columns: [
+                                        DataColumn(
+                                          label: const Text("Numéro de ligne"),
+                                          onSort: onSort,
+                                        ),
+                                        DataColumn(
+                                          label: const Text("réf"),
+                                          onSort: onSort,
+                                        ),
+                                        DataColumn(
+                                          label: const Text("Article"),
+                                          onSort: onSort,
+                                        ),
+                                        DataColumn(
+                                          label: const Text("Description"),
+                                          onSort: onSort,
+                                        ),
+                                        DataColumn(
+                                          label: const Text("Unité"),
+                                          onSort: onSort,
+                                        ),
+                                        DataColumn(
+                                          label: const Text("Quantité"),
+                                          onSort: onSort,
+                                        ),
+                                        DataColumn(
+                                          label: const Text("Prix unitaire"),
+                                          onSort: onSort,
+                                        ),
+                                        DataColumn(
+                                          label: const Text("Taxes"),
+                                          onSort: onSort,
+                                        ),
+                                        DataColumn(
+                                          label: const Text("Sous-total"),
+                                          onSort: onSort,
+                                        )
+                                      ],
+                                      rows: [
+                                        for (var i = 0;
+                                            i < widget.commande.length;
+                                            i++) ...[
+                                          DataRow(cells: [
+                                            DataCell(Text("$i")),
+                                            DataCell(Text(
+                                                "${widget.commande[i]['réf']}")),
+                                            DataCell(Text(
+                                                widget.commande[i]['Article'])),
+                                            DataCell(Text(widget.commande[i]
+                                                ['Description'])),
+                                            DataCell(Text(
+                                                "${widget.commande[i]['Unite']}")),
+                                            DataCell(Text(
+                                                "${widget.commande[i]['Quantite']}")),
+                                            DataCell(Text(
+                                                "${widget.commande[i]['prix']}")),
+                                            const DataCell(Text("${0.2}")),
+                                            DataCell(Text(
+                                                "${widget.commande[i]["Quantite"] * widget.commande[i]["prix"]}")),
+                                          ]),
+                                        ]
+                                      ],
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            Flexible(
-                              child: IconButton(
-                                onPressed: () {
-                                  if (n.text.isEmpty) {
-                                    showToast(
-                                        "Veuillez entrer Numéro de ligne");
-                                  } else {
-                                    Get.to(() => ModifierCommande(
-                                          idus: widget.idus,
-                                          id: widget.id,
-                                          num: int.parse(n.text),
-                                          titre: widget.titre,
-                                          client: widget.client,
-                                          etat: widget.etat,
-                                          commande: widget.commande,
-                                          remise: widget.remise,
-                                          total: widget.total,
-                                          montant: widget.montant,
-                                          role: widget.role,
-                                          date: widget.date,
-                                          email: widget.email,
-                                          name: widget.name,
-                                          acces: widget.acces,
-                                          url: widget.url,
-                                          tel: widget.tel,
-                                          adr: widget.adr,
-                                        ));
-                                  }
-                                },
-                                icon: const Icon(
-                                  Icons.edit,
-                                  color: Colors.orange,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: SingleChildScrollView(
-                            child: DataTable(
-                              sortAscending: isAscending,
-                              sortColumnIndex: sortColumnIndex,
-                              columns: [
-                                DataColumn(
-                                  label: const Text("Numéro de ligne"),
-                                  onSort: onSort,
-                                ),
-                                DataColumn(
-                                  label: const Text("réf"),
-                                  onSort: onSort,
-                                ),
-                                DataColumn(
-                                  label: const Text("Article"),
-                                  onSort: onSort,
-                                ),
-                                DataColumn(
-                                  label: const Text("Description"),
-                                  onSort: onSort,
-                                ),
-                                DataColumn(
-                                  label: const Text("Unité"),
-                                  onSort: onSort,
-                                ),
-                                DataColumn(
-                                  label: const Text("Quantité"),
-                                  onSort: onSort,
-                                ),
-                                DataColumn(
-                                  label: const Text("Prix unitaire"),
-                                  onSort: onSort,
-                                ),
-                                DataColumn(
-                                  label: const Text("Taxes"),
-                                  onSort: onSort,
-                                ),
-                                DataColumn(
-                                  label: const Text("Sous-total"),
-                                  onSort: onSort,
-                                )
-                              ],
-                              rows: [
-                                for (var i = 0;
-                                    i < widget.commande.length;
-                                    i++) ...[
-                                  DataRow(cells: [
-                                    DataCell(Text("$i")),
-                                    DataCell(
-                                        Text("${widget.commande[i]['réf']}")),
-                                    DataCell(
-                                        Text(widget.commande[i]['Article'])),
-                                    DataCell(Text(
-                                        widget.commande[i]['Description'])),
-                                    DataCell(
-                                        Text("${widget.commande[i]['Unite']}")),
-                                    DataCell(Text(
-                                        "${widget.commande[i]['Quantite']}")),
-                                    DataCell(
-                                        Text("${widget.commande[i]['prix']}")),
-                                    const DataCell(Text("${0.2}")),
-                                    DataCell(Text(
-                                        "${widget.commande[i]["Quantite"] * widget.commande[i]["prix"]}")),
-                                  ]),
-                                ]
                               ],
                             ),
                           ),
-                        ),
-                        Row(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.only(left: 20, top: 30),
-                              child: Text(
-                                "État",
-                                style:
-                                    TextStyle(fontSize: 15, letterSpacing: 3),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 43, top: 25),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(
-                                      color: Colors.grey, width: 1.5)),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  dropdownColor: Colors.white,
-                                  icon: const Padding(
-                                    padding: EdgeInsets.only(left: 20),
-                                    child: Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Colors.orange,
-                                    ),
+                          Container(
+                            color: Colors.white,
+                            margin: const EdgeInsets.only(top: 20, bottom: 20),
+                            child: Column(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 20, top: 30),
+                                  child: Text(
+                                    "État :",
+                                    style: TextStyle(
+                                        fontSize: 15, letterSpacing: 3),
                                   ),
-                                  style: const TextStyle(
-                                      fontSize: 20, color: Colors.black),
-                                  iconSize: 40,
-                                  value: widget.etat,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      widget.etat = newValue.toString();
-                                    });
-                                  },
-                                  items: listItem.map((valueItem) {
-                                    return DropdownMenuItem(
-                                      value: valueItem,
-                                      child: Text(valueItem),
-                                    );
-                                  }).toList(),
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  top: 30, right: 13, left: 13, bottom: 40),
-                              child: const Text(
-                                "Remise",
-                                style:
-                                    TextStyle(fontSize: 15, letterSpacing: 3),
-                              ),
-                            ),
-                            Flexible(
-                              child: Container(
-                                margin:
-                                    const EdgeInsets.only(left: 10, right: 65),
-                                child: TextFormField(
-                                  controller: Contolleremise,
-                                  decoration: InputDecoration(
-                                    hintText: '${widget.remise}%',
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    focusedBorder: OutlineInputBorder(
+                                Container(
+                                  margin: const EdgeInsets.only(
+                                      left: 43, top: 25, bottom: 15),
+                                  decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(
-                                          color: Colors.orange, width: 1.5),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(
-                                        color: Colors.orange,
-                                        width: 1.5,
+                                      border: Border.all(
+                                          color: Colors.grey, width: 1.5)),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton(
+                                      dropdownColor: Colors.white,
+                                      icon: const Padding(
+                                        padding: EdgeInsets.only(left: 20),
+                                        child: Icon(
+                                          Icons.arrow_drop_down,
+                                          color: Colors.orange,
+                                        ),
                                       ),
+                                      style: const TextStyle(
+                                          fontSize: 20, color: Colors.black),
+                                      iconSize: 40,
+                                      value: widget.etat,
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          widget.etat = newValue.toString();
+                                        });
+                                      },
+                                      items: listItem.map((valueItem) {
+                                        return DropdownMenuItem(
+                                          value: valueItem,
+                                          child: Text(valueItem),
+                                        );
+                                      }).toList(),
                                     ),
                                   ),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "Veuillez entrer valeur\n de remise ";
-                                    }
-                                    if (!RegExp("%").hasMatch(value)) {
-                                      return "Veuillez entrer\n  valeur avec % ";
-                                    }
-                                    return null;
-                                  },
                                 ),
-                              ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                // Validate returns true if the form is valid, otherwise false.
-                                if (_formKey.currentState!.validate()) {
-                                  streamController.add(Contolleremise.text);
-                                  var ch = Contolleremise.text.substring(
-                                      0, Contolleremise.text.indexOf("%"));
-                                  // ignore: unnecessary_cast
-                                  remise = int.parse(ch);
-                                  // ignore: unnecessary_cast
-
-                                  widget.remise = remise;
-                                }
-                              },
-                              child: const Text(
-                                "Ajouter",
-                                style: TextStyle(fontSize: 18.0),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.orange),
+                              ],
                             ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              width: 350,
-                              height: 200,
-                              decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                  color: Color.fromARGB(255, 245, 245, 245)),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 8, top: 15),
-                                child: Column(
+                          ),
+                          Container(
+                            color: Colors.white,
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      "Montant HT:${calculMontat()} ",
-                                      style: const TextStyle(fontSize: 20),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Remise:${widget.remise / 100} ",
-                                        style: const TextStyle(fontSize: 20),
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          top: 30,
+                                          right: 13,
+                                          left: 13,
+                                          bottom: 40),
+                                      child: const Text(
+                                        "Remise :",
+                                        style: TextStyle(
+                                            fontSize: 15, letterSpacing: 3),
                                       ),
                                     ),
-                                    const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Taxes: 0.2",
-                                        style: TextStyle(fontSize: 20),
+                                    Flexible(
+                                      child: Container(
+                                        margin: const EdgeInsets.only(
+                                            left: 15, right: 100),
+                                        child: TextFormField(
+                                          controller: Contolleremise,
+                                          decoration: InputDecoration(
+                                            hintText: '${widget.remise}%',
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: const BorderSide(
+                                                  color: Colors.orange,
+                                                  width: 1.5),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: const BorderSide(
+                                                color: Colors.orange,
+                                                width: 1.5,
+                                              ),
+                                            ),
+                                          ),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return "Veuillez entrer valeur\n de remise ";
+                                            }
+                                            if (!RegExp("%").hasMatch(value)) {
+                                              return "Veuillez entrer\n  valeur avec % ";
+                                            }
+                                            return null;
+                                          },
+                                        ),
                                       ),
-                                    ),
-                                    const Divider(
-                                      color: Colors.black,
-                                    ),
-                                    Text(
-                                      "Total: ${(calculMontat() * (1 + 0.2)) * (1 - (widget.remise / 100))}",
-                                      style: const TextStyle(fontSize: 20),
                                     ),
                                   ],
                                 ),
-                              ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    // Validate returns true if the form is valid, otherwise false.
+                                    if (_formKey.currentState!.validate()) {
+                                      streamController.add(Contolleremise.text);
+                                      var ch = Contolleremise.text.substring(
+                                          0, Contolleremise.text.indexOf("%"));
+                                      // ignore: unnecessary_cast
+                                      remise = int.parse(ch);
+                                      // ignore: unnecessary_cast
+
+                                      widget.remise = remise;
+                                    }
+                                  },
+                                  child: const Text(
+                                    "Ajouter",
+                                    style: TextStyle(fontSize: 18.0),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors.orange),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ],
-                    )),
-                  ],
+                          ),
+                          Container(
+                            color: Colors.white,
+                            margin: const EdgeInsets.only(top: 20),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 350,
+                                  height: 200,
+                                  margin: const EdgeInsets.only(
+                                      left: 30, top: 10, right: 10, bottom: 10),
+                                  decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                      color:
+                                          Color.fromARGB(255, 245, 245, 245)),
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.only(left: 8, top: 15),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "Montant HT:${calculMontat()} ",
+                                          style: const TextStyle(fontSize: 20),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "Remise:${widget.remise / 100} ",
+                                            style:
+                                                const TextStyle(fontSize: 20),
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "Taxes: 0.2",
+                                            style: TextStyle(fontSize: 20),
+                                          ),
+                                        ),
+                                        const Divider(
+                                          color: Colors.black,
+                                        ),
+                                        Text(
+                                          "Total: ${(calculMontat() * (1 + 0.2)) * (1 - (widget.remise / 100))}",
+                                          style: const TextStyle(fontSize: 20),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )),
+                    ],
+                  ),
                 ),
               ),
-            )),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                maximumSize: const Size(double.infinity, 50),
-                primary: Colors.indigo,
-              ),
-              child: const Text("Modifier"),
-              onPressed: () {
-                // Validate returns true if the form is valid, otherwise false.
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  maximumSize: const Size(double.infinity, 50),
+                  primary: Colors.indigo,
+                ),
+                child: const Text("Modifier"),
+                onPressed: () {
+                  // Validate returns true if the form is valid, otherwise false.
 
-                Devis().updateDevis(
-                    widget.id,
-                    widget.client,
-                    widget.etat,
-                    (calculMontat() * (1 + 0.2)) * (1 - (widget.remise / 100)),
-                    widget.commande,
-                    widget.remise,
-                    calculMontat());
-                Get.to(() => ListDevis(
-                      idus: widget.idus,
-                      role: widget.role,
-                      email: widget.email,
-                      name: widget.name,
-                      acces: widget.acces,
-                      url: widget.url,
-                      tel: widget.tel,
-                      adr: widget.adr,
-                    ));
-                if (widget.etat == "Bon de commande") {
-                  AutoFacture().addFacture(
-                      uuid,
-                      "Facture N°${lf + 1}",
-                      widget.titre,
+                  Devis().updateDevis(
+                      widget.id,
                       widget.client,
-                      "Brouillon",
-                      widget.date,
+                      widget.etat,
                       (calculMontat() * (1 + 0.2)) *
                           (1 - (widget.remise / 100)),
                       widget.commande,
                       widget.remise,
                       calculMontat());
-                }
-              },
-            ),
-          ],
+                  Get.to(() => ListDevis(
+                        idus: widget.idus,
+                        role: widget.role,
+                        email: widget.email,
+                        name: widget.name,
+                        acces: widget.acces,
+                        url: widget.url,
+                        tel: widget.tel,
+                        adr: widget.adr,
+                      ));
+                  if (widget.etat == "Bon de commande") {
+                    AutoFacture().addFacture(
+                        uuid,
+                        "Facture N°${lf + 1}",
+                        widget.titre,
+                        widget.client,
+                        "Brouillon",
+                        widget.date,
+                        (calculMontat() * (1 + 0.2)) *
+                            (1 - (widget.remise / 100)),
+                        widget.commande,
+                        widget.remise,
+                        calculMontat());
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

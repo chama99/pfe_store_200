@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../api/firebase_api.dart';
+
 class DemandeCongeScreen extends StatefulWidget {
-  const DemandeCongeScreen({Key? key}) : super(key: key);
+  final String userID;
+  const DemandeCongeScreen({Key? key, required this.userID}) : super(key: key);
 
   @override
   State<DemandeCongeScreen> createState() => _DemandeCongeScreenState();
 }
 
 class _DemandeCongeScreenState extends State<DemandeCongeScreen> {
+  int days = 0;
   var typeConge;
   DateTime _endDate = DateTime.now();
   DateTime _beginDate = DateTime.now().add(const Duration(days: 1));
@@ -23,7 +27,7 @@ class _DemandeCongeScreenState extends State<DemandeCongeScreen> {
       body: Container(
         padding: EdgeInsets.all(8),
         child: Column(
-          //mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -32,32 +36,31 @@ class _DemandeCongeScreenState extends State<DemandeCongeScreen> {
                   "Type de congé :",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                Column(
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        const Text("Congé payés"),
-                        Radio(
-                            value: "Congé payés",
-                            groupValue: typeConge,
-                            onChanged: (v) {}),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Text("Congé non payés"),
-                        Radio(
-                            value: "Congé non payés",
-                            groupValue: typeConge,
-                            onChanged: (v) {})
-                      ],
-                    ),
+                    const Text("Payés"),
+                    Radio(
+                        value: "Congé payés",
+                        groupValue: typeConge,
+                        onChanged: (v) {}),
                   ],
-                )
+                ),
+                Row(
+                  children: [
+                    const Text("Non payés"),
+                    Radio(
+                        value: "Congé non payés",
+                        groupValue: typeConge,
+                        onChanged: (v) {})
+                  ],
+                ),
               ],
             ),
             Row(children: [
-              const Text("Date de début : "),
+              const Text(
+                "Date de début : ",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               const Spacer(),
               ElevatedButton(
                 // style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith(),
@@ -82,7 +85,10 @@ class _DemandeCongeScreenState extends State<DemandeCongeScreen> {
               ),
             ]),
             Row(children: [
-              const Text("Date du fin: "),
+              const Text(
+                "Date du fin: ",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               const Spacer(),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: Colors.orange),
@@ -105,6 +111,32 @@ class _DemandeCongeScreenState extends State<DemandeCongeScreen> {
                 },
               ),
             ]),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Durée : ",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text("$days")
+              ],
+            ),
+            Row(
+              children: [
+                const Text(
+                  "Description : ",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Expanded(
+                    child: TextFormField(
+                  minLines:
+                      3, // any number you need (It works as the rows for the textarea)
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                ))
+              ],
+            ),
+            ElevatedButton(onPressed: () {}, child: Text("Sauvgarder"))
           ],
         ),
       ),

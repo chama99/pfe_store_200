@@ -1,29 +1,24 @@
 import 'dart:io';
 
-import 'package:chama_projet/Planning/calander.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
-import 'package:path/path.dart';
+
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import '../utils.dart';
 
 class PlanScreen extends StatefulWidget {
-  final String role, techName, username;
+  final String? role;
   final String planID;
   final dynamic event;
   const PlanScreen(
-      {Key? key,
-      required this.event,
-      required this.planID,
-      required this.role,
-      required this.techName,
-      required this.username})
+      {Key? key, required this.event, required this.planID, this.role})
       : super(key: key);
 
   @override
@@ -34,6 +29,7 @@ class _PlanScreenState extends State<PlanScreen> {
   ///---------State-------------
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
   String _picturePath = "";
+  List<String> _pictureUploaded = [];
   dynamic _eventFromParent;
   List<bool> _buttons = [false, false, false];
   String _planStatus = "Planifier";
@@ -41,7 +37,7 @@ class _PlanScreenState extends State<PlanScreen> {
   final String _networkImage =
       "https://i0.wp.com/shahpourpouyan.com/wp-content/uploads/2018/10/orionthemes-placeholder-image-1.png";
   final _noteController = TextEditingController();
-  XFile? _noteImage;
+  List<XFile?>? _noteImage;
   final TextStyle _leftTextStyle =
       const TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
   final TextStyle _rightTextStyle =
@@ -50,7 +46,45 @@ class _PlanScreenState extends State<PlanScreen> {
   Widget _saveButtonContent = const Text("Sauvgader",
       style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18));
 
+  Map<String, String> _paths = {};
+  String _extension = "";
+  late FileType _pickType;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  List<UploadTask> _tasks = <UploadTask>[];
+
   ///--------Methods--------------
+  Future _uploadImages(String email) async {
+    const destination = 'PlanNote';
+    for (var f in _noteImage!) {
+      final ref = firebase_storage.FirebaseStorage.instance
+          .ref(destination)
+          .child('$email/');
+      final UploadTask uploadTask = ref.putFile(File(f!.path));
+    }
+  }
+
+  void selectImages() async {
+    List<XFile>? imageFileList = [];
+    final List<XFile>? selectedImages = await ImagePicker().pickMultiImage();
+    if (selectedImages!.isNotEmpty) {
+      imageFileList.addAll(selectedImages);
+    }
+    setState(() {});
+  }
+
+  void openFileExplorer() async {
+    var i = 0;
+    try {
+      var x = await FilePicker.platform.pickFiles();
+      for (var picture in x!.files) {
+        _paths.addAll({'$i': picture.path!});
+      }
+    } on PlatformException catch (e) {
+      print("Unsupported operation" + e.toString());
+    }
+    if (!mounted) return;
+  }
+
   _renderButton() {
     if (_planStatus == "Demarrer") {
       _planStatus = "Demarrer";
@@ -110,7 +144,7 @@ class _PlanScreenState extends State<PlanScreen> {
           ));
     });
     if (_noteImage != null) {
-      uploadImage(widget.planID);
+      _uploadImages(widget.planID);
     }
 
     final refPlans = FirebaseFirestore.instance.collection("plan");
@@ -193,10 +227,6 @@ class _PlanScreenState extends State<PlanScreen> {
                         _buttons[1] = false;
                         _buttons[2] = true;
                         setState(() {});
-                        Get.to(() => Calander(
-                            techName: widget.techName,
-                            username: widget.username,
-                            role: widget.role));
                       },
                       style: ElevatedButton.styleFrom(
                           primary: _buttons[0] ? Colors.grey : Colors.orange),
@@ -218,10 +248,6 @@ class _PlanScreenState extends State<PlanScreen> {
                         _buttons[2] = true;
 
                         setState(() {});
-                        Get.to(() => Calander(
-                            techName: widget.techName,
-                            username: widget.username,
-                            role: widget.role));
                       },
                       style: ElevatedButton.styleFrom(
                           primary: _buttons[1] ? Colors.grey : Colors.green),
@@ -237,10 +263,6 @@ class _PlanScreenState extends State<PlanScreen> {
                         _buttons[1] = true;
                         _buttons[2] = true;
                         setState(() {});
-                        Get.to(() => Calander(
-                            techName: widget.techName,
-                            username: widget.username,
-                            role: widget.role));
                       },
                       style: ElevatedButton.styleFrom(
                           primary: _buttons[2] ? Colors.grey : Colors.red),
@@ -355,11 +377,20 @@ class _PlanScreenState extends State<PlanScreen> {
                       height: 200,
                       width: 300,
                     )
-                  : Image.file(
-                      File(_noteImage!.path),
-                      height: 200,
-                      width: 300,
-                    ),
+                  : GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 200,
+                              childAspectRatio: 3 / 2,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 20),
+                      itemCount: _noteImage!.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                            child: Container(
+                          child: Image.asset(_noteImage![index]!.path),
+                        ));
+                      })
             ],
           ),
         )),
@@ -381,27 +412,27 @@ class _PlanScreenState extends State<PlanScreen> {
   //   await refInDb.set({'state': ""});
   // }
 
-  uploadImage(String email) async {
-    // ignore: unused_local_variable
-    final fileName = basename(_noteImage!.path);
-    // ignore: prefer_const_declarations
-    final destination = 'PlanNote';
+  // uploadImage(String email) async {
+  //   // ignore: unused_local_variable
+  //   final fileName = basename(_noteImage!.path);
+  //   // ignore: prefer_const_declarations
+  //   final destination = 'PlanNote';
 
-    try {
-      final ref = firebase_storage.FirebaseStorage.instance
-          .ref(destination)
-          .child('$email/');
-      UploadTask uploadTask = ref.putFile(File(_noteImage!.path));
-      await uploadTask.whenComplete(() async {
-        _picturePath = await uploadTask.snapshot.ref.getDownloadURL();
+  //   try {
+  //     final ref = firebase_storage.FirebaseStorage.instance
+  //         .ref(destination)
+  //         .child('$email/');
+  //     UploadTask uploadTask = ref.putFile(File(_noteImage!.path));
+  //     await uploadTask.whenComplete(() async {
+  //       _picturePath = await uploadTask.snapshot.ref.getDownloadURL();
 
-        //Employe().addEmploye(email, nom, tel, adresse, uploadPath);
-      });
-    } catch (e) {
-      // ignore: avoid_print
-      print('error occured');
-    }
-  }
+  //       //Employe().addEmploye(email, nom, tel, adresse, uploadPath);
+  //     });
+  //   } catch (e) {
+  //     // ignore: avoid_print
+  //     print('error occured');
+  //   }
+  // }
 
   Widget bottomSheet() {
     return Container(
@@ -423,14 +454,14 @@ class _PlanScreenState extends State<PlanScreen> {
           children: <Widget>[
             FlatButton.icon(
               onPressed: () {
-                takePhoto(ImageSource.camera);
+                selectImages();
               },
               icon: const Icon(Icons.camera),
               label: const Text("Appareil photo"),
             ),
             FlatButton.icon(
               onPressed: () {
-                takePhoto(ImageSource.gallery);
+                selectImages();
               },
               icon: const Icon(Icons.camera),
               label: const Text("Galerie"),
@@ -441,12 +472,12 @@ class _PlanScreenState extends State<PlanScreen> {
     );
   }
 
-  void takePhoto(ImageSource source) async {
-    XFile? pickedFile = await _picker.pickImage(source: source);
-    setState(() {
-      _noteImage = pickedFile!;
-    });
-  }
+  // void takePhoto(ImageSource source) async {
+  //   XFile? pickedFile = await _picker.pickImage(source: source);
+  //   setState(() {
+  //     _noteImage = pickedFile!;
+  //   });
+  // }
 
   modalShow(String text, BuildContext context, {bool success = true}) async {
     return await showDialog(
@@ -472,4 +503,43 @@ class _PlanScreenState extends State<PlanScreen> {
               ],
             ));
   }
+
+  Widget buildImageCard(int index, XFile image) => Card(
+        clipBehavior: Clip.antiAlias,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: GestureDetector(
+          onTap: () {},
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(image.path),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Container(
+                        margin: const EdgeInsets.all(5),
+                        //padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: Colors.redAccent,
+                            borderRadius: BorderRadius.circular(100)),
+                        child: const Icon(
+                          Icons.play_arrow,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ]),
+        ),
+      );
 }
