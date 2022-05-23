@@ -32,7 +32,7 @@ class User {
     List itemsList = [];
 
     try {
-      await user.get().then((querySnapshot) {
+      await user.orderBy("name").get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           itemsList.add(a);

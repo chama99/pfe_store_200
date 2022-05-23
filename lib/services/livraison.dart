@@ -9,7 +9,7 @@ class Livraison {
     List itemsList = [];
 
     try {
-      await livraisonn.get().then((querySnapshot) {
+      await livraisonn.orderBy("numliv").get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           itemsList.add(a);

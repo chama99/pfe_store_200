@@ -10,7 +10,6 @@ import 'package:open_file/open_file.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 import '../services/pdf_devis.dart';
-import '../widget/NavBottom.dart';
 
 class DevisDetailler extends StatefulWidget {
   String titre, client, etat, role, id, idus;
@@ -93,15 +92,15 @@ class _DevisDetaillerState extends State<DevisDetailler> {
         ],
         backgroundColor: Colors.orange,
       ),
-      bottomNavigationBar: NavBottom(
-          tel: widget.tel,
-          adr: widget.adr,
-          id: widget.idus,
-          email: widget.email,
-          name: widget.name,
-          acces: widget.acces,
-          url: widget.url,
-          role: widget.role),
+      bottomNavigationBar: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          maximumSize: const Size(double.infinity, 50),
+          primary: Colors.indigo,
+        ),
+        child: const Text("Convertir  au format PDF",
+            style: TextStyle(fontSize: 20)),
+        onPressed: onSubmit,
+      ),
       body: ListView(
         children: [
           Container(
@@ -331,14 +330,6 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                       ),
                     ),
                   ],
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    maximumSize: const Size(double.infinity, 50),
-                    primary: Colors.indigo,
-                  ),
-                  child: const Text("Convertir  au format PDF"),
-                  onPressed: onSubmit,
                 ),
               ],
             ),

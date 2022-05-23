@@ -65,243 +65,279 @@ class _UpdateLivraisonState extends State<UpdateLivraison> {
           // ignore: void_checks
           return Future.value(false);
         },
-        child: Column(
-          children: [
-            Expanded(
-                child: ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      const Text(
-                        "Ajouter lignes de commande ",
-                        style: TextStyle(
-                            fontSize: 15,
-                            letterSpacing: 3,
-                            color: Colors.indigo),
-                        textAlign: TextAlign.left,
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          Get.to(() => AjoutoperationLiv(
-                                id: widget.id,
-                                titre: widget.titre,
-                                etat: widget.etat,
-                                date: widget.date,
-                                ListOperation: widget.OperationList,
-                                livraison: widget.livraison,
-                                page: "Livraison",
-                              ));
-                        },
-                        icon: const Icon(
-                          Icons.add,
-                          color: Colors.orange,
+        child: Container(
+          color: Colors.grey[200],
+          child: Column(
+            children: [
+              Expanded(
+                  child: ListView(
+                children: [
+                  Container(
+                    color: Colors.white,
+                    margin: const EdgeInsets.only(top: 30),
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: Colors.orange[100],
+                          ),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  Get.to(() => AjoutoperationLiv(
+                                        id: widget.id,
+                                        titre: widget.titre,
+                                        etat: widget.etat,
+                                        date: widget.date,
+                                        ListOperation: widget.OperationList,
+                                        livraison: widget.livraison,
+                                        page: "Livraison",
+                                      ));
+                                },
+                                icon: const Icon(
+                                  Icons.add,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                              const Text(
+                                "Ajouter lignes de commande ",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    letterSpacing: 3,
+                                    color: Colors.indigo),
+                                textAlign: TextAlign.left,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      const Text(
-                        "Modifier la commande Numéro :",
-                        style: TextStyle(
-                            fontSize: 15,
-                            letterSpacing: 3,
-                            color: Colors.indigo),
-                        textAlign: TextAlign.left,
-                      ),
-                      Flexible(
-                        child: TextFormField(
-                          controller: n,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: const BorderSide(
-                                  color: Colors.orange, width: 1.5),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: const BorderSide(
-                                color: Colors.orange,
-                                width: 1.5,
+                        Container(
+                          margin: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: Colors.orange[100],
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Flexible(
+                                    child: IconButton(
+                                      onPressed: () {
+                                        if (n.text.isEmpty) {
+                                          showToast(
+                                              "Veuillez entrer Numéro de ligne");
+                                        } else {
+                                          Get.to(() => ModifierOperationLiv(
+                                                id: widget.id,
+                                                titre: widget.titre,
+                                                livraison: widget.livraison,
+                                                etat: widget.etat,
+                                                num: int.parse(n.text),
+                                                ligneOperation:
+                                                    widget.OperationList,
+                                                date: widget.date,
+                                              ));
+                                        }
+                                      },
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: Colors.orange,
+                                      ),
+                                    ),
+                                  ),
+                                  const Text(
+                                    "Modifier la commande Numéro :",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        letterSpacing: 3,
+                                        color: Colors.indigo),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    bottom: 15, right: 150, left: 150),
+                                child: TextFormField(
+                                  controller: n,
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                      borderSide: const BorderSide(
+                                          color: Colors.orange, width: 1.5),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                      borderSide: const BorderSide(
+                                        color: Colors.orange,
+                                        width: 1.5,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: SingleChildScrollView(
+                              child: DataTable(
+                                columns: const [
+                                  DataColumn(
+                                    label: Text("Numéro de ligne"),
+                                  ),
+                                  DataColumn(
+                                    label: Text("Article"),
+                                  ),
+                                  DataColumn(
+                                    label: Text("Colis source"),
+                                  ),
+                                  DataColumn(
+                                    label: Text("Colis de destination"),
+                                  ),
+                                  DataColumn(
+                                    label: Text("Appartenant à"),
+                                  ),
+                                  DataColumn(
+                                    label: Text("Fait"),
+                                  ),
+                                  DataColumn(
+                                    label: Text("Unité de mesure"),
+                                  ),
+                                ],
+                                rows: [
+                                  for (var i = 0;
+                                      i < widget.OperationList.length;
+                                      i++) ...[
+                                    DataRow(cells: [
+                                      DataCell(Text("$i")),
+                                      DataCell(Text(
+                                          widget.OperationList[i]['Article'])),
+                                      DataCell(Text(widget.OperationList[i]
+                                          ['Colis source'])),
+                                      DataCell(Text(widget.OperationList[i]
+                                          ['Colis de destination'])),
+                                      DataCell(Text(
+                                          "${widget.OperationList[i]['Appartenant']}")),
+                                      DataCell(Text(
+                                          "${widget.OperationList[i]['Fait']}")),
+                                      DataCell(Text(
+                                          "${widget.OperationList[i]['Unite']}")),
+                                    ]),
+                                  ]
+                                ],
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Flexible(
-                        child: IconButton(
-                          onPressed: () {
-                            if (n.text.isEmpty) {
-                              showToast("Veuillez entrer Numéro de ligne");
-                            } else {
-                              Get.to(() => ModifierOperationLiv(
-                                    id: widget.id,
-                                    titre: widget.titre,
-                                    livraison: widget.livraison,
-                                    etat: widget.etat,
-                                    num: int.parse(n.text),
-                                    ligneOperation: widget.OperationList,
-                                    date: widget.date,
-                                  ));
-                            }
-                          },
-                          icon: const Icon(
-                            Icons.edit,
-                            color: Colors.orange,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: SingleChildScrollView(
-                      child: DataTable(
-                        columns: const [
-                          DataColumn(
-                            label: Text("Numéro de ligne"),
-                          ),
-                          DataColumn(
-                            label: Text("Article"),
-                          ),
-                          DataColumn(
-                            label: Text("Colis source"),
-                          ),
-                          DataColumn(
-                            label: Text("Colis de destination"),
-                          ),
-                          DataColumn(
-                            label: Text("Appartenant à"),
-                          ),
-                          DataColumn(
-                            label: Text("Fait"),
-                          ),
-                          DataColumn(
-                            label: Text("Unité de mesure"),
-                          ),
-                        ],
-                        rows: [
-                          for (var i = 0;
-                              i < widget.OperationList.length;
-                              i++) ...[
-                            DataRow(cells: [
-                              DataCell(Text("$i")),
-                              DataCell(
-                                  Text(widget.OperationList[i]['Article'])),
-                              DataCell(Text(
-                                  widget.OperationList[i]['Colis source'])),
-                              DataCell(Text(widget.OperationList[i]
-                                  ['Colis de destination'])),
-                              DataCell(Text(
-                                  "${widget.OperationList[i]['Appartenant']}")),
-                              DataCell(
-                                  Text("${widget.OperationList[i]['Fait']}")),
-                              DataCell(
-                                  Text("${widget.OperationList[i]['Unite']}")),
-                            ]),
-                          ]
-                        ],
-                      ),
+                      ],
                     ),
                   ),
-                ),
-                Row(
-                  children: const [
-                    Padding(
-                      padding: EdgeInsets.only(left: 35, top: 50),
-                      child: Text(
-                        "Adresse de livraison:",
-                        style: TextStyle(fontSize: 15, letterSpacing: 3),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  margin: const EdgeInsets.only(left: 30, top: 30, right: 30),
-                  child: TextFormField(
-                    initialValue: widget.livraison,
-                    onChanged: (value) {
-                      widget.livraison = value;
-                    },
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.orange, width: 1.5),
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.orange,
-                          width: 1.5,
+                  Container(
+                    color: Colors.white,
+                    margin: const EdgeInsets.only(top: 20, bottom: 20),
+                    child: Column(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 35, top: 20),
+                          child: Text(
+                            "Adresse de livraison:",
+                            style: TextStyle(fontSize: 15, letterSpacing: 3),
+                          ),
                         ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.grey,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 35, top: 50),
-                      child: Text(
-                        "État",
-                        style: TextStyle(fontSize: 15, letterSpacing: 3),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 110, top: 50),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.grey, width: 1.5)),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          dropdownColor: Colors.white,
-                          icon: const Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.orange,
+                        Container(
+                          margin: const EdgeInsets.only(
+                              bottom: 15, left: 20, right: 20, top: 20),
+                          child: TextFormField(
+                            initialValue: widget.livraison,
+                            onChanged: (value) {
+                              widget.livraison = value;
+                            },
+                            decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Colors.orange, width: 1.5),
+                              ),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.orange,
+                                  width: 1.5,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  width: 1.5,
+                                ),
+                              ),
                             ),
                           ),
-                          style: const TextStyle(
-                              fontSize: 20, color: Colors.black),
-                          iconSize: 40,
-                          value: widget.etat,
-                          onChanged: (newValue) {
-                            setState(() {
-                              widget.etat = newValue.toString();
-                            });
-                          },
-                          items: listItem3.map((valueItem) {
-                            return DropdownMenuItem(
-                              value: valueItem,
-                              child: Text(valueItem),
-                            );
-                          }).toList(),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-              ],
-            ))
-          ],
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 35, top: 20),
+                          child: Text(
+                            "État :",
+                            style: TextStyle(fontSize: 15, letterSpacing: 3),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 20, bottom: 15),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border:
+                                  Border.all(color: Colors.grey, width: 1.5)),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              dropdownColor: Colors.white,
+                              icon: const Padding(
+                                padding: EdgeInsets.only(left: 10),
+                                child: Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.black),
+                              iconSize: 40,
+                              value: widget.etat,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  widget.etat = newValue.toString();
+                                });
+                              },
+                              items: listItem3.map((valueItem) {
+                                return DropdownMenuItem(
+                                  value: valueItem,
+                                  child: Text(valueItem),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ))
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: ElevatedButton(
@@ -309,7 +345,10 @@ class _UpdateLivraisonState extends State<UpdateLivraison> {
           maximumSize: const Size(double.infinity, 50),
           primary: Colors.indigo,
         ),
-        child: const Text("Modifier"),
+        child: const Text(
+          "Modifier",
+          style: TextStyle(fontSize: 20),
+        ),
         onPressed: () {
           Livraison().updateLivraison(
               widget.id,

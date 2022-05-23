@@ -77,7 +77,7 @@ class _ListFacttState extends State<ListFactt> {
                         Padding(
                           padding: const EdgeInsets.all(15),
                           child: Center(
-                            child: Text("Les factures à partir les devis",
+                            child: Text("Devis en facture",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 30,
@@ -119,7 +119,7 @@ class _ListFacttState extends State<ListFactt> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text("Les nouvelles Factures",
+                          child: Text(" Facture ",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 30,

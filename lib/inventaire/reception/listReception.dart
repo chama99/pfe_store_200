@@ -132,7 +132,8 @@ class _ListReceptionState extends State<ListReception> {
                                           recp["ligne d'operation"],
                                       date: recp["date prévue"]
                                           .toDate()
-                                          .toString()));
+                                          .toString()
+                                          .substring(0, 10)));
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),

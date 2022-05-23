@@ -9,7 +9,7 @@ class Reception {
     List itemsList = [];
 
     try {
-      await reception.get().then((querySnapshot) {
+      await reception.orderBy("numrecp").get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           itemsList.add(a);

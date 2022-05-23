@@ -43,7 +43,7 @@ class _listContactState extends State<listContact> {
   var length;
 
   // ignore: unnecessary_new
-  Widget appBarTitle = const Text("Contacts");
+  Widget appBarTitle = const Text("Clients");
   Icon actionIcon = const Icon(Icons.search);
   @override
   Widget build(BuildContext context) {
@@ -140,8 +140,6 @@ class _listContactState extends State<listContact> {
                                                     ['portable professionnel'],
                                                 adresse: userContactList[index]
                                                     ['Adresse professionnelle'],
-                                                role: userContactList[index]
-                                                    ['type'],
                                               )));
                                 },
                                 splashColor:

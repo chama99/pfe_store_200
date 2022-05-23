@@ -62,118 +62,182 @@ class _TransfertDetaileState extends State<TransfertDetaile> {
         backgroundColor: Colors.orange,
       ),
       body: Container(
-        margin: const EdgeInsets.only(top: 30, left: 10),
-        child: Column(
+        color: Colors.grey[200],
+        child: ListView(
           children: [
-            Row(
-              children: const [
-                Padding(
-                  padding: EdgeInsets.only(left: 8, top: 20),
-                  child: Text(
-                    "Type d'operation:",
-                    style: TextStyle(fontSize: 20, letterSpacing: 3),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8, top: 20),
-              child: Text(
-                widget.typeoperation,
-                style: const TextStyle(
-                    color: Colors.indigo, fontSize: 25, letterSpacing: 3),
-              ),
-            ),
-            Row(
+            Column(
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 8, top: 30),
-                  child: Text(
-                    "État:",
-                    style: TextStyle(fontSize: 20, letterSpacing: 3),
-                  ),
-                ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 8, top: 30),
-                  child: Text(
-                    widget.etat,
-                    style: const TextStyle(
-                        color: Colors.indigo, fontSize: 25, letterSpacing: 3),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: const [
-                Padding(
-                  padding: EdgeInsets.only(left: 8, top: 30),
-                  child: Text(
-                    "Adresse de livraison:",
-                    style: TextStyle(fontSize: 20, letterSpacing: 3),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8, top: 30),
-              child: Text(
-                widget.transf,
-                style: const TextStyle(
-                    color: Colors.indigo, fontSize: 25, letterSpacing: 3),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: SingleChildScrollView(
-                  child: DataTable(
-                    columns: const [
-                      DataColumn(
-                        label: Text("Article"),
+                  padding: const EdgeInsets.all(15),
+                  child: Row(
+                    children: [
+                      Text(
+                        widget.titre,
+                        style: TextStyle(
+                          fontSize: 20,
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 1
+                            ..color = Colors.black,
+                        ),
                       ),
-                      DataColumn(
-                        label: Text("Colis source"),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 50),
+                        child: Text("Sète,le",
+                            style: TextStyle(
+                              fontSize: 20,
+                            )),
                       ),
-                      DataColumn(
-                        label: Text("Colis de destination"),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          widget.date,
+                          style: TextStyle(
+                            fontSize: 20,
+                            foreground: Paint()
+                              ..style = PaintingStyle.stroke
+                              ..strokeWidth = 1
+                              ..color = Colors.black,
+                          ),
+                        ),
                       ),
-                      DataColumn(
-                        label: Text("Appartenant à"),
-                      ),
-                      DataColumn(
-                        label: Text("Fait"),
-                      ),
-                      DataColumn(
-                        label: Text("Unité de mesure"),
-                      ),
-                    ],
-                    rows: [
-                      for (var i = 0;
-                          i < widget.LigneOperations.length;
-                          i++) ...[
-                        DataRow(cells: [
-                          DataCell(Text(widget.LigneOperations[i]['Article'])),
-                          DataCell(
-                              Text(widget.LigneOperations[i]['Colis source'])),
-                          DataCell(Text(widget.LigneOperations[i]
-                              ['Colis de destination'])),
-                          DataCell(Text(
-                              "${widget.LigneOperations[i]['Appartenant']}")),
-                          DataCell(
-                              Text("${widget.LigneOperations[i]['Fait']}")),
-                          DataCell(
-                              Text("${widget.LigneOperations[i]['Unite']}")),
-                        ]),
-                      ]
                     ],
                   ),
                 ),
-              ),
+                Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 160, top: 40),
+                      child: Text(
+                        "Type d'operation:",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 160),
+                      child: Text(
+                        widget.typeoperation,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 195, top: 10),
+                      child: Text(
+                        "État:",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8, top: 10),
+                      child: Text(
+                        widget.etat,
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 110, top: 10),
+                      child: Text(
+                        "Transfert à:",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 160),
+                      child: Text(
+                        widget.transf,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 60),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SingleChildScrollView(
+                      child: DataTable(
+                        dataRowColor:
+                            MaterialStateProperty.resolveWith(_getDataRowColor),
+                        columns: const [
+                          DataColumn(
+                            label: Text("Article"),
+                          ),
+                          DataColumn(
+                            label: Text("Colis source"),
+                          ),
+                          DataColumn(
+                            label: Text("Colis de destination"),
+                          ),
+                          DataColumn(
+                            label: Text("Appartenant à"),
+                          ),
+                          DataColumn(
+                            label: Text("Fait"),
+                          ),
+                          DataColumn(
+                            label: Text("Unité de mesure"),
+                          ),
+                        ],
+                        rows: [
+                          for (var i = 0;
+                              i < widget.LigneOperations.length;
+                              i++) ...[
+                            DataRow(cells: [
+                              DataCell(
+                                  Text(widget.LigneOperations[i]['Article'])),
+                              DataCell(Text(
+                                  widget.LigneOperations[i]['Colis source'])),
+                              DataCell(Text(widget.LigneOperations[i]
+                                  ['Colis de destination'])),
+                              DataCell(Text(
+                                  "${widget.LigneOperations[i]['Appartenant']}")),
+                              DataCell(
+                                  Text("${widget.LigneOperations[i]['Fait']}")),
+                              DataCell(Text(
+                                  "${widget.LigneOperations[i]['Unite']}")),
+                            ]),
+                          ]
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  Color _getDataRowColor(Set<MaterialState> states) {
+    const Set<MaterialState> interactiveStates = <MaterialState>{
+      MaterialState.pressed,
+      MaterialState.hovered,
+      MaterialState.focused,
+    };
+
+    if (states.any(interactiveStates.contains)) {
+      return Colors.blue;
+    }
+    return const Color.fromRGBO(255, 224, 178, 1);
   }
 }

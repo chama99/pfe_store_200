@@ -9,7 +9,7 @@ class Employe {
     List itemsList = [];
 
     try {
-      await employe.get().then((querySnapshot) {
+      await employe.orderBy("name").get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           itemsList.add(a);

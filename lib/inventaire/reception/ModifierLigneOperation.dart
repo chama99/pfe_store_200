@@ -46,7 +46,7 @@ class _ModifierOperationState extends State<ModifierOperation> {
                 Text(
                   "Article : ${widget.ligneOperation[widget.num]["Article"]}",
                   style: const TextStyle(
-                      fontSize: 20, letterSpacing: 3, color: Colors.indigo),
+                      fontSize: 20, fontWeight: FontWeight.w500),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 20),

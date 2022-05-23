@@ -84,10 +84,10 @@ class _ModifieLignFactState extends State<ModifieLignFact> {
                 Text(
                   "Article : ${widget.commande[widget.num]["Article"]}",
                   style: const TextStyle(
-                      fontSize: 20, letterSpacing: 3, color: Colors.indigo),
+                      fontSize: 20, fontWeight: FontWeight.w500),
                 ),
                 const Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 30, bottom: 20),
                   child: Text(
                     "Description:",
                     style: TextStyle(fontSize: 15, letterSpacing: 3),
@@ -118,9 +118,12 @@ class _ModifieLignFactState extends State<ModifieLignFact> {
                     ),
                   ),
                 ),
-                const Text(
-                  "Quantité :",
-                  style: TextStyle(fontSize: 15, letterSpacing: 3),
+                const Padding(
+                  padding: EdgeInsets.only(top: 30, bottom: 20),
+                  child: Text(
+                    "Quantité :",
+                    style: TextStyle(fontSize: 15, letterSpacing: 3),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

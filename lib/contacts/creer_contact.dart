@@ -74,7 +74,6 @@ class _CreeContactPageState extends State<CreeContactPage> {
   String client = "client";
   String fournisseur = "fournisseur";
 
-  var type = "";
   var email = "";
   var nom = "";
   var tel = "";
@@ -103,8 +102,6 @@ class _CreeContactPageState extends State<CreeContactPage> {
     super.dispose();
   }
 
-  late String dropdown;
-
   clearText() {
     telp.clear();
     emailController.clear();
@@ -120,7 +117,7 @@ class _CreeContactPageState extends State<CreeContactPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Créer Un Contact"),
+          title: const Text("Créer Un Client"),
           backgroundColor: Colors.orange,
         ),
         body: RefreshIndicator(
@@ -236,6 +233,12 @@ class _CreeContactPageState extends State<CreeContactPage> {
                                 "Tél. portable professionnel",
                                 color: Colors.white,
                               ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Veuillez entrer tél. portable professionnel';
+                                }
+                                return null;
+                              },
                             ),
                           ),
                           Padding(
@@ -249,6 +252,12 @@ class _CreeContactPageState extends State<CreeContactPage> {
                                 "Adresse professionnelle",
                                 color: Colors.white,
                               ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Veuillez entrer adresse professionnelle';
+                                }
+                                return null;
+                              },
                             ),
                           ),
                           Padding(
@@ -264,41 +273,22 @@ class _CreeContactPageState extends State<CreeContactPage> {
                               ),
                             ),
                           ),
-                          RadioListTile(
-                              title: const Text("Client"),
-                              value: client,
-                              groupValue: radio,
-                              onChanged: (value) {
-                                setState(() {
-                                  radio = value;
-                                });
-                              }),
-                          RadioListTile(
-                              title: const Text("Fornissuer"),
-                              value: fournisseur,
-                              groupValue: radio,
-                              onChanged: (value) {
-                                setState(() {
-                                  radio = value;
-                                });
-                              }),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               ElevatedButton(
                                 onPressed: () {
                                   // Validate returns true if the form is valid, otherwise false.
-                                  if (_formKey.currentState!.validate() &&
-                                      VerificationContactByNom(
-                                              nomController.text) ==
-                                          false) {
-                                    if (radio != null) {
+                                  if (_formKey.currentState!.validate()) {
+                                    if (VerificationContactByNom(
+                                            nomController.text) ==
+                                        false) {
                                       setState(() {
                                         email = emailController.text;
                                         nom = nomController.text;
                                         tel = telp.text;
                                         adresse = adressee.text;
-                                        type = radio;
+
                                         etiquette = etiquettetroller.text;
                                         if (imageFile == null) {
                                           Contact().addContact(
@@ -307,7 +297,6 @@ class _CreeContactPageState extends State<CreeContactPage> {
                                               nom,
                                               tel,
                                               adressee.text,
-                                              type,
                                               etiquettetroller.text,
                                               "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
                                         } else {
@@ -320,11 +309,8 @@ class _CreeContactPageState extends State<CreeContactPage> {
                                         Get.to(() => const listContact());
                                       });
                                     } else {
-                                      showToast(
-                                          "veuillez sélectionner fournisseur ou client ");
+                                      showToast("Nom de contact déja existé");
                                     }
-                                  } else {
-                                    showToast("Nom de contact déja existé");
                                   }
                                 },
                                 child: const Text(
@@ -405,7 +391,7 @@ class _CreeContactPageState extends State<CreeContactPage> {
       UploadTask uploadTask = ref.putFile(File(imageFile!.path));
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
-        Contact().addContact(uuid, email, nom, tel, adressee.text, type,
+        Contact().addContact(uuid, email, nom, tel, adressee.text,
             etiquettetroller.text, uploadPath);
       });
     } catch (e) {

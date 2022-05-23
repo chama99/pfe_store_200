@@ -9,7 +9,7 @@ class Transfert {
     List itemsList = [];
 
     try {
-      await transfert.get().then((querySnapshot) {
+      await transfert.orderBy("numtran").get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           itemsList.add(a);

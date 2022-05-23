@@ -9,7 +9,7 @@ class Achat {
     List itemsList = [];
 
     try {
-      await achat.get().then((querySnapshot) {
+      await achat.orderBy("numachat").get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           itemsList.add(a);

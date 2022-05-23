@@ -20,10 +20,24 @@ import 'package:path/path.dart';
 
 import '../services/employe.dart';
 import '../widget/InputDeco_design.dart';
+import '../widget/NavBottom.dart';
 import '../widget/toast.dart';
 
 class AddUserPage extends StatefulWidget {
-  const AddUserPage({Key? key}) : super(key: key);
+  String role, idus;
+  String name, email, url, tel, adr;
+  List acces;
+  AddUserPage(
+      {Key? key,
+      required this.idus,
+      required this.role,
+      required this.email,
+      required this.name,
+      required this.acces,
+      required this.url,
+      required this.adr,
+      required this.tel})
+      : super(key: key);
 
   @override
   _AddUserPageState createState() => _AddUserPageState();
@@ -147,12 +161,29 @@ class _AddUserPageState extends State<AddUserPage> {
           title: const Text("Créer Un Utilisateur"),
           backgroundColor: Colors.orange,
         ),
+        bottomNavigationBar: NavBottom(
+            tel: widget.tel,
+            adr: widget.adr,
+            id: widget.idus,
+            email: widget.email,
+            name: widget.name,
+            acces: widget.acces,
+            url: widget.url,
+            role: widget.role),
         body: RefreshIndicator(
           onRefresh: () {
             Navigator.pushReplacement(
                 context,
                 PageRouteBuilder(
-                    pageBuilder: (a, b, c) => AddUserPage(),
+                    pageBuilder: (a, b, c) => AddUserPage(
+                        idus: widget.idus,
+                        role: widget.role,
+                        email: widget.email,
+                        name: widget.name,
+                        acces: acces,
+                        url: widget.url,
+                        adr: widget.adr,
+                        tel: widget.tel),
                     transitionDuration: Duration(seconds: 0)));
             // ignore: void_checks
             return Future.value(false);
@@ -470,7 +501,15 @@ class _AddUserPageState extends State<AddUserPage> {
                                             ch = null;
                                             imageFile = null;
 
-                                            Get.to(() => ListUser());
+                                            Get.to(() => ListUser(
+                                                idus: widget.idus,
+                                                role: widget.role,
+                                                email: widget.email,
+                                                name: widget.name,
+                                                acces: widget.acces,
+                                                url: widget.url,
+                                                adr: widget.adr,
+                                                tel: widget.tel));
                                           });
                                         } else {
                                           showToast(

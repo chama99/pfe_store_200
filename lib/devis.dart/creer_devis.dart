@@ -89,7 +89,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
   List fact = [];
   List facta = [];
   fetchDatabaseList() async {
-    dynamic resultant = await Contact().getContactListByNom();
+    dynamic resultant = await Contact().getContactsList();
     dynamic resultant2 = await Commande().getCommandesList();
     dynamic resd = await Devis().getDevisList();
     dynamic resf = await Facture().getFacturesList();

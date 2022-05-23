@@ -13,16 +13,22 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import '../widget/InputDeco_design.dart';
+import '../widget/NavBottom.dart';
 
 class UpdateUserPage extends StatefulWidget {
-  final String nom, email, id;
+  final String nom, email, id, idus, role, adr, tel, url;
   List acces;
   // ignore: prefer_const_constructors_in_immutables
   UpdateUserPage(
       {Key? key,
+      required this.idus,
+      required this.role,
+      required this.adr,
+      required this.tel,
       required this.id,
       required this.email,
       required this.nom,
+      required this.url,
       required this.acces})
       : super(key: key);
 
@@ -56,6 +62,15 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
         ),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.tel,
+          adr: widget.adr,
+          id: widget.idus,
+          email: widget.email,
+          name: widget.nom,
+          acces: widget.acces,
+          url: widget.url,
+          role: widget.role),
       body: Form(
           key: _formKey,
           // Getting Specific Data by ID
@@ -174,7 +189,15 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
                                   } else {
                                     uploadImage(email, mdp, role);
                                   }
-                                  Get.to(() => const ListUser());
+                                  Get.to(() => ListUser(
+                                      idus: widget.idus,
+                                      role: widget.role,
+                                      email: widget.email,
+                                      name: widget.nom,
+                                      acces: widget.acces,
+                                      url: url,
+                                      adr: widget.adr,
+                                      tel: widget.tel));
                                 }
                               },
                               child: const Text(

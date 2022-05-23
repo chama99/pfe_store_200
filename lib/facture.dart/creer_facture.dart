@@ -94,7 +94,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
   List list = [];
   List fact = [];
   fetchDatabaseList() async {
-    dynamic resultant = await Contact().getContactListByNom();
+    dynamic resultant = await Contact().getContactsList();
     dynamic resultant2 = await CommandeFact().getCommList();
     dynamic resultf = await Facture().getFacturesList();
 

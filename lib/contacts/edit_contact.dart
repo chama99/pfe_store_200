@@ -37,7 +37,7 @@ class _EditContactState extends State<EditContact> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Contact / ${widget.nom}",
+          "Client / ${widget.nom}",
           style: const TextStyle(
             color: Colors.white,
           ),
@@ -49,7 +49,7 @@ class _EditContactState extends State<EditContact> {
           // Getting Specific Data by ID
           child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
             future: FirebaseFirestore.instance
-                .collection('contacts')
+                .collection('clients')
                 .doc(widget.id)
                 .get(),
             builder: (_, snapshot) {
@@ -184,15 +184,8 @@ class _EditContactState extends State<EditContact> {
                                 // Validate returns true if the form is valid, otherwise false.
                                 if (_formKey.currentState!.validate()) {
                                   if (imageFile == null) {
-                                    Contact().updateContact(
-                                        widget.id,
-                                        email,
-                                        nom,
-                                        tel,
-                                        adresse,
-                                        type,
-                                        etiquette,
-                                        url);
+                                    Contact().updateContact(widget.id, email,
+                                        nom, tel, adresse, etiquette, url);
                                   } else {
                                     uploadImage(email, widget.nom, tel, adresse,
                                         type, etiquette);
@@ -280,7 +273,7 @@ class _EditContactState extends State<EditContact> {
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
         Contact().updateContact(
-            widget.id, email, nom, tel, adresse, type, etiquette, uploadPath);
+            widget.id, email, nom, tel, adresse, etiquette, uploadPath);
       });
     } catch (e) {
       // ignore: avoid_print

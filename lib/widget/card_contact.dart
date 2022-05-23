@@ -21,7 +21,7 @@ Card buildInputCardContact() {
               size: 70,
               color: Colors.white,
             ),
-            Text(" Contacts",
+            Text(" Clients",
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.white))
           ],

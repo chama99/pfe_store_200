@@ -111,15 +111,18 @@ class _AjoutoperationState extends State<Ajoutoperation> {
         child: Column(
           children: [
             const Center(
-              child: Text(
-                "Article :",
-                style: TextStyle(fontSize: 20, letterSpacing: 3),
+              child: Padding(
+                padding: EdgeInsets.only(top: 30, bottom: 10),
+                child: Text(
+                  "Article :",
+                  style: TextStyle(fontSize: 20, letterSpacing: 3),
+                ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                width: 320,
+                width: 370,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(color: Colors.grey, width: 1)),

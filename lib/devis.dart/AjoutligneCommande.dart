@@ -135,44 +135,44 @@ class _AjoutCommandeState extends State<AjoutCommande> {
           child: Column(
             children: [
               const Center(
-                child: Text(
-                  "Article :",
-                  style: TextStyle(fontSize: 20, letterSpacing: 3),
+                child: Padding(
+                  padding: EdgeInsets.only(top: 30, bottom: 20),
+                  child: Text(
+                    "Article :",
+                    style: TextStyle(fontSize: 20, letterSpacing: 3),
+                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: 320,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: Colors.grey, width: 1)),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      hint: const Text("Article "),
-                      dropdownColor: Colors.white,
-                      icon: const Padding(
-                        padding: EdgeInsets.only(left: 15),
-                        child: Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.orange,
-                        ),
+              Container(
+                width: 370,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(color: Colors.grey, width: 1)),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    hint: const Text("Article "),
+                    dropdownColor: Colors.white,
+                    icon: const Padding(
+                      padding: EdgeInsets.only(left: 15),
+                      child: Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.orange,
                       ),
-                      style: const TextStyle(fontSize: 20, color: Colors.black),
-                      iconSize: 40,
-                      value: article,
-                      onChanged: (newValue) {
-                        setState(() {
-                          article = newValue.toString();
-                        });
-                      },
-                      items: ListArticle.map((valueItem) {
-                        return DropdownMenuItem(
-                          value: valueItem,
-                          child: Text(valueItem),
-                        );
-                      }).toList(),
                     ),
+                    style: const TextStyle(fontSize: 20, color: Colors.black),
+                    iconSize: 40,
+                    value: article,
+                    onChanged: (newValue) {
+                      setState(() {
+                        article = newValue.toString();
+                      });
+                    },
+                    items: ListArticle.map((valueItem) {
+                      return DropdownMenuItem(
+                        value: valueItem,
+                        child: Text(valueItem),
+                      );
+                    }).toList(),
                   ),
                 ),
               ),
@@ -205,9 +205,13 @@ class _AjoutCommandeState extends State<AjoutCommande> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Center(
-                            child: Text(
-                              "Description :",
-                              style: TextStyle(fontSize: 20, letterSpacing: 3),
+                            child: Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Text(
+                                "Description :",
+                                style:
+                                    TextStyle(fontSize: 20, letterSpacing: 3),
+                              ),
                             ),
                           ),
                           Padding(
@@ -240,9 +244,13 @@ class _AjoutCommandeState extends State<AjoutCommande> {
                             ),
                           ),
                           const Center(
-                            child: Text(
-                              "Quantité :",
-                              style: TextStyle(fontSize: 20, letterSpacing: 3),
+                            child: Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Text(
+                                "Quantité :",
+                                style:
+                                    TextStyle(fontSize: 20, letterSpacing: 3),
+                              ),
                             ),
                           ),
                           Padding(

@@ -5,11 +5,25 @@ import 'package:chama_projet/services/user.dart';
 
 import 'package:flutter/material.dart';
 
+import '../widget/NavBottom.dart';
 import '../widget/boitedialogue.dart';
 import 'creer_user_page.dart';
 
 class ListUser extends StatefulWidget {
-  const ListUser({Key? key}) : super(key: key);
+  String role, idus;
+  String name, email, url, tel, adr;
+  List acces;
+  ListUser(
+      {Key? key,
+      required this.idus,
+      required this.role,
+      required this.email,
+      required this.name,
+      required this.acces,
+      required this.url,
+      required this.adr,
+      required this.tel})
+      : super(key: key);
 
   @override
   _ListUserState createState() => _ListUserState();
@@ -58,7 +72,15 @@ class _ListUserState extends State<ListUser> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const AddUserPage()));
+                          builder: (context) => AddUserPage(
+                              idus: widget.idus,
+                              role: widget.role,
+                              email: widget.email,
+                              name: widget.name,
+                              acces: widget.acces,
+                              url: widget.url,
+                              adr: widget.adr,
+                              tel: widget.tel)));
                 },
                 child: Text(
                   "Créer".toUpperCase(),
@@ -71,6 +93,15 @@ class _ListUserState extends State<ListUser> {
           ],
           backgroundColor: Colors.orange,
         ),
+        bottomNavigationBar: NavBottom(
+            tel: widget.tel,
+            adr: widget.adr,
+            id: widget.idus,
+            email: widget.email,
+            name: widget.name,
+            acces: widget.acces,
+            url: widget.url,
+            role: widget.role),
         body: Container(
           margin: const EdgeInsets.all(10),
           child: Column(
@@ -111,7 +142,15 @@ class _ListUserState extends State<ListUser> {
                           Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
-                                  pageBuilder: (a, b, c) => const ListUser(),
+                                  pageBuilder: (a, b, c) => ListUser(
+                                      idus: widget.idus,
+                                      role: widget.role,
+                                      email: widget.email,
+                                      name: widget.name,
+                                      acces: widget.acces,
+                                      url: widget.url,
+                                      adr: widget.adr,
+                                      tel: widget.tel),
                                   transitionDuration:
                                       const Duration(seconds: 0)));
                           // ignore: void_checks
@@ -130,6 +169,7 @@ class _ListUserState extends State<ListUser> {
                                           builder: (context) =>
                                               UtilisateurDetail(
                                                 id: user['IdUser'],
+                                                idus: widget.idus,
                                                 image: user['image'],
                                                 email: user['email'],
                                                 nom: user['name'],

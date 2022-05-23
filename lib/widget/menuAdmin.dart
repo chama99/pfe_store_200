@@ -121,39 +121,47 @@ class _MenuAdminState extends State<MenuAdmin> {
               url: widget.url,
               role: widget.role),
           backgroundColor: Colors.white,
-          body: Container(
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: GridView.count(
-                crossAxisCount: 3,
-                children: <Widget>[
-                  for (var x in widget.acces) ...[
-                    if (x == "Employés") ...[buildInputCardEmploye()],
-                    if (x == "Achats") ...[buildInputCardAchat()],
-                    if (x == "Devis") ...[
-                      buildInputCardDevis(
-                          widget.role,
-                          widget.email,
-                          widget.name,
-                          widget.url,
-                          widget.acces,
-                          widget.id,
-                          widget.tel,
-                          widget.adr)
-                    ],
-                    if (x == "Contacts") ...[buildInputCardContact()],
-                    if (x == "Articles") ...[buildInputCardArtcile()],
-                    if (x == "Factures") ...[buildInputCardFacture()],
-                    if (x == "Utilisateurs") ...[buildInputCardUser()],
-                    if (x == "Applications") ...[buildInputCardRole()],
-                    if (x == "Plan") ...[
-                      buildInputCardPlan(widget.role, widget.email, widget.name)
-                    ],
-                    if (x == "Inventaire") ...[buildInputCardInventaire()],
-                    if (x == "Conges") ...[buildInputCardConges(widget.id)]
-                  ]
-                ],
-              ),
+          body: Padding(
+            padding: const EdgeInsets.all(15),
+            child: GridView.count(
+              crossAxisCount: 3,
+              children: <Widget>[
+                for (var x in widget.acces) ...[
+                  if (x == "Employés") ...[buildInputCardEmploye()],
+                  if (x == "Achats") ...[buildInputCardAchat()],
+                  if (x == "Devis") ...[
+                    buildInputCardDevis(
+                        widget.role,
+                        widget.email,
+                        widget.name,
+                        widget.url,
+                        widget.acces,
+                        widget.id,
+                        widget.tel,
+                        widget.adr)
+                  ],
+                  if (x == "Clients") ...[buildInputCardContact()],
+                  if (x == "Articles") ...[buildInputCardArtcile()],
+                  if (x == "Factures") ...[buildInputCardFacture()],
+                  if (x == "Utilisateurs") ...[
+                    buildInputCardUser(
+                        widget.id,
+                        widget.role,
+                        widget.email,
+                        widget.name,
+                        widget.acces,
+                        widget.url,
+                        widget.adr,
+                        widget.tel)
+                  ],
+                  if (x == "Applications") ...[buildInputCardRole()],
+                  if (x == "Plan") ...[
+                    buildInputCardPlan(widget.role, widget.email, widget.name)
+                  ],
+                  if (x == "Inventaire") ...[buildInputCardInventaire()],
+                  if (x == "Conges") ...[buildInputCardConges(widget.id)]
+                ]
+              ],
             ),
           ),
         ),

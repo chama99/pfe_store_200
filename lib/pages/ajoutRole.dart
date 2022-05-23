@@ -44,7 +44,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
   var fact = "Factures";
   var article = "Articles";
   var app = "Applications";
-  var cong = "Conges";
+  var cong = "Clients";
 
   bool t = false;
   bool ap = false;

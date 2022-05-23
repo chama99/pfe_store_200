@@ -134,7 +134,8 @@ class _ListTransfertState extends State<ListTransfert> {
                                           trans["ligne d'operation"],
                                       date: trans["date prévue"]
                                           .toDate()
-                                          .toString()));
+                                          .toString()
+                                          .substring(0, 10)));
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),

@@ -227,74 +227,77 @@ class _UpdateDevisState extends State<UpdateDevis> {
                                     borderRadius: BorderRadius.circular(40),
                                     color: Colors.orange[100],
                                   ),
-                                  child: Row(
+                                  child: Column(
                                     children: [
-                                      Flexible(
-                                        child: IconButton(
-                                          onPressed: () {
-                                            if (n.text.isEmpty) {
-                                              showToast(
-                                                  "Veuillez entrer Numéro de ligne");
-                                            } else {
-                                              Get.to(() => ModifierCommande(
-                                                    idus: widget.idus,
-                                                    id: widget.id,
-                                                    num: int.parse(n.text),
-                                                    titre: widget.titre,
-                                                    client: widget.client,
-                                                    etat: widget.etat,
-                                                    commande: widget.commande,
-                                                    remise: widget.remise,
-                                                    total: widget.total,
-                                                    montant: widget.montant,
-                                                    role: widget.role,
-                                                    date: widget.date,
-                                                    email: widget.email,
-                                                    name: widget.name,
-                                                    acces: widget.acces,
-                                                    url: widget.url,
-                                                    tel: widget.tel,
-                                                    adr: widget.adr,
-                                                  ));
-                                            }
-                                          },
-                                          icon: const Icon(
-                                            Icons.edit,
-                                            color: Colors.orange,
-                                          ),
-                                        ),
-                                      ),
-                                      const Text(
-                                        "Modifier la commande Numéro :",
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            letterSpacing: 3,
-                                            color: Colors.indigo),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                      Flexible(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              right: 20, top: 10, bottom: 10),
-                                          child: TextFormField(
-                                            controller: n,
-                                            decoration: InputDecoration(
-                                              filled: true,
-                                              fillColor: Colors.white,
-                                              focusedBorder: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                borderSide: const BorderSide(
-                                                    color: Colors.orange,
-                                                    width: 1.5),
+                                      Row(
+                                        children: [
+                                          Flexible(
+                                            child: IconButton(
+                                              onPressed: () {
+                                                if (n.text.isEmpty) {
+                                                  showToast(
+                                                      "Veuillez entrer Numéro de ligne");
+                                                } else {
+                                                  Get.to(() => ModifierCommande(
+                                                        idus: widget.idus,
+                                                        id: widget.id,
+                                                        num: int.parse(n.text),
+                                                        titre: widget.titre,
+                                                        client: widget.client,
+                                                        etat: widget.etat,
+                                                        commande:
+                                                            widget.commande,
+                                                        remise: widget.remise,
+                                                        total: widget.total,
+                                                        montant: widget.montant,
+                                                        role: widget.role,
+                                                        date: widget.date,
+                                                        email: widget.email,
+                                                        name: widget.name,
+                                                        acces: widget.acces,
+                                                        url: widget.url,
+                                                        tel: widget.tel,
+                                                        adr: widget.adr,
+                                                      ));
+                                                }
+                                              },
+                                              icon: const Icon(
+                                                Icons.edit,
+                                                color: Colors.orange,
                                               ),
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                borderSide: const BorderSide(
+                                            ),
+                                          ),
+                                          const Text(
+                                            "Modifier la commande Numéro :",
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                letterSpacing: 3,
+                                                color: Colors.indigo),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 150, bottom: 10, left: 150),
+                                        child: TextFormField(
+                                          controller: n,
+                                          decoration: InputDecoration(
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: const BorderSide(
                                                   color: Colors.orange,
-                                                  width: 1.5,
-                                                ),
+                                                  width: 1.5),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: const BorderSide(
+                                                color: Colors.orange,
+                                                width: 1.5,
                                               ),
                                             ),
                                           ),
@@ -517,49 +520,54 @@ class _UpdateDevisState extends State<UpdateDevis> {
                             margin: const EdgeInsets.only(top: 20),
                             child: Row(
                               children: [
-                                Container(
-                                  width: 350,
-                                  height: 200,
-                                  margin: const EdgeInsets.only(
-                                      left: 30, top: 10, right: 10, bottom: 10),
-                                  decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                      color:
-                                          Color.fromARGB(255, 245, 245, 245)),
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.only(left: 8, top: 15),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "Montant HT:${calculMontat()} ",
-                                          style: const TextStyle(fontSize: 20),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Container(
+                                    width: 350,
+                                    height: 200,
+                                    margin: const EdgeInsets.only(
+                                        left: 15, top: 10, bottom: 10),
+                                    decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "Remise:${widget.remise / 100} ",
+                                        color:
+                                            Color.fromARGB(255, 245, 245, 245)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8, top: 15),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            "Montant HT:${calculMontat()} ",
                                             style:
                                                 const TextStyle(fontSize: 20),
                                           ),
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "Taxes: 0.2",
-                                            style: TextStyle(fontSize: 20),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              "Remise:${widget.remise / 100} ",
+                                              style:
+                                                  const TextStyle(fontSize: 20),
+                                            ),
                                           ),
-                                        ),
-                                        const Divider(
-                                          color: Colors.black,
-                                        ),
-                                        Text(
-                                          "Total: ${(calculMontat() * (1 + 0.2)) * (1 - (widget.remise / 100))}",
-                                          style: const TextStyle(fontSize: 20),
-                                        ),
-                                      ],
+                                          const Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Text(
+                                              "Taxes: 0.2",
+                                              style: TextStyle(fontSize: 20),
+                                            ),
+                                          ),
+                                          const Divider(
+                                            color: Colors.black,
+                                          ),
+                                          Text(
+                                            "Total: ${(calculMontat() * (1 + 0.2)) * (1 - (widget.remise / 100))}",
+                                            style:
+                                                const TextStyle(fontSize: 20),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -572,49 +580,55 @@ class _UpdateDevisState extends State<UpdateDevis> {
                   ),
                 ),
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  maximumSize: const Size(double.infinity, 50),
-                  primary: Colors.indigo,
-                ),
-                child: const Text("Modifier"),
-                onPressed: () {
-                  // Validate returns true if the form is valid, otherwise false.
+              SizedBox(
+                width: 500,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    maximumSize: const Size(double.infinity, 50),
+                    primary: Colors.indigo,
+                  ),
+                  child: const Text(
+                    "Modifier",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  onPressed: () {
+                    // Validate returns true if the form is valid, otherwise false.
 
-                  Devis().updateDevis(
-                      widget.id,
-                      widget.client,
-                      widget.etat,
-                      (calculMontat() * (1 + 0.2)) *
-                          (1 - (widget.remise / 100)),
-                      widget.commande,
-                      widget.remise,
-                      calculMontat());
-                  Get.to(() => ListDevis(
-                        idus: widget.idus,
-                        role: widget.role,
-                        email: widget.email,
-                        name: widget.name,
-                        acces: widget.acces,
-                        url: widget.url,
-                        tel: widget.tel,
-                        adr: widget.adr,
-                      ));
-                  if (widget.etat == "Bon de commande") {
-                    AutoFacture().addFacture(
-                        uuid,
-                        "Facture N°${lf + 1}",
-                        widget.titre,
+                    Devis().updateDevis(
+                        widget.id,
                         widget.client,
-                        "Brouillon",
-                        widget.date,
+                        widget.etat,
                         (calculMontat() * (1 + 0.2)) *
                             (1 - (widget.remise / 100)),
                         widget.commande,
                         widget.remise,
                         calculMontat());
-                  }
-                },
+                    Get.to(() => ListDevis(
+                          idus: widget.idus,
+                          role: widget.role,
+                          email: widget.email,
+                          name: widget.name,
+                          acces: widget.acces,
+                          url: widget.url,
+                          tel: widget.tel,
+                          adr: widget.adr,
+                        ));
+                    if (widget.etat == "Bon de commande") {
+                      AutoFacture().addFacture(
+                          uuid,
+                          "Facture N°${lf + 1}",
+                          widget.titre,
+                          widget.client,
+                          "Brouillon",
+                          widget.date,
+                          (calculMontat() * (1 + 0.2)) *
+                              (1 - (widget.remise / 100)),
+                          widget.commande,
+                          widget.remise,
+                          calculMontat());
+                    }
+                  },
+                ),
               ),
             ],
           ),

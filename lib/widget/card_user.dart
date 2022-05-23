@@ -3,13 +3,22 @@ import 'package:get/get.dart';
 
 import '../pages/listUser.dart';
 
-Card buildInputCardUser() {
+Card buildInputCardUser(String idus, String role, String email, String name,
+    List acces, String url, String adr, String tel) {
   return Card(
     color: const Color.fromARGB(255, 176, 134, 184),
     margin: const EdgeInsets.all(8.0),
     child: InkWell(
       onTap: () {
-        Get.to(() => const ListUser());
+        Get.to(() => ListUser(
+            idus: idus,
+            role: role,
+            email: email,
+            name: name,
+            acces: acces,
+            url: url,
+            adr: adr,
+            tel: tel));
       },
       splashColor: const Color.fromARGB(255, 3, 56, 109),
       child: Center(

@@ -78,7 +78,7 @@ class _UpdateFactureState extends State<UpdateFacture> {
   List commandeList = [];
 
   fetchDatabaseList() async {
-    dynamic resultant = await Contact().getContactListByNom();
+    dynamic resultant = await Contact().getContactsList();
     dynamic resultant2 = await CommandeFact().getCommList();
 
     if (resultant == null) {
@@ -128,286 +128,329 @@ class _UpdateFactureState extends State<UpdateFacture> {
           // ignore: void_checks
           return Future.value(false);
         },
-        child: Column(
-          children: [
-            Expanded(
-                child: Form(
-              key: _formKey,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+        child: Container(
+          color: Colors.grey[200],
+          child: Column(
+            children: [
+              Expanded(
+                  child: Form(
+                key: _formKey,
                 child: Column(
                   children: [
                     Expanded(
                         child: ListView(
                       children: [
-                        Row(
-                          children: [
-                            const Text(
-                              "Ajouter lignes de commande ",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  letterSpacing: 3,
-                                  color: Colors.indigo),
-                              textAlign: TextAlign.left,
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                Get.to(() => AjoutLigneFacture(
-                                      id: widget.id,
-                                      titre: widget.titre,
-                                      commande: widget.listfact,
-                                      client: widget.client,
-                                      date1: widget.date1,
-                                      etat: widget.etat,
-                                      montant: widget.montant,
-                                      remise: remise,
-                                      total: widget.total,
-                                      res: widget.res,
-                                      page: widget.page,
-                                    ));
-                              },
-                              icon: const Icon(
-                                Icons.add,
-                                color: Colors.orange,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Text(
-                              "Modifier la commande Numéro :",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  letterSpacing: 3,
-                                  color: Colors.indigo),
-                              textAlign: TextAlign.left,
-                            ),
-                            Flexible(
-                              child: TextFormField(
-                                controller: n,
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: const BorderSide(
-                                        color: Colors.orange, width: 1.5),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: const BorderSide(
-                                      color: Colors.orange,
-                                      width: 1.5,
+                        Container(
+                          color: Colors.white,
+                          margin: const EdgeInsets.only(top: 30),
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(40),
+                                  color: Colors.orange[100],
+                                ),
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        Get.to(() => AjoutLigneFacture(
+                                              id: widget.id,
+                                              titre: widget.titre,
+                                              commande: widget.listfact,
+                                              client: widget.client,
+                                              date1: widget.date1,
+                                              etat: widget.etat,
+                                              montant: widget.montant,
+                                              remise: remise,
+                                              total: widget.total,
+                                              res: widget.res,
+                                              page: widget.page,
+                                            ));
+                                      },
+                                      icon: const Icon(
+                                        Icons.add,
+                                        color: Colors.orange,
+                                      ),
                                     ),
+                                    const Text(
+                                      "Ajouter lignes de commande ",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          letterSpacing: 3,
+                                          color: Colors.indigo),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(40),
+                                  color: Colors.orange[100],
+                                ),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {
+                                            if (n.text.isEmpty) {
+                                              showToast(
+                                                  "Veuillez entrer Numéro de ligne");
+                                            } else {
+                                              Get.to(() => ModifieLignFact(
+                                                    id: widget.id,
+                                                    titre: widget.titre,
+                                                    commande: widget.listfact,
+                                                    num: int.parse(n.text),
+                                                    client: widget.client,
+                                                    date1: widget.date1,
+                                                    etat: widget.etat,
+                                                    montant: widget.montant,
+                                                    remise: remise,
+                                                    total: widget.total,
+                                                    res: widget.res,
+                                                    page: widget.page,
+                                                  ));
+                                            }
+                                          },
+                                          icon: const Icon(
+                                            Icons.edit,
+                                            color: Colors.orange,
+                                          ),
+                                        ),
+                                        const Text(
+                                          "Modifier la commande Numéro :",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              letterSpacing: 3,
+                                              color: Colors.indigo),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 150, bottom: 10, left: 150),
+                                      child: TextFormField(
+                                        controller: n,
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            borderSide: const BorderSide(
+                                                color: Colors.orange,
+                                                width: 1.5),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            borderSide: const BorderSide(
+                                              color: Colors.orange,
+                                              width: 1.5,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: SingleChildScrollView(
+                                  child: DataTable(
+                                    columns: const [
+                                      DataColumn(
+                                        label: Text("Numéro de ligne"),
+                                      ),
+                                      DataColumn(
+                                        label: Text("réf"),
+                                      ),
+                                      DataColumn(
+                                        label: Text("Article"),
+                                      ),
+                                      DataColumn(
+                                        label: Text("Description"),
+                                      ),
+                                      DataColumn(
+                                        label: Text(" Unité"),
+                                      ),
+                                      DataColumn(
+                                        label: Text("Quantité"),
+                                      ),
+                                      DataColumn(
+                                        label: Text("Prix Unitaire"),
+                                      ),
+                                      DataColumn(
+                                        label: Text("TVA"),
+                                      ),
+                                      DataColumn(
+                                        label: Text("Sous-total"),
+                                      )
+                                    ],
+                                    rows: [
+                                      for (var i = 0;
+                                          i < widget.listfact.length;
+                                          i++) ...[
+                                        DataRow(cells: [
+                                          DataCell(Text("$i")),
+                                          DataCell(Text(
+                                              "${widget.listfact[i]['réf']}")),
+                                          DataCell(Text(
+                                              widget.listfact[i]['Article'])),
+                                          DataCell(Text(widget.listfact[i]
+                                              ['Description'])),
+                                          DataCell(Text(
+                                              "${widget.listfact[i]['Unite']}")),
+                                          DataCell(Text(
+                                              "${widget.listfact[i]['Quantite']}")),
+                                          DataCell(Text(
+                                              "${widget.listfact[i]['prix']}")),
+                                          const DataCell(Text("20%")),
+                                          DataCell(Text(
+                                              "${widget.listfact[i]["sous-total"]}")),
+                                        ]),
+                                      ]
+                                    ],
                                   ),
                                 ),
                               ),
-                            ),
-                            Flexible(
-                              child: IconButton(
-                                onPressed: () {
-                                  if (n.text.isEmpty) {
-                                    showToast(
-                                        "Veuillez entrer Numéro de ligne");
-                                  } else {
-                                    Get.to(() => ModifieLignFact(
-                                          id: widget.id,
-                                          titre: widget.titre,
-                                          commande: widget.listfact,
-                                          num: int.parse(n.text),
-                                          client: widget.client,
-                                          date1: widget.date1,
-                                          etat: widget.etat,
-                                          montant: widget.montant,
-                                          remise: remise,
-                                          total: widget.total,
-                                          res: widget.res,
-                                          page: widget.page,
-                                        ));
-                                  }
-                                },
-                                icon: const Icon(
-                                  Icons.edit,
-                                  color: Colors.orange,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: SingleChildScrollView(
-                            child: DataTable(
-                              columns: const [
-                                DataColumn(
-                                  label: Text("Numéro de ligne"),
-                                ),
-                                DataColumn(
-                                  label: Text("réf"),
-                                ),
-                                DataColumn(
-                                  label: Text("Article"),
-                                ),
-                                DataColumn(
-                                  label: Text("Description"),
-                                ),
-                                DataColumn(
-                                  label: Text(" Unité"),
-                                ),
-                                DataColumn(
-                                  label: Text("Quantité"),
-                                ),
-                                DataColumn(
-                                  label: Text("Prix Unitaire"),
-                                ),
-                                DataColumn(
-                                  label: Text("TVA"),
-                                ),
-                                DataColumn(
-                                  label: Text("Sous-total"),
-                                )
-                              ],
-                              rows: [
-                                for (var i = 0;
-                                    i < widget.listfact.length;
-                                    i++) ...[
-                                  DataRow(cells: [
-                                    DataCell(Text("$i")),
-                                    DataCell(
-                                        Text("${widget.listfact[i]['réf']}")),
-                                    DataCell(
-                                        Text(widget.listfact[i]['Article'])),
-                                    DataCell(Text(
-                                        widget.listfact[i]['Description'])),
-                                    DataCell(
-                                        Text("${widget.listfact[i]['Unite']}")),
-                                    DataCell(Text(
-                                        "${widget.listfact[i]['Quantite']}")),
-                                    DataCell(
-                                        Text("${widget.listfact[i]['prix']}")),
-                                    const DataCell(Text("20%")),
-                                    DataCell(Text(
-                                        "${widget.listfact[i]["sous-total"]}")),
-                                  ]),
-                                ]
-                              ],
-                            ),
+                            ],
                           ),
-                        ),
-                        Row(
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.all(13),
-                              child: Text(
-                                "Client :",
-                                style:
-                                    TextStyle(fontSize: 15, letterSpacing: 3),
-                              ),
-                            ),
-                          ],
                         ),
                         Container(
-                          margin: const EdgeInsets.only(left: 0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border:
-                                  Border.all(color: Colors.grey, width: 1.5)),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton(
-                              dropdownColor: Colors.white,
-                              icon: const Padding(
-                                padding: EdgeInsets.only(left: 115),
-                                child: Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.orange,
+                          color: Colors.white,
+                          margin: const EdgeInsets.only(top: 20, bottom: 20),
+                          child: Column(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(13),
+                                child: Text(
+                                  "Client :",
+                                  style:
+                                      TextStyle(fontSize: 15, letterSpacing: 3),
                                 ),
                               ),
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.black),
-                              iconSize: 40,
-                              value: widget.client,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  widget.client = newValue.toString();
-                                });
-                              },
-                              items: userContactList.map((valueItem) {
-                                return DropdownMenuItem(
-                                  value: valueItem,
-                                  child: Text(valueItem),
-                                );
-                              }).toList(),
-                            ),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 15),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(
+                                        color: Colors.grey, width: 1.5)),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton(
+                                    dropdownColor: Colors.white,
+                                    icon: const Padding(
+                                      padding: EdgeInsets.only(left: 115),
+                                      child: Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.orange,
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                        fontSize: 20, color: Colors.black),
+                                    iconSize: 40,
+                                    value: widget.client,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        widget.client = newValue.toString();
+                                      });
+                                    },
+                                    items: userContactList.map((valueItem) {
+                                      return DropdownMenuItem(
+                                        value: valueItem,
+                                        child: Text(valueItem),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        Row(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.all(20),
-                              child: Text(
-                                "État",
-                                style:
-                                    TextStyle(fontSize: 15, letterSpacing: 3),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 43),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(
-                                      color: Colors.grey, width: 1.5)),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  dropdownColor: Colors.white,
-                                  icon: const Padding(
-                                    padding: EdgeInsets.only(left: 20),
-                                    child: Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Colors.orange,
-                                    ),
-                                  ),
-                                  style: const TextStyle(
-                                      fontSize: 20, color: Colors.black),
-                                  iconSize: 40,
-                                  value: widget.etat,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      widget.etat = newValue.toString();
-                                    });
-                                  },
-                                  items: listItem.map((valueItem) {
-                                    return DropdownMenuItem(
-                                      value: valueItem,
-                                      child: Text(valueItem),
-                                    );
-                                  }).toList(),
+                        Container(
+                          color: Colors.white,
+                          child: Column(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Text(
+                                  "État :",
+                                  style:
+                                      TextStyle(fontSize: 15, letterSpacing: 3),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.all(20),
-                              child: Text(
-                                "Date de facturations",
-                                style:
-                                    TextStyle(fontSize: 15, letterSpacing: 3),
+                              Container(
+                                margin:
+                                    const EdgeInsets.only(left: 43, bottom: 15),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(
+                                        color: Colors.grey, width: 1.5)),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton(
+                                    dropdownColor: Colors.white,
+                                    icon: const Padding(
+                                      padding: EdgeInsets.only(left: 20),
+                                      child: Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.orange,
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                        fontSize: 20, color: Colors.black),
+                                    iconSize: 40,
+                                    value: widget.etat,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        widget.etat = newValue.toString();
+                                      });
+                                    },
+                                    items: listItem.map((valueItem) {
+                                      return DropdownMenuItem(
+                                        value: valueItem,
+                                        child: Text(valueItem),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                        Container(child: buildDatePicker(dataTime)),
+                        Container(
+                          color: Colors.white,
+                          margin: const EdgeInsets.only(top: 20, bottom: 20),
+                          child: Column(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Text(
+                                  "Date de facturations :",
+                                  style:
+                                      TextStyle(fontSize: 15, letterSpacing: 3),
+                                ),
+                              ),
+                              Container(child: buildDatePicker(dataTime)),
+                            ],
+                          ),
+                        ),
                         Container(
                           margin: const EdgeInsets.only(top: 20),
+                          color: Colors.white,
                           child: Row(
                             children: [
                               Container(
                                 width: 350,
                                 height: 200,
+                                margin: const EdgeInsets.only(
+                                    top: 10, left: 20, right: 10),
                                 decoration: const BoxDecoration(
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(10),
@@ -444,9 +487,9 @@ class _UpdateFactureState extends State<UpdateFacture> {
                     )),
                   ],
                 ),
-              ),
-            )),
-          ],
+              )),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: ElevatedButton(
@@ -454,7 +497,10 @@ class _UpdateFactureState extends State<UpdateFacture> {
           maximumSize: const Size(double.infinity, 50),
           primary: Colors.indigo,
         ),
-        child: const Text("Modifier"),
+        child: const Text(
+          "Modifier",
+          style: TextStyle(fontSize: 20),
+        ),
         onPressed: () {
           if (widget.page == "nouvellefacture") {
             Facture().updateFacture(

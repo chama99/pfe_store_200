@@ -8,7 +8,7 @@ class Article {
     List itemsList = [];
 
     try {
-      await article.get().then((querySnapshot) {
+      await article.orderBy("nom_art").get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
 

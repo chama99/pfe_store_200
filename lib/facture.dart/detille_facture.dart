@@ -84,29 +84,12 @@ class _DetailFactureState extends State<DetailFacture> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Text(
-                        widget.titre,
-                        style: TextStyle(
-                          fontSize: 20,
-                          foreground: Paint()
-                            ..style = PaintingStyle.stroke
-                            ..strokeWidth = 1
-                            ..color = Colors.black,
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 50),
-                        child: Text("Sète,le",
-                            style: TextStyle(
-                              fontSize: 20,
-                            )),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 50),
-                        child: Text(
-                          widget.date1,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Text(
+                          widget.titre,
                           style: TextStyle(
                             fontSize: 20,
                             foreground: Paint()
@@ -115,8 +98,28 @@ class _DetailFactureState extends State<DetailFacture> {
                               ..color = Colors.black,
                           ),
                         ),
-                      ),
-                    ],
+                        const Padding(
+                          padding: EdgeInsets.only(left: 50),
+                          child: Text("Sète,le",
+                              style: TextStyle(
+                                fontSize: 20,
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 33),
+                          child: Text(
+                            widget.date1,
+                            style: TextStyle(
+                              fontSize: 20,
+                              foreground: Paint()
+                                ..style = PaintingStyle.stroke
+                                ..strokeWidth = 1
+                                ..color = Colors.black,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Row(
@@ -292,7 +295,10 @@ class _DetailFactureState extends State<DetailFacture> {
           maximumSize: const Size(double.infinity, 50),
           primary: Colors.indigo,
         ),
-        child: const Text("Convertir  au format PDF"),
+        child: const Text(
+          "Convertir  au format PDF",
+          style: TextStyle(fontSize: 20),
+        ),
         onPressed: onSubmit,
       ),
     );

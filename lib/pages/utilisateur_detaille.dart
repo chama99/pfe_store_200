@@ -3,12 +3,15 @@
 import 'package:chama_projet/pages/update_user.dart';
 import 'package:flutter/material.dart';
 
+import '../widget/NavBottom.dart';
+
 class UtilisateurDetail extends StatefulWidget {
-  String email, nom, mdp, image, role, id, adr, tel;
+  String email, nom, mdp, image, role, id, adr, tel, idus;
   List acces;
   UtilisateurDetail({
     Key? key,
     required this.id,
+    required this.idus,
     required this.image,
     required this.email,
     required this.nom,
@@ -68,6 +71,11 @@ class _UtilisateurDetailState extends State<UtilisateurDetail> {
                               email: widget.email,
                               nom: widget.nom,
                               acces: widget.acces,
+                              adr: widget.adr,
+                              idus: widget.id,
+                              role: widget.role,
+                              tel: widget.tel,
+                              url: widget.image,
                             )));
               },
               child: Text(
@@ -80,6 +88,15 @@ class _UtilisateurDetailState extends State<UtilisateurDetail> {
           ),
         ],
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.tel,
+          adr: widget.adr,
+          id: widget.idus,
+          email: widget.email,
+          name: widget.nom,
+          acces: widget.acces,
+          url: widget.image,
+          role: widget.role),
       body: Stack(
         alignment: Alignment.center,
         children: [

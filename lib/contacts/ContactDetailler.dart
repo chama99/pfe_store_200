@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'edit_contact.dart';
 
 class ContactDetail extends StatefulWidget {
-  String email, nom, tel, adresse, image, role, id;
+  String email, nom, tel, adresse, image, id;
   ContactDetail({
     Key? key,
     required this.id,
@@ -14,7 +14,6 @@ class ContactDetail extends StatefulWidget {
     required this.nom,
     required this.tel,
     required this.adresse,
-    required this.role,
   }) : super(key: key);
 
   @override
@@ -90,9 +89,6 @@ class _ContactDetailState extends State<ContactDetail> {
                   children: [
                     textfield(
                       hintText: widget.email,
-                    ),
-                    textfield(
-                      hintText: widget.role,
                     ),
                     textfield(
                       hintText: widget.adresse,

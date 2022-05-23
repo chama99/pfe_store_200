@@ -101,7 +101,13 @@ class _ModifierCommandeState extends State<ModifierCommande> {
               children: [
                 Text(
                   "Article : ${widget.commande[widget.num]["Article"]} ",
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w500),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text("Description :",
+                      style: TextStyle(fontSize: 20, letterSpacing: 3)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -128,6 +134,11 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                       ),
                     ),
                   ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text("Quantité :",
+                      style: TextStyle(fontSize: 20, letterSpacing: 3)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -198,7 +209,7 @@ class _ModifierCommandeState extends State<ModifierCommande> {
                       },
                       child: const Text(
                         "Modifier",
-                        style: TextStyle(fontSize: 25),
+                        style: TextStyle(fontSize: 20),
                       ),
                       style: ElevatedButton.styleFrom(primary: Colors.orange),
                     ),

@@ -9,7 +9,7 @@ class AutoFacture {
     List itemsList = [];
 
     try {
-      await autofact.get().then((querySnapshot) {
+      await autofact.orderBy("numfact").get().then((querySnapshot) {
         querySnapshot.docs.map((element) {
           Map a = element.data() as Map<String, dynamic>;
           itemsList.add(a);

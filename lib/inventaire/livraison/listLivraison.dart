@@ -133,7 +133,8 @@ class _ListLivraisonState extends State<ListLivraison> {
                                       LigneOperations: liv["ligne d'operation"],
                                       date: liv["date prévue"]
                                           .toDate()
-                                          .toString()));
+                                          .toString()
+                                          .substring(0, 10)));
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),

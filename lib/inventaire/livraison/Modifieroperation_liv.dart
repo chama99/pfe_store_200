@@ -48,7 +48,7 @@ class _ModifierOperationLivState extends State<ModifierOperationLiv> {
                 Text(
                   "Article :${widget.ligneOperation[widget.num]["Article"]}",
                   style: const TextStyle(
-                      fontSize: 20, color: Colors.indigo, letterSpacing: 3),
+                      fontSize: 20, fontWeight: FontWeight.w500),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 20),

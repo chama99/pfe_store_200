@@ -105,15 +105,18 @@ class AjoutLigneFactureState extends State<AjoutLigneFacture> {
           child: Column(
             children: [
               const Center(
-                child: Text(
-                  "Article :",
-                  style: TextStyle(fontSize: 20, letterSpacing: 3),
+                child: Padding(
+                  padding: EdgeInsets.only(top: 30),
+                  child: Text(
+                    "Article :",
+                    style: TextStyle(fontSize: 20, letterSpacing: 3),
+                  ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  width: 320,
+                  width: 370,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(color: Colors.grey, width: 1)),
@@ -122,7 +125,7 @@ class AjoutLigneFactureState extends State<AjoutLigneFacture> {
                       hint: const Text("Article "),
                       dropdownColor: Colors.white,
                       icon: const Padding(
-                        padding: EdgeInsets.only(left: 15),
+                        padding: EdgeInsets.only(),
                         child: Icon(
                           Icons.arrow_drop_down,
                           color: Colors.orange,
@@ -174,6 +177,12 @@ class AjoutLigneFactureState extends State<AjoutLigneFacture> {
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          const Padding(
+                            padding: EdgeInsets.only(top: 20, bottom: 20),
+                            child: Text("Description :",
+                                style:
+                                    TextStyle(fontSize: 20, letterSpacing: 3)),
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
@@ -202,6 +211,12 @@ class AjoutLigneFactureState extends State<AjoutLigneFacture> {
                                 return null;
                               },
                             ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 20, bottom: 20),
+                            child: Text("Quantité :",
+                                style:
+                                    TextStyle(fontSize: 20, letterSpacing: 3)),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
