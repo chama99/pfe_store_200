@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../services/article.dart';
+import '../widget/NavBottom.dart';
 
 class ModifieLignFact extends StatefulWidget {
   String titre, id, page;
@@ -14,21 +15,32 @@ class ModifieLignFact extends StatefulWidget {
   int num, res;
   String client, etat, date1;
   double total, remise, montant;
-  ModifieLignFact(
-      {Key? key,
-      required this.id,
-      required this.titre,
-      required this.commande,
-      required this.num,
-      required this.client,
-      required this.date1,
-      required this.etat,
-      required this.montant,
-      required this.remise,
-      required this.total,
-      required this.res,
-      required this.page})
-      : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  ModifieLignFact({
+    Key? key,
+    required this.id,
+    required this.titre,
+    required this.commande,
+    required this.num,
+    required this.client,
+    required this.date1,
+    required this.etat,
+    required this.montant,
+    required this.remise,
+    required this.total,
+    required this.res,
+    required this.page,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<ModifieLignFact> createState() => _ModifieLignFactState();
@@ -73,6 +85,15 @@ class _ModifieLignFactState extends State<ModifieLignFact> {
         backgroundColor: Colors.orange,
         title: Text("Modifier Ligne de facture ${widget.num}"),
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(30),
@@ -188,17 +209,24 @@ class _ModifieLignFactState extends State<ModifieLignFact> {
                           }
 
                           Get.to(() => UpdateFacture(
-                                id: widget.id,
-                                titre: widget.titre,
-                                client: widget.client,
-                                etat: widget.etat,
-                                total: widget.total,
-                                listfact: widget.commande,
-                                montant: widget.montant,
-                                date1: widget.date1,
-                                res: widget.res,
-                                page: widget.page,
-                              ));
+                              id: widget.id,
+                              titre: widget.titre,
+                              tab: widget.commande,
+                              etat: widget.etat,
+                              res: widget.res,
+                              client: widget.client,
+                              page: widget.page,
+                              total: widget.total,
+                              montant: widget.montant,
+                              date1: widget.date1,
+                              idus: widget.idus,
+                              url: widget.url,
+                              telus: widget.telus,
+                              adrus: widget.adrus,
+                              accesus: widget.accesus,
+                              nameus: widget.nameus,
+                              emailus: widget.emailus,
+                              roleus: widget.roleus));
                         }
                       },
                       child: const Text(

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../widget/NavBottom.dart';
 import 'edit_article.dart';
 
 class ArticleDetail extends StatefulWidget {
@@ -10,23 +11,34 @@ class ArticleDetail extends StatefulWidget {
   double prix_dachat, prix_de_vente;
   String image;
   int qt, taxes_a_la_vente;
-  ArticleDetail(
-      {Key? key,
-      required this.id,
-      required this.nom,
-      required this.type,
-      required this.role,
-      required this.cat,
-      required this.data,
-      required this.reference_interne,
-      required this.taxes_a_la_vente,
-      required this.prix_dachat,
-      required this.sale_prix,
-      required this.prix_de_vente,
-      required this.unite,
-      required this.image,
-      required this.qt})
-      : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  ArticleDetail({
+    Key? key,
+    required this.id,
+    required this.nom,
+    required this.type,
+    required this.role,
+    required this.cat,
+    required this.data,
+    required this.reference_interne,
+    required this.taxes_a_la_vente,
+    required this.prix_dachat,
+    required this.sale_prix,
+    required this.prix_de_vente,
+    required this.unite,
+    required this.image,
+    required this.qt,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<ArticleDetail> createState() => _ArticleDetailState();
@@ -72,21 +84,28 @@ class _ArticleDetailState extends State<ArticleDetail> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => EditArticle(
-                              id: widget.id,
-                              nom: widget.nom,
-                              type: widget.type,
-                              role: widget.role,
-                              cat: widget.cat,
-                              data: widget.data,
-                              reference_interne: widget.reference_interne,
-                              taxes_a_la_vente: widget.taxes_a_la_vente,
-                              prix_dachat: widget.prix_dachat,
-                              sale_prix: widget.sale_prix,
-                              prix_de_vente: widget.prix_de_vente,
-                              unite: widget.unite,
-                              image: widget.image,
-                              qt: widget.qt,
-                            )));
+                            id: widget.id,
+                            nom: widget.nom,
+                            type: widget.type,
+                            role: widget.role,
+                            cat: widget.cat,
+                            data: widget.data,
+                            reference_interne: widget.reference_interne,
+                            taxes_a_la_vente: widget.taxes_a_la_vente,
+                            prix_dachat: widget.prix_dachat,
+                            sale_prix: widget.sale_prix,
+                            prix_de_vente: widget.prix_de_vente,
+                            unite: widget.unite,
+                            image: widget.image,
+                            qt: widget.qt,
+                            idus: widget.idus,
+                            url: widget.url,
+                            telus: widget.telus,
+                            adrus: widget.adrus,
+                            accesus: widget.accesus,
+                            nameus: widget.nameus,
+                            emailus: widget.emailus,
+                            roleus: widget.roleus)));
               },
               child: Text(
                 "Modifier".toUpperCase(),
@@ -98,6 +117,15 @@ class _ArticleDetailState extends State<ArticleDetail> {
           ),
         ],
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: Stack(alignment: Alignment.center, children: [
         ListView(
           children: [

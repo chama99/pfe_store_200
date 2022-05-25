@@ -3,12 +3,26 @@
 import 'package:chama_projet/services/article.dart';
 
 import 'package:flutter/material.dart';
+import '../widget/NavBottom.dart';
 import '../widget/boitedialogue.dart';
 import 'ArticleDetail.dart';
 import 'cree_article.dart';
 
 class listArticle extends StatefulWidget {
-  const listArticle({Key? key}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  listArticle({
+    Key? key,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   _listArticleState createState() => _listArticleState();
@@ -57,7 +71,15 @@ class _listArticleState extends State<listArticle> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CreeArticlePage()));
+                          builder: (context) => CreeArticlePage(
+                              idus: widget.idus,
+                              url: widget.url,
+                              telus: widget.telus,
+                              adrus: widget.adrus,
+                              accesus: widget.accesus,
+                              nameus: widget.nameus,
+                              emailus: widget.emailus,
+                              roleus: widget.roleus)));
                 },
                 child: Text(
                   "Créer".toUpperCase(),
@@ -70,6 +92,15 @@ class _listArticleState extends State<listArticle> {
           ],
           backgroundColor: Colors.orange,
         ),
+        bottomNavigationBar: NavBottom(
+            tel: widget.telus,
+            adr: widget.adrus,
+            id: widget.idus,
+            email: widget.emailus,
+            name: widget.nameus,
+            acces: widget.accesus,
+            url: widget.url,
+            role: widget.roleus),
         body: Container(
           margin: const EdgeInsets.all(10),
           child: Column(
@@ -110,7 +141,15 @@ class _listArticleState extends State<listArticle> {
                           Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
-                                  pageBuilder: (a, b, c) => const listArticle(),
+                                  pageBuilder: (a, b, c) => listArticle(
+                                      idus: widget.idus,
+                                      url: widget.url,
+                                      telus: widget.telus,
+                                      adrus: widget.adrus,
+                                      accesus: widget.accesus,
+                                      nameus: widget.nameus,
+                                      emailus: widget.emailus,
+                                      roleus: widget.roleus),
                                   transitionDuration:
                                       const Duration(seconds: 0)));
                           // ignore: void_checks
@@ -127,40 +166,43 @@ class _listArticleState extends State<listArticle> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => ArticleDetail(
-                                                id: userArticleList[index]
-                                                    ['id_art'],
-                                                nom: userArticleList[index]
-                                                    ['nom_art'],
-                                                type: userArticleList[index]
-                                                    ['type_art'],
-                                                role: userArticleList[index]
-                                                    ['role_art'],
-                                                cat: userArticleList[index]
-                                                    ['cat'],
-                                                data: userArticleList[index]
-                                                    ['code_a_barre'],
-                                                reference_interne:
-                                                    userArticleList[index]
-                                                        ['reference_interne'],
-                                                taxes_a_la_vente:
-                                                    userArticleList[index]
-                                                        ['taxes_a_la_vente'],
-                                                prix_dachat:
-                                                    userArticleList[index]
-                                                        ['prix_dachat'],
-                                                sale_prix:
-                                                    userArticleList[index]
-                                                        ['sale_prix'],
-                                                prix_de_vente:
-                                                    userArticleList[index]
-                                                        ['prix_de_vente'],
-                                                unite: userArticleList[index]
-                                                    ['unite'],
-                                                image: userArticleList[index]
-                                                    ['image'],
-                                                qt: userArticleList[index]
-                                                    ["Quantité"],
-                                              )));
+                                              id: userArticleList[index]
+                                                  ['id_art'],
+                                              nom: userArticleList[index]
+                                                  ['nom_art'],
+                                              type: userArticleList[index]
+                                                  ['type_art'],
+                                              role: userArticleList[index]
+                                                  ['role_art'],
+                                              cat: userArticleList[index]
+                                                  ['cat'],
+                                              data: userArticleList[index]
+                                                  ['code_a_barre'],
+                                              reference_interne:
+                                                  userArticleList[index]
+                                                      ['reference_interne'],
+                                              taxes_a_la_vente:
+                                                  userArticleList[index]
+                                                      ['taxes_a_la_vente'],
+                                              prix_dachat: userArticleList[index]
+                                                  ['prix_dachat'],
+                                              sale_prix: userArticleList[index]
+                                                  ['sale_prix'],
+                                              prix_de_vente:
+                                                  userArticleList[index]
+                                                      ['prix_de_vente'],
+                                              unite: userArticleList[index]
+                                                  ['unite'],
+                                              image: userArticleList[index]['image'],
+                                              qt: userArticleList[index]["Quantité"],
+                                              idus: widget.idus,
+                                              url: widget.url,
+                                              telus: widget.telus,
+                                              adrus: widget.adrus,
+                                              accesus: widget.accesus,
+                                              nameus: widget.nameus,
+                                              emailus: widget.emailus,
+                                              roleus: widget.roleus)));
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),

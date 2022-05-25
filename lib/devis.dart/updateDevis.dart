@@ -581,7 +581,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                 ),
               ),
               SizedBox(
-                width: 500,
+                width: 370,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     maximumSize: const Size(double.infinity, 50),
@@ -593,7 +593,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                   ),
                   onPressed: () {
                     // Validate returns true if the form is valid, otherwise false.
-
+                    DateTime dataTime = DateTime.parse(widget.date);
                     Devis().updateDevis(
                         widget.id,
                         widget.client,
@@ -620,7 +620,7 @@ class _UpdateDevisState extends State<UpdateDevis> {
                           widget.titre,
                           widget.client,
                           "Brouillon",
-                          widget.date,
+                          dataTime,
                           (calculMontat() * (1 + 0.2)) *
                               (1 - (widget.remise / 100)),
                           widget.commande,

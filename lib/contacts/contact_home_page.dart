@@ -5,11 +5,25 @@ import 'package:chama_projet/widget/boitedialogue.dart';
 
 import 'package:flutter/material.dart';
 
+import '../widget/NavBottom.dart';
 import 'ContactDetailler.dart';
 import 'creer_contact.dart';
 
 class listContact extends StatefulWidget {
-  const listContact({Key? key}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  listContact({
+    Key? key,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   _listContactState createState() => _listContactState();
@@ -27,7 +41,7 @@ class _listContactState extends State<listContact> {
   }
 
   fetchDatabaseList() async {
-    dynamic resultant = await Contact().getContactsList();
+    dynamic resultant = await Client().getClientsList();
 
     if (resultant == null) {
       // ignore: avoid_print
@@ -58,7 +72,15 @@ class _listContactState extends State<listContact> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CreeContactPage()));
+                          builder: (context) => CreeContactPage(
+                              idus: widget.idus,
+                              url: widget.url,
+                              telus: widget.telus,
+                              adrus: widget.adrus,
+                              accesus: widget.accesus,
+                              nameus: widget.nameus,
+                              emailus: widget.emailus,
+                              roleus: widget.roleus)));
                 },
                 child: Text(
                   "Créer".toUpperCase(),
@@ -71,6 +93,15 @@ class _listContactState extends State<listContact> {
           ],
           backgroundColor: Colors.orange,
         ),
+        bottomNavigationBar: NavBottom(
+            tel: widget.telus,
+            adr: widget.adrus,
+            id: widget.idus,
+            email: widget.emailus,
+            name: widget.nameus,
+            acces: widget.accesus,
+            url: widget.url,
+            role: widget.roleus),
         body: Container(
           margin: const EdgeInsets.all(10),
           child: Column(
@@ -111,7 +142,15 @@ class _listContactState extends State<listContact> {
                           Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
-                                  pageBuilder: (a, b, c) => const listContact(),
+                                  pageBuilder: (a, b, c) => listContact(
+                                      idus: widget.idus,
+                                      url: widget.url,
+                                      telus: widget.telus,
+                                      adrus: widget.adrus,
+                                      accesus: widget.accesus,
+                                      nameus: widget.nameus,
+                                      emailus: widget.emailus,
+                                      roleus: widget.roleus),
                                   transitionDuration:
                                       const Duration(seconds: 0)));
                           // ignore: void_checks
@@ -128,19 +167,25 @@ class _listContactState extends State<listContact> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => ContactDetail(
-                                                id: userContactList[index]
-                                                    ['id'],
-                                                image: userContactList[index]
-                                                    ['image'],
-                                                email: userContactList[index]
-                                                    ['email'],
-                                                nom: userContactList[index]
-                                                    ['name'],
-                                                tel: userContactList[index]
-                                                    ['portable professionnel'],
-                                                adresse: userContactList[index]
-                                                    ['Adresse professionnelle'],
-                                              )));
+                                              id: userContactList[index]['id'],
+                                              image: userContactList[index]
+                                                  ['image'],
+                                              email: userContactList[index]
+                                                  ['email'],
+                                              nom: userContactList[index]
+                                                  ['name'],
+                                              tel: userContactList[index]
+                                                  ['portable professionnel'],
+                                              adresse: userContactList[index]
+                                                  ['Adresse professionnelle'],
+                                              idus: widget.idus,
+                                              url: widget.url,
+                                              telus: widget.telus,
+                                              adrus: widget.adrus,
+                                              accesus: widget.accesus,
+                                              nameus: widget.nameus,
+                                              emailus: widget.emailus,
+                                              roleus: widget.roleus)));
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),

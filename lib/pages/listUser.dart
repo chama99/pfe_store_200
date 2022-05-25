@@ -168,17 +168,23 @@ class _ListUserState extends State<ListUser> {
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               UtilisateurDetail(
-                                                id: user['IdUser'],
-                                                idus: widget.idus,
-                                                image: user['image'],
-                                                email: user['email'],
-                                                nom: user['name'],
-                                                mdp: user['mot de passe'],
-                                                role: user['role'],
-                                                acces: user['acces'],
-                                                tel: user['telephone'],
-                                                adr: user['adresse'],
-                                              )));
+                                                  id: user['IdUser'],
+                                                  idus: widget.idus,
+                                                  image: user['image'],
+                                                  email: user['email'],
+                                                  nom: user['name'],
+                                                  mdp: user['mot de passe'],
+                                                  role: user['role'],
+                                                  acces: user['acces'],
+                                                  tel: user['telephone'],
+                                                  adr: user['adresse'],
+                                                  url: widget.url,
+                                                  telus: widget.tel,
+                                                  adrus: widget.adr,
+                                                  accesus: widget.acces,
+                                                  nameus: widget.name,
+                                                  emailus: widget.email,
+                                                  roleus: widget.role)));
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),

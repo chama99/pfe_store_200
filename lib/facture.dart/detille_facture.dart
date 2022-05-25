@@ -18,19 +18,30 @@ class DetailFacture extends StatefulWidget {
   double montant;
   int res;
   double total;
-  DetailFacture(
-      {Key? key,
-      required this.id,
-      required this.titre,
-      required this.client,
-      required this.etat,
-      required this.date1,
-      required this.total,
-      required this.listfact,
-      required this.montant,
-      required this.res,
-      required this.page})
-      : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  DetailFacture({
+    Key? key,
+    required this.id,
+    required this.titre,
+    required this.client,
+    required this.etat,
+    required this.date1,
+    required this.total,
+    required this.listfact,
+    required this.montant,
+    required this.res,
+    required this.page,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<DetailFacture> createState() => _DetailFactureState();
@@ -50,17 +61,24 @@ class _DetailFactureState extends State<DetailFacture> {
               onTap: () {
                 if (widget.etat == "Brouillon" || widget.etat == "Avoir") {
                   Get.to(() => UpdateFacture(
-                        id: widget.id,
-                        titre: widget.titre,
-                        client: widget.client,
-                        etat: widget.etat,
-                        total: widget.total,
-                        listfact: widget.listfact,
-                        montant: widget.montant,
-                        date1: widget.date1,
-                        res: widget.res,
-                        page: widget.page,
-                      ));
+                      id: widget.id,
+                      titre: widget.titre,
+                      tab: widget.listfact,
+                      etat: widget.etat,
+                      res: widget.res,
+                      client: widget.client,
+                      page: widget.page,
+                      total: widget.total,
+                      montant: widget.montant,
+                      date1: widget.date1,
+                      idus: widget.idus,
+                      url: widget.url,
+                      telus: widget.telus,
+                      adrus: widget.adrus,
+                      accesus: widget.accesus,
+                      nameus: widget.nameus,
+                      emailus: widget.emailus,
+                      roleus: widget.roleus));
                 } else {
                   showToast("Ne peut pas modifier cette facture");
                 }

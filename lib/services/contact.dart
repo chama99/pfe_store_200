@@ -1,11 +1,11 @@
 import 'package:chama_projet/widget/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Contact {
+class Client {
   final CollectionReference client =
       FirebaseFirestore.instance.collection('clients');
 
-  Future getContactsList() async {
+  Future getClientsList() async {
     List itemsList = [];
 
     try {

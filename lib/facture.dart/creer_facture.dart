@@ -30,9 +30,23 @@ import 'package:path/path.dart';
 
 import '../services/employe.dart';
 import '../widget/InputDeco_design.dart';
+import '../widget/NavBottom.dart';
 
 class CreeFacturePage extends StatefulWidget {
-  const CreeFacturePage({Key? key}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  CreeFacturePage({
+    Key? key,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   _CreeFacturePageState createState() => _CreeFacturePageState();
@@ -53,6 +67,14 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
   XFile? imageFile;
+  final CollectionReference contactsCollection =
+      FirebaseFirestore.instance.collection('clients');
+  Future getData() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await contactsCollection.get();
+
+    return querySnapshot.docs.map((doc) => doc.data()).toList();
+  }
 
   final _formKey = GlobalKey<FormState>();
   final titre = TextEditingController();
@@ -72,6 +94,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
   StreamController<String> _streamController = StreamController();
 
   bool test = false;
+  List clients = [];
   @override
   void initState() {
     super.initState();
@@ -86,6 +109,11 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
         remisee = r;
       });
     });
+    getData().then((client) {
+      for (int i = 0; i < client.length; i++) {
+        clients.add(client[i]["name"]);
+      }
+    });
   }
 
   List userContactList = [];
@@ -94,20 +122,13 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
   List list = [];
   List fact = [];
   fetchDatabaseList() async {
-    dynamic resultant = await Contact().getContactsList();
     dynamic resultant2 = await CommandeFact().getCommList();
     dynamic resultf = await Facture().getFacturesList();
 
-    if (resultant == null) {
-      // ignore: avoid_print
-      print('Unable to retrieve');
-    } else {
-      setState(() {
-        userContactList = resultant;
-        commandeList = resultant2;
-        fact = resultf;
-      });
-    }
+    setState(() {
+      commandeList = resultant2;
+      fact = resultf;
+    });
   }
 
   addList() {
@@ -142,13 +163,30 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
         title: const Text("Créer Un Facture"),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: RefreshIndicator(
         onRefresh: () {
           Navigator.pushReplacement(
               context,
               PageRouteBuilder(
                   // ignore: prefer_const_constructors
-                  pageBuilder: (a, b, c) => CreeFacturePage(),
+                  pageBuilder: (a, b, c) => CreeFacturePage(
+                      idus: widget.idus,
+                      url: widget.url,
+                      telus: widget.telus,
+                      adrus: widget.adrus,
+                      accesus: widget.accesus,
+                      nameus: widget.nameus,
+                      emailus: widget.emailus,
+                      roleus: widget.roleus),
                   // ignore: prefer_const_constructors
                   transitionDuration: Duration(seconds: 0)));
           // ignore: void_checks
@@ -179,8 +217,15 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                                   child: InkWell(
                                     onTap: () {
                                       Get.to(() => LigneFacture(
-                                            titre: Contollertitre.text,
-                                          ));
+                                          titre: Contollertitre.text,
+                                          idus: widget.idus,
+                                          url: widget.url,
+                                          telus: widget.telus,
+                                          adrus: widget.adrus,
+                                          accesus: widget.accesus,
+                                          nameus: widget.nameus,
+                                          emailus: widget.emailus,
+                                          roleus: widget.roleus));
                                     },
                                     child: Container(
                                       margin: const EdgeInsets.all(10),
@@ -317,7 +362,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                                           client = newValue.toString();
                                         });
                                       },
-                                      items: userContactList.map((valueItem) {
+                                      items: clients.map((valueItem) {
                                         return DropdownMenuItem(
                                           value: valueItem,
                                           child: Text(valueItem),
@@ -534,45 +579,57 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                   ),
                 ),
               )),
+              SizedBox(
+                width: 370,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    maximumSize: const Size(double.infinity, 50),
+                    primary: Colors.indigo,
+                  ),
+                  child: const Text("Sauvgarder"),
+                  onPressed: () {
+                    // Validate returns true if the form is valid, otherwise false.
+                    if (_formKey.currentState!.validate()) {
+                      // ignore: prefer_adjacent_string_concatenation
+                      ch = "F" + "$number";
+                      addList();
+                      if (client != null) {
+                        if (etat != null) {
+                          Facture().addFacture(
+                              uuid,
+                              "Facture N° ${l + 1}",
+                              client,
+                              etat,
+                              dataTime,
+                              (calculMontat() * (1 + 0.2)) *
+                                  (1 - (remisee / 100)),
+                              list,
+                              remisee,
+                              calculMontat());
+                          CommandeFact().deleteCommde();
+                          Get.to(() => ListFacture(
+                              idus: widget.idus,
+                              url: widget.url,
+                              telus: widget.telus,
+                              adrus: widget.adrus,
+                              accesus: widget.accesus,
+                              nameus: widget.nameus,
+                              emailus: widget.emailus,
+                              roleus: widget.roleus));
+                        } else {
+                          showToast("veuillez sélectionner état ");
+                        }
+                      } else {
+                        showToast("veuillez sélectionner client ");
+                      }
+                      CommandeFact().deleteCommde();
+                    }
+                  },
+                ),
+              ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          maximumSize: const Size(double.infinity, 50),
-          primary: Colors.indigo,
-        ),
-        child: const Text("Sauvgarder"),
-        onPressed: () {
-          // Validate returns true if the form is valid, otherwise false.
-          if (_formKey.currentState!.validate()) {
-            // ignore: prefer_adjacent_string_concatenation
-            ch = "F" + "$number";
-            addList();
-            if (client != null) {
-              if (etat != null) {
-                Facture().addFacture(
-                    uuid,
-                    "Facture N° ${l + 1}",
-                    client,
-                    etat,
-                    dataTime,
-                    (calculMontat() * (1 + 0.2)) * (1 - (remisee / 100)),
-                    list,
-                    remisee,
-                    calculMontat());
-                CommandeFact().deleteCommde();
-                Get.to(() => const ListFacture());
-              } else {
-                showToast("veuillez sélectionner état ");
-              }
-            } else {
-              showToast("veuillez sélectionner client ");
-            }
-            CommandeFact().deleteCommde();
-          }
-        },
       ),
     );
   }

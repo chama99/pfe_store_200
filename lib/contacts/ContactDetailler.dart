@@ -2,10 +2,14 @@
 
 import 'package:flutter/material.dart';
 
+import '../widget/NavBottom.dart';
 import 'edit_contact.dart';
 
 class ContactDetail extends StatefulWidget {
   String email, nom, tel, adresse, image, id;
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
   ContactDetail({
     Key? key,
     required this.id,
@@ -14,6 +18,14 @@ class ContactDetail extends StatefulWidget {
     required this.nom,
     required this.tel,
     required this.adresse,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
   }) : super(key: key);
 
   @override
@@ -60,9 +72,16 @@ class _ContactDetailState extends State<ContactDetail> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => EditContact(
-                              nom: widget.nom,
-                              id: widget.id,
-                            )));
+                            nom: widget.nom,
+                            id: widget.id,
+                            idus: widget.idus,
+                            url: widget.url,
+                            telus: widget.telus,
+                            adrus: widget.adrus,
+                            accesus: widget.accesus,
+                            nameus: widget.nameus,
+                            emailus: widget.emailus,
+                            roleus: widget.roleus)));
               },
               child: Text(
                 "Modifier".toUpperCase(),
@@ -74,6 +93,15 @@ class _ContactDetailState extends State<ContactDetail> {
           ),
         ],
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: Stack(
         alignment: Alignment.center,
         children: [

@@ -18,11 +18,25 @@ import 'package:path/path.dart';
 
 import '../services/employe.dart';
 import '../widget/InputDeco_design.dart';
+import '../widget/NavBottom.dart';
 import '../widget/toast.dart';
 import 'listeEmployes.dart';
 
 class CreeEmployePage extends StatefulWidget {
-  const CreeEmployePage({Key? key}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  CreeEmployePage({
+    Key? key,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   _CreeEmployePageState createState() => _CreeEmployePageState();
@@ -107,13 +121,30 @@ class _CreeEmployePageState extends State<CreeEmployePage> {
         title: const Text("Créer Un Employé"),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: RefreshIndicator(
           onRefresh: () {
             Navigator.pushReplacement(
                 context,
                 PageRouteBuilder(
                     // ignore: prefer_const_constructors
-                    pageBuilder: (a, b, c) => CreeEmployePage(),
+                    pageBuilder: (a, b, c) => CreeEmployePage(
+                        idus: widget.idus,
+                        url: widget.url,
+                        telus: widget.telus,
+                        adrus: widget.adrus,
+                        accesus: widget.accesus,
+                        nameus: widget.nameus,
+                        emailus: widget.emailus,
+                        roleus: widget.roleus),
                     // ignore: prefer_const_constructors
                     transitionDuration: Duration(seconds: 0)));
             // ignore: void_checks
@@ -197,7 +228,15 @@ class _CreeEmployePageState extends State<CreeEmployePage> {
 
                                         clearText();
 
-                                        Get.to(() => const listEmploye());
+                                        Get.to(() => listEmploye(
+                                            idus: widget.idus,
+                                            url: widget.url,
+                                            telus: widget.telus,
+                                            adrus: widget.adrus,
+                                            accesus: widget.accesus,
+                                            nameus: widget.nameus,
+                                            emailus: widget.emailus,
+                                            roleus: widget.roleus));
                                       });
                                     }
                                   }

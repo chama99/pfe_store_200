@@ -378,8 +378,8 @@ class _CreerLivraisonState extends State<CreerLivraison> {
             addList();
             if (operation != null) {
               if (etat != null) {
-                Livraison().addLivraison(uuid, "Livraison N°$numl", operation,
-                    etat, dataTime, list, adresse.text);
+                Livraison().addLivraison(uuid, "Livraison N°${numl + 1}",
+                    operation, etat, dataTime, list, adresse.text);
 
                 Get.to(() => const ListLivraison());
               } else {

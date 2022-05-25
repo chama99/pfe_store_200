@@ -40,7 +40,7 @@ Future openDialog(context, id, mssg, ch) {
                     } else if (ch == "transfert") {
                       Transfert().deleteTransfert(id);
                     } else {
-                      Contact().deleteContact(id);
+                      Client().deleteContact(id);
                     }
                     Navigator.of(context).pop();
                   },

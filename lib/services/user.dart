@@ -145,15 +145,10 @@ class User {
     }
   }
 
-  Future<void> updateRoleUser(email, mdp, role, url, acces, name) {
+  Future<void> updateRoleUser(id, acces) {
     return user
-        .doc(email)
-        .set({
-          'name': name,
-          'email': email,
-          'mot de passe': mdp,
-          'role': role,
-          'image': url,
+        .doc(id)
+        .update({
           'acces': acces,
         })
         // ignore: avoid_print

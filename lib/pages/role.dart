@@ -2,9 +2,23 @@ import 'package:chama_projet/pages/ajoutRole.dart';
 import 'package:flutter/material.dart';
 
 import '../services/user.dart';
+import '../widget/NavBottom.dart';
 
 class Roles extends StatefulWidget {
-  const Roles({Key? key}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  Roles({
+    Key? key,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<Roles> createState() => _RolesState();
@@ -89,12 +103,29 @@ class _RolesState extends State<Roles> {
         title: const Text("Rôle"),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: RefreshIndicator(
         onRefresh: () {
           Navigator.pushReplacement(
               context,
               PageRouteBuilder(
-                  pageBuilder: (a, b, c) => const Roles(),
+                  pageBuilder: (a, b, c) => Roles(
+                      idus: widget.idus,
+                      url: widget.url,
+                      telus: widget.telus,
+                      adrus: widget.adrus,
+                      accesus: widget.accesus,
+                      nameus: widget.nameus,
+                      emailus: widget.emailus,
+                      roleus: widget.roleus),
                   transitionDuration: const Duration(seconds: 0)));
           // ignore: void_checks
           return Future.value(false);
@@ -188,17 +219,10 @@ class _RolesState extends State<Roles> {
                                                                 ['acces'];
                                                         listest.removeAt(j);
                                                         User().updateRoleUser(
-                                                            userTechList[i]
-                                                                ['email'],
-                                                            userTechList[i][
-                                                                'mot de passe'],
-                                                            userTechList[i]
-                                                                ['role'],
-                                                            userTechList[i]
-                                                                ['image'],
-                                                            listest,
-                                                            userTechList[i]
-                                                                ['name']);
+                                                          userTechList[i]
+                                                              ['IdUser'],
+                                                          listest,
+                                                        );
                                                         Navigator.pop(context);
                                                       },
                                                       child: const Text(
@@ -232,19 +256,23 @@ class _RolesState extends State<Roles> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     AjoutAcces(
-                                                      name: userTechList[i]
-                                                          ['name'],
-                                                      email: userTechList[i]
-                                                          ['email'],
-                                                      image: userTechList[i]
-                                                          ['image'],
-                                                      role: userTechList[i]
-                                                          ['role'],
-                                                      mp: userTechList[i]
-                                                          ['mot de passe'],
-                                                      acces: userTechList[i]
-                                                          ['acces'],
-                                                    )));
+                                                        name: userTechList[i]
+                                                            ['name'],
+                                                        id:
+                                                            userTechList[i]
+                                                                ['IdUser'],
+                                                        acces:
+                                                            userTechList[i]
+                                                                ['acces'],
+                                                        idus: widget.idus,
+                                                        url: widget.url,
+                                                        telus: widget.telus,
+                                                        adrus: widget.adrus,
+                                                        accesus: widget.accesus,
+                                                        nameus: widget.nameus,
+                                                        emailus: widget.emailus,
+                                                        roleus:
+                                                            widget.roleus)));
                                       },
                                       child: const Icon(
                                         Icons.add,
@@ -299,17 +327,10 @@ class _RolesState extends State<Roles> {
                                                                 ['acces'];
                                                         listest.removeAt(j);
                                                         User().updateRoleUser(
-                                                            userCompList[i]
-                                                                ['email'],
-                                                            userCompList[i][
-                                                                'mot de passe'],
-                                                            userCompList[i]
-                                                                ['role'],
-                                                            userCompList[i]
-                                                                ['image'],
-                                                            listest,
-                                                            userCompList[i]
-                                                                ['name']);
+                                                          userCompList[i]
+                                                              ['IdUser'],
+                                                          listest,
+                                                        );
                                                         Navigator.pop(context);
                                                       },
                                                       child: const Text(
@@ -343,19 +364,23 @@ class _RolesState extends State<Roles> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     AjoutAcces(
-                                                      name: userCompList[i]
-                                                          ['name'],
-                                                      email: userCompList[i]
-                                                          ['email'],
-                                                      image: userCompList[i]
-                                                          ['image'],
-                                                      role: userCompList[i]
-                                                          ['role'],
-                                                      mp: userCompList[i]
-                                                          ['mot de passe'],
-                                                      acces: userCompList[i]
-                                                          ['acces'],
-                                                    )));
+                                                        name: userCompList[i]
+                                                            ['name'],
+                                                        id:
+                                                            userCompList[i]
+                                                                ['IdUser'],
+                                                        acces:
+                                                            userCompList[i]
+                                                                ['acces'],
+                                                        idus: widget.idus,
+                                                        url: widget.url,
+                                                        telus: widget.telus,
+                                                        adrus: widget.adrus,
+                                                        accesus: widget.accesus,
+                                                        nameus: widget.nameus,
+                                                        emailus: widget.emailus,
+                                                        roleus:
+                                                            widget.roleus)));
                                       },
                                       child: const Icon(
                                         Icons.add,
@@ -411,16 +436,8 @@ class _RolesState extends State<Roles> {
                                                         listest.removeAt(j);
                                                         User().updateRoleUser(
                                                             userProfilesList[i]
-                                                                ['email'],
-                                                            userProfilesList[i][
-                                                                'mot de passe'],
-                                                            userProfilesList[i]
-                                                                ['role'],
-                                                            userProfilesList[i]
-                                                                ['image'],
-                                                            listest,
-                                                            userProfilesList[i]
-                                                                ['name']);
+                                                                ['IdUser'],
+                                                            listest);
                                                         Navigator.pop(context);
                                                       },
                                                       child: const Text(
@@ -438,10 +455,10 @@ class _RolesState extends State<Roles> {
                                     ),
                                   ],
                                   Container(
-                                    margin: const EdgeInsets.all(20),
+                                    margin: const EdgeInsets.all(30),
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.orange[200],
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.orange,
                                     ),
                                     child: Row(
                                       children: [
@@ -453,31 +470,30 @@ class _RolesState extends State<Roles> {
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          AjoutAcces(
-                                                            name:
-                                                                userProfilesList[
-                                                                    i]['name'],
-                                                            email:
-                                                                userProfilesList[
-                                                                    i]['email'],
-                                                            image:
-                                                                userProfilesList[
-                                                                    i]['image'],
-                                                            role:
-                                                                userProfilesList[
-                                                                    i]['role'],
-                                                            mp: userProfilesList[
-                                                                    i][
-                                                                'mot de passe'],
-                                                            acces:
-                                                                userProfilesList[
-                                                                    i]['acces'],
-                                                          )));
+                                                      builder: (context) => AjoutAcces(
+                                                          id: userProfilesList[
+                                                              i]['IdUser'],
+                                                          acces:
+                                                              userProfilesList[
+                                                                  i]['acces'],
+                                                          name:
+                                                              userProfilesList[
+                                                                  i]['name'],
+                                                          idus: widget.idus,
+                                                          url: widget.url,
+                                                          telus: widget.telus,
+                                                          adrus: widget.adrus,
+                                                          accesus:
+                                                              widget.accesus,
+                                                          nameus: widget.nameus,
+                                                          emailus:
+                                                              widget.emailus,
+                                                          roleus:
+                                                              widget.roleus)));
                                             },
                                             child: const Icon(
                                               Icons.add,
-                                              color: Colors.indigo,
+                                              color: Colors.white,
                                             ),
                                           ),
                                         ),
@@ -487,7 +503,7 @@ class _RolesState extends State<Roles> {
                                             "Ajouter",
                                             style: TextStyle(
                                                 fontSize: 20,
-                                                color: Colors.indigo),
+                                                color: Colors.white),
                                           ),
                                         )
                                       ],

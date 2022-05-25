@@ -127,7 +127,17 @@ class _MenuAdminState extends State<MenuAdmin> {
               crossAxisCount: 3,
               children: <Widget>[
                 for (var x in widget.acces) ...[
-                  if (x == "Employés") ...[buildInputCardEmploye()],
+                  if (x == "Employés") ...[
+                    buildInputCardEmploye(
+                        widget.id,
+                        widget.name,
+                        widget.email,
+                        widget.url,
+                        widget.acces,
+                        widget.role,
+                        widget.tel,
+                        widget.adr)
+                  ],
                   if (x == "Achats") ...[buildInputCardAchat()],
                   if (x == "Devis") ...[
                     buildInputCardDevis(
@@ -140,9 +150,39 @@ class _MenuAdminState extends State<MenuAdmin> {
                         widget.tel,
                         widget.adr)
                   ],
-                  if (x == "Clients") ...[buildInputCardContact()],
-                  if (x == "Articles") ...[buildInputCardArtcile()],
-                  if (x == "Factures") ...[buildInputCardFacture()],
+                  if (x == "Clients") ...[
+                    buildInputCardContact(
+                        widget.id,
+                        widget.name,
+                        widget.email,
+                        widget.url,
+                        widget.acces,
+                        widget.role,
+                        widget.tel,
+                        widget.adr)
+                  ],
+                  if (x == "Articles") ...[
+                    buildInputCardArtcile(
+                        widget.id,
+                        widget.name,
+                        widget.email,
+                        widget.url,
+                        widget.acces,
+                        widget.role,
+                        widget.tel,
+                        widget.adr)
+                  ],
+                  if (x == "Factures") ...[
+                    buildInputCardFacture(
+                        widget.id,
+                        widget.name,
+                        widget.email,
+                        widget.url,
+                        widget.acces,
+                        widget.role,
+                        widget.tel,
+                        widget.adr)
+                  ],
                   if (x == "Utilisateurs") ...[
                     buildInputCardUser(
                         widget.id,
@@ -154,7 +194,17 @@ class _MenuAdminState extends State<MenuAdmin> {
                         widget.adr,
                         widget.tel)
                   ],
-                  if (x == "Applications") ...[buildInputCardRole()],
+                  if (x == "Applications") ...[
+                    buildInputCardRole(
+                        widget.id,
+                        widget.name,
+                        widget.email,
+                        widget.url,
+                        widget.acces,
+                        widget.role,
+                        widget.tel,
+                        widget.adr)
+                  ],
                   if (x == "Plan") ...[
                     buildInputCardPlan(widget.role, widget.email, widget.name)
                   ],

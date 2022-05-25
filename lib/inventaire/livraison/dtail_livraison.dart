@@ -47,7 +47,7 @@ class _LivraisonDetaileState extends State<LivraisonDetaile> {
                       etat: widget.etat,
                       date: widget.date));
                 } else {
-                  showToast("Ne peut pas modifier cette réception");
+                  showToast("Ne peut pas modifier cette livraison");
                 }
               },
               child: Text(

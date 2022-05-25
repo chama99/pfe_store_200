@@ -18,9 +18,23 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
 import '../widget/InputDeco_design.dart';
+import '../widget/NavBottom.dart';
 
 class CreeArticlePage extends StatefulWidget {
-  const CreeArticlePage({Key? key}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  CreeArticlePage({
+    Key? key,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   _CreeArticlePageState createState() => _CreeArticlePageState();
@@ -146,13 +160,30 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
         title: const Text("Créer Un Article"),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: RefreshIndicator(
         onRefresh: () {
           Navigator.pushReplacement(
               context,
               PageRouteBuilder(
                   // ignore: prefer_const_constructors
-                  pageBuilder: (a, b, c) => CreeArticlePage(),
+                  pageBuilder: (a, b, c) => CreeArticlePage(
+                      idus: widget.idus,
+                      url: widget.url,
+                      telus: widget.telus,
+                      adrus: widget.adrus,
+                      accesus: widget.accesus,
+                      nameus: widget.nameus,
+                      emailus: widget.emailus,
+                      roleus: widget.roleus),
                   // ignore: prefer_const_constructors
                   transitionDuration: Duration(seconds: 0)));
           // ignore: void_checks
@@ -484,70 +515,81 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                 ),
               ),
             )),
+            SizedBox(
+              width: 370,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Validate returns true if the form is valid, otherwise false.
+                  if (_formKey.currentState!.validate()) {
+                    if ((radio != null) &&
+                        (ch != null) &&
+                        (chh != null) &&
+                        (chhh != null)) {
+                      setState(() {
+                        nom = nomController.text;
+                        type = radio;
+                        role = ch;
+                        cat = chh;
+                        code_a_barre = data;
+                        reference_interne = reference_interneController.text;
+
+                        taxes_a_la_vente = taxes_a_la_venteController.text;
+                        prix_dachat = prix_dachatController.text;
+                        sale_prix = sale_prixController.text;
+                        prix_de_vente = prix_de_venteController.text;
+
+                        unite = chhh;
+                        if (imageFile == null) {
+                          Article().addArticle(
+                              nom,
+                              nom,
+                              type,
+                              role,
+                              cat,
+                              data,
+                              int.parse(reference_interne),
+                              int.parse(taxes_a_la_vente),
+                              double.parse(prix_dachat),
+                              int.parse(sale_prix),
+                              double.parse(prix_de_vente),
+                              unite,
+                              "http://www.ipsgroup.fr/wp-content/uploads/2013/12/default_image_01-1024x1024-1140x642.png",
+                              int.parse(quantite_controller.text));
+                        } else {
+                          uploadImage(nom);
+                        }
+
+                        clearText();
+                        ch = null;
+                        chh = null;
+                        chhh = null;
+                        radio = null;
+                        imageFile = null;
+                        Get.to(() => listArticle(
+                            idus: widget.idus,
+                            url: widget.url,
+                            telus: widget.telus,
+                            adrus: widget.adrus,
+                            accesus: widget.accesus,
+                            nameus: widget.nameus,
+                            emailus: widget.emailus,
+                            roleus: widget.roleus));
+                      });
+                    } else {
+                      showToast(
+                          "veuillez sélectionner un type darticle ou catégorie darticle ou unite de mesure ");
+                    }
+                  }
+                },
+                child: const Text(
+                  "Sauvegarder",
+                  style: TextStyle(fontSize: 18.0),
+                ),
+                style: ElevatedButton.styleFrom(primary: Colors.indigo),
+              ),
+            ),
           ],
         ),
-      ),
-      bottomNavigationBar: ElevatedButton(
-        onPressed: () {
-          // Validate returns true if the form is valid, otherwise false.
-          if (_formKey.currentState!.validate()) {
-            if ((radio != null) &&
-                (ch != null) &&
-                (chh != null) &&
-                (chhh != null)) {
-              setState(() {
-                nom = nomController.text;
-                type = radio;
-                role = ch;
-                cat = chh;
-                code_a_barre = data;
-                reference_interne = reference_interneController.text;
-
-                taxes_a_la_vente = taxes_a_la_venteController.text;
-                prix_dachat = prix_dachatController.text;
-                sale_prix = sale_prixController.text;
-                prix_de_vente = prix_de_venteController.text;
-
-                unite = chhh;
-                if (imageFile == null) {
-                  Article().addArticle(
-                      nom,
-                      nom,
-                      type,
-                      role,
-                      cat,
-                      data,
-                      int.parse(reference_interne),
-                      int.parse(taxes_a_la_vente),
-                      double.parse(prix_dachat),
-                      int.parse(sale_prix),
-                      double.parse(prix_de_vente),
-                      unite,
-                      "http://www.ipsgroup.fr/wp-content/uploads/2013/12/default_image_01-1024x1024-1140x642.png",
-                      int.parse(quantite_controller.text));
-                } else {
-                  uploadImage(nom);
-                }
-
-                clearText();
-                ch = null;
-                chh = null;
-                chhh = null;
-                radio = null;
-                imageFile = null;
-                Get.to(() => const listArticle());
-              });
-            } else {
-              showToast(
-                  "veuillez sélectionner un type darticle ou catégorie darticle ou unite de mesure ");
-            }
-          }
-        },
-        child: const Text(
-          "Sauvegarder",
-          style: TextStyle(fontSize: 18.0),
-        ),
-        style: ElevatedButton.styleFrom(primary: Colors.indigo),
       ),
     );
   }

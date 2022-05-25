@@ -10,13 +10,28 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
 import '../widget/InputDeco_design.dart';
+import '../widget/NavBottom.dart';
 import 'contact_home_page.dart';
 
 class EditContact extends StatefulWidget {
   final String nom, id;
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
   // ignore: prefer_const_constructors_in_immutables
-  EditContact({Key? key, required this.nom, required this.id})
-      : super(key: key);
+  EditContact({
+    Key? key,
+    required this.nom,
+    required this.id,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   _EditContactState createState() => _EditContactState();
@@ -44,6 +59,15 @@ class _EditContactState extends State<EditContact> {
         ),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: Form(
           key: _formKey,
           // Getting Specific Data by ID
@@ -184,13 +208,21 @@ class _EditContactState extends State<EditContact> {
                                 // Validate returns true if the form is valid, otherwise false.
                                 if (_formKey.currentState!.validate()) {
                                   if (imageFile == null) {
-                                    Contact().updateContact(widget.id, email,
+                                    Client().updateContact(widget.id, email,
                                         nom, tel, adresse, etiquette, url);
                                   } else {
                                     uploadImage(email, widget.nom, tel, adresse,
                                         type, etiquette);
                                   }
-                                  Get.to(() => const listContact());
+                                  Get.to(() => listContact(
+                                      idus: widget.idus,
+                                      url: widget.url,
+                                      telus: widget.telus,
+                                      adrus: widget.adrus,
+                                      accesus: widget.accesus,
+                                      nameus: widget.nameus,
+                                      emailus: widget.emailus,
+                                      roleus: widget.roleus));
                                 }
                               },
                               child: const Text(
@@ -272,7 +304,7 @@ class _EditContactState extends State<EditContact> {
       UploadTask uploadTask = ref.putFile(File(imageFile!.path));
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
-        Contact().updateContact(
+        Client().updateContact(
             widget.id, email, nom, tel, adresse, etiquette, uploadPath);
       });
     } catch (e) {

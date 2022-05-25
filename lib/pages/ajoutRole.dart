@@ -5,27 +5,30 @@ import 'package:chama_projet/services/user.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../widget/NavBottom.dart';
 import '../widget/toast.dart';
 
 class AjoutAcces extends StatefulWidget {
-  String name, email;
+  String id, name;
+  String emailus, nameus, url, roleus, adrus, telus, idus;
 
-  String image;
-
-  String role;
-
-  String mp;
+  List accesus;
   List acces;
 
-  AjoutAcces(
-      {Key? key,
-      required this.name,
-      required this.email,
-      required this.image,
-      required this.role,
-      required this.mp,
-      required this.acces})
-      : super(key: key);
+  AjoutAcces({
+    Key? key,
+    required this.id,
+    required this.acces,
+    required this.name,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<AjoutAcces> createState() => _AjoutAccesState();
@@ -66,6 +69,15 @@ class _AjoutAccesState extends State<AjoutAcces> {
         title: Text("Utilisateur / ${widget.name}"),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: Container(
         margin: const EdgeInsets.all(20),
         child: SingleChildScrollView(
@@ -404,9 +416,16 @@ class _AjoutAccesState extends State<AjoutAcces> {
                       for (var ch in roleList) {
                         widget.acces.add(ch);
                       }
-                      User().updateRoleUser(widget.email, widget.mp,
-                          widget.role, widget.image, widget.acces, widget.name);
-                      Get.to(() => const Roles());
+                      User().updateRoleUser(widget.id, widget.acces);
+                      Get.to(() => Roles(
+                          idus: widget.idus,
+                          url: widget.url,
+                          telus: widget.telus,
+                          adrus: widget.adrus,
+                          accesus: widget.accesus,
+                          nameus: widget.nameus,
+                          emailus: widget.emailus,
+                          roleus: widget.roleus));
                     },
                     child: const Text(
                       "Ajouter",

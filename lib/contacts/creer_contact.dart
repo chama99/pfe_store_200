@@ -21,10 +21,24 @@ import 'package:path/path.dart';
 
 import '../services/employe.dart';
 import '../widget/InputDeco_design.dart';
+import '../widget/NavBottom.dart';
 import '../widget/toast.dart';
 
 class CreeContactPage extends StatefulWidget {
-  const CreeContactPage({Key? key}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  CreeContactPage({
+    Key? key,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   _CreeContactPageState createState() => _CreeContactPageState();
@@ -40,7 +54,7 @@ class _CreeContactPageState extends State<CreeContactPage> {
   }
 
   fetchDatabaseList() async {
-    dynamic resultant = await Contact().getContactListByNom();
+    dynamic resultant = await Client().getContactListByNom();
 
     if (resultant == null) {
       // ignore: avoid_print
@@ -120,13 +134,30 @@ class _CreeContactPageState extends State<CreeContactPage> {
           title: const Text("Créer Un Client"),
           backgroundColor: Colors.orange,
         ),
+        bottomNavigationBar: NavBottom(
+            tel: widget.telus,
+            adr: widget.adrus,
+            id: widget.idus,
+            email: widget.emailus,
+            name: widget.nameus,
+            acces: widget.accesus,
+            url: widget.url,
+            role: widget.roleus),
         body: RefreshIndicator(
           onRefresh: () {
             Navigator.pushReplacement(
                 context,
                 PageRouteBuilder(
                     // ignore: prefer_const_constructors
-                    pageBuilder: (a, b, c) => CreeContactPage(),
+                    pageBuilder: (a, b, c) => CreeContactPage(
+                        idus: widget.idus,
+                        url: widget.url,
+                        telus: widget.telus,
+                        adrus: widget.adrus,
+                        accesus: widget.accesus,
+                        nameus: widget.nameus,
+                        emailus: widget.emailus,
+                        roleus: widget.roleus),
                     // ignore: prefer_const_constructors
                     transitionDuration: Duration(seconds: 0)));
             // ignore: void_checks
@@ -291,7 +322,7 @@ class _CreeContactPageState extends State<CreeContactPage> {
 
                                         etiquette = etiquettetroller.text;
                                         if (imageFile == null) {
-                                          Contact().addContact(
+                                          Client().addContact(
                                               uuid,
                                               email,
                                               nom,
@@ -306,7 +337,15 @@ class _CreeContactPageState extends State<CreeContactPage> {
                                         clearText();
                                         radio = null;
                                         imageFile = null;
-                                        Get.to(() => const listContact());
+                                        Get.to(() => listContact(
+                                            idus: widget.idus,
+                                            url: widget.url,
+                                            telus: widget.telus,
+                                            adrus: widget.adrus,
+                                            accesus: widget.accesus,
+                                            nameus: widget.nameus,
+                                            emailus: widget.emailus,
+                                            roleus: widget.roleus));
                                       });
                                     } else {
                                       showToast("Nom de contact déja existé");
@@ -391,7 +430,7 @@ class _CreeContactPageState extends State<CreeContactPage> {
       UploadTask uploadTask = ref.putFile(File(imageFile!.path));
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
-        Contact().addContact(uuid, email, nom, tel, adressee.text,
+        Client().addContact(uuid, email, nom, tel, adressee.text,
             etiquettetroller.text, uploadPath);
       });
     } catch (e) {

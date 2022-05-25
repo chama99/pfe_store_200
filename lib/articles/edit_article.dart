@@ -13,6 +13,7 @@ import 'package:path/path.dart';
 
 import '../services/article.dart';
 import '../widget/InputDeco_design.dart';
+import '../widget/NavBottom.dart';
 
 class EditArticle extends StatefulWidget {
   String id, nom, type, role, cat, data, unite;
@@ -21,6 +22,9 @@ class EditArticle extends StatefulWidget {
   String image;
   int qt;
   int taxes_a_la_vente;
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
   EditArticle({
     Key? key,
     required this.id,
@@ -37,6 +41,14 @@ class EditArticle extends StatefulWidget {
     required this.unite,
     required this.image,
     required this.qt,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
   }) : super(key: key);
 
   @override
@@ -67,223 +79,246 @@ class _EditContactState extends State<EditArticle> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Articles / ${widget.nom}",
-            style: const TextStyle(
-              color: Colors.white,
-            ),
+      appBar: AppBar(
+        title: Text(
+          "Articles / ${widget.nom}",
+          style: const TextStyle(
+            color: Colors.white,
           ),
-          backgroundColor: Colors.orange,
         ),
-        body: Form(
-          key: _formKey,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-              child: ListView(
-                children: [
-                  Center(
-                    child: Stack(children: <Widget>[
+        backgroundColor: Colors.orange,
+      ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
+      body: Column(
+        children: [
+          Expanded(
+            child: Form(
+              key: _formKey,
+              child: Center(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                  child: ListView(
+                    children: [
+                      Center(
+                        child: Stack(children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              radius: 60.0,
+                              // ignore: unnecessary_null_comparison
+                              backgroundImage: imageFile == null
+                                  ? NetworkImage(widget.image) as ImageProvider
+                                  : FileImage(
+                                      File(imageFile!.path),
+                                    ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 25.0,
+                            right: 15.0,
+                            child: InkWell(
+                              onTap: () {
+                                showModalBottomSheet(
+                                    context: context,
+                                    builder: ((builder) => bottomSheet()));
+                              },
+                              child: const Icon(
+                                Icons.edit,
+                                color: Colors.orange,
+                                size: 28.0,
+                              ),
+                            ),
+                          )
+                        ]),
+                      ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CircleAvatar(
-                          radius: 60.0,
-                          // ignore: unnecessary_null_comparison
-                          backgroundImage: imageFile == null
-                              ? NetworkImage(widget.image) as ImageProvider
-                              : FileImage(
-                                  File(imageFile!.path),
-                                ),
+                        padding: const EdgeInsets.only(
+                            bottom: 20, left: 1, right: 1, top: 10),
+                        child: DropdownButton(
+                          dropdownColor: Colors.white,
+                          icon: const Padding(
+                            padding: EdgeInsets.only(right: 1),
+                            child: Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.orange,
+                            ),
+                          ),
+                          style: const TextStyle(
+                              fontSize: 20, color: Colors.black),
+                          iconSize: 40,
+                          value: widget.role,
+                          onChanged: (newValue) {
+                            setState(() {
+                              widget.role = newValue.toString();
+                            });
+                          },
+                          items: listItem.map((valueItem) {
+                            return DropdownMenuItem(
+                              value: valueItem,
+                              child: Text(valueItem),
+                            );
+                          }).toList(),
                         ),
                       ),
-                      Positioned(
-                        bottom: 25.0,
-                        right: 15.0,
-                        child: InkWell(
-                          onTap: () {
-                            showModalBottomSheet(
-                                context: context,
-                                builder: ((builder) => bottomSheet()));
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            bottom: 20, left: 0, right: 0, top: 1),
+                        child: DropdownButton(
+                          dropdownColor: Colors.white,
+                          icon: const Padding(
+                            padding: EdgeInsets.only(left: 1),
+                            child: Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.orange,
+                            ),
+                          ),
+                          style: const TextStyle(
+                              fontSize: 20, color: Colors.black),
+                          iconSize: 40,
+                          value: widget.cat,
+                          onChanged: (newValue) {
+                            setState(() {
+                              widget.cat = newValue.toString();
+                            });
                           },
-                          child: const Icon(
-                            Icons.edit,
-                            color: Colors.orange,
-                            size: 28.0,
+                          items: listItem1.map((valueItem) {
+                            return DropdownMenuItem(
+                              value: valueItem,
+                              child: Text(valueItem),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: TextFormField(
+                          initialValue: widget.qt.toString(),
+                          autofocus: false,
+                          onChanged: (value) => widget.qt = int.parse(value),
+                          decoration: buildInputDecoration(
+                            Icons.web_stories,
+                            "Quantité",
+                            color: Colors.white,
                           ),
                         ),
-                      )
-                    ]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        bottom: 20, left: 1, right: 1, top: 10),
-                    child: DropdownButton(
-                      dropdownColor: Colors.white,
-                      icon: const Padding(
-                        padding: EdgeInsets.only(right: 1),
-                        child: Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.orange,
-                        ),
                       ),
-                      style: const TextStyle(fontSize: 20, color: Colors.black),
-                      iconSize: 40,
-                      value: widget.role,
-                      onChanged: (newValue) {
-                        setState(() {
-                          widget.role = newValue.toString();
-                        });
-                      },
-                      items: listItem.map((valueItem) {
-                        return DropdownMenuItem(
-                          value: valueItem,
-                          child: Text(valueItem),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        bottom: 20, left: 0, right: 0, top: 1),
-                    child: DropdownButton(
-                      dropdownColor: Colors.white,
-                      icon: const Padding(
-                        padding: EdgeInsets.only(left: 1),
-                        child: Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.orange,
-                        ),
-                      ),
-                      style: const TextStyle(fontSize: 20, color: Colors.black),
-                      iconSize: 40,
-                      value: widget.cat,
-                      onChanged: (newValue) {
-                        setState(() {
-                          widget.cat = newValue.toString();
-                        });
-                      },
-                      items: listItem1.map((valueItem) {
-                        return DropdownMenuItem(
-                          value: valueItem,
-                          child: Text(valueItem),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: TextFormField(
-                      initialValue: widget.qt.toString(),
-                      autofocus: false,
-                      onChanged: (value) => widget.qt = int.parse(value),
-                      decoration: buildInputDecoration(
-                        Icons.web_stories,
-                        "Quantité",
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: TextFormField(
-                      initialValue: "${widget.taxes_a_la_vente}",
-                      autofocus: false,
-                      onChanged: (value) =>
-                          widget.taxes_a_la_vente = int.parse(value),
-                      decoration: buildInputDecoration(
-                        Icons.monetization_on,
-                        "taxes à la vente",
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: TextFormField(
-                      initialValue: "${widget.sale_prix}",
-                      autofocus: false,
-                      onChanged: (value) => widget.sale_prix = int.parse(value),
-                      decoration: buildInputDecoration(
-                        Icons.monetization_on,
-                        "sale prix",
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: TextFormField(
-                      initialValue: "${widget.prix_de_vente}",
-                      autofocus: false,
-                      onChanged: (value) =>
-                          widget.prix_de_vente = double.parse(value),
-                      decoration: buildInputDecoration(
-                        Icons.monetization_on,
-                        "prix de vente",
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            // Validate returns true if the form is valid, otherwise false.
-                            if (_formKey.currentState!.validate()) {
-                              if (imageFile == null) {
-                                Article().updateArticle(
-                                    widget.id,
-                                    widget.nom,
-                                    widget.type,
-                                    widget.role,
-                                    widget.cat,
-                                    widget.data,
-                                    widget.reference_interne,
-                                    widget.taxes_a_la_vente,
-                                    widget.prix_dachat,
-                                    widget.sale_prix,
-                                    widget.prix_de_vente,
-                                    widget.unite,
-                                    widget.image,
-                                    widget.qt);
-                              } else {
-                                uploadImage(
-                                  widget.id,
-                                  widget.nom,
-                                  widget.type,
-                                  widget.role,
-                                  widget.cat,
-                                  widget.data,
-                                  widget.reference_interne,
-                                  widget.taxes_a_la_vente,
-                                  widget.prix_dachat,
-                                  widget.sale_prix,
-                                  widget.prix_de_vente,
-                                  widget.unite,
-                                );
-                              }
-                              // Get.to(() => const listArticle());
-                              Get.to(() => const listArticle());
-                            }
-                          },
-                          child: const Text(
-                            "Sauvegarder",
-                            style: TextStyle(fontSize: 18.0),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: TextFormField(
+                          initialValue: "${widget.taxes_a_la_vente}",
+                          autofocus: false,
+                          onChanged: (value) =>
+                              widget.taxes_a_la_vente = int.parse(value),
+                          decoration: buildInputDecoration(
+                            Icons.monetization_on,
+                            "taxes à la vente",
+                            color: Colors.white,
                           ),
-                          style:
-                              ElevatedButton.styleFrom(primary: Colors.orange),
                         ),
-                      ],
-                    ),
-                  )
-                ],
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: TextFormField(
+                          initialValue: "${widget.sale_prix}",
+                          autofocus: false,
+                          onChanged: (value) =>
+                              widget.sale_prix = int.parse(value),
+                          decoration: buildInputDecoration(
+                            Icons.monetization_on,
+                            "sale prix",
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: TextFormField(
+                          initialValue: "${widget.prix_de_vente}",
+                          autofocus: false,
+                          onChanged: (value) =>
+                              widget.prix_de_vente = double.parse(value),
+                          decoration: buildInputDecoration(
+                            Icons.monetization_on,
+                            "prix de vente",
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
-        ));
+          SizedBox(
+            width: 370,
+            child: ElevatedButton(
+              onPressed: () {
+                // Validate returns true if the form is valid, otherwise false.
+                if (_formKey.currentState!.validate()) {
+                  if (imageFile == null) {
+                    Article().updateArticle(
+                        widget.id,
+                        widget.nom,
+                        widget.type,
+                        widget.role,
+                        widget.cat,
+                        widget.data,
+                        widget.reference_interne,
+                        widget.taxes_a_la_vente,
+                        widget.prix_dachat,
+                        widget.sale_prix,
+                        widget.prix_de_vente,
+                        widget.unite,
+                        widget.image,
+                        widget.qt);
+                  } else {
+                    uploadImage(
+                      widget.id,
+                      widget.nom,
+                      widget.type,
+                      widget.role,
+                      widget.cat,
+                      widget.data,
+                      widget.reference_interne,
+                      widget.taxes_a_la_vente,
+                      widget.prix_dachat,
+                      widget.sale_prix,
+                      widget.prix_de_vente,
+                      widget.unite,
+                    );
+                  }
+                  // Get.to(() => const listArticle());
+                  Get.to(() => listArticle(
+                      idus: widget.idus,
+                      url: widget.url,
+                      telus: widget.telus,
+                      adrus: widget.adrus,
+                      accesus: widget.accesus,
+                      nameus: widget.nameus,
+                      emailus: widget.emailus,
+                      roleus: widget.roleus));
+                }
+              },
+              child: const Text(
+                "Sauvegarder",
+                style: TextStyle(fontSize: 18.0),
+              ),
+              style: ElevatedButton.styleFrom(primary: Colors.indigo),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget bottomSheet() {

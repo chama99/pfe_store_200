@@ -14,7 +14,21 @@ import '../widget/toast.dart';
 
 class LigneFacture extends StatefulWidget {
   String titre;
-  LigneFacture({Key? key, required this.titre}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  LigneFacture({
+    Key? key,
+    required this.titre,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<LigneFacture> createState() => _LigneFactureState();
@@ -305,7 +319,15 @@ class _LigneFactureState extends State<LigneFacture> {
                                         prixv,
                                         int.parse(qt.text) * prixv);
                                     clearText();
-                                    Get.to(() => const CreeFacturePage());
+                                    Get.to(() => CreeFacturePage(
+                                        idus: widget.idus,
+                                        url: widget.url,
+                                        telus: widget.telus,
+                                        adrus: widget.adrus,
+                                        accesus: widget.accesus,
+                                        nameus: widget.nameus,
+                                        emailus: widget.emailus,
+                                        roleus: widget.roleus));
                                   } else {
                                     showToast("veuillez sélectionner Article ");
                                   }

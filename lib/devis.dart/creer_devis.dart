@@ -6,9 +6,10 @@ import 'dart:async';
 
 import 'package:chama_projet/services/autofacture.dart';
 import 'package:chama_projet/services/commande.dart';
-import 'package:chama_projet/services/contact.dart';
+
 import 'package:chama_projet/services/devis.dart';
 import 'package:chama_projet/widget/toast.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +66,17 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
   StreamController<String> _streamController = StreamController();
   final String uuid = GUIDGen.generate();
   bool test = false;
+  final CollectionReference contactsCollection =
+      FirebaseFirestore.instance.collection('clients');
+  Future getData() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await contactsCollection.get();
+
+    return querySnapshot.docs.map((doc) => doc.data()).toList();
+  }
+
+  List clients = [];
+
   @override
   void initState() {
     super.initState();
@@ -79,6 +91,11 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
         remisee = r;
       });
     });
+    getData().then((client) {
+      for (int i = 0; i < client.length; i++) {
+        clients.add(client[i]["name"]);
+      }
+    });
   }
 
   List userContactList = [];
@@ -89,24 +106,17 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
   List fact = [];
   List facta = [];
   fetchDatabaseList() async {
-    dynamic resultant = await Contact().getContactsList();
     dynamic resultant2 = await Commande().getCommandesList();
     dynamic resd = await Devis().getDevisList();
     dynamic resf = await Facture().getFacturesList();
     dynamic resfa = await AutoFacture().getFacturesList();
 
-    if (resultant == null) {
-      // ignore: avoid_print
-      print('Unable to retrieve');
-    } else {
-      setState(() {
-        userContactList = resultant;
-        commandeList = resultant2;
-        devis = resd;
-        fact = resf;
-        facta = resfa;
-      });
-    }
+    setState(() {
+      commandeList = resultant2;
+      devis = resd;
+      fact = resf;
+      facta = resfa;
+    });
   }
 
   addList() {
@@ -345,7 +355,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                           client = newValue.toString();
                                         });
                                       },
-                                      items: userContactList.map((valueItem) {
+                                      items: clients.map((valueItem) {
                                         return DropdownMenuItem(
                                           value: valueItem,
                                           child: Text(valueItem),
@@ -580,7 +590,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                       "Devis N°${l + 1}",
                                       client,
                                       "Brouillon",
-                                      dataTime.toString().substring(0, 10),
+                                      dataTime,
                                       (calculMontat() * (1 + 0.2)) *
                                           (1 - (remisee / 100)),
                                       list,

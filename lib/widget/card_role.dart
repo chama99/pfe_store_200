@@ -3,13 +3,22 @@ import 'package:get/get.dart';
 
 import '../pages/role.dart';
 
-Card buildInputCardRole() {
+Card buildInputCardRole(String idus, String nomus, String emailus, String url,
+    List acces, String role, String telus, String adrus) {
   return Card(
     color: Colors.brown[200],
     margin: const EdgeInsets.all(8.0),
     child: InkWell(
       onTap: () {
-        Get.to(() => const Roles());
+        Get.to(() => Roles(
+            idus: idus,
+            url: url,
+            emailus: emailus,
+            nameus: nomus,
+            roleus: role,
+            accesus: acces,
+            telus: telus,
+            adrus: adrus));
       },
       splashColor: const Color.fromARGB(255, 3, 56, 109),
       child: Center(

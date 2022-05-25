@@ -8,9 +8,23 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../services/autofacture.dart';
+import '../widget/NavBottom.dart';
 
 class ListFactureDev extends StatefulWidget {
-  const ListFactureDev({Key? key}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  ListFactureDev({
+    Key? key,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
   @override
   _ListFactureDevState createState() => _ListFactureDevState();
 }
@@ -60,6 +74,15 @@ class _ListFactureDevState extends State<ListFactureDev> {
           title: appBarTitle,
           backgroundColor: Colors.orange,
         ),
+        bottomNavigationBar: NavBottom(
+            tel: widget.telus,
+            adr: widget.adrus,
+            id: widget.idus,
+            email: widget.emailus,
+            name: widget.nameus,
+            acces: widget.accesus,
+            url: widget.url,
+            role: widget.roleus),
         body: Container(
           margin: const EdgeInsets.all(10),
           child: Column(
@@ -100,8 +123,15 @@ class _ListFactureDevState extends State<ListFactureDev> {
                           Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
-                                  pageBuilder: (a, b, c) =>
-                                      const ListFactureDev(),
+                                  pageBuilder: (a, b, c) => ListFactureDev(
+                                      idus: widget.idus,
+                                      url: widget.url,
+                                      telus: widget.telus,
+                                      adrus: widget.adrus,
+                                      accesus: widget.accesus,
+                                      nameus: widget.nameus,
+                                      emailus: widget.emailus,
+                                      roleus: widget.roleus),
                                   transitionDuration:
                                       const Duration(seconds: 0)));
                           // ignore: void_checks
@@ -124,14 +154,25 @@ class _ListFactureDevState extends State<ListFactureDev> {
                                               titre: facture["numfact"],
                                               client: facture['client'],
                                               etat: facture['etat'],
-                                              date1: facture[
-                                                  "date de facturation"],
+                                              date1:
+                                                  facture["date de facturation"]
+                                                      .toDate()
+                                                      .toString()
+                                                      .substring(0, 10),
                                               total: facture['total'],
                                               listfact:
                                                   facture["ligne facture"],
                                               montant: facture["montant"],
                                               res: facture['remise'],
-                                              page: "autofacture"),
+                                              page: "autofacture",
+                                              idus: widget.idus,
+                                              url: widget.url,
+                                              telus: widget.telus,
+                                              adrus: widget.adrus,
+                                              accesus: widget.accesus,
+                                              nameus: widget.nameus,
+                                              emailus: widget.emailus,
+                                              roleus: widget.roleus),
                                         );
                                       },
                                       splashColor:
@@ -140,7 +181,7 @@ class _ListFactureDevState extends State<ListFactureDev> {
                                         title: Text(facture["etat"]),
                                         subtitle: Text(
                                             // ignore: unnecessary_string_interpolations
-                                            "${facture["date de facturation"]}     ${facture["total"]}£"),
+                                            "${facture["date de facturation"].toDate().toString().substring(0, 10)}     ${facture["total"]}£"),
                                         leading: Text(
                                           facture["numfact"],
                                           style: const TextStyle(

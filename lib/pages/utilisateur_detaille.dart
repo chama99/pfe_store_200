@@ -7,7 +7,9 @@ import '../widget/NavBottom.dart';
 
 class UtilisateurDetail extends StatefulWidget {
   String email, nom, mdp, image, role, id, adr, tel, idus;
+  String emailus, nameus, url, roleus, adrus, telus;
   List acces;
+  List accesus;
   UtilisateurDetail({
     Key? key,
     required this.id,
@@ -20,6 +22,13 @@ class UtilisateurDetail extends StatefulWidget {
     required this.acces,
     required this.tel,
     required this.adr,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
   }) : super(key: key);
 
   @override
@@ -67,16 +76,22 @@ class _UtilisateurDetailState extends State<UtilisateurDetail> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => UpdateUserPage(
-                              id: widget.id,
-                              email: widget.email,
-                              nom: widget.nom,
-                              acces: widget.acces,
-                              adr: widget.adr,
-                              idus: widget.id,
-                              role: widget.role,
-                              tel: widget.tel,
-                              url: widget.image,
-                            )));
+                            id: widget.id,
+                            email: widget.email,
+                            nom: widget.nom,
+                            acces: widget.acces,
+                            adr: widget.adr,
+                            idus: widget.id,
+                            role: widget.role,
+                            tel: widget.tel,
+                            url: widget.image,
+                            image: widget.url,
+                            telus: widget.telus,
+                            adrus: widget.adrus,
+                            accesus: widget.accesus,
+                            nameus: widget.nameus,
+                            emailus: widget.emailus,
+                            roleus: widget.roleus)));
               },
               child: Text(
                 "Modifier".toUpperCase(),
@@ -89,14 +104,14 @@ class _UtilisateurDetailState extends State<UtilisateurDetail> {
         ],
       ),
       bottomNavigationBar: NavBottom(
-          tel: widget.tel,
-          adr: widget.adr,
+          tel: widget.telus,
+          adr: widget.adrus,
           id: widget.idus,
-          email: widget.email,
-          name: widget.nom,
-          acces: widget.acces,
-          url: widget.image,
-          role: widget.role),
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -104,7 +119,7 @@ class _UtilisateurDetailState extends State<UtilisateurDetail> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Container(
-                height: size.height * 0.60,
+                height: size.height * 0.50,
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(

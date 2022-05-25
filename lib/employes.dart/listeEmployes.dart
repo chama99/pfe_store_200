@@ -5,11 +5,25 @@ import 'package:chama_projet/widget/boitedialogue.dart';
 import 'package:flutter/material.dart';
 
 import '../services/employe.dart';
+import '../widget/NavBottom.dart';
 import 'creer_employe.dart';
 import 'employe_detaille.dart';
 
 class listEmploye extends StatefulWidget {
-  const listEmploye({Key? key}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  listEmploye({
+    Key? key,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   _listEmployeState createState() => _listEmployeState();
@@ -58,7 +72,15 @@ class _listEmployeState extends State<listEmploye> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CreeEmployePage()));
+                          builder: (context) => CreeEmployePage(
+                              idus: widget.idus,
+                              url: widget.url,
+                              telus: widget.telus,
+                              adrus: widget.adrus,
+                              accesus: widget.accesus,
+                              nameus: widget.nameus,
+                              emailus: widget.emailus,
+                              roleus: widget.roleus)));
                 },
                 child: Text(
                   "Créer".toUpperCase(),
@@ -71,6 +93,15 @@ class _listEmployeState extends State<listEmploye> {
           ],
           backgroundColor: Colors.orange,
         ),
+        bottomNavigationBar: NavBottom(
+            tel: widget.telus,
+            adr: widget.adrus,
+            id: widget.idus,
+            email: widget.emailus,
+            name: widget.nameus,
+            acces: widget.accesus,
+            url: widget.url,
+            role: widget.roleus),
         body: Container(
           margin: const EdgeInsets.all(10),
           child: Column(
@@ -104,14 +135,24 @@ class _listEmployeState extends State<listEmploye> {
               Expanded(
                 child: userProfilesList.isEmpty
                     ? const Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          color: Colors.orange,
+                        ),
                       )
                     : RefreshIndicator(
                         onRefresh: () {
                           Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
-                                  pageBuilder: (a, b, c) => const listEmploye(),
+                                  pageBuilder: (a, b, c) => listEmploye(
+                                      idus: widget.idus,
+                                      url: widget.url,
+                                      telus: widget.telus,
+                                      adrus: widget.adrus,
+                                      accesus: widget.accesus,
+                                      nameus: widget.nameus,
+                                      emailus: widget.emailus,
+                                      roleus: widget.roleus),
                                   transitionDuration:
                                       const Duration(seconds: 0)));
                           // ignore: void_checks
@@ -128,15 +169,22 @@ class _listEmployeState extends State<listEmploye> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => EmployeDetail(
-                                                id: userProfilesList[index]
-                                                    ['IdEmp'],
-                                                nom: userProfilesList[index]
-                                                    ['name'],
-                                                tel: userProfilesList[index]
-                                                    ['portable professionnel'],
-                                                adresse: userProfilesList[index]
-                                                    ['Adresse professionnelle'],
-                                              )));
+                                              id: userProfilesList[index]
+                                                  ['IdEmp'],
+                                              nom: userProfilesList[index]
+                                                  ['name'],
+                                              tel: userProfilesList[index]
+                                                  ['portable professionnel'],
+                                              adresse: userProfilesList[index]
+                                                  ['Adresse professionnelle'],
+                                              idus: widget.idus,
+                                              url: widget.url,
+                                              telus: widget.telus,
+                                              adrus: widget.adrus,
+                                              accesus: widget.accesus,
+                                              nameus: widget.nameus,
+                                              emailus: widget.emailus,
+                                              roleus: widget.roleus)));
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),

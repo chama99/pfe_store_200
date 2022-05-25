@@ -18,19 +18,29 @@ import '../widget/NavBottom.dart';
 class UpdateUserPage extends StatefulWidget {
   final String nom, email, id, idus, role, adr, tel, url;
   List acces;
+  String emailus, nameus, image, roleus, adrus, telus;
+
+  List accesus;
   // ignore: prefer_const_constructors_in_immutables
-  UpdateUserPage(
-      {Key? key,
-      required this.idus,
-      required this.role,
-      required this.adr,
-      required this.tel,
-      required this.id,
-      required this.email,
-      required this.nom,
-      required this.url,
-      required this.acces})
-      : super(key: key);
+  UpdateUserPage({
+    Key? key,
+    required this.idus,
+    required this.role,
+    required this.adr,
+    required this.tel,
+    required this.id,
+    required this.email,
+    required this.nom,
+    required this.url,
+    required this.acces,
+    required this.image,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   _UpdateUserPageState createState() => _UpdateUserPageState();
@@ -63,14 +73,14 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
         backgroundColor: Colors.orange,
       ),
       bottomNavigationBar: NavBottom(
-          tel: widget.tel,
-          adr: widget.adr,
+          tel: widget.telus,
+          adr: widget.adrus,
           id: widget.idus,
-          email: widget.email,
-          name: widget.nom,
-          acces: widget.acces,
-          url: widget.url,
-          role: widget.role),
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.image,
+          role: widget.roleus),
       body: Form(
           key: _formKey,
           // Getting Specific Data by ID

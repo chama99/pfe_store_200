@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 
 import '../services/article.dart';
 import '../services/facture.dart';
+import '../widget/NavBottom.dart';
 import '../widget/toast.dart';
 
 class AjoutLigneFacture extends StatefulWidget {
@@ -19,20 +20,31 @@ class AjoutLigneFacture extends StatefulWidget {
   int res;
   String client, etat, date1;
   double total, remise, montant;
-  AjoutLigneFacture(
-      {Key? key,
-      required this.id,
-      required this.titre,
-      required this.commande,
-      required this.client,
-      required this.date1,
-      required this.etat,
-      required this.montant,
-      required this.remise,
-      required this.total,
-      required this.res,
-      required this.page})
-      : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  AjoutLigneFacture({
+    Key? key,
+    required this.id,
+    required this.titre,
+    required this.commande,
+    required this.client,
+    required this.date1,
+    required this.etat,
+    required this.montant,
+    required this.remise,
+    required this.total,
+    required this.res,
+    required this.page,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<AjoutLigneFacture> createState() => AjoutLigneFactureState();
@@ -101,6 +113,15 @@ class AjoutLigneFactureState extends State<AjoutLigneFacture> {
           backgroundColor: Colors.orange,
           title: const Text("Ajouter Ligne de facture"),
         ),
+        bottomNavigationBar: NavBottom(
+            tel: widget.telus,
+            adr: widget.adrus,
+            id: widget.idus,
+            email: widget.emailus,
+            name: widget.nameus,
+            acces: widget.accesus,
+            url: widget.url,
+            role: widget.roleus),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -291,17 +312,24 @@ class AjoutLigneFactureState extends State<AjoutLigneFacture> {
                                       }
                                       clearText();
                                       Get.to(() => UpdateFacture(
-                                            id: widget.id,
-                                            titre: widget.titre,
-                                            client: widget.client,
-                                            etat: widget.etat,
-                                            total: widget.total,
-                                            listfact: widget.commande,
-                                            montant: widget.montant,
-                                            date1: widget.date1,
-                                            res: widget.res,
-                                            page: widget.page,
-                                          ));
+                                          id: widget.id,
+                                          titre: widget.titre,
+                                          tab: widget.commande,
+                                          etat: widget.etat,
+                                          res: widget.res,
+                                          client: widget.client,
+                                          page: widget.page,
+                                          total: widget.total,
+                                          montant: widget.montant,
+                                          date1: widget.date1,
+                                          idus: widget.idus,
+                                          url: widget.url,
+                                          telus: widget.telus,
+                                          adrus: widget.adrus,
+                                          accesus: widget.accesus,
+                                          nameus: widget.nameus,
+                                          emailus: widget.emailus,
+                                          roleus: widget.roleus));
                                     } else {
                                       showToast(
                                           "veuillez sélectionner Article ");

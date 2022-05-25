@@ -377,8 +377,8 @@ class _CreerTransfertState extends State<CreerTransfert> {
             addList();
             if (operation != null) {
               if (etat != null) {
-                Transfert().addTransfert(uuid, "Transfert N°$numf", operation,
-                    etat, dataTime, list, transfert.text);
+                Transfert().addTransfert(uuid, "Transfert N°${numf + 1}",
+                    operation, etat, dataTime, list, transfert.text);
 
                 Get.to(() => const ListTransfert());
               } else {

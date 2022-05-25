@@ -3,12 +3,26 @@ import 'package:chama_projet/services/facture.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../widget/NavBottom.dart';
 import 'listfact.dart';
 import 'listfactdevis.dart';
 import 'dart:ui' as ui;
 
 class ListFactt extends StatefulWidget {
-  const ListFactt({Key? key}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  ListFactt({
+    Key? key,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<ListFactt> createState() => _ListFacttState();
@@ -48,12 +62,29 @@ class _ListFacttState extends State<ListFactt> {
         title: const Text("Inventaire"),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: RefreshIndicator(
           onRefresh: () {
             Navigator.pushReplacement(
                 context,
                 PageRouteBuilder(
-                    pageBuilder: (a, b, c) => const ListFactt(),
+                    pageBuilder: (a, b, c) => ListFactt(
+                        idus: widget.idus,
+                        url: widget.url,
+                        telus: widget.telus,
+                        adrus: widget.adrus,
+                        accesus: widget.accesus,
+                        nameus: widget.nameus,
+                        emailus: widget.emailus,
+                        roleus: widget.roleus),
                     transitionDuration: const Duration(seconds: 0)));
             // ignore: void_checks
             return Future.value(false);
@@ -68,7 +99,15 @@ class _ListFacttState extends State<ListFactt> {
                   child: Card(
                       child: InkWell(
                     onTap: () {
-                      Get.to(() => const ListFactureDev());
+                      Get.to(() => ListFactureDev(
+                          idus: widget.idus,
+                          url: widget.url,
+                          telus: widget.telus,
+                          adrus: widget.adrus,
+                          accesus: widget.accesus,
+                          nameus: widget.nameus,
+                          emailus: widget.emailus,
+                          roleus: widget.roleus));
                     },
                     splashColor: const Color.fromARGB(255, 3, 56, 109),
                     child: Column(
@@ -111,7 +150,15 @@ class _ListFacttState extends State<ListFactt> {
                   child: Card(
                       child: InkWell(
                     onTap: () {
-                      Get.to(() => const ListFacture());
+                      Get.to(() => ListFacture(
+                          idus: widget.idus,
+                          url: widget.url,
+                          telus: widget.telus,
+                          adrus: widget.adrus,
+                          accesus: widget.accesus,
+                          nameus: widget.nameus,
+                          emailus: widget.emailus,
+                          roleus: widget.roleus));
                     },
                     splashColor: const Color.fromARGB(255, 3, 56, 109),
                     child: Column(

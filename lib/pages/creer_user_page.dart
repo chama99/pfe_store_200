@@ -516,11 +516,13 @@ class _AddUserPageState extends State<AddUserPage> {
                                               "veuillez sélectionner poste occupé ");
                                         }
                                       } else {
-                                        showToast("Email déja existé");
+                                        showToast(
+                                            "veuillez sélectionner Nom de l'employé");
                                       }
                                     } else {
                                       showToast(
-                                          "veuillez sélectionner Nom de l'employé");
+                                        "Email déja existé",
+                                      );
                                     }
                                   }
                                 },

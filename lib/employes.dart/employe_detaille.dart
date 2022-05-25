@@ -3,14 +3,27 @@
 import 'package:chama_projet/employes.dart/update_employe.dart';
 import 'package:flutter/material.dart';
 
+import '../widget/NavBottom.dart';
+
 class EmployeDetail extends StatefulWidget {
   String nom, tel, adresse, id;
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
   EmployeDetail({
     Key? key,
     required this.id,
     required this.nom,
     required this.tel,
     required this.adresse,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
   }) : super(key: key);
 
   @override
@@ -58,9 +71,16 @@ class _EmployeDetailState extends State<EmployeDetail> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => UpdateEmployePage(
-                              nom: widget.nom,
-                              id: widget.id,
-                            )));
+                            nom: widget.nom,
+                            id: widget.id,
+                            idus: widget.idus,
+                            url: widget.url,
+                            telus: widget.telus,
+                            adrus: widget.adrus,
+                            accesus: widget.accesus,
+                            nameus: widget.nameus,
+                            emailus: widget.emailus,
+                            roleus: widget.roleus)));
               },
               child: Text(
                 "Modifier".toUpperCase(),
@@ -72,6 +92,15 @@ class _EmployeDetailState extends State<EmployeDetail> {
           ),
         ],
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: Stack(
         alignment: Alignment.center,
         children: [
