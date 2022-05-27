@@ -313,7 +313,9 @@ class _EditContactState extends State<EditArticle> {
                 "Sauvegarder",
                 style: TextStyle(fontSize: 18.0),
               ),
-              style: ElevatedButton.styleFrom(primary: Colors.indigo),
+              style: ElevatedButton.styleFrom(
+                primary: Color.fromARGB(255, 11, 64, 117),
+              ),
             ),
           ),
         ],

@@ -382,33 +382,36 @@ class _UpdateLivraisonState extends State<UpdateLivraison> {
                   ),
                 ],
               )),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  maximumSize: const Size(double.infinity, 50),
-                  primary: Colors.indigo,
+              SizedBox(
+                width: 370,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    maximumSize: const Size(double.infinity, 50),
+                    primary: Color.fromARGB(255, 11, 64, 117),
+                  ),
+                  child: const Text(
+                    "Modifier",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  onPressed: () {
+                    Livraison().updateLivraison(
+                        widget.id,
+                        "Atelier:Réception",
+                        widget.etat,
+                        DateTime.parse(widget.date),
+                        widget.OperationList,
+                        widget.livraison);
+                    Get.to(() => ListLivraison(
+                        idus: widget.idus,
+                        url: widget.url,
+                        telus: widget.telus,
+                        adrus: widget.adrus,
+                        accesus: widget.accesus,
+                        nameus: widget.nameus,
+                        emailus: widget.emailus,
+                        roleus: widget.roleus));
+                  },
                 ),
-                child: const Text(
-                  "Modifier",
-                  style: TextStyle(fontSize: 20),
-                ),
-                onPressed: () {
-                  Livraison().updateLivraison(
-                      widget.id,
-                      "Atelier:Réception",
-                      widget.etat,
-                      DateTime.parse(widget.date),
-                      widget.OperationList,
-                      widget.livraison);
-                  Get.to(() => ListLivraison(
-                      idus: widget.idus,
-                      url: widget.url,
-                      telus: widget.telus,
-                      adrus: widget.adrus,
-                      accesus: widget.accesus,
-                      nameus: widget.nameus,
-                      emailus: widget.emailus,
-                      roleus: widget.roleus));
-                },
               ),
             ],
           ),

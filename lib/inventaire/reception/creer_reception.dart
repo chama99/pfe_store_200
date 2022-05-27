@@ -404,11 +404,11 @@ class _CreerReceptionState extends State<CreerReception> {
                 ),
               )),
               SizedBox(
-                width: 360,
+                width: 370,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     maximumSize: const Size(double.infinity, 50),
-                    primary: Colors.indigo,
+                    primary: Color.fromARGB(255, 11, 64, 117),
                   ),
                   child: const Text("Sauvegarder"),
                   onPressed: () {

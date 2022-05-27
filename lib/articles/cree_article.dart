@@ -346,21 +346,32 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            FlatButton(
-                                onPressed: () => _scan(),
-                                child: const Text(
-                                  "code à barres",
-                                  style: TextStyle(
-                                    backgroundColor: Colors.orange,
-                                    fontSize: 25,
-                                    color: Colors.black,
+                            Container(
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(width: 3, color: Colors.white),
+                                borderRadius: BorderRadius.circular(18),
+                                color: Colors.orange,
+                              ),
+                              child: Column(
+                                children: [
+                                  FlatButton(
+                                      onPressed: () => _scan(),
+                                      child: const Text(
+                                        "code à barres",
+                                        style: TextStyle(
+                                          fontSize: 25,
+                                          color: Colors.white,
+                                        ),
+                                      )),
+                                  Text(
+                                    data,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 25,
+                                    ),
                                   ),
-                                )),
-                            Text(
-                              data,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 25,
+                                ],
                               ),
                             ),
                           ],
@@ -585,7 +596,9 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                   "Sauvegarder",
                   style: TextStyle(fontSize: 18.0),
                 ),
-                style: ElevatedButton.styleFrom(primary: Colors.indigo),
+                style: ElevatedButton.styleFrom(
+                  primary: Color.fromARGB(255, 11, 64, 117),
+                ),
               ),
             ),
           ],

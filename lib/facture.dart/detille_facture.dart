@@ -311,7 +311,7 @@ class _DetailFactureState extends State<DetailFacture> {
       bottomNavigationBar: ElevatedButton(
         style: ElevatedButton.styleFrom(
           maximumSize: const Size(double.infinity, 50),
-          primary: Colors.indigo,
+          primary: Color.fromARGB(255, 11, 64, 117),
         ),
         child: const Text(
           "Convertir  au format PDF",

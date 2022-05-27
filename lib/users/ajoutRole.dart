@@ -37,12 +37,12 @@ class AjoutAcces extends StatefulWidget {
 class _AjoutAccesState extends State<AjoutAcces> {
   List roleList = [];
   var stock = "Inventaire";
-  var achat = "Achats";
+
   var devis = "Devis";
   var uts = "Utilisateurs";
-  var contact = "Contacts";
+  var contact = "Clients";
   var plan = "Plan";
-  var mssg = "Message";
+
   var emp = "Employés";
   var fact = "Factures";
   var article = "Articles";
@@ -83,47 +83,23 @@ class _AjoutAccesState extends State<AjoutAcces> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
-                Text(
-                  "Liste Des Applications",
-                  style: TextStyle(
-                      color: Colors.indigo,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30),
-                )
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Stack(children: [
+                  Text("Liste des applications",
+                      style: TextStyle(
+                        fontSize: 30,
+                        foreground: Paint()
+                          ..style = PaintingStyle.stroke
+                          ..strokeWidth = 1.5
+                          ..color = Color.fromARGB(255, 11, 64, 117),
+                      )),
+                ]),
               ]),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Checkbox(
-                    activeColor: Colors.indigo,
-                    value: a,
-                    onChanged: (value) {
-                      setState(() {
-                        a = value!;
-
-                        for (var i in widget.acces) {
-                          if (i == achat) {
-                            t = true;
-                          }
-                        }
-                        if (t == true) {
-                          showToast("$achat déjà existé");
-                        }
-                        if (t == false) {
-                          roleList.add(achat);
-                        }
-                      });
-                    },
-                  ),
-                  Text(achat),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Checkbox(
-                    activeColor: Colors.indigo,
+                    activeColor: Color.fromARGB(255, 11, 64, 117),
                     value: ar,
                     onChanged: (value) {
                       setState(() {
@@ -150,7 +126,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Checkbox(
-                    activeColor: Colors.indigo,
+                    activeColor: Color.fromARGB(255, 11, 64, 117),
                     value: ap,
                     onChanged: (value) {
                       setState(() {
@@ -177,7 +153,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Checkbox(
-                    activeColor: Colors.indigo,
+                    activeColor: Color.fromARGB(255, 11, 64, 117),
                     value: con,
                     onChanged: (value) {
                       setState(() {
@@ -204,7 +180,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Checkbox(
-                    activeColor: Colors.indigo,
+                    activeColor: Color.fromARGB(255, 11, 64, 117),
                     value: u,
                     onChanged: (value) {
                       setState(() {
@@ -230,7 +206,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Checkbox(
-                    activeColor: Colors.indigo,
+                    activeColor: Color.fromARGB(255, 11, 64, 117),
                     value: c,
                     onChanged: (value) {
                       setState(() {
@@ -256,7 +232,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Checkbox(
-                    activeColor: Colors.indigo,
+                    activeColor: Color.fromARGB(255, 11, 64, 117),
                     value: d,
                     onChanged: (value) {
                       setState(() {
@@ -282,7 +258,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Checkbox(
-                    activeColor: Colors.indigo,
+                    activeColor: Color.fromARGB(255, 11, 64, 117),
                     value: f,
                     onChanged: (value) {
                       setState(() {
@@ -308,33 +284,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Checkbox(
-                    activeColor: Colors.indigo,
-                    value: m,
-                    onChanged: (value) {
-                      setState(() {
-                        m = value!;
-                        for (var i in widget.acces) {
-                          if (i == mssg) {
-                            t = true;
-                          }
-                        }
-                        if (t == true) {
-                          showToast("$mssg  déjà existé");
-                        }
-                        if (t == false) {
-                          roleList.add(mssg);
-                        }
-                      });
-                    },
-                  ),
-                  Text(mssg),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Checkbox(
-                    activeColor: Colors.indigo,
+                    activeColor: Color.fromARGB(255, 11, 64, 117),
                     value: p,
                     onChanged: (value) {
                       setState(() {
@@ -360,7 +310,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Checkbox(
-                    activeColor: Colors.indigo,
+                    activeColor: Color.fromARGB(255, 11, 64, 117),
                     value: e,
                     onChanged: (value) {
                       setState(() {
@@ -386,7 +336,7 @@ class _AjoutAccesState extends State<AjoutAcces> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Checkbox(
-                    activeColor: Colors.indigo,
+                    activeColor: Color.fromARGB(255, 11, 64, 117),
                     value: s,
                     onChanged: (value) {
                       setState(() {

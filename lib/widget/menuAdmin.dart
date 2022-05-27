@@ -54,19 +54,13 @@ class _MenuAdminState extends State<MenuAdmin> {
               Stack(
                 children: <Widget>[
                   Padding(
-                    padding:
-                        const EdgeInsets.only(top: 8.0, right: 15, bottom: 4),
-                    child: ClipOval(
-                      child: Image.network(
-                        widget.url,
-                        fit: BoxFit.cover,
-                        width: 50,
-                      ),
-                    ),
+                    padding: const EdgeInsets.only(top: 3, right: 0, bottom: 4),
+                    child: CircleAvatar(
+                        radius: 50, backgroundImage: NetworkImage(widget.url)),
                   ),
                   Positioned(
                     top: 30,
-                    right: 18,
+                    right: 30,
                     child: InkWell(
                       onTap: () {
                         showModalBottomSheet(
@@ -77,14 +71,12 @@ class _MenuAdminState extends State<MenuAdmin> {
                                     UserAccountsDrawerHeader(
                                       accountName: Text(widget.name),
                                       accountEmail: Text(widget.email),
-                                      currentAccountPicture: CircleAvatar(
-                                        child: ClipOval(
-                                          child: Image.network(
-                                            widget.url,
-                                            fit: BoxFit.cover,
-                                            width: 90,
-                                          ),
-                                        ),
+                                      currentAccountPicture: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: CircleAvatar(
+                                            radius: 90,
+                                            backgroundImage:
+                                                NetworkImage(widget.url)),
                                       ),
                                       decoration: const BoxDecoration(
                                           color: Colors.orange),

@@ -460,10 +460,10 @@ class _AddUserPageState extends State<AddUserPage> {
                                   if (ch == "Technicien") {
                                     acces.add("Plan");
                                     acces.add("Conges");
+                                    acces.add("Devis");
                                   } else {
                                     acces.add("Factures");
                                     acces.add("Conges");
-                                    acces.add("Devis");
                                   }
 
                                   if (_formKey.currentState!.validate()) {
