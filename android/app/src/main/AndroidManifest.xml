@@ -2,7 +2,7 @@
     package="com.example.chama_projet">
    <application
         
-        android:label="chama_projet"
+        android:label="Store 2000"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

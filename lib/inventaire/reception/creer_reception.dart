@@ -7,10 +7,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_azure_b2c/GUIDGenerator.dart';
 import 'package:get/get.dart';
 
+import '../../widget/NavBottom.dart';
 import '../../widget/toast.dart';
 
 class CreerReception extends StatefulWidget {
-  const CreerReception({Key? key}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  CreerReception({
+    Key? key,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<CreerReception> createState() => _CreerReceptionState();
@@ -75,13 +89,30 @@ class _CreerReceptionState extends State<CreerReception> {
         title: const Text("Créer un Reception"),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: RefreshIndicator(
         onRefresh: () {
           Navigator.pushReplacement(
               context,
               PageRouteBuilder(
                   // ignore: prefer_const_constructors
-                  pageBuilder: (a, b, c) => CreerReception(),
+                  pageBuilder: (a, b, c) => CreerReception(
+                      idus: widget.idus,
+                      url: widget.url,
+                      telus: widget.telus,
+                      adrus: widget.adrus,
+                      accesus: widget.accesus,
+                      nameus: widget.nameus,
+                      emailus: widget.emailus,
+                      roleus: widget.roleus),
                   // ignore: prefer_const_constructors
                   transitionDuration: Duration(seconds: 0)));
           // ignore: void_checks
@@ -112,8 +143,15 @@ class _CreerReceptionState extends State<CreerReception> {
                                   child: InkWell(
                                     onTap: () {
                                       Get.to(() => LigneOperation(
-                                            page: "Réception",
-                                          ));
+                                          page: "Réception",
+                                          idus: widget.idus,
+                                          url: widget.url,
+                                          telus: widget.telus,
+                                          adrus: widget.adrus,
+                                          accesus: widget.accesus,
+                                          nameus: widget.nameus,
+                                          emailus: widget.emailus,
+                                          roleus: widget.roleus));
                                     },
                                     child: Container(
                                       margin: const EdgeInsets.all(20),
@@ -365,37 +403,54 @@ class _CreerReceptionState extends State<CreerReception> {
                   ),
                 ),
               )),
+              SizedBox(
+                width: 360,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    maximumSize: const Size(double.infinity, 50),
+                    primary: Colors.indigo,
+                  ),
+                  child: const Text("Sauvegarder"),
+                  onPressed: () {
+                    // Validate returns true if the form is valid, otherwise false.
+                    if (_formKey.currentState!.validate()) {
+                      // ignore: prefer_adjacent_string_concatenation
+
+                      addList();
+                      if (operation != null) {
+                        if (etat != null) {
+                          Reception().addReception(
+                              uuid,
+                              "Reception N°${numr + 1}",
+                              operation,
+                              etat,
+                              dataTime,
+                              list,
+                              reception);
+
+                          Get.to(() => ListReception(
+                              idus: widget.idus,
+                              url: widget.url,
+                              telus: widget.telus,
+                              adrus: widget.adrus,
+                              accesus: widget.accesus,
+                              nameus: widget.nameus,
+                              emailus: widget.emailus,
+                              roleus: widget.roleus));
+                        } else {
+                          showToast("veuillez sélectionner etat ");
+                        }
+                      } else {
+                        showToast("veuillez sélectionner  type d'opération");
+                      }
+                      CommandeOperation().deleteCommdeop();
+                    }
+                  },
+                ),
+              ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          maximumSize: const Size(double.infinity, 50),
-          primary: Colors.indigo,
-        ),
-        child: const Text("Sauvegarder"),
-        onPressed: () {
-          // Validate returns true if the form is valid, otherwise false.
-          if (_formKey.currentState!.validate()) {
-            // ignore: prefer_adjacent_string_concatenation
-
-            addList();
-            if (operation != null) {
-              if (etat != null) {
-                Reception().addReception(uuid, "Reception N°${numr + 1}",
-                    operation, etat, dataTime, list, reception);
-
-                Get.to(() => const ListReception());
-              } else {
-                showToast("veuillez sélectionner etat ");
-              }
-            } else {
-              showToast("veuillez sélectionner  type d'opération");
-            }
-            CommandeOperation().deleteCommdeop();
-          }
-        },
       ),
     );
   }

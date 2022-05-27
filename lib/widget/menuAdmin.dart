@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'NavBottom.dart';
-import 'card_achat.dart';
+
 import 'card_devis.dart';
 import 'card_employe.dart';
 import 'card_facture.dart';
@@ -138,7 +138,6 @@ class _MenuAdminState extends State<MenuAdmin> {
                         widget.tel,
                         widget.adr)
                   ],
-                  if (x == "Achats") ...[buildInputCardAchat()],
                   if (x == "Devis") ...[
                     buildInputCardDevis(
                         widget.role,
@@ -208,7 +207,17 @@ class _MenuAdminState extends State<MenuAdmin> {
                   if (x == "Plan") ...[
                     buildInputCardPlan(widget.role, widget.email, widget.name)
                   ],
-                  if (x == "Inventaire") ...[buildInputCardInventaire()],
+                  if (x == "Inventaire") ...[
+                    buildInputCardInventaire(
+                        widget.id,
+                        widget.name,
+                        widget.email,
+                        widget.url,
+                        widget.acces,
+                        widget.role,
+                        widget.tel,
+                        widget.adr)
+                  ],
                   if (x == "Conges") ...[buildInputCardConges(widget.id)]
                 ]
               ],

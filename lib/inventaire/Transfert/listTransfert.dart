@@ -8,10 +8,24 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../widget/NavBottom.dart';
 import '../../widget/boitedialogue.dart';
 
 class ListTransfert extends StatefulWidget {
-  const ListTransfert({Key? key}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  ListTransfert({
+    Key? key,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<ListTransfert> createState() => _ListTransfertState();
@@ -57,7 +71,15 @@ class _ListTransfertState extends State<ListTransfert> {
               padding: const EdgeInsets.only(top: 20, right: 30),
               child: InkWell(
                 onTap: () {
-                  Get.to(() => const CreerTransfert());
+                  Get.to(() => CreerTransfert(
+                      idus: widget.idus,
+                      url: widget.url,
+                      telus: widget.telus,
+                      adrus: widget.adrus,
+                      accesus: widget.accesus,
+                      nameus: widget.nameus,
+                      emailus: widget.emailus,
+                      roleus: widget.roleus));
                 },
                 child: Text(
                   "Créer".toUpperCase(),
@@ -70,6 +92,15 @@ class _ListTransfertState extends State<ListTransfert> {
           ],
           backgroundColor: Colors.orange,
         ),
+        bottomNavigationBar: NavBottom(
+            tel: widget.telus,
+            adr: widget.adrus,
+            id: widget.idus,
+            email: widget.emailus,
+            name: widget.nameus,
+            acces: widget.accesus,
+            url: widget.url,
+            role: widget.roleus),
         body: Container(
           margin: const EdgeInsets.all(10),
           child: Column(
@@ -110,8 +141,15 @@ class _ListTransfertState extends State<ListTransfert> {
                           Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
-                                  pageBuilder: (a, b, c) =>
-                                      const ListTransfert(),
+                                  pageBuilder: (a, b, c) => ListTransfert(
+                                      idus: widget.idus,
+                                      url: widget.url,
+                                      telus: widget.telus,
+                                      adrus: widget.adrus,
+                                      accesus: widget.accesus,
+                                      nameus: widget.nameus,
+                                      emailus: widget.emailus,
+                                      roleus: widget.roleus),
                                   transitionDuration:
                                       const Duration(seconds: 0)));
                           // ignore: void_checks
@@ -135,7 +173,15 @@ class _ListTransfertState extends State<ListTransfert> {
                                       date: trans["date prévue"]
                                           .toDate()
                                           .toString()
-                                          .substring(0, 10)));
+                                          .substring(0, 10),
+                                      idus: widget.idus,
+                                      url: widget.url,
+                                      telus: widget.telus,
+                                      adrus: widget.adrus,
+                                      accesus: widget.accesus,
+                                      nameus: widget.nameus,
+                                      emailus: widget.emailus,
+                                      roleus: widget.roleus));
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),
@@ -180,11 +226,5 @@ class _ListTransfertState extends State<ListTransfert> {
     setState(() {
       ListTransf = suggestions;
     });
-  }
-
-  String formattedDate(timeStamp) {
-    var dateFromTimeStamp =
-        DateTime.fromMicrosecondsSinceEpoch(timeStamp.seconds * 1000);
-    return DateFormat('dd-MM-yyyy').format(dateFromTimeStamp);
   }
 }

@@ -11,18 +11,23 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import '../widget/InputDeco_design.dart';
+import '../widget/NavBottom.dart';
 
 class UpdateProfil extends StatefulWidget {
-  final String nom, email, id;
+  final String nom, email, id, tel, image, adr, role;
   List acces;
   // ignore: prefer_const_constructors_in_immutables
-  UpdateProfil(
-      {Key? key,
-      required this.id,
-      required this.email,
-      required this.nom,
-      required this.acces})
-      : super(key: key);
+  UpdateProfil({
+    Key? key,
+    required this.id,
+    required this.email,
+    required this.nom,
+    required this.acces,
+    required this.tel,
+    required this.adr,
+    required this.image,
+    required this.role,
+  }) : super(key: key);
 
   @override
   _UpdateProfilState createState() => _UpdateProfilState();
@@ -53,6 +58,15 @@ class _UpdateProfilState extends State<UpdateProfil> {
         ),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.tel,
+          adr: widget.adr,
+          id: widget.id,
+          email: widget.email,
+          name: widget.nom,
+          acces: widget.acces,
+          url: widget.image,
+          role: widget.role),
       body: Form(
           key: _formKey,
           // Getting Specific Data by ID

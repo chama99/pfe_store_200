@@ -4,6 +4,7 @@ import 'package:chama_projet/inventaire/reception/update_reception.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../widget/NavBottom.dart';
 import '../../widget/toast.dart';
 
 class ReceptionDetaile extends StatefulWidget {
@@ -11,17 +12,28 @@ class ReceptionDetaile extends StatefulWidget {
   String receptions;
   // ignore: non_constant_identifier_names
   List LigneOperations;
-  ReceptionDetaile(
-      {Key? key,
-      required this.id,
-      required this.titre,
-      required this.typeoperation,
-      required this.etat,
-      required this.receptions,
-      required this.date,
-      // ignore: non_constant_identifier_names
-      required this.LigneOperations})
-      : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  ReceptionDetaile({
+    Key? key,
+    required this.id,
+    required this.titre,
+    required this.typeoperation,
+    required this.etat,
+    required this.receptions,
+    required this.date,
+    // ignore: non_constant_identifier_names
+    required this.LigneOperations,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<ReceptionDetaile> createState() => _ReceptionDetaileState();
@@ -40,13 +52,20 @@ class _ReceptionDetaileState extends State<ReceptionDetaile> {
               onTap: () {
                 if (widget.etat == "Brouillon" || widget.etat == "En attente") {
                   Get.to(() => UpdateReception(
-                        id: widget.id,
-                        titre: widget.titre,
-                        OperationList: widget.LigneOperations,
-                        reception: widget.receptions,
-                        etat: widget.etat,
-                        date: widget.date,
-                      ));
+                      id: widget.id,
+                      titre: widget.titre,
+                      OperationList: widget.LigneOperations,
+                      reception: widget.receptions,
+                      etat: widget.etat,
+                      date: widget.date,
+                      idus: widget.idus,
+                      url: widget.url,
+                      telus: widget.telus,
+                      adrus: widget.adrus,
+                      accesus: widget.accesus,
+                      nameus: widget.nameus,
+                      emailus: widget.emailus,
+                      roleus: widget.roleus));
                 } else {
                   showToast("Ne peut pas modifier cette réception");
                 }
@@ -62,6 +81,15 @@ class _ReceptionDetaileState extends State<ReceptionDetaile> {
         ],
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: Container(
         color: Colors.grey[200],
         child: ListView(

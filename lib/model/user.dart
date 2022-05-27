@@ -1,4 +1,4 @@
-import '../utils.dart';
+import '../pages/utils.dart';
 
 class UserField {
   static const String lastMessageTime = 'lastMessageTime';

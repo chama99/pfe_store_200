@@ -4,6 +4,7 @@ import 'package:chama_projet/inventaire/livraison/update_livraison.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../widget/NavBottom.dart';
 import '../../widget/toast.dart';
 
 class LivraisonDetaile extends StatefulWidget {
@@ -11,17 +12,28 @@ class LivraisonDetaile extends StatefulWidget {
   String livraison;
   // ignore: non_constant_identifier_names
   List LigneOperations;
-  LivraisonDetaile(
-      {Key? key,
-      required this.id,
-      required this.titre,
-      required this.typeoperation,
-      required this.etat,
-      required this.livraison,
-      required this.date,
-      // ignore: non_constant_identifier_names
-      required this.LigneOperations})
-      : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  LivraisonDetaile({
+    Key? key,
+    required this.id,
+    required this.titre,
+    required this.typeoperation,
+    required this.etat,
+    required this.livraison,
+    required this.date,
+    // ignore: non_constant_identifier_names
+    required this.LigneOperations,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<LivraisonDetaile> createState() => _LivraisonDetaileState();
@@ -45,7 +57,15 @@ class _LivraisonDetaileState extends State<LivraisonDetaile> {
                       OperationList: widget.LigneOperations,
                       livraison: widget.livraison,
                       etat: widget.etat,
-                      date: widget.date));
+                      date: widget.date,
+                      idus: widget.idus,
+                      url: widget.url,
+                      telus: widget.telus,
+                      adrus: widget.adrus,
+                      accesus: widget.accesus,
+                      nameus: widget.nameus,
+                      emailus: widget.emailus,
+                      roleus: widget.roleus));
                 } else {
                   showToast("Ne peut pas modifier cette livraison");
                 }
@@ -61,6 +81,15 @@ class _LivraisonDetaileState extends State<LivraisonDetaile> {
         ],
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: Container(
         color: Colors.grey[200],
         child: ListView(

@@ -1,9 +1,10 @@
 import 'package:chama_projet/model/user.dart';
-import 'package:chama_projet/pages/chat_page.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/user.dart';
+import 'chat_page.dart';
 
 class ChatHeaderWidget extends StatelessWidget {
   final List<User> users;

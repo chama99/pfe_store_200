@@ -7,21 +7,34 @@ import 'package:chama_projet/services/transfert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../widget/NavBottom.dart';
+
 class ModifierOperationTran extends StatefulWidget {
   int num;
   List ligneOperation;
   String titre, date, id;
   String transf, etat;
-  ModifierOperationTran(
-      {Key? key,
-      required this.id,
-      required this.titre,
-      required this.transf,
-      required this.etat,
-      required this.num,
-      required this.ligneOperation,
-      required this.date})
-      : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  ModifierOperationTran({
+    Key? key,
+    required this.id,
+    required this.titre,
+    required this.transf,
+    required this.etat,
+    required this.num,
+    required this.ligneOperation,
+    required this.date,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<ModifierOperationTran> createState() => _ModifierOperationTranState();
@@ -37,6 +50,15 @@ class _ModifierOperationTranState extends State<ModifierOperationTran> {
         title: Text("Modifier Opération ${widget.num}"),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(30),
@@ -190,7 +212,15 @@ class _ModifierOperationTranState extends State<ModifierOperationTran> {
                             OperationList: widget.ligneOperation,
                             transf: widget.transf,
                             etat: widget.etat,
-                            date: widget.date));
+                            date: widget.date,
+                            idus: widget.idus,
+                            url: widget.url,
+                            telus: widget.telus,
+                            adrus: widget.adrus,
+                            accesus: widget.accesus,
+                            nameus: widget.nameus,
+                            emailus: widget.emailus,
+                            roleus: widget.roleus));
                       },
                       child: const Text(
                         "Modifier",

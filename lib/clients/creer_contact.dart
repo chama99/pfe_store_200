@@ -4,7 +4,7 @@
 
 import 'dart:io';
 
-import 'package:chama_projet/contacts/contact_home_page.dart';
+import 'package:chama_projet/clients/contact_home_page.dart';
 import 'package:chama_projet/services/contact.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 

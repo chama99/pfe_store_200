@@ -22,7 +22,7 @@ class AppDropdownInput<T> extends StatelessWidget {
         return InputDecorator(
           decoration: InputDecoration(
             contentPadding:
-                EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
             labelText: hintText,
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),

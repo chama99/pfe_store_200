@@ -9,10 +9,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_azure_b2c/GUIDGenerator.dart';
 import 'package:get/get.dart';
 
+import '../../widget/NavBottom.dart';
 import '../../widget/toast.dart';
 
 class CreerLivraison extends StatefulWidget {
-  const CreerLivraison({Key? key}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  CreerLivraison({
+    Key? key,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<CreerLivraison> createState() => _CreerLivraisonState();
@@ -78,13 +92,30 @@ class _CreerLivraisonState extends State<CreerLivraison> {
         title: const Text("Créer un Livraison"),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: RefreshIndicator(
         onRefresh: () {
           Navigator.pushReplacement(
               context,
               PageRouteBuilder(
                   // ignore: prefer_const_constructors
-                  pageBuilder: (a, b, c) => CreerLivraison(),
+                  pageBuilder: (a, b, c) => CreerLivraison(
+                      idus: widget.idus,
+                      url: widget.url,
+                      telus: widget.telus,
+                      adrus: widget.adrus,
+                      accesus: widget.accesus,
+                      nameus: widget.nameus,
+                      emailus: widget.emailus,
+                      roleus: widget.roleus),
                   // ignore: prefer_const_constructors
                   transitionDuration: Duration(seconds: 0)));
           // ignore: void_checks
@@ -115,8 +146,15 @@ class _CreerLivraisonState extends State<CreerLivraison> {
                                   child: InkWell(
                                     onTap: () {
                                       Get.to(() => LigneOperation(
-                                            page: "Livraison",
-                                          ));
+                                          page: "Livraison",
+                                          idus: widget.idus,
+                                          url: widget.url,
+                                          telus: widget.telus,
+                                          adrus: widget.adrus,
+                                          accesus: widget.accesus,
+                                          nameus: widget.nameus,
+                                          emailus: widget.emailus,
+                                          roleus: widget.roleus));
                                     },
                                     child: Container(
                                       margin: const EdgeInsets.all(20),
@@ -363,34 +401,51 @@ class _CreerLivraisonState extends State<CreerLivraison> {
                   ),
                 ),
               )),
+              SizedBox(
+                width: 360,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    maximumSize: const Size(double.infinity, 50),
+                    primary: Colors.indigo,
+                  ),
+                  child: const Text("Sauvegarder"),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      addList();
+                      if (operation != null) {
+                        if (etat != null) {
+                          Livraison().addLivraison(
+                              uuid,
+                              "Livraison N°${numl + 1}",
+                              operation,
+                              etat,
+                              dataTime,
+                              list,
+                              adresse.text);
+
+                          Get.to(() => ListLivraison(
+                              idus: widget.idus,
+                              url: widget.url,
+                              telus: widget.telus,
+                              adrus: widget.adrus,
+                              accesus: widget.accesus,
+                              nameus: widget.nameus,
+                              emailus: widget.emailus,
+                              roleus: widget.roleus));
+                        } else {
+                          showToast("veuillez sélectionner etat ");
+                        }
+                      } else {
+                        showToast("veuillez sélectionner  type d'opération");
+                      }
+                    }
+                    CommandeOperation().deleteCommdeop();
+                  },
+                ),
+              ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          maximumSize: const Size(double.infinity, 50),
-          primary: Colors.indigo,
-        ),
-        child: const Text("Sauvegarder"),
-        onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            addList();
-            if (operation != null) {
-              if (etat != null) {
-                Livraison().addLivraison(uuid, "Livraison N°${numl + 1}",
-                    operation, etat, dataTime, list, adresse.text);
-
-                Get.to(() => const ListLivraison());
-              } else {
-                showToast("veuillez sélectionner etat ");
-              }
-            } else {
-              showToast("veuillez sélectionner  type d'opération");
-            }
-          }
-          CommandeOperation().deleteCommdeop();
-        },
       ),
     );
   }

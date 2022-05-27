@@ -4,12 +4,26 @@ import 'package:chama_projet/services/reception.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../../widget/NavBottom.dart';
 import '../../widget/boitedialogue.dart';
 import 'creer_reception.dart';
 import 'details_reception.dart';
 
 class ListReception extends StatefulWidget {
-  const ListReception({Key? key}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  ListReception({
+    Key? key,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<ListReception> createState() => _ListReceptionState();
@@ -55,7 +69,15 @@ class _ListReceptionState extends State<ListReception> {
               padding: const EdgeInsets.only(top: 20, right: 30),
               child: InkWell(
                 onTap: () {
-                  Get.to(() => const CreerReception());
+                  Get.to(() => CreerReception(
+                      idus: widget.idus,
+                      url: widget.url,
+                      telus: widget.telus,
+                      adrus: widget.adrus,
+                      accesus: widget.accesus,
+                      nameus: widget.nameus,
+                      emailus: widget.emailus,
+                      roleus: widget.roleus));
                 },
                 child: Text(
                   "Créer".toUpperCase(),
@@ -68,6 +90,15 @@ class _ListReceptionState extends State<ListReception> {
           ],
           backgroundColor: Colors.orange,
         ),
+        bottomNavigationBar: NavBottom(
+            tel: widget.telus,
+            adr: widget.adrus,
+            id: widget.idus,
+            email: widget.emailus,
+            name: widget.nameus,
+            acces: widget.accesus,
+            url: widget.url,
+            role: widget.roleus),
         body: Container(
           margin: const EdgeInsets.all(10),
           child: Column(
@@ -108,8 +139,15 @@ class _ListReceptionState extends State<ListReception> {
                           Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
-                                  pageBuilder: (a, b, c) =>
-                                      const ListReception(),
+                                  pageBuilder: (a, b, c) => ListReception(
+                                      idus: widget.idus,
+                                      url: widget.url,
+                                      telus: widget.telus,
+                                      adrus: widget.adrus,
+                                      accesus: widget.accesus,
+                                      nameus: widget.nameus,
+                                      emailus: widget.emailus,
+                                      roleus: widget.roleus),
                                   transitionDuration:
                                       const Duration(seconds: 0)));
                           // ignore: void_checks
@@ -133,7 +171,15 @@ class _ListReceptionState extends State<ListReception> {
                                       date: recp["date prévue"]
                                           .toDate()
                                           .toString()
-                                          .substring(0, 10)));
+                                          .substring(0, 10),
+                                      idus: widget.idus,
+                                      url: widget.url,
+                                      telus: widget.telus,
+                                      adrus: widget.adrus,
+                                      accesus: widget.accesus,
+                                      nameus: widget.nameus,
+                                      emailus: widget.emailus,
+                                      roleus: widget.roleus));
                                 },
                                 splashColor:
                                     const Color.fromARGB(255, 3, 56, 109),
@@ -178,11 +224,5 @@ class _ListReceptionState extends State<ListReception> {
     setState(() {
       Listreception = suggestions;
     });
-  }
-
-  String formattedDate(timeStamp) {
-    var dateFromTimeStamp =
-        DateTime.fromMicrosecondsSinceEpoch(timeStamp.seconds * 1000);
-    return DateFormat('dd-MM-yyyy').format(dateFromTimeStamp);
   }
 }

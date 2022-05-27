@@ -8,12 +8,27 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../services/article.dart';
+import '../../widget/NavBottom.dart';
 import '../../widget/toast.dart';
 import 'creer_reception.dart';
 
 class LigneOperation extends StatefulWidget {
   String page;
-  LigneOperation({Key? key, required this.page}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  LigneOperation({
+    Key? key,
+    required this.page,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<LigneOperation> createState() => _LigneOperationState();
@@ -96,6 +111,15 @@ class _LigneOperationState extends State<LigneOperation> {
         backgroundColor: Colors.orange,
         title: const Text("Ajouter Ligne de opérations"),
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -299,11 +323,35 @@ class _LigneOperationState extends State<LigneOperation> {
                                           unitev);
                                       clearText();
                                       if (widget.page == "Réception") {
-                                        Get.to(() => const CreerReception());
+                                        Get.to(() => CreerReception(
+                                            idus: widget.idus,
+                                            url: widget.url,
+                                            telus: widget.telus,
+                                            adrus: widget.adrus,
+                                            accesus: widget.accesus,
+                                            nameus: widget.nameus,
+                                            emailus: widget.emailus,
+                                            roleus: widget.roleus));
                                       } else if (widget.page == "Transfert") {
-                                        Get.to(() => const CreerTransfert());
+                                        Get.to(() => CreerTransfert(
+                                            idus: widget.idus,
+                                            url: widget.url,
+                                            telus: widget.telus,
+                                            adrus: widget.adrus,
+                                            accesus: widget.accesus,
+                                            nameus: widget.nameus,
+                                            emailus: widget.emailus,
+                                            roleus: widget.roleus));
                                       } else {
-                                        Get.to(() => const CreerLivraison());
+                                        Get.to(() => CreerLivraison(
+                                            idus: widget.idus,
+                                            url: widget.url,
+                                            telus: widget.telus,
+                                            adrus: widget.adrus,
+                                            accesus: widget.accesus,
+                                            nameus: widget.nameus,
+                                            emailus: widget.emailus,
+                                            roleus: widget.roleus));
                                       }
                                     } else {
                                       showToast(

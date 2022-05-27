@@ -1,10 +1,9 @@
 // ignore_for_file: must_be_immutable, file_names
 
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../pages/chats_page.dart';
+import '../chat_widgets/chats_page.dart';
 
 import '../users/profile.dart';
 import 'menuAdmin.dart';

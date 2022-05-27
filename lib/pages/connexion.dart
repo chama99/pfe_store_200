@@ -3,7 +3,8 @@
 import 'package:chama_projet/services/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
-
+import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:convert' show base64, utf8;
 import '../widget/InputDeco_design.dart';

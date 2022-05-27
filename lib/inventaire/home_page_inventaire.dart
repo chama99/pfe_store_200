@@ -9,8 +9,23 @@ import 'package:get/get.dart';
 import '../services/reception.dart';
 import 'dart:ui' as ui;
 
+import '../widget/NavBottom.dart';
+
 class ListInventaire extends StatefulWidget {
-  const ListInventaire({Key? key}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  ListInventaire({
+    Key? key,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<ListInventaire> createState() => _ListInventaireState();
@@ -52,12 +67,29 @@ class _ListInventaireState extends State<ListInventaire> {
         title: const Text("Inventaire"),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: RefreshIndicator(
           onRefresh: () {
             Navigator.pushReplacement(
                 context,
                 PageRouteBuilder(
-                    pageBuilder: (a, b, c) => const ListInventaire(),
+                    pageBuilder: (a, b, c) => ListInventaire(
+                        idus: widget.idus,
+                        url: widget.url,
+                        telus: widget.telus,
+                        adrus: widget.adrus,
+                        accesus: widget.accesus,
+                        nameus: widget.nameus,
+                        emailus: widget.emailus,
+                        roleus: widget.roleus),
                     transitionDuration: const Duration(seconds: 0)));
             // ignore: void_checks
             return Future.value(false);
@@ -72,7 +104,15 @@ class _ListInventaireState extends State<ListInventaire> {
                   child: Card(
                       child: InkWell(
                     onTap: () {
-                      Get.to(() => const ListReception());
+                      Get.to(() => ListReception(
+                          idus: widget.idus,
+                          url: widget.url,
+                          telus: widget.telus,
+                          adrus: widget.adrus,
+                          accesus: widget.accesus,
+                          nameus: widget.nameus,
+                          emailus: widget.emailus,
+                          roleus: widget.roleus));
                     },
                     splashColor: const Color.fromARGB(255, 3, 56, 109),
                     child: Column(
@@ -110,7 +150,15 @@ class _ListInventaireState extends State<ListInventaire> {
                   child: Card(
                       child: InkWell(
                     onTap: () {
-                      Get.to(() => const ListTransfert());
+                      Get.to(() => ListTransfert(
+                          idus: widget.idus,
+                          url: widget.url,
+                          telus: widget.telus,
+                          adrus: widget.adrus,
+                          accesus: widget.accesus,
+                          nameus: widget.nameus,
+                          emailus: widget.emailus,
+                          roleus: widget.roleus));
                     },
                     splashColor: const Color.fromARGB(255, 3, 56, 109),
                     child: Column(
@@ -148,7 +196,15 @@ class _ListInventaireState extends State<ListInventaire> {
                   child: Card(
                       child: InkWell(
                     onTap: () {
-                      Get.to(() => const ListLivraison());
+                      Get.to(() => ListLivraison(
+                          idus: widget.idus,
+                          url: widget.url,
+                          telus: widget.telus,
+                          adrus: widget.adrus,
+                          accesus: widget.accesus,
+                          nameus: widget.nameus,
+                          emailus: widget.emailus,
+                          roleus: widget.roleus));
                     },
                     splashColor: const Color.fromARGB(255, 3, 56, 109),
                     child: Column(

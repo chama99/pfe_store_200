@@ -46,8 +46,6 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
   // ignore: non_constant_identifier_names
   final Contolleremise = TextEditingController();
   DateTime dataTime = DateTime.now();
-  int? sortColumnIndex;
-  bool isAscending = false;
 
   final _formKey = GlobalKey<FormState>();
   final titre = TextEditingController();
@@ -252,40 +250,30 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                   scrollDirection: Axis.horizontal,
                                   child: SingleChildScrollView(
                                     child: DataTable(
-                                      sortAscending: isAscending,
-                                      sortColumnIndex: sortColumnIndex,
-                                      columns: [
+                                      columns: const [
                                         DataColumn(
-                                          label: const Text("réf"),
-                                          onSort: onSort,
+                                          label: Text("réf"),
                                         ),
                                         DataColumn(
-                                          label: const Text("Article"),
-                                          onSort: onSort,
+                                          label: Text("Article"),
                                         ),
                                         DataColumn(
-                                          label: const Text("Description"),
-                                          onSort: onSort,
+                                          label: Text("Description"),
                                         ),
                                         DataColumn(
-                                          label: const Text("Unité"),
-                                          onSort: onSort,
+                                          label: Text("Unité"),
                                         ),
                                         DataColumn(
-                                          label: const Text("Quantité"),
-                                          onSort: onSort,
+                                          label: Text("Quantité"),
                                         ),
                                         DataColumn(
-                                          label: const Text("Prix unitaire"),
-                                          onSort: onSort,
+                                          label: Text("Prix unitaire"),
                                         ),
                                         DataColumn(
-                                          label: const Text("Taxes"),
-                                          onSort: onSort,
+                                          label: Text("Taxes"),
                                         ),
                                         DataColumn(
-                                          label: const Text("Sous-total"),
-                                          onSort: onSort,
+                                          label: Text("Sous-total"),
                                         )
                                       ],
                                       rows: [
@@ -638,13 +626,6 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
         ),
       ),
     );
-  }
-
-  void onSort(int columnIndex, bool ascending) {
-    setState(() {
-      sortColumnIndex = columnIndex;
-      isAscending = ascending;
-    });
   }
 
   Widget buildDatePicker(date) => SizedBox(

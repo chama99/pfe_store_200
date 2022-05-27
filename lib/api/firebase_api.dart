@@ -5,7 +5,7 @@ import 'package:chama_projet/model/message.dart';
 import 'package:chama_projet/model/user.dart';
 
 import '../model/user.dart';
-import '../utils.dart';
+import '../pages/utils.dart';
 
 class FirebaseApi {
   static Stream<List<User>>? getUsers() {

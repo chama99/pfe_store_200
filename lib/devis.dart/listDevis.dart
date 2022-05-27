@@ -4,7 +4,6 @@ import 'package:chama_projet/services/devis.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../widget/NavBottom.dart';
 import '../widget/boitedialogue.dart';
@@ -233,11 +232,5 @@ class _ListDevisState extends State<ListDevis> {
     setState(() {
       Listdevis = suggestions;
     });
-  }
-
-  String formattedDate(timeStamp) {
-    var dateFromTimeStamp =
-        DateTime.fromMicrosecondsSinceEpoch(timeStamp.seconds * 2000);
-    return DateFormat('MM/dd/yyyy').format(dateFromTimeStamp);
   }
 }

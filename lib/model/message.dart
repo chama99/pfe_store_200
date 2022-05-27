@@ -1,4 +1,4 @@
-import '../utils.dart';
+import '../pages/utils.dart';
 
 class MessageField {
   static const String createdAt = 'createdAt';

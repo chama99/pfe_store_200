@@ -207,6 +207,10 @@ class _UpdateFactureState extends State<UpdateFacture> {
                                             if (n.text.isEmpty) {
                                               showToast(
                                                   "Veuillez entrer Numéro de ligne");
+                                            } else if (int.parse(n.text) >
+                                                widget.tab.length - 1) {
+                                              showToast(
+                                                  "le numéro de ligne n'existe pas");
                                             } else {
                                               Get.to(() => ModifieLignFact(
                                                   id: widget.id,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../pages/listUser.dart';
+import '../users/listUser.dart';
 
 Card buildInputCardUser(String idus, String role, String email, String name,
     List acces, String url, String adr, String tel) {

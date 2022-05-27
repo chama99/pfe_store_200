@@ -3,11 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../widget/NavBottom.dart';
 import 'modifierprof.dart';
 
 class Profile extends StatefulWidget {
   String email, nom, mdp, image, role, id, adress, telef;
   List acces;
+
   Profile({
     Key? key,
     required this.id,
@@ -66,7 +68,11 @@ class _ProfileState extends State<Profile> {
                     id: widget.id,
                     email: widget.email,
                     nom: widget.nom,
-                    acces: widget.acces));
+                    acces: widget.acces,
+                    tel: widget.telef,
+                    adr: widget.adress,
+                    image: widget.image,
+                    role: widget.role));
               },
               child: Text(
                 "Modifier".toUpperCase(),
@@ -78,6 +84,15 @@ class _ProfileState extends State<Profile> {
           ),
         ],
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telef,
+          adr: widget.adress,
+          id: widget.id,
+          email: widget.email,
+          name: widget.nom,
+          acces: widget.acces,
+          url: widget.image,
+          role: widget.role),
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -85,7 +100,7 @@ class _ProfileState extends State<Profile> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Container(
-                height: size.height * 0.60,
+                height: size.height * 0.50,
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(

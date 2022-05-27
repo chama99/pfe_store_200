@@ -1,27 +1,24 @@
-// ignore_for_file: file_names, must_be_immutable, unused_local_variable
+// ignore_for_file: file_names, must_be_immutable
 
-import 'package:chama_projet/pages/update_user.dart';
 import 'package:flutter/material.dart';
 
 import '../widget/NavBottom.dart';
+import 'edit_contact.dart';
 
-class UtilisateurDetail extends StatefulWidget {
-  String email, nom, mdp, image, role, id, adr, tel, idus;
-  String emailus, nameus, url, roleus, adrus, telus;
-  List acces;
+class ContactDetail extends StatefulWidget {
+  String email, nom, tel, adresse, image, id;
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
   List accesus;
-  UtilisateurDetail({
+  ContactDetail({
     Key? key,
     required this.id,
-    required this.idus,
     required this.image,
     required this.email,
     required this.nom,
-    required this.mdp,
-    required this.role,
-    required this.acces,
     required this.tel,
-    required this.adr,
+    required this.adresse,
+    required this.idus,
     required this.url,
     required this.emailus,
     required this.nameus,
@@ -32,10 +29,10 @@ class UtilisateurDetail extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<UtilisateurDetail> createState() => _UtilisateurDetailState();
+  State<ContactDetail> createState() => _ContactDetailState();
 }
 
-class _UtilisateurDetailState extends State<UtilisateurDetail> {
+class _ContactDetailState extends State<ContactDetail> {
   Widget textfield({@required hintText}) {
     return Material(
       elevation: 4,
@@ -75,17 +72,11 @@ class _UtilisateurDetailState extends State<UtilisateurDetail> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => UpdateUserPage(
-                            id: widget.id,
-                            email: widget.email,
+                        builder: (context) => EditContact(
                             nom: widget.nom,
-                            acces: widget.acces,
-                            adr: widget.adr,
-                            idus: widget.id,
-                            role: widget.role,
-                            tel: widget.tel,
-                            url: widget.image,
-                            image: widget.url,
+                            id: widget.id,
+                            idus: widget.idus,
+                            url: widget.url,
                             telus: widget.telus,
                             adrus: widget.adrus,
                             accesus: widget.accesus,
@@ -123,33 +114,16 @@ class _UtilisateurDetailState extends State<UtilisateurDetail> {
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     textfield(
-                      hintText: widget.nom,
+                      hintText: widget.email,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: textfield(
-                        hintText: widget.email,
-                      ),
+                    textfield(
+                      hintText: widget.adresse,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: textfield(
-                        hintText: widget.role,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: textfield(
-                        hintText: widget.adr,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: textfield(
-                        hintText: widget.tel,
-                      ),
+                    textfield(
+                      hintText: widget.tel,
                     ),
                   ],
                 ),
@@ -166,6 +140,18 @@ class _UtilisateurDetailState extends State<UtilisateurDetail> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  widget.nom,
+                  style: const TextStyle(
+                    fontSize: 35,
+                    letterSpacing: 1.5,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
               Container(
                 padding: const EdgeInsets.all(10.0),
                 width: MediaQuery.of(context).size.width / 2,
@@ -193,9 +179,9 @@ class HeaderCurvedContainer extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()..color = Colors.orange;
     Path path = Path()
-      ..relativeLineTo(0, 100)
-      ..quadraticBezierTo(size.width / 2, 150, size.width, 100)
-      ..relativeLineTo(0, -100)
+      ..relativeLineTo(0, 150)
+      ..quadraticBezierTo(size.width / 2, 225, size.width, 150)
+      ..relativeLineTo(0, -150)
       ..close();
     canvas.drawPath(path, paint);
   }

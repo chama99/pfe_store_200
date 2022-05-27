@@ -196,52 +196,44 @@ class _DevisDetaillerState extends State<DevisDetailler> {
                             MaterialStateProperty.resolveWith(_getDataRowColor),
                         sortAscending: isAscending,
                         sortColumnIndex: sortColumnIndex,
-                        columns: [
+                        columns: const [
                           DataColumn(
-                            label: const Text(
+                            label: Text(
                               "réf",
                             ),
-                            onSort: onSort,
                           ),
                           DataColumn(
-                            label: const Text(
+                            label: Text(
                               "Article",
                             ),
-                            onSort: onSort,
                           ),
                           DataColumn(
-                            label: const Text(
+                            label: Text(
                               "Description",
                             ),
-                            onSort: onSort,
                           ),
                           DataColumn(
-                            label: const Text(
+                            label: Text(
                               "Unité",
                             ),
-                            onSort: onSort,
                           ),
                           DataColumn(
-                            label: const Text(
+                            label: Text(
                               "Quantité",
                             ),
-                            onSort: onSort,
                           ),
                           DataColumn(
-                            label: const Text(
+                            label: Text(
                               "Prix unitaire",
                             ),
-                            onSort: onSort,
                           ),
                           DataColumn(
-                            label: const Text(
+                            label: Text(
                               "Taxes",
                             ),
-                            onSort: onSort,
                           ),
                           DataColumn(
-                            label: const Text("Sous-total"),
-                            onSort: onSort,
+                            label: Text("Sous-total"),
                           )
                         ],
                         rows: [
@@ -337,13 +329,6 @@ class _DevisDetaillerState extends State<DevisDetailler> {
         ],
       ),
     );
-  }
-
-  void onSort(int columnIndex, bool ascending) {
-    setState(() {
-      sortColumnIndex = columnIndex;
-      isAscending = ascending;
-    });
   }
 
   Future onSubmit() async {

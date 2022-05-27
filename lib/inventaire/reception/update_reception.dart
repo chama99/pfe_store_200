@@ -5,6 +5,7 @@ import 'package:chama_projet/inventaire/reception/listReception.dart';
 import 'package:chama_projet/services/reception.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../widget/NavBottom.dart';
 import '../../widget/toast.dart';
 import 'ModifierLigneOperation.dart';
 
@@ -13,15 +14,26 @@ class UpdateReception extends StatefulWidget {
   List OperationList;
   String reception, etat;
   String date;
-  UpdateReception(
-      {Key? key,
-      required this.id,
-      required this.titre,
-      required this.OperationList,
-      required this.reception,
-      required this.etat,
-      required this.date})
-      : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  UpdateReception({
+    Key? key,
+    required this.id,
+    required this.titre,
+    required this.OperationList,
+    required this.reception,
+    required this.etat,
+    required this.date,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<UpdateReception> createState() => _UpdateReceptionState();
@@ -44,6 +56,15 @@ class _UpdateReceptionState extends State<UpdateReception> {
         ),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: RefreshIndicator(
         onRefresh: () {
           Navigator.pushReplacement(
@@ -51,13 +72,20 @@ class _UpdateReceptionState extends State<UpdateReception> {
               PageRouteBuilder(
                   // ignore: prefer_const_constructors
                   pageBuilder: (a, b, c) => UpdateReception(
-                        id: widget.id,
-                        titre: widget.titre,
-                        OperationList: widget.OperationList,
-                        reception: widget.reception,
-                        etat: widget.etat,
-                        date: widget.date,
-                      ),
+                      id: widget.id,
+                      titre: widget.titre,
+                      OperationList: widget.OperationList,
+                      reception: widget.reception,
+                      etat: widget.etat,
+                      date: widget.date,
+                      idus: widget.idus,
+                      url: widget.url,
+                      telus: widget.telus,
+                      adrus: widget.adrus,
+                      accesus: widget.accesus,
+                      nameus: widget.nameus,
+                      emailus: widget.emailus,
+                      roleus: widget.roleus),
                   // ignore: prefer_const_constructors
                   transitionDuration: Duration(seconds: 0)));
           // ignore: void_checks
@@ -86,14 +114,21 @@ class _UpdateReceptionState extends State<UpdateReception> {
                               IconButton(
                                 onPressed: () {
                                   Get.to(() => Ajoutoperation(
-                                        id: widget.id,
-                                        titre: widget.titre,
-                                        etat: widget.etat,
-                                        date: widget.date,
-                                        ListOperation: widget.OperationList,
-                                        reception: widget.reception,
-                                        page: ch,
-                                      ));
+                                      id: widget.id,
+                                      titre: widget.titre,
+                                      etat: widget.etat,
+                                      date: widget.date,
+                                      ListOperation: widget.OperationList,
+                                      reception: widget.reception,
+                                      page: ch,
+                                      idus: widget.idus,
+                                      url: widget.url,
+                                      telus: widget.telus,
+                                      adrus: widget.adrus,
+                                      accesus: widget.accesus,
+                                      nameus: widget.nameus,
+                                      emailus: widget.emailus,
+                                      roleus: widget.roleus));
                                 },
                                 icon: const Icon(
                                   Icons.add,
@@ -129,17 +164,29 @@ class _UpdateReceptionState extends State<UpdateReception> {
                                             if (n.text.isEmpty) {
                                               showToast(
                                                   "Veuillez entrer Numéro de ligne");
+                                            } else if (int.parse(n.text) >
+                                                widget.OperationList.length -
+                                                    1) {
+                                              showToast(
+                                                  "le numéro de ligne n'existe pas");
                                             } else {
                                               Get.to(() => ModifierOperation(
-                                                    id: widget.id,
-                                                    titre: widget.titre,
-                                                    reception: widget.reception,
-                                                    etat: widget.etat,
-                                                    num: int.parse(n.text),
-                                                    ligneOperation:
-                                                        widget.OperationList,
-                                                    date: widget.date,
-                                                  ));
+                                                  id: widget.id,
+                                                  titre: widget.titre,
+                                                  reception: widget.reception,
+                                                  etat: widget.etat,
+                                                  num: int.parse(n.text),
+                                                  ligneOperation:
+                                                      widget.OperationList,
+                                                  date: widget.date,
+                                                  idus: widget.idus,
+                                                  url: widget.url,
+                                                  telus: widget.telus,
+                                                  adrus: widget.adrus,
+                                                  accesus: widget.accesus,
+                                                  nameus: widget.nameus,
+                                                  emailus: widget.emailus,
+                                                  roleus: widget.roleus));
                                             }
                                           },
                                           icon: const Icon(
@@ -346,30 +393,38 @@ class _UpdateReceptionState extends State<UpdateReception> {
                     ),
                   ),
                 ],
-              ))
+              )),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  maximumSize: const Size(double.infinity, 50),
+                  primary: Colors.indigo,
+                ),
+                child: const Text(
+                  "Modifier",
+                  style: TextStyle(fontSize: 20),
+                ),
+                onPressed: () {
+                  Reception().updateReception(
+                      widget.id,
+                      "Atelier:Réception",
+                      widget.etat,
+                      DateTime.parse(widget.date),
+                      widget.OperationList,
+                      widget.reception);
+                  Get.to(() => ListReception(
+                      idus: widget.idus,
+                      url: widget.url,
+                      telus: widget.telus,
+                      adrus: widget.adrus,
+                      accesus: widget.accesus,
+                      nameus: widget.nameus,
+                      emailus: widget.emailus,
+                      roleus: widget.roleus));
+                },
+              ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          maximumSize: const Size(double.infinity, 50),
-          primary: Colors.indigo,
-        ),
-        child: const Text(
-          "Modifier",
-          style: TextStyle(fontSize: 20),
-        ),
-        onPressed: () {
-          Reception().updateReception(
-              widget.id,
-              "Atelier:Réception",
-              widget.etat,
-              DateTime.parse(widget.date),
-              widget.OperationList,
-              widget.reception);
-          Get.to(() => const ListReception());
-        },
       ),
     );
   }

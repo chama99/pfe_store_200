@@ -1,24 +1,27 @@
-// ignore_for_file: file_names, must_be_immutable
+// ignore_for_file: file_names, must_be_immutable, unused_local_variable
 
+import 'package:chama_projet/users/update_user.dart';
 import 'package:flutter/material.dart';
 
 import '../widget/NavBottom.dart';
-import 'edit_contact.dart';
 
-class ContactDetail extends StatefulWidget {
-  String email, nom, tel, adresse, image, id;
-  String emailus, nameus, url, roleus, adrus, telus, idus;
-
+class UtilisateurDetail extends StatefulWidget {
+  String email, nom, mdp, image, role, id, adr, tel, idus;
+  String emailus, nameus, url, roleus, adrus, telus;
+  List acces;
   List accesus;
-  ContactDetail({
+  UtilisateurDetail({
     Key? key,
     required this.id,
+    required this.idus,
     required this.image,
     required this.email,
     required this.nom,
+    required this.mdp,
+    required this.role,
+    required this.acces,
     required this.tel,
-    required this.adresse,
-    required this.idus,
+    required this.adr,
     required this.url,
     required this.emailus,
     required this.nameus,
@@ -29,10 +32,10 @@ class ContactDetail extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ContactDetail> createState() => _ContactDetailState();
+  State<UtilisateurDetail> createState() => _UtilisateurDetailState();
 }
 
-class _ContactDetailState extends State<ContactDetail> {
+class _UtilisateurDetailState extends State<UtilisateurDetail> {
   Widget textfield({@required hintText}) {
     return Material(
       elevation: 4,
@@ -59,6 +62,7 @@ class _ContactDetailState extends State<ContactDetail> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -71,11 +75,17 @@ class _ContactDetailState extends State<ContactDetail> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => EditContact(
-                            nom: widget.nom,
+                        builder: (context) => UpdateUserPage(
                             id: widget.id,
-                            idus: widget.idus,
-                            url: widget.url,
+                            email: widget.email,
+                            nom: widget.nom,
+                            acces: widget.acces,
+                            adr: widget.adr,
+                            idus: widget.id,
+                            role: widget.role,
+                            tel: widget.tel,
+                            url: widget.image,
+                            image: widget.url,
                             telus: widget.telus,
                             adrus: widget.adrus,
                             accesus: widget.accesus,
@@ -109,20 +119,37 @@ class _ContactDetailState extends State<ContactDetail> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Container(
-                height: 450,
+                height: size.height * 0.50,
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     textfield(
-                      hintText: widget.email,
+                      hintText: widget.nom,
                     ),
-                    textfield(
-                      hintText: widget.adresse,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: textfield(
+                        hintText: widget.email,
+                      ),
                     ),
-                    textfield(
-                      hintText: widget.tel,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: textfield(
+                        hintText: widget.role,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: textfield(
+                        hintText: widget.adr,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: textfield(
+                        hintText: widget.tel,
+                      ),
                     ),
                   ],
                 ),
@@ -139,18 +166,6 @@ class _ContactDetailState extends State<ContactDetail> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Text(
-                  widget.nom,
-                  style: const TextStyle(
-                    fontSize: 35,
-                    letterSpacing: 1.5,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
               Container(
                 padding: const EdgeInsets.all(10.0),
                 width: MediaQuery.of(context).size.width / 2,
@@ -178,9 +193,9 @@ class HeaderCurvedContainer extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()..color = Colors.orange;
     Path path = Path()
-      ..relativeLineTo(0, 150)
-      ..quadraticBezierTo(size.width / 2, 225, size.width, 150)
-      ..relativeLineTo(0, -150)
+      ..relativeLineTo(0, 100)
+      ..quadraticBezierTo(size.width / 2, 150, size.width, 100)
+      ..relativeLineTo(0, -100)
       ..close();
     canvas.drawPath(path, paint);
   }

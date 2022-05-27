@@ -1,6 +1,6 @@
 // ignore_for_file: file_names, must_be_immutable
 
-import 'package:chama_projet/pages/role.dart';
+import 'package:chama_projet/users/role.dart';
 import 'package:chama_projet/services/user.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

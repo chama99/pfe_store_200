@@ -8,6 +8,7 @@ import 'package:chama_projet/services/livraison.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../widget/NavBottom.dart';
 import '../../widget/toast.dart';
 import 'Modifieroperation_liv.dart';
 
@@ -16,15 +17,26 @@ class UpdateLivraison extends StatefulWidget {
   List OperationList;
   String livraison, etat;
   String date;
-  UpdateLivraison(
-      {Key? key,
-      required this.id,
-      required this.titre,
-      required this.OperationList,
-      required this.livraison,
-      required this.etat,
-      required this.date})
-      : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  UpdateLivraison({
+    Key? key,
+    required this.id,
+    required this.titre,
+    required this.OperationList,
+    required this.livraison,
+    required this.etat,
+    required this.date,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<UpdateLivraison> createState() => _UpdateLivraisonState();
@@ -46,6 +58,15 @@ class _UpdateLivraisonState extends State<UpdateLivraison> {
         ),
         backgroundColor: Colors.orange,
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: RefreshIndicator(
         onRefresh: () {
           Navigator.pushReplacement(
@@ -53,13 +74,20 @@ class _UpdateLivraisonState extends State<UpdateLivraison> {
               PageRouteBuilder(
                   // ignore: prefer_const_constructors
                   pageBuilder: (a, b, c) => UpdateLivraison(
-                        id: widget.id,
-                        titre: widget.titre,
-                        OperationList: widget.OperationList,
-                        livraison: widget.livraison,
-                        etat: widget.etat,
-                        date: widget.date,
-                      ),
+                      id: widget.id,
+                      titre: widget.titre,
+                      OperationList: widget.OperationList,
+                      livraison: widget.livraison,
+                      etat: widget.etat,
+                      date: widget.date,
+                      idus: widget.idus,
+                      url: widget.url,
+                      telus: widget.telus,
+                      adrus: widget.adrus,
+                      accesus: widget.accesus,
+                      nameus: widget.nameus,
+                      emailus: widget.emailus,
+                      roleus: widget.roleus),
                   // ignore: prefer_const_constructors
                   transitionDuration: Duration(seconds: 0)));
           // ignore: void_checks
@@ -88,14 +116,21 @@ class _UpdateLivraisonState extends State<UpdateLivraison> {
                               IconButton(
                                 onPressed: () {
                                   Get.to(() => AjoutoperationLiv(
-                                        id: widget.id,
-                                        titre: widget.titre,
-                                        etat: widget.etat,
-                                        date: widget.date,
-                                        ListOperation: widget.OperationList,
-                                        livraison: widget.livraison,
-                                        page: "Livraison",
-                                      ));
+                                      id: widget.id,
+                                      titre: widget.titre,
+                                      etat: widget.etat,
+                                      date: widget.date,
+                                      ListOperation: widget.OperationList,
+                                      livraison: widget.livraison,
+                                      page: "Livraison",
+                                      idus: widget.idus,
+                                      url: widget.url,
+                                      telus: widget.telus,
+                                      adrus: widget.adrus,
+                                      accesus: widget.accesus,
+                                      nameus: widget.nameus,
+                                      emailus: widget.emailus,
+                                      roleus: widget.roleus));
                                 },
                                 icon: const Icon(
                                   Icons.add,
@@ -129,17 +164,28 @@ class _UpdateLivraisonState extends State<UpdateLivraison> {
                                         if (n.text.isEmpty) {
                                           showToast(
                                               "Veuillez entrer Numéro de ligne");
+                                        } else if (int.parse(n.text) >
+                                            widget.OperationList.length - 1) {
+                                          showToast(
+                                              "le numéro de ligne n'existe pas");
                                         } else {
                                           Get.to(() => ModifierOperationLiv(
-                                                id: widget.id,
-                                                titre: widget.titre,
-                                                livraison: widget.livraison,
-                                                etat: widget.etat,
-                                                num: int.parse(n.text),
-                                                ligneOperation:
-                                                    widget.OperationList,
-                                                date: widget.date,
-                                              ));
+                                              id: widget.id,
+                                              titre: widget.titre,
+                                              livraison: widget.livraison,
+                                              etat: widget.etat,
+                                              num: int.parse(n.text),
+                                              ligneOperation:
+                                                  widget.OperationList,
+                                              date: widget.date,
+                                              idus: widget.idus,
+                                              url: widget.url,
+                                              telus: widget.telus,
+                                              adrus: widget.adrus,
+                                              accesus: widget.accesus,
+                                              nameus: widget.nameus,
+                                              emailus: widget.emailus,
+                                              roleus: widget.roleus));
                                         }
                                       },
                                       icon: const Icon(
@@ -335,30 +381,38 @@ class _UpdateLivraisonState extends State<UpdateLivraison> {
                     ),
                   ),
                 ],
-              ))
+              )),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  maximumSize: const Size(double.infinity, 50),
+                  primary: Colors.indigo,
+                ),
+                child: const Text(
+                  "Modifier",
+                  style: TextStyle(fontSize: 20),
+                ),
+                onPressed: () {
+                  Livraison().updateLivraison(
+                      widget.id,
+                      "Atelier:Réception",
+                      widget.etat,
+                      DateTime.parse(widget.date),
+                      widget.OperationList,
+                      widget.livraison);
+                  Get.to(() => ListLivraison(
+                      idus: widget.idus,
+                      url: widget.url,
+                      telus: widget.telus,
+                      adrus: widget.adrus,
+                      accesus: widget.accesus,
+                      nameus: widget.nameus,
+                      emailus: widget.emailus,
+                      roleus: widget.roleus));
+                },
+              ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          maximumSize: const Size(double.infinity, 50),
-          primary: Colors.indigo,
-        ),
-        child: const Text(
-          "Modifier",
-          style: TextStyle(fontSize: 20),
-        ),
-        onPressed: () {
-          Livraison().updateLivraison(
-              widget.id,
-              "Atelier:Réception",
-              widget.etat,
-              DateTime.parse(widget.date),
-              widget.OperationList,
-              widget.livraison);
-          Get.to(() => const ListLivraison());
-        },
       ),
     );
   }

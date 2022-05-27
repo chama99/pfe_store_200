@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
-import 'drop_down.dart';
+import '../widget/drop_down.dart';
 
 class AlertDialogPlan extends StatefulWidget {
   final EventList<Event> allPlans;

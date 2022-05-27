@@ -1,6 +1,6 @@
 // ignore_for_file: file_names, unused_local_variable
 
-import 'package:chama_projet/pages/utilisateur_detaille.dart';
+import 'package:chama_projet/users/utilisateur_detaille.dart';
 import 'package:chama_projet/services/user.dart';
 
 import 'package:flutter/material.dart';

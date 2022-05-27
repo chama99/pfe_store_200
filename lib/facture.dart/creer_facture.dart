@@ -28,6 +28,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
+import '../services/autofacture.dart';
 import '../services/employe.dart';
 import '../widget/InputDeco_design.dart';
 import '../widget/NavBottom.dart';
@@ -121,13 +122,16 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
 
   List list = [];
   List fact = [];
+  List facto = [];
   fetchDatabaseList() async {
     dynamic resultant2 = await CommandeFact().getCommList();
     dynamic resultf = await Facture().getFacturesList();
+    dynamic resfa = await AutoFacture().getFacturesList();
 
     setState(() {
       commandeList = resultant2;
       fact = resultf;
+      facto = resfa;
     });
   }
 
@@ -156,7 +160,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
 
   @override
   Widget build(BuildContext context) {
-    var l = fact.length;
+    var lf = fact.length + facto.length;
     final number = Random().nextInt(20);
     return Scaffold(
       appBar: AppBar(
@@ -261,38 +265,30 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                                     child: DataTable(
                                       sortAscending: isAscending,
                                       sortColumnIndex: sortColumnIndex,
-                                      columns: [
+                                      columns: const [
                                         DataColumn(
-                                          label: const Text("réf"),
-                                          onSort: onSort,
+                                          label: Text("réf"),
                                         ),
                                         DataColumn(
-                                          label: const Text("Article"),
-                                          onSort: onSort,
+                                          label: Text("Article"),
                                         ),
                                         DataColumn(
-                                          label: const Text("Description"),
-                                          onSort: onSort,
+                                          label: Text("Description"),
                                         ),
                                         DataColumn(
-                                          label: const Text(" Unité"),
-                                          onSort: onSort,
+                                          label: Text(" Unité"),
                                         ),
                                         DataColumn(
-                                          label: const Text("Quantité"),
-                                          onSort: onSort,
+                                          label: Text("Quantité"),
                                         ),
                                         DataColumn(
-                                          label: const Text("Prix Unitaire"),
-                                          onSort: onSort,
+                                          label: Text("Prix Unitaire"),
                                         ),
                                         DataColumn(
-                                          label: const Text("TVA"),
-                                          onSort: onSort,
+                                          label: Text("TVA"),
                                         ),
                                         DataColumn(
-                                          label: const Text("Sous-total"),
-                                          onSort: onSort,
+                                          label: Text("Sous-total"),
                                         )
                                       ],
                                       rows: [
@@ -597,7 +593,7 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
                         if (etat != null) {
                           Facture().addFacture(
                               uuid,
-                              "Facture N° ${l + 1}",
+                              "Facture N° ${lf + 1}",
                               client,
                               etat,
                               dataTime,
@@ -632,13 +628,6 @@ class _CreeFacturePageState extends State<CreeFacturePage> {
         ),
       ),
     );
-  }
-
-  void onSort(int columnIndex, bool ascending) {
-    setState(() {
-      sortColumnIndex = columnIndex;
-      isAscending = ascending;
-    });
   }
 
   Widget buildDatePicker(date) => SizedBox(

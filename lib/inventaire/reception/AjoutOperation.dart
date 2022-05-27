@@ -9,21 +9,33 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../services/article.dart';
+import '../../widget/NavBottom.dart';
 import '../../widget/toast.dart';
 
 class Ajoutoperation extends StatefulWidget {
   List ListOperation;
   String id, etat, date, reception, page, titre;
-  Ajoutoperation(
-      {Key? key,
-      required this.id,
-      required this.titre,
-      required this.etat,
-      required this.date,
-      required this.ListOperation,
-      required this.reception,
-      required this.page})
-      : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  Ajoutoperation({
+    Key? key,
+    required this.id,
+    required this.titre,
+    required this.etat,
+    required this.date,
+    required this.ListOperation,
+    required this.reception,
+    required this.page,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<Ajoutoperation> createState() => _AjoutoperationState();
@@ -107,6 +119,15 @@ class _AjoutoperationState extends State<Ajoutoperation> {
         backgroundColor: Colors.orange,
         title: const Text("Ajouter Ligne de opérations"),
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -316,7 +337,15 @@ class _AjoutoperationState extends State<Ajoutoperation> {
                                           OperationList: widget.ListOperation,
                                           reception: widget.reception,
                                           etat: widget.etat,
-                                          date: widget.date));
+                                          date: widget.date,
+                                          idus: widget.idus,
+                                          url: widget.url,
+                                          telus: widget.telus,
+                                          adrus: widget.adrus,
+                                          accesus: widget.accesus,
+                                          nameus: widget.nameus,
+                                          emailus: widget.emailus,
+                                          roleus: widget.roleus));
                                     } else {
                                       showToast(
                                           "veuillez sélectionner Article ");

@@ -1,5 +1,5 @@
 import 'package:chama_projet/Planning/plan_screen.dart';
-import 'package:chama_projet/widget/alertdialog_create_plan.dart';
+import 'package:chama_projet/Planning/alertdialog_create_plan.dart';
 import 'package:chama_projet/widget/plan_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

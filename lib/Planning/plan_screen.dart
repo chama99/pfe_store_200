@@ -11,7 +11,7 @@ import 'package:lottie/lottie.dart';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-import '../utils.dart';
+import '../pages/utils.dart';
 
 class PlanScreen extends StatefulWidget {
   final String? role;
@@ -120,16 +120,6 @@ class _PlanScreenState extends State<PlanScreen> {
       ));
     });
   }
-  // String _getPlanStatus() {
-  //   if (_buttons[0]) {
-  //     return "Demarrer";
-  //   } else if (_buttons[1]) {
-  //     return "Terminer";
-  //   } else if (_buttons[2]) {
-  //     return "Annuler";
-  //   }
-  //   return "Planifier";
-  // }
 
   void _updatePlan(BuildContext cx) async {
     if (_noteController.text == "") {
@@ -405,35 +395,6 @@ class _PlanScreenState extends State<PlanScreen> {
         ));
   }
 
-  // void updatePlan() async {
-  //   final CollectionReference _collectionRef =
-  //       FirebaseFirestore.instance.collection('plan');
-  //   var refInDb = _collectionRef.doc(widget.event['subject']);
-  //   await refInDb.set({'state': ""});
-  // }
-
-  // uploadImage(String email) async {
-  //   // ignore: unused_local_variable
-  //   final fileName = basename(_noteImage!.path);
-  //   // ignore: prefer_const_declarations
-  //   final destination = 'PlanNote';
-
-  //   try {
-  //     final ref = firebase_storage.FirebaseStorage.instance
-  //         .ref(destination)
-  //         .child('$email/');
-  //     UploadTask uploadTask = ref.putFile(File(_noteImage!.path));
-  //     await uploadTask.whenComplete(() async {
-  //       _picturePath = await uploadTask.snapshot.ref.getDownloadURL();
-
-  //       //Employe().addEmploye(email, nom, tel, adresse, uploadPath);
-  //     });
-  //   } catch (e) {
-  //     // ignore: avoid_print
-  //     print('error occured');
-  //   }
-  // }
-
   Widget bottomSheet() {
     return Container(
       height: 100.0,
@@ -471,13 +432,6 @@ class _PlanScreenState extends State<PlanScreen> {
       ]),
     );
   }
-
-  // void takePhoto(ImageSource source) async {
-  //   XFile? pickedFile = await _picker.pickImage(source: source);
-  //   setState(() {
-  //     _noteImage = pickedFile!;
-  //   });
-  // }
 
   modalShow(String text, BuildContext context, {bool success = true}) async {
     return await showDialog(

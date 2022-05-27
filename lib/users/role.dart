@@ -1,4 +1,4 @@
-import 'package:chama_projet/pages/ajoutRole.dart';
+import 'package:chama_projet/users/ajoutRole.dart';
 import 'package:flutter/material.dart';
 
 import '../services/user.dart';

@@ -1,10 +1,11 @@
-import 'package:chama_projet/pages/congescreens/conge_screen.dart';
+import 'package:chama_projet/congescreens/conge_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../Planning/calander.dart';
 import '../Planning/home_page_planning.dart';
+import '../congescreens/conge_screen.dart';
 
 Card buildInputCardPlan(String role, String email, String username) {
   return Card(

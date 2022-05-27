@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../contacts/contact_home_page.dart';
+import '../clients/contact_home_page.dart';
 
 Card buildInputCardContact(String idus, String nomus, String emailus,
     String url, List acces, String role, String telus, String adrus) {
