@@ -54,13 +54,14 @@ class _MenuAdminState extends State<MenuAdmin> {
               Stack(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(top: 3, right: 0, bottom: 4),
+                    padding:
+                        const EdgeInsets.only(top: 10, right: 15, bottom: 0),
                     child: CircleAvatar(
-                        radius: 50, backgroundImage: NetworkImage(widget.url)),
+                        radius: 20, backgroundImage: NetworkImage(widget.url)),
                   ),
                   Positioned(
-                    top: 30,
-                    right: 30,
+                    top: 25,
+                    right: 10,
                     child: InkWell(
                       onTap: () {
                         showModalBottomSheet(
