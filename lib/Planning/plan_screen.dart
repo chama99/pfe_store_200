@@ -2,24 +2,40 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-
 import '../pages/utils.dart';
+import '../widget/NavBottom.dart';
+import '../widget/modal.dart';
 
 class PlanScreen extends StatefulWidget {
   final String? role;
   final String planID;
   final dynamic event;
-  const PlanScreen(
-      {Key? key, required this.event, required this.planID, this.role})
-      : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  PlanScreen({
+    Key? key,
+    required this.event,
+    required this.planID,
+    this.role,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<PlanScreen> createState() => _PlanScreenState();
@@ -37,15 +53,14 @@ class _PlanScreenState extends State<PlanScreen> {
   final String _networkImage =
       "https://i0.wp.com/shahpourpouyan.com/wp-content/uploads/2018/10/orionthemes-placeholder-image-1.png";
   final _noteController = TextEditingController();
-  List<XFile?>? _noteImage;
+  List<XFile?>? _noteImage = [];
   final TextStyle _leftTextStyle =
       const TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
   final TextStyle _rightTextStyle =
       const TextStyle(fontWeight: FontWeight.w500, fontSize: 18);
-
-  Widget _saveButtonContent = const Text("Sauvgader",
+  Widget _saveButtonContent = const Text("Sauvgarder",
       style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18));
-
+  bool _isClicked = false;
   Map<String, String> _paths = {};
   String _extension = "";
   late FileType _pickType;
@@ -53,21 +68,31 @@ class _PlanScreenState extends State<PlanScreen> {
   List<UploadTask> _tasks = <UploadTask>[];
 
   ///--------Methods--------------
-  Future _uploadImages(String email) async {
-    const destination = 'PlanNote';
+  Future<List<String>> _uploadImages(String email) async {
+    int i = 0;
+    await FirebaseAuth.instance.signInAnonymously();
     for (var f in _noteImage!) {
-      final ref = firebase_storage.FirebaseStorage.instance
-          .ref(destination)
-          .child('$email/');
-      final UploadTask uploadTask = ref.putFile(File(f!.path));
+      i++;
+      final ref = FirebaseStorage.instance
+          .ref('plan_pictures')
+          .child(widget.planID + "$i");
+      final uploadTask = ref.putFile(File(f!.path));
+      uploadTask.whenComplete(() async {
+        try {
+          var x = await ref.getDownloadURL();
+          _pictureUploaded.add(x);
+        } catch (onError) {
+          print("Error");
+        }
+      });
     }
+    return _pictureUploaded;
   }
 
   void selectImages() async {
-    List<XFile>? imageFileList = [];
     final List<XFile>? selectedImages = await ImagePicker().pickMultiImage();
     if (selectedImages!.isNotEmpty) {
-      imageFileList.addAll(selectedImages);
+      _noteImage!.addAll(selectedImages);
     }
     setState(() {});
   }
@@ -102,23 +127,58 @@ class _PlanScreenState extends State<PlanScreen> {
   }
 
   updatePlanStatus(String status, BuildContext context) async {
-    final refPlans = FirebaseFirestore.instance.collection("plan");
-    refPlans.doc(widget.planID).update({"state": status}).then((v) {
-      print("i had began");
-      _planStatus = status;
-      _renderButton();
+    bool clicked = GetStorage().read(widget.planID) ?? false;
+    //print(clicked);
+    if (status != "Terminer") {
+      final refPlans = FirebaseFirestore.instance.collection("plan");
+      refPlans.doc(widget.planID).update({"state": status}).then((v) {
+        print("i had began");
+        _planStatus = status;
+        _renderButton();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Row(children: [
+            const Icon(
+              Icons.check,
+              color: Colors.greenAccent,
+            ),
+            const Spacer(),
+            Text('Plan a été $status avec success ')
+          ]),
+        ));
+      });
+    } else if (status == "Terminer" && clicked) {
+      final refPlans = FirebaseFirestore.instance.collection("plan");
+      refPlans.doc(widget.planID).update({"state": status}).then((v) {
+        print("i had began");
+        _planStatus = status;
+        _renderButton();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Row(children: const [
+            Icon(
+              Icons.check,
+              color: Colors.greenAccent,
+            ),
+            Spacer(),
+            Text('Plan a été Terminer avec success')
+          ]),
+        ));
+      });
+    } else if (status == "Terminer" && clicked == false) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         behavior: SnackBarBehavior.floating,
         content: Row(children: const [
           Icon(
-            Icons.check,
-            color: Colors.greenAccent,
+            Icons.warning,
+            color: Colors.orangeAccent,
           ),
           Spacer(),
-          Text('Plan a été mis a jour avec success ')
+          Text(
+              'Veuillez remplir le note et sauvgarder pour \nterminer le plan!')
         ]),
       ));
-    });
+    }
   }
 
   void _updatePlan(BuildContext cx) async {
@@ -134,50 +194,68 @@ class _PlanScreenState extends State<PlanScreen> {
           ));
     });
     if (_noteImage != null) {
-      _uploadImages(widget.planID);
-    }
+      _uploadImages(widget.planID).then((picturesUploaded) async {
+        final refPlans = FirebaseFirestore.instance.collection("plan");
+        await refPlans.doc(widget.planID).update({
+          "state": _planStatus,
+          "note": _noteController.text,
+          "picture": picturesUploaded,
+          "updated": true
+        }).then((_) async {
+          _isClicked = true;
+          var _newEvent = await refPlans.doc(widget.planID).get();
 
-    final refPlans = FirebaseFirestore.instance.collection("plan");
-    await refPlans.doc(widget.planID).update({
-      "state": _planStatus,
-      "note": _noteController.text,
-      "picture": _picturePath == "" ? "" : _picturePath
-    }).then((_) async {
-      var _newEvent = await refPlans.doc(widget.planID).get();
-      setState(() {
-        _eventFromParent = _newEvent;
-        _saveButtonContent = Text("Sauvgader", style: _rightTextStyle);
+          setState(() {
+            _eventFromParent = _newEvent;
+            _saveButtonContent = Text("Sauvgarder", style: _rightTextStyle);
+          });
+          ScaffoldMessenger.of(cx).showSnackBar(SnackBar(
+            content: Row(children: const [
+              Icon(
+                Icons.check,
+                color: Colors.greenAccent,
+              ),
+              Spacer(),
+              Text('Plan a été mis a jour avec success ')
+            ]),
+          ));
+          GetStorage().write(widget.planID, true);
+        }).onError((error, stackTrace) {
+          setState(() {
+            _saveButtonContent = Text("Sauvgarder", style: _rightTextStyle);
+          });
+          print(error);
+          print(stackTrace);
+          ScaffoldMessenger.of(cx).showSnackBar(SnackBar(
+            content: Row(children: [
+              const Icon(
+                Icons.check,
+                color: Colors.greenAccent,
+              ),
+              const SizedBox(width: 8),
+              Text('Probléme : $error')
+            ]),
+          ));
+        });
+      }).onError((error, stackTrace) {
+        ScaffoldMessenger.of(cx).showSnackBar(SnackBar(
+          content: Row(children: const [
+            Icon(
+              Icons.check,
+              color: Colors.greenAccent,
+            ),
+            SizedBox(width: 8),
+            Text("un probléme s'est produit lors du chargement des photo ")
+          ]),
+        ));
       });
-      _scaffoldkey.currentState!.showSnackBar(SnackBar(
-        content: Row(children: const [
-          Icon(
-            Icons.check,
-            color: Colors.greenAccent,
-          ),
-          Spacer(),
-          Text('Plan a été mis a jour avec success ')
-        ]),
-      ));
-    }).onError((error, stackTrace) {
-      setState(() {
-        _saveButtonContent = Text("Sauvgader", style: _rightTextStyle);
-      });
-      ScaffoldMessenger.of(cx).showSnackBar(SnackBar(
-        content: Row(children: [
-          const Icon(
-            Icons.check,
-            color: Colors.greenAccent,
-          ),
-          const SizedBox(width: 8),
-          Text('Probléme : ${error}')
-        ]),
-      ));
-    });
+    }
   }
 
   ///---------InitState()-------
   @override
   void initState() {
+    _isClicked = widget.event["updated"] ?? false;
     if (widget.role == "Technicien") {
       _buttons = [false, false, true];
     }
@@ -192,207 +270,254 @@ class _PlanScreenState extends State<PlanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.orange,
-          centerTitle: true,
-          title: const Text("Plan"),
-        ),
-        body: SingleChildScrollView(
-            child: Container(
-          height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        if (_buttons[0]) {
-                          return;
-                        }
-                        updatePlanStatus("Demarrer", context);
-                        _planStatus = "Demarrer";
-                        _buttons[0] = true;
-                        _buttons[1] = false;
-                        _buttons[2] = true;
-                        setState(() {});
-                      },
-                      style: ElevatedButton.styleFrom(
-                          primary: _buttons[0] ? Colors.grey : Colors.orange),
-                      child: const Text("Démarrer")),
-                  ElevatedButton(
-                      onPressed: () {
-                        if (_buttons[1]) {
-                          return;
-                        }
-                        if (_noteController.text.isEmpty) {
-                          modalShow("Veuillez remplir les note", context,
-                              success: false);
-                          return;
-                        }
-                        updatePlanStatus("Terminer", context);
-                        //_planStatus = "Terminer";
-                        _buttons[0] = true;
-                        _buttons[1] = true;
-                        _buttons[2] = true;
+      appBar: AppBar(
+        backgroundColor: Colors.orange,
+        centerTitle: true,
+        title: const Text("Plan"),
+      ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      if (_buttons[0]) {
+                        return;
+                      }
+                      updatePlanStatus("Demarrer", context);
+                      _planStatus = "Demarrer";
+                      setState(() {});
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: _buttons[0] ? Colors.grey : Colors.orange),
+                    child: const Text("Démarrer")),
+                ElevatedButton(
+                    onPressed: () {
+                      if (_buttons[1]) {
+                        return;
+                      }
+                      if (_noteController.text.isEmpty) {
+                        modalShow("Veuillez remplir les note", context,
+                            success: false);
+                        return;
+                      }
+                      updatePlanStatus("Terminer", context);
+                      _planStatus = "Terminer";
 
-                        setState(() {});
-                      },
-                      style: ElevatedButton.styleFrom(
-                          primary: _buttons[1] ? Colors.grey : Colors.green),
-                      child: const Text("Terminer")),
-                  ElevatedButton(
-                      onPressed: () {
-                        if (_buttons[2]) {
-                          return;
-                        }
-                        updatePlanStatus("Annuler", context);
-                        _planStatus = "Annuler";
-                        _buttons[0] = true;
-                        _buttons[1] = true;
-                        _buttons[2] = true;
-                        setState(() {});
-                      },
-                      style: ElevatedButton.styleFrom(
-                          primary: _buttons[2] ? Colors.grey : Colors.red),
-                      child: const Text("Annuler")),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("Sujet de plan :", style: _leftTextStyle),
-                  Text(_eventFromParent['subject'], style: _rightTextStyle)
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("Etat de plan :", style: _leftTextStyle),
-                  Text(_eventFromParent['state'].toString(),
-                      style: _rightTextStyle)
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("Client :", style: _leftTextStyle),
-                  Text(_eventFromParent['client'], style: _rightTextStyle)
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("Date de début :", style: _leftTextStyle),
-                  Text(Utils.toReadableDate(_eventFromParent['startTime']),
-                      style: _rightTextStyle)
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("Date de fin :", style: _leftTextStyle),
-                  Text(
-                      Utils.toReadableDate(_eventFromParent['endTime'])
-                          .toString(),
-                      style: _rightTextStyle)
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("Heure :", style: _leftTextStyle),
-                  Text(_eventFromParent['time'] ?? "--:--  --:--",
-                      style: _rightTextStyle)
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("Note :", style: _leftTextStyle),
-                  Expanded(
-                      child: TextField(
-                    controller: _noteController,
-                    decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                      icon: Container(
-                        height: 50,
-                        width: 50,
-                        child: const Icon(
-                          Icons.add,
-                          color: Colors.white,
-                        ),
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(40)),
-                            color: Colors.grey[400]),
+                      setState(() {});
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: _buttons[1] ? Colors.grey : Colors.green),
+                    child: const Text("Terminer")),
+                ElevatedButton(
+                    onPressed: () {
+                      if (_buttons[2]) {
+                        return;
+                      }
+                      updatePlanStatus("Annuler", context);
+                      _planStatus = "Annuler";
+                      setState(() {});
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: _buttons[2] ? Colors.grey : Colors.red),
+                    child: const Text("Annuler")),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("Sujet de plan :", style: _leftTextStyle),
+                Text(_eventFromParent['subject'], style: _rightTextStyle)
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("Etat de plan :", style: _leftTextStyle),
+                Text(_eventFromParent['state'].toString(),
+                    style: _rightTextStyle)
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("Client :", style: _leftTextStyle),
+                Text(_eventFromParent['client'], style: _rightTextStyle)
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("Date de début :", style: _leftTextStyle),
+                Text(Utils.toReadableDate(_eventFromParent['startTime']),
+                    style: _rightTextStyle)
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("Date de fin :", style: _leftTextStyle),
+                Text(
+                    Utils.toReadableDate(_eventFromParent['endTime'])
+                        .toString(),
+                    style: _rightTextStyle)
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("Heure :", style: _leftTextStyle),
+                Text(_eventFromParent['time'] ?? "--:--  --:--",
+                    style: _rightTextStyle)
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("Note :", style: _leftTextStyle),
+                Expanded(
+                    child: TextField(
+                  controller: _noteController,
+                  decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                    icon: Container(
+                      height: 50,
+                      width: 50,
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.white,
                       ),
-                      onPressed: () {
-                        showModalBottomSheet(
-                            context: context,
-                            builder: ((builder) => bottomSheet()));
-                      },
-                    )),
-                  ))
-                ],
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              _noteImage == null
-                  ? Image.network(
-                      _networkImage,
-                      height: 200,
-                      width: 300,
-                    )
-                  : GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 200,
-                              childAspectRatio: 3 / 2,
-                              crossAxisSpacing: 20,
-                              mainAxisSpacing: 20),
-                      itemCount: _noteImage!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Card(
-                            child: Container(
-                          child: Image.asset(_noteImage![index]!.path),
-                        ));
-                      })
-            ],
-          ),
-        )),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-          child: ElevatedButton(
-              onPressed: () => _updatePlan(context),
-              style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
-                  fixedSize: Size(MediaQuery.of(context).size.width * .7, 45)),
-              child: _saveButtonContent),
-        ));
+                      decoration: BoxDecoration(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(40)),
+                          color: Colors.grey[400]),
+                    ),
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: ((builder) => bottomSheet()));
+                    },
+                  )),
+                ))
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            _pictureUploaded.isEmpty && _eventFromParent["picture"] != null
+                ? Expanded(
+                    child: GridView.builder(
+                        scrollDirection: Axis.vertical,
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 200,
+                                childAspectRatio: 3 / 2,
+                                crossAxisSpacing: 20,
+                                mainAxisSpacing: 20),
+                        itemCount: _eventFromParent["picture"]!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Card(
+                              child: Stack(
+                            children: [
+                              Center(
+                                  child: SizedBox(
+                                      child: Image.network(
+                                          _eventFromParent["picture"][index]))),
+                              Positioned(
+                                  bottom: 10,
+                                  right: 10,
+                                  child: GestureDetector(
+                                      onTap: () async => showDialog(
+                                            context: context,
+                                            builder: (context) => ModalImage(
+                                                link:
+                                                    _eventFromParent["picture"]
+                                                        [index]),
+                                          ),
+                                      child: Icon(Icons.zoom_in)))
+                            ],
+                          ));
+                        }))
+                : Expanded(
+                    child: GridView.builder(
+                        scrollDirection: Axis.vertical,
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 200,
+                                childAspectRatio: 3 / 2,
+                                crossAxisSpacing: 20,
+                                mainAxisSpacing: 20),
+                        itemCount: _noteImage!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Card(
+                            child: Stack(
+                              children: [
+                                Center(
+                                    child: Image.file(
+                                        File(_noteImage![index]!.path))),
+                                Positioned(
+                                    bottom: 10,
+                                    right: 10,
+                                    child: GestureDetector(
+                                        onTap: () async => showDialog(
+                                              context: context,
+                                              builder: (context) => ModalImage(
+                                                  link:
+                                                      _noteImage![index]!.path),
+                                            ),
+                                        child: Icon(Icons.zoom_in)))
+                              ],
+                            ),
+                          );
+                        })),
+            SizedBox(
+              width: 370,
+              child: ElevatedButton(
+                  onPressed: () => _updatePlan(context),
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color.fromARGB(255, 62, 75, 146),
+                      fixedSize:
+                          Size(MediaQuery.of(context).size.width * .7, 45)),
+                  child: _saveButtonContent),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget bottomSheet() {
@@ -404,7 +529,7 @@ class _PlanScreenState extends State<PlanScreen> {
       ),
       child: Column(children: <Widget>[
         const Text(
-          "Choisissez la photo de profil",
+          "Choisissez un ou plusieurs images",
           style: TextStyle(fontSize: 20.0),
         ),
         const SizedBox(

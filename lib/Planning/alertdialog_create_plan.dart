@@ -6,21 +6,33 @@ import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 
+import '../pages/utils.dart';
+import '../widget/NavBottom.dart';
 import '../widget/drop_down.dart';
 
 class AlertDialogPlan extends StatefulWidget {
   final EventList<Event> allPlans;
   final String techName, username, role;
-  const AlertDialogPlan(
-      {Key? key,
-      required this.allPlans,
-      required this.techName,
-      required this.callback,
-      required this.username,
-      required this.role})
-      : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  AlertDialogPlan({
+    Key? key,
+    required this.allPlans,
+    required this.techName,
+    required this.callback,
+    required this.username,
+    required this.role,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
   final VoidCallback callback;
   @override
   State<AlertDialogPlan> createState() => _AlertDialogPlanState();
@@ -30,7 +42,7 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
   Widget _buttonWidget = const Text("Sauvgarder");
   bool _loading = true;
   final CollectionReference _contactsCollection =
-      FirebaseFirestore.instance.collection('contacts');
+      FirebaseFirestore.instance.collection('clients');
 
   final CollectionReference _planCollection =
       FirebaseFirestore.instance.collection('plan');
@@ -41,8 +53,7 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
   List<dynamic> users = [];
   Future getData() async {
     // Get docs from collection reference
-    QuerySnapshot querySnapshot =
-        await _contactsCollection.where('type', isEqualTo: "client").get();
+    QuerySnapshot querySnapshot = await _contactsCollection.get();
 
     return querySnapshot.docs.map((doc) => doc.data()).toList();
   }
@@ -63,59 +74,6 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
 
   String heure = "09:00 - 16:00";
   String clientDropDown = "Choissiez un client";
-
-  void sauvgardePlan() {
-    var doesExit = widget.allPlans.getEvents(_beginDate);
-    if (!_beginDate.isBefore(_endDate)) {
-      modalShow("Date de début doit étre inferieur au date de fin du plan",
-          success: false);
-      return;
-    }
-    if (telephone == "") {
-      modalShow("Veuillez selectionnez un client ", success: false);
-      return;
-    }
-    if (addresse == "") {
-      modalShow("Veuillez selectionnez un client ", success: false);
-      return;
-    }
-    if (sujet.text == "") {
-      modalShow("Veuillez entrer le sujet du plan", success: false);
-      return;
-    }
-    if (doesExit.isNotEmpty) {
-      modalShow("Date de début selectionner est déja prise par un autre plan",
-          success: false);
-      return;
-    }
-    setState(() {
-      _buttonWidget = const SizedBox(
-          width: 40,
-          child: CupertinoActivityIndicator(
-            color: Colors.white,
-          ));
-    });
-    //&& &&  &&
-    _planCollection.add({
-      "client": clientDropDown,
-      "endTime": _endDate,
-      "startTime": _beginDate,
-      "state": "Planifier",
-      "subject": sujet.text,
-      "owners": [widget.techName],
-      "time": heure
-    }).then((_) {
-      widget.callback();
-      setState(() {
-        _buttonWidget = const Text("Sauvgarder");
-        modalShow("Plan ajouter avec succès");
-      });
-    });
-    Get.to(() => Calander(
-        techName: widget.techName,
-        username: widget.username,
-        role: widget.role));
-  }
 
   @override
   void initState() {
@@ -145,6 +103,15 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
             "Créer un plan",
           ),
         ),
+        bottomNavigationBar: NavBottom(
+            tel: widget.telus,
+            adr: widget.adrus,
+            id: widget.idus,
+            email: widget.emailus,
+            name: widget.nameus,
+            acces: widget.accesus,
+            url: widget.url,
+            role: widget.roleus),
         body: Container(
           padding: const EdgeInsets.all(8),
           child: Column(
@@ -250,7 +217,8 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
               const Divider(
                 thickness: 4,
               ),
-              Center(
+              SizedBox(
+                width: 370,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: const Color.fromARGB(255, 62, 75, 146)),
@@ -304,36 +272,91 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
     });
   }
 
-  modalShow(String text, {bool success = true}) async {
-    return await showDialog(
-        context: context,
-        builder: (_) => CupertinoAlertDialog(
-              title: success
-                  ? Lottie.asset("asset/success.json",
-                      height: MediaQuery.of(context).size.height * 0.08,
-                      repeat: false)
-                  : const Icon(Icons.close,
-                      color: Colors.red), //const Text("Succès"),
-              content: Column(
-                children: [
-                  Text(text),
-                ],
-              ),
-              actions: <Widget>[
-                CupertinoDialogAction(
-                  onPressed: () => Navigator.of(context).pop(),
-                  isDefaultAction: true,
-                  child: const Text("D'accord"),
-                ),
-              ],
-            ));
-  }
-
   Widget cTextFeild(String text, TextEditingController ctrl) {
     return TextField(
       // readOnly: t,
       controller: ctrl,
       decoration: InputDecoration(hintText: text),
     );
+  }
+
+  void sauvgardePlan() {
+    var doesExit = widget.allPlans.getEvents(_beginDate);
+
+    DateTime now = Utils.formatDateToCalculate(DateTime.now());
+    bool isValidDate = _beginDate.isBefore(now) || _endDate.isBefore(now);
+
+    if (isValidDate) {
+      Utils.modalShow("Un congé ne peut pas etre au passé", context,
+          success: false);
+      return;
+    }
+    if ((_beginDate.isBefore(now) && _endDate.isAfter(now))) {
+      Utils.modalShow("Veuillez remplir la description", context,
+          success: false);
+      return;
+    }
+
+    if (telephone == "") {
+      Utils.modalShow("Veuillez selectionnez un client ", context,
+          success: false);
+      return;
+    }
+
+    if (addresse == "") {
+      Utils.modalShow("Veuillez selectionnez un client ", context,
+          success: false);
+      return;
+    }
+
+    if (sujet.text == "") {
+      Utils.modalShow("Veuillez entrer le sujet du plan", context,
+          success: false);
+      return;
+    }
+
+    if (doesExit.isNotEmpty) {
+      Utils.modalShow(
+          "Date de début selectionner est déja prise par un autre plan",
+          context,
+          success: false);
+      return;
+    }
+
+    setState(() {
+      _buttonWidget = const SizedBox(
+          width: 40,
+          child: CupertinoActivityIndicator(
+            color: Colors.white,
+          ));
+    });
+    //&& &&  &&
+    _planCollection.add({
+      "client": clientDropDown,
+      "endTime": _endDate,
+      "startTime": _beginDate,
+      "state": "Planifier",
+      "subject": sujet.text,
+      "owners": [widget.techName],
+      "time": heure
+    }).then((_) {
+      widget.callback();
+      setState(() {
+        _buttonWidget = const Text("Sauvgarder");
+      });
+      Utils.modalShow("Plan ajouter avec succès", context);
+    });
+    Get.to(() => Calander(
+        techName: widget.techName,
+        username: widget.username,
+        role: widget.role,
+        idus: widget.idus,
+        url: widget.url,
+        telus: widget.telus,
+        adrus: widget.adrus,
+        accesus: widget.accesus,
+        nameus: widget.nameus,
+        emailus: widget.emailus,
+        roleus: widget.roleus));
   }
 }

@@ -1,10 +1,13 @@
 import 'package:chama_projet/Planning/plan_screen.dart';
-import 'package:chama_projet/Planning/alertdialog_create_plan.dart';
+
 import 'package:chama_projet/widget/plan_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
+
+import '../widget/NavBottom.dart';
+import 'alertdialog_create_plan.dart';
 
 var data = FirebaseFirestore.instance;
 
@@ -12,12 +15,23 @@ class Calander extends StatefulWidget {
   final String role;
   final String techName;
   final String username;
-  const Calander(
-      {Key? key,
-      required this.techName,
-      required this.username,
-      required this.role})
-      : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  Calander({
+    Key? key,
+    required this.techName,
+    required this.username,
+    required this.role,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   _CalanderState createState() => _CalanderState();
@@ -68,8 +82,8 @@ class _CalanderState extends State<Calander> {
                 ),
                 description: value[i].id));
       }
-      setState(() {});
     });
+    setState(() {});
   }
 
   callBack() async {
@@ -98,12 +112,19 @@ class _CalanderState extends State<Calander> {
                     await showDialog(
                         context: context,
                         builder: (context) => AlertDialogPlan(
-                              allPlans: _markedDateMap,
-                              techName: widget.techName,
-                              callback: callBack,
-                              username: widget.username,
-                              role: widget.role,
-                            ));
+                            username: widget.username,
+                            role: widget.role,
+                            allPlans: _markedDateMap,
+                            techName: widget.techName,
+                            callback: callBack,
+                            idus: widget.idus,
+                            url: widget.url,
+                            telus: widget.telus,
+                            adrus: widget.adrus,
+                            accesus: widget.accesus,
+                            nameus: widget.nameus,
+                            emailus: widget.emailus,
+                            roleus: widget.roleus));
                   },
                   child: const Text(
                     "Créer",
@@ -111,28 +132,41 @@ class _CalanderState extends State<Calander> {
                   )),
           ],
         ),
-        body: Column(
+        bottomNavigationBar: NavBottom(
+            tel: widget.telus,
+            adr: widget.adrus,
+            id: widget.idus,
+            email: widget.emailus,
+            name: widget.nameus,
+            acces: widget.accesus,
+            url: widget.url,
+            role: widget.roleus),
+        body: ListView(
           children: [
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            Column(
               children: [
                 const SizedBox(
-                  width: 2,
+                  height: 10,
                 ),
-                _container("Planifier", Colors.blue),
-                _container("Démarrer", Colors.orange),
-                _container("Terminer", Colors.green),
-                _container("Annuler", Colors.red),
-                const SizedBox(
-                  width: 2,
-                )
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    const SizedBox(
+                      width: 2,
+                    ),
+                    _container("Planifier", Colors.blue),
+                    _container("Démarrer", Colors.orange),
+                    _container("Terminer", Colors.green),
+                    _container("Annuler", Colors.red),
+                    const SizedBox(
+                      width: 2,
+                    )
+                  ],
+                ),
+                _calendar(),
+                _lowerHalf,
               ],
             ),
-            _calendar(),
-            _lowerHalf,
           ],
         ),
       ),
@@ -171,10 +205,17 @@ class _CalanderState extends State<Calander> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => PlanScreen(
-                                    event: plan[0],
-                                    planID: events[0].description!,
-                                    role: widget.role,
-                                  )));
+                                  event: plan[0],
+                                  planID: events[0].description!,
+                                  role: widget.role,
+                                  idus: widget.idus,
+                                  url: widget.url,
+                                  telus: widget.telus,
+                                  adrus: widget.adrus,
+                                  accesus: widget.accesus,
+                                  nameus: widget.nameus,
+                                  emailus: widget.emailus,
+                                  roleus: widget.roleus)));
                     },
                     child: const Icon(Icons.edit),
                   )),
@@ -183,7 +224,7 @@ class _CalanderState extends State<Calander> {
         }
       },
       markedDatesMap: _markedDateMap,
-      selectedDateTime: DateTime.now(),
+      // selectedDateTime: DateTime.now(),
       height: 420,
       daysHaveCircularBorder: null,
       markedDateIconBuilder: (Event event) {
@@ -230,7 +271,6 @@ class _CalanderState extends State<Calander> {
         );
       },
       todayButtonColor: Colors.deepPurpleAccent,
-      todayBorderColor: Colors.deepPurpleAccent,
     );
   }
 

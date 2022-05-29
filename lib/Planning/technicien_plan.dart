@@ -6,14 +6,23 @@ import 'package:getwidget/getwidget.dart';
 
 class TechnicienPlan extends StatefulWidget {
   final String loggedInUserMail;
-  final String username, techName, role;
-  const TechnicienPlan(
-      {Key? key,
-      required this.loggedInUserMail,
-      required this.username,
-      required this.techName,
-      required this.role})
-      : super(key: key);
+  final String username;
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  TechnicienPlan({
+    Key? key,
+    required this.loggedInUserMail,
+    required this.username,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   State<TechnicienPlan> createState() => _TechnicienPlanState();
@@ -94,10 +103,16 @@ class _TechnicienPlanState extends State<TechnicienPlan> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => PlanScreen(
-                          event: list[index],
-                          planID: list[index].id,
-                          role: widget.role,
-                        )));
+                        event: list[index],
+                        planID: list[index].id,
+                        idus: widget.idus,
+                        url: widget.url,
+                        telus: widget.telus,
+                        adrus: widget.adrus,
+                        accesus: widget.accesus,
+                        nameus: widget.nameus,
+                        emailus: widget.emailus,
+                        roleus: widget.roleus)));
           },
           child: Align(
               alignment: Alignment.centerRight,

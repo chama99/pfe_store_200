@@ -4,13 +4,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../widget/NavBottom.dart';
 import 'calander.dart';
 
 var data = FirebaseFirestore.instance;
 
 class MultiSelection extends StatefulWidget {
   final String role;
-  const MultiSelection({Key? key, required this.role}) : super(key: key);
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  MultiSelection({
+    Key? key,
+    required this.role,
+    required this.idus,
+    required this.url,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
+  }) : super(key: key);
 
   @override
   _MultiSelectionState createState() => _MultiSelectionState();
@@ -32,12 +47,6 @@ class _MultiSelectionState extends State<MultiSelection> {
         : "aucune technecien  ";
   }
 
-// Future getData() async {
-//     QuerySnapshot querySnapshot = await _collectionRef
-//         //.where('owners', arrayContainsAny: [widget.techName])
-//         .get();
-//     return querySnapshot.docs.map((doc) => doc.data()).toList();
-//   }
   fetchDatabaseList() async {
     QuerySnapshot resultant = await data
         .collection('users')
@@ -85,8 +94,17 @@ class _MultiSelectionState extends State<MultiSelection> {
       appBar: AppBar(
         backgroundColor: Colors.orange,
         centerTitle: true,
-        title: const Text("Planing des Technicien"),
+        title: const Text("Les  techniciens"),
       ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
       body: _isLoading
           ? Center(
               child: Column(
@@ -102,76 +120,79 @@ class _MultiSelectionState extends State<MultiSelection> {
                 Text("Chargement..", style: TextStyle(fontSize: 20)),
               ],
             ))
-          : Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: TextField(
-                    onChanged: _runFilter,
-                    controller: editingController,
-                    decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: const BorderSide(
-                              color: Colors.orange, width: 1.5),
-                        ),
-                        labelText: "recherche",
-                        labelStyle: const TextStyle(
-                            fontSize: 20.0,
-                            color: Color.fromARGB(255, 102, 102, 102)),
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          color: Colors.orange,
-                        ),
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                        )),
-                  ),
-                ),
-                Visibility(
-                  visible: isMultiSelectionEnabled,
-                  child: SizedBox(
-                    height: 70,
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        IconButton(
-                            onPressed: () {
-                              selectedItems.clear();
-                              isMultiSelectionEnabled = false;
-                              setState(() {});
-                            },
-                            icon: const Icon(Icons.close)),
-                        Text(
-                          getSelectedItemCount(),
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              Get.to(AddPlanning(
-                                selectedItems: selectedItems,
-                              ));
-
-                              setState(() {
-                                isMultiSelectionEnabled = false;
-                              });
-                            },
-                            label: Text("Plan"),
-                            icon: const Icon(
-                              Icons.add,
-                            )),
-                      ],
+          : Container(
+              margin: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextField(
+                      onChanged: _runFilter,
+                      controller: editingController,
+                      decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                            borderSide: const BorderSide(
+                                color: Colors.orange, width: 1.5),
+                          ),
+                          labelText: "recherche",
+                          labelStyle: const TextStyle(
+                              fontSize: 20.0,
+                              color: Color.fromARGB(255, 102, 102, 102)),
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            color: Colors.orange,
+                          ),
+                          border: const OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(25.0)),
+                          )),
                     ),
                   ),
-                ),
-                Expanded(
-                    child: ListView.builder(
-                        itemCount: listTechs.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
+                  Visibility(
+                    visible: isMultiSelectionEnabled,
+                    child: SizedBox(
+                      height: 70,
+                      width: double.infinity,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                selectedItems.clear();
+                                isMultiSelectionEnabled = false;
+                                setState(() {});
+                              },
+                              icon: const Icon(Icons.close)),
+                          Text(
+                            getSelectedItemCount(),
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          ElevatedButton.icon(
+                              onPressed: () {
+                                Get.to(AddPlanning(
+                                  selectedItems: selectedItems,
+                                ));
+
+                                setState(() {
+                                  isMultiSelectionEnabled = false;
+                                });
+                              },
+                              label: Text("Plan"),
+                              icon: const Icon(
+                                Icons.add,
+                              )),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                      child: ListView.builder(
+                          itemCount: listTechs.length,
+                          itemBuilder: (context, index) {
+                            final user = listTechs[index];
+                            return Card(
+                                child: InkWell(
                               onTap: () {
                                 if (isMultiSelectionEnabled) {
                                   doMultiSelection(listTechs[index][0]);
@@ -179,75 +200,34 @@ class _MultiSelectionState extends State<MultiSelection> {
                                   Get.to(Calander(
                                       username: listTechs[index]['email'],
                                       techName: listTechs[index]['name'],
-                                      role: widget.role));
+                                      role: widget.role,
+                                      idus: widget.idus,
+                                      url: widget.url,
+                                      telus: widget.telus,
+                                      adrus: widget.adrus,
+                                      accesus: widget.accesus,
+                                      nameus: widget.nameus,
+                                      emailus: widget.emailus,
+                                      roleus: widget.roleus));
                                 }
                               },
-                              onLongPress: () {
-                                isMultiSelectionEnabled = true;
-                                doMultiSelection(listTechs[index][0]);
-                              },
-                              child: Stack(
-                                alignment: Alignment.centerRight,
-                                children: [
-                                  Container(
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                          color: Colors.green.withOpacity(0.2),
-                                          borderRadius:
-                                              BorderRadius.circular(12)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          children: [
-                                            CircleAvatar(
-                                              backgroundImage: NetworkImage(
-                                                  "${listTechs[index]['image']}"),
-                                              radius: 40,
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                              listTechs[index]["email"],
-                                            ),
-                                          ],
-                                        ),
-                                      )),
-                                  Visibility(
-                                      visible: isMultiSelectionEnabled,
-                                      child: Icon(
-                                        selectedItems
-                                                .contains(listTechs[index][0])
-                                            ? Icons.check_circle
-                                            : Icons.radio_button_unchecked,
-                                        size: 30,
-                                        color: Colors.green,
-                                      ))
-                                ],
+                              splashColor:
+                                  const Color.fromARGB(255, 3, 56, 109),
+                              child: ListTile(
+                                title: Text(user["name"]),
+                                subtitle: Text(user["email"]),
+                                leading: CircleAvatar(
+                                  radius: 20.0,
+                                  backgroundImage: NetworkImage(user['image']),
+                                ),
                               ),
-                            ),
-                          );
-                        }))
-              ],
+                            ));
+                          }))
+                ],
+              ),
             ),
     ));
   }
-
-  // void filterSearchResults(String query) {
-  //   if (editingController.text == "") {
-  //     setState(() => listTechs = backUpListTechs);
-  //   } else {
-  //     backUpListTechs = listTechs;
-  //     final suggestions = listTechs.where((employe) {
-  //       final String namemploye = employe['name'].toLowerCase();
-  //       final String input = query.toLowerCase();
-  //       return namemploye.startsWith(input);
-  //     }).toList();
-  //     setState(() {
-  //       listTechs = suggestions;
-  //     });
-  //   }
-  // }
 
   void _runFilter(String enteredKeyword) {
     List<Object?> results = [];

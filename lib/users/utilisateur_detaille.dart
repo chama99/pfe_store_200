@@ -112,78 +112,86 @@ class _UtilisateurDetailState extends State<UtilisateurDetail> {
           acces: widget.accesus,
           url: widget.url,
           role: widget.roleus),
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                height: size.height * 0.50,
-                width: double.infinity,
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
+      body: Stack(alignment: Alignment.center, children: [
+        ListView(
+          children: [
+            Column(
+              children: [
+                Stack(
+                  //alignment: Alignment.center,
                   children: [
-                    textfield(
-                      hintText: widget.nom,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: textfield(
-                        hintText: widget.email,
+                    CustomPaint(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
                       ),
+                      painter: HeaderCurvedContainer(),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: textfield(
-                        hintText: widget.role,
-                      ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(120, 20, 120, 0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                width: MediaQuery.of(context).size.width / 2,
+                                height: MediaQuery.of(context).size.width / 2,
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.white, width: 5),
+                                  shape: BoxShape.circle,
+                                  color: Colors.white,
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(widget.image),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: textfield(
-                        hintText: widget.adr,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: textfield(
-                        hintText: widget.tel,
-                      ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 700,
+                          width: double.infinity,
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(height: 150),
+                              textfield(
+                                hintText: widget.nom,
+                              ),
+                              textfield(
+                                hintText: widget.role,
+                              ),
+                              textfield(
+                                hintText: widget.email,
+                              ),
+                              textfield(
+                                hintText: widget.adr,
+                              ),
+                              textfield(
+                                hintText: widget.tel,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              )
-            ],
-          ),
-          CustomPaint(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
+              ],
             ),
-            painter: HeaderCurvedContainer(),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                width: MediaQuery.of(context).size.width / 2,
-                height: MediaQuery.of(context).size.width / 2,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 5),
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(widget.image),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+          ],
+        ),
+      ]),
     );
   }
 }
@@ -194,8 +202,8 @@ class HeaderCurvedContainer extends CustomPainter {
     Paint paint = Paint()..color = Colors.orange;
     Path path = Path()
       ..relativeLineTo(0, 100)
-      ..quadraticBezierTo(size.width / 2, 150, size.width, 100)
-      ..relativeLineTo(0, -100)
+      ..quadraticBezierTo(size.width / 2, 180, size.width, 100)
+      ..relativeLineTo(0, -200)
       ..close();
     canvas.drawPath(path, paint);
   }

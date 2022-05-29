@@ -1,23 +1,50 @@
-import 'package:chama_projet/congescreens/conge_screen.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../Planning/calander.dart';
 import '../Planning/home_page_planning.dart';
-import '../congescreens/conge_screen.dart';
 
-Card buildInputCardPlan(String role, String email, String username) {
+Card buildInputCardPlan(
+    String role,
+    String email,
+    String username,
+    String idus,
+    String nomus,
+    String emailus,
+    String url,
+    List acces,
+    String roleus,
+    String telus,
+    String adrus) {
   return Card(
     color: const Color.fromARGB(255, 237, 96, 96),
     margin: const EdgeInsets.all(8.0),
     child: InkWell(
       onTap: () {
         if (role == "Admin") {
-          Get.to(() => MultiSelection(role: role));
+          Get.to(() => MultiSelection(
+              role: role,
+              idus: idus,
+              url: url,
+              emailus: emailus,
+              nameus: nomus,
+              roleus: roleus,
+              accesus: acces,
+              telus: telus,
+              adrus: adrus));
         } else if (role == "Technicien") {
-          Get.to(
-              () => Calander(techName: email, username: username, role: role));
+          Get.to(() => Calander(
+              techName: email,
+              username: username,
+              role: role,
+              idus: idus,
+              url: url,
+              telus: telus,
+              adrus: adrus,
+              accesus: acces,
+              nameus: username,
+              emailus: emailus,
+              roleus: roleus));
         }
       },
       splashColor: const Color.fromARGB(255, 3, 56, 109),
@@ -40,14 +67,12 @@ Card buildInputCardPlan(String role, String email, String username) {
   );
 }
 
-Card buildInputCardConges(String userID) {
+Card buildInputCardConges(String userID, String role) {
   return Card(
     color: const Color.fromARGB(255, 239, 158, 181),
     margin: const EdgeInsets.all(8.0),
     child: InkWell(
-      onTap: () {
-        Get.to(() => CongeScreen(userID: userID));
-      },
+      onTap: () {},
       splashColor: const Color.fromARGB(255, 3, 56, 109),
       child: Center(
         child: Column(

@@ -125,7 +125,7 @@ class _PlanCardState extends State<PlanCard> {
                         Row(
                           children: <Widget>[
                             const Icon(
-                              Icons.location_on,
+                              Icons.calendar_month,
                               color: Colors.white,
                               size: 16,
                             ),
