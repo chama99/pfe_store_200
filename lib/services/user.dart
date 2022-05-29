@@ -19,7 +19,10 @@ class User {
           'image': url,
           'acces': acces,
           'telephone': telephone,
-          'adresse': adresse
+          'adresse': adresse,
+          'paidLeaveDaysLeft' : "21",
+          'totalExpiredLeaveDays' : "0",
+          'lastMessageTime': Timestamp.fromDate(DateTime.now())
         })
         // ignore: avoid_print
         .then((value) => showToast("Utilisateur ajouté"))
