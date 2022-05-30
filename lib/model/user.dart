@@ -31,7 +31,7 @@ class User {
       );
 
   static User fromJson(dynamic json) => User(
-        idUser: json['email'],
+        idUser: json['IdUser'],
         name: json['name'],
         urlAvatar: json['image'],
         lastMessageTime: Utils.toDateTime(json['lastMessageTime']),

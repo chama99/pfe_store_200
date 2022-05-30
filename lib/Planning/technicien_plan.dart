@@ -8,12 +8,14 @@ class TechnicienPlan extends StatefulWidget {
   final String loggedInUserMail;
   final String username;
   String emailus, nameus, url, roleus, adrus, telus, idus;
+  final String techName;
 
   List accesus;
   TechnicienPlan({
     Key? key,
-    required this.loggedInUserMail,
+    required this.techName,
     required this.username,
+    required this.loggedInUserMail,
     required this.idus,
     required this.url,
     required this.emailus,
@@ -103,16 +105,19 @@ class _TechnicienPlanState extends State<TechnicienPlan> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => PlanScreen(
-                        event: list[index],
-                        planID: list[index].id,
-                        idus: widget.idus,
-                        url: widget.url,
-                        telus: widget.telus,
-                        adrus: widget.adrus,
-                        accesus: widget.accesus,
-                        nameus: widget.nameus,
-                        emailus: widget.emailus,
-                        roleus: widget.roleus)));
+                          event: list[index],
+                          planID: list[index].id,
+                          idus: widget.idus,
+                          url: widget.url,
+                          telus: widget.telus,
+                          adrus: widget.adrus,
+                          accesus: widget.accesus,
+                          nameus: widget.nameus,
+                          emailus: widget.emailus,
+                          roleus: widget.roleus,
+                          techName: widget.techName,
+                          username: widget.username,
+                        )));
           },
           child: Align(
               alignment: Alignment.centerRight,

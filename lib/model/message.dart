@@ -5,22 +5,27 @@ class MessageField {
 }
 
 class Message {
-  final String idUser;
+  // ignore: non_constant_identifier_names
+  final String destID;
   final String urlAvatar;
   final String username;
   final String message;
+  final String senderID;
   final DateTime createdAt;
 
   const Message({
-    required this.idUser,
+    // ignore: non_constant_identifier_names
+    required this.destID,
     required this.urlAvatar,
+    required this.senderID,
     required this.username,
     required this.message,
     required this.createdAt,
   });
 
   static Message fromJson(dynamic json) => Message(
-        idUser: json['idUser'],
+        senderID: json['senderID'],
+        destID: json['destID'],
         urlAvatar: json['urlAvatar'],
         username: json['username'],
         message: json['message'],
@@ -28,8 +33,9 @@ class Message {
       );
 
   Map<String, dynamic> toJson() => {
-        'idUser': idUser,
+        'destID': destID,
         'urlAvatar': urlAvatar,
+        'senderID': senderID,
         'username': username,
         'message': message,
         'createdAt': Utils.fromDateTimeToJson(createdAt),

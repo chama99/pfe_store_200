@@ -3,32 +3,54 @@ import 'package:chama_projet/model/message.dart';
 
 import 'package:flutter/material.dart';
 
-import '../../api/firebase_api.dart';
+import '../pages/utils.dart';
 import 'message_widget.dart';
 
 class MessagesWidget extends StatelessWidget {
-  final String userMail;
-  final String currentUser;
+  final String destID;
+  final String currentUserID;
+
   const MessagesWidget({
-    required this.currentUser,
-    required this.userMail,
+    required this.currentUserID,
+    required this.destID,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => StreamBuilder<List<Message>>(
-        stream: FirebaseApi.getMessages(userMail),
+        stream: FirebaseApi.getMessages(destID, currentUserID),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
               return const Center(child: CircularProgressIndicator());
             default:
               if (snapshot.hasError) {
-                return buildText('Something Went Wrong Try later');
+                return buildText(
+                    'Something Went Wrong Try later ${snapshot.error}');
               } else {
-                final messages = snapshot.data;
+                Utils.printLog(
+                    "Chouf currentUSER $currentUserID desinationID $destID");
+                Utils.printLog(
+                    "---------------------------------------------------------");
+                for (var element in snapshot.data!) {
+                  Utils.printLog("${element.toJson()}");
+                }
+                Utils.printLog(
+                    "---------------------------------------------------------");
+                final messages = snapshot.data!
+                    .where((e) =>
+                        (e.destID == destID && e.senderID == currentUserID) ||
+                        (e.destID == currentUserID && e.senderID == destID))
+                    .toList();
 
-                return messages!.isEmpty
+                Utils.printLog(
+                    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                for (var element in messages) {
+                  Utils.printLog("${element.toJson()}");
+                }
+                Utils.printLog(
+                    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                return messages.isEmpty
                     ? buildText('Say Hi..')
                     : ListView.builder(
                         physics: const BouncingScrollPhysics(),
@@ -36,11 +58,12 @@ class MessagesWidget extends StatelessWidget {
                         itemCount: messages.length,
                         itemBuilder: (context, index) {
                           final message = messages[index];
-                          print(
-                              "=>>>>>>> message ${message.idUser} $currentUser");
+
+                          //print(
+                          //  "message.IdUser == currentUserID.  ${message.destID} == $currentUserID");
                           return MessageWidget(
                             message: message,
-                            isMe: message.idUser == userMail,
+                            isMe: message.destID == destID,
                           );
                         },
                       );
@@ -52,7 +75,7 @@ class MessagesWidget extends StatelessWidget {
   Widget buildText(String text) => Center(
         child: Text(
           text,
-          style: const TextStyle(fontSize: 24),
+          style: TextStyle(fontSize: 24),
         ),
       );
 }

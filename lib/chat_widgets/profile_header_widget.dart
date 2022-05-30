@@ -30,19 +30,9 @@ class ProfileHeaderWidget extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                SizedBox(width: 4),
               ],
             )
           ],
         ),
-      );
-
-  Widget buildIcon(IconData icon) => Container(
-        padding: const EdgeInsets.all(5),
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white54,
-        ),
-        child: Icon(icon, size: 25, color: Colors.white),
       );
 }

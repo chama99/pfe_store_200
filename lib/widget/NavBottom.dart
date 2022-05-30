@@ -65,6 +65,7 @@ class _NavBottomState extends State<NavBottom> {
               role: widget.role,
               tel: widget.tel,
               adr: widget.adr,
+              currentUserID: widget.id,
             ),
           )
         },
@@ -142,6 +143,7 @@ class _NavBottomState extends State<NavBottom> {
                           role: widget.role,
                           tel: widget.tel,
                           adr: widget.adr,
+                          currentUserID: widget.id,
                         ),
                       )
                     },

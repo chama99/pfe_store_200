@@ -1,19 +1,54 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_calendar_carousel/classes/event.dart';
-import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
+import 'package:chama_projet/api/firebase_api.dart';
 
-import '../congescreens/demande_conge_screen.dart';
+import 'package:flutter/material.dart';
+
+import '../pages/utils.dart';
+import '../widget/NavBottom.dart';
 
 class CongeScreen extends StatefulWidget {
-  final String userID;
-  const CongeScreen({Key? key, required this.userID}) : super(key: key);
+  final dynamic singleConge;
+  String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  List accesus;
+  CongeScreen(
+      {required this.singleConge,
+      required this.idus,
+      required this.url,
+      required this.emailus,
+      required this.nameus,
+      required this.roleus,
+      required this.accesus,
+      required this.telus,
+      required this.adrus,
+      Key? key})
+      : super(key: key);
 
   @override
   State<CongeScreen> createState() => _CongeScreenState();
 }
 
 class _CongeScreenState extends State<CongeScreen> {
-  final holidayDays = 0;
+  String status = "";
+  DateTime _endDate = DateTime.now();
+  //bool _isLoading = true;
+  final TextStyle _leftTextStyle =
+      const TextStyle(fontWeight: FontWeight.w500, fontSize: 18);
+  final TextStyle _rightTextStyle = const TextStyle(
+      color: Colors.blueGrey, fontWeight: FontWeight.w500, fontSize: 16);
+  List<bool> buttonsState = [true, true];
+
+  @override
+  void initState() {
+    status = widget.singleConge['status'];
+    if (status != "waiting") {
+      buttonsState = [false, false];
+    }
+    super.initState();
+    _endDate = DateTime.parse(
+            widget.singleConge["beginDateOfTheHoliday"].toDate().toString())
+        .add(Duration(days: int.parse(widget.singleConge["duration"])));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,85 +56,137 @@ class _CongeScreenState extends State<CongeScreen> {
           backgroundColor: Colors.orange,
           //centerTitle: true,
           title: const Text("Congé"),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 20, right: 30),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              DemandeCongeScreen(userID: widget.userID)));
-                },
-                child: const Text(
-                  "Demander",
-                  style: TextStyle(
-                      fontSize: 15, color: Colors.white, letterSpacing: 3),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ),
-          ],
         ),
+        bottomNavigationBar: NavBottom(
+            tel: widget.telus,
+            adr: widget.adrus,
+            id: widget.idus,
+            email: widget.emailus,
+            name: widget.nameus,
+            acces: widget.accesus,
+            url: widget.url,
+            role: widget.roleus),
         body: Container(
-          padding: const EdgeInsets.all(20),
+          height: MediaQuery.of(context).size.height * .7,
+          padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(mainAxisSize: MainAxisSize.max, children: [
-                  const Text("Nombre de jour expirée : ",
-                      style: TextStyle(fontSize: 20)),
+              children: <Widget>[
+                Row(children: [
+                  const Text("description du congé: ",
+                      style:
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
                   const Spacer(),
-                  Text(
-                    '$holidayDays',
-                    style:
-                        const TextStyle(color: Colors.blueGrey, fontSize: 20),
+                  Text(widget.singleConge["description"],
+                      style: _rightTextStyle),
+                ]),
+                Row(children: [
+                  const Text("Durée : ",
+                      style:
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
+                  const Spacer(),
+                  Text("${widget.singleConge["duration"]} jours",
+                      style: _rightTextStyle),
+                ]),
+                Row(children: [
+                  Text("Statue : ", style: _leftTextStyle),
+                  const Spacer(),
+                  Icon(
+                      widget.singleConge["status"] == "waiting"
+                          ? Icons.hourglass_full_rounded
+                          : widget.singleConge["status"] == "refused"
+                              ? Icons.close
+                              : Icons.check,
+                      color: widget.singleConge["status"] == "waiting"
+                          ? Colors.orangeAccent
+                          : widget.singleConge["status"] == "refused"
+                              ? Colors.redAccent
+                              : Colors.greenAccent),
+                ]),
+                Row(children: [
+                  const Text("Proposer par l'utilisateur: ",
+                      style:
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
+                  const Spacer(),
+                  Flexible(
+                    flex: 2,
+                    child: Text(
+                        Utils.capitalizeFirstLetter(
+                            widget.singleConge["username"]),
+                        style: _rightTextStyle),
                   )
                 ]),
-                Row(mainAxisSize: MainAxisSize.max, children: [
-                  const Text("Nombre de jour Restant : ",
-                      style: TextStyle(fontSize: 20)),
+                Row(children: [
+                  Text("Date de début : ", style: _leftTextStyle),
                   const Spacer(),
                   Text(
-                    '$holidayDays',
-                    style:
-                        const TextStyle(color: Colors.blueGrey, fontSize: 20),
-                  )
+                      Utils.toReadableDate(widget
+                          .singleConge["beginDateOfTheHoliday"]
+                          .toDate()
+                          .toString()),
+                      style: _rightTextStyle),
+                ]),
+                Row(children: [
+                  Text("Date de fin : ", style: _leftTextStyle),
+                  const Spacer(),
+                  Text(Utils.toReadableDate(_endDate), style: _rightTextStyle),
                 ]),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _container("Payé", Colors.orange),
-                    _container("Non payé", Colors.green)
-                  ],
-                ),
-                _calendar()
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: buttonsState[0] ? Colors.green : Colors.grey,
+                        ),
+                        onPressed: () {
+                          if (!buttonsState.contains(false)) {
+                            FirebaseApi.updateLeave(
+                                    widget.singleConge["leaveID"],
+                                    "accepted",
+                                    widget.singleConge["leaveType"],
+                                    duration: widget.singleConge['duration'],
+                                    userID: widget.singleConge['userID'])
+                                .then((value) {
+                              print(value);
+                              if (value) {
+                                setState(() {
+                                  buttonsState = [false, false];
+                                  status = "accepted";
+                                });
+                              }
+                            });
+                          }
+                        },
+                        child: Row(children: const [
+                          Icon(Icons.check),
+                          Text("Accepter")
+                        ]),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary:
+                                buttonsState[1] ? Colors.red : Colors.grey),
+                        onPressed: () {
+                          if (!buttonsState.contains(false)) {
+                            FirebaseApi.updateLeave(
+                                    widget.singleConge["leaveID"],
+                                    "refused",
+                                    widget.singleConge["leaveType"])
+                                .then((value) {
+                              setState(() {
+                                buttonsState = [false, false];
+                                status = "refused";
+                              });
+                            });
+                          }
+                        },
+                        child: Row(children: const [
+                          Icon(Icons.close),
+                          Text("Refuser")
+                        ]),
+                      )
+                    ]),
               ]),
         ));
-  }
-
-  Widget _container(String t, MaterialColor c) {
-    return Container(
-      decoration:
-          BoxDecoration(color: c, borderRadius: BorderRadius.circular(5)),
-      child: Padding(
-          padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
-          child: Text(t, style: const TextStyle(color: Colors.white))),
-    );
-  }
-
-  Widget _calendar() {
-    return CalendarCarousel<Event>(
-      onDayPressed: (DateTime date, List<Event> events) {},
-      //markedDatesMap: _markedDateMap,
-      selectedDateTime: DateTime.now(),
-      height: 420,
-      daysHaveCircularBorder: null,
-      markedDateIconBuilder: null,
-
-      todayButtonColor: Colors.deepPurpleAccent,
-      todayBorderColor: Colors.deepPurpleAccent,
-    );
   }
 }

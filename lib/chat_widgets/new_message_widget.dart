@@ -1,13 +1,14 @@
 import 'package:chama_projet/api/firebase_api.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class NewMessageWidget extends StatefulWidget {
-  final String idUser;
-  final String currentUserMail;
-  const NewMessageWidget(
-      {required this.idUser, required this.currentUserMail, Key? key})
-      : super(key: key);
+  final String currentUserID;
+  final String destID;
+  const NewMessageWidget({
+    required this.currentUserID,
+    required this.destID,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _NewMessageWidgetState createState() => _NewMessageWidgetState();
@@ -18,9 +19,11 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
   String message = '';
 
   void sendMessage() async {
+    print("destID ${widget.destID}  currentUserID ${widget.currentUserID}");
     FocusScope.of(context).unfocus();
-    print("About to send to fb ${widget.idUser} === ${widget.currentUserMail}");
-    await FirebaseApi.uploadMessage(widget.idUser, message);
+
+    await FirebaseApi.uploadMessage(
+        widget.currentUserID, widget.destID, message);
 
     _controller.clear();
   }
@@ -28,7 +31,7 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
   @override
   Widget build(BuildContext context) => Container(
         color: Colors.white,
-        padding: const EdgeInsets.all(8),
+        padding: EdgeInsets.all(8),
         child: Row(
           children: <Widget>[
             Expanded(

@@ -6,6 +6,7 @@ import 'custom_calendar.dart';
 class CalendarPopupView extends StatefulWidget {
   const CalendarPopupView(
       {Key? key,
+      this.color = const Color(0xff54D3C2),
       this.initialStartDate,
       this.initialEndDate,
       this.onApplyClick,
@@ -14,7 +15,7 @@ class CalendarPopupView extends StatefulWidget {
       this.minimumDate,
       this.maximumDate})
       : super(key: key);
-
+  final Color color;
   final DateTime? minimumDate;
   final DateTime? maximumDate;
   final bool barrierDismissible;
@@ -56,72 +57,64 @@ class _CalendarPopupViewState extends State<CalendarPopupView>
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: AnimatedBuilder(
-          animation: animationController!,
-          builder: (BuildContext context, Widget? child) {
-            return AnimatedOpacity(
-              duration: const Duration(milliseconds: 600),
-              opacity: animationController!.value,
-              child: InkWell(
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                onTap: () {
-                  if (widget.barrierDismissible) {
-                    Navigator.pop(context);
-                  }
-                },
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: HotelAppTheme.buildLightTheme().backgroundColor,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(24.0)),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: Colors.grey.withOpacity(0.2),
-                              offset: const Offset(4, 4),
-                              blurRadius: 8.0),
-                        ],
+        child: AnimatedBuilder(
+      animation: animationController!,
+      builder: (BuildContext context, Widget? child) {
+        return AnimatedOpacity(
+          duration: const Duration(milliseconds: 600),
+          opacity: animationController!.value,
+          child: InkWell(
+            splashColor: Colors.transparent,
+            focusColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            onTap: () {
+              if (widget.barrierDismissible) {
+                Navigator.pop(context);
+              }
+            },
+            child: Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: HotelAppTheme.buildLightTheme().backgroundColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(24.0)),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        offset: const Offset(4, 4),
+                        blurRadius: 8.0),
+                  ],
+                ),
+                child: InkWell(
+                  borderRadius: const BorderRadius.all(Radius.circular(24.0)),
+                  onTap: () {},
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      CustomCalendarView(
+                        color: widget.color,
+                        minimumDate: widget.minimumDate,
+                        maximumDate: widget.maximumDate,
+                        initialEndDate: widget.initialEndDate,
+                        initialStartDate: widget.initialStartDate,
+                        startEndDateChange:
+                            (DateTime startDateData, DateTime endDateData) {
+                          setState(() {
+                            startDate = startDateData;
+                            endDate = endDateData;
+                          });
+                        },
                       ),
-                      child: InkWell(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(24.0)),
-                        onTap: () {},
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            CustomCalendarView(
-                              minimumDate: widget.minimumDate,
-                              maximumDate: widget.maximumDate,
-                              initialEndDate: widget.initialEndDate,
-                              initialStartDate: widget.initialStartDate,
-                              startEndDateChange: (DateTime startDateData,
-                                  DateTime endDateData) {
-                                setState(() {
-                                  startDate = startDateData;
-                                  endDate = endDateData;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    ],
                   ),
                 ),
               ),
-            );
-          },
-        ),
-      ),
-    );
+            ),
+          ),
+        );
+      },
+    ));
   }
 }

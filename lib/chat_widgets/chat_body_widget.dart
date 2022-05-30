@@ -3,24 +3,27 @@ import 'package:chama_projet/model/user.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/user.dart';
+import '../widget/NavBottom.dart';
 import 'chat_page.dart';
 
 class ChatBodyWidget extends StatefulWidget {
   final List<User> users;
-  final String currentUser;
-  String name, email, url, role, id, tel, adr;
-  List acces;
-  ChatBodyWidget({
-    required this.currentUser,
+  final String currentUserID;
+  final String emailus, nameus, url, roleus, adrus, telus, idus;
+
+  final List accesus;
+
+  const ChatBodyWidget({
     required this.users,
-    required this.email,
-    required this.name,
-    required this.acces,
+    required this.currentUserID,
+    required this.idus,
     required this.url,
-    required this.role,
-    required this.id,
-    required this.tel,
-    required this.adr,
+    required this.emailus,
+    required this.nameus,
+    required this.roleus,
+    required this.accesus,
+    required this.telus,
+    required this.adrus,
     Key? key,
   }) : super(key: key);
 
@@ -44,7 +47,6 @@ class _ChatBodyWidgetState extends State<ChatBodyWidget> {
   @override
   Widget build(BuildContext context) => Expanded(
         child: Container(
-          padding: const EdgeInsets.all(10),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
@@ -56,70 +58,69 @@ class _ChatBodyWidgetState extends State<ChatBodyWidget> {
         ),
       );
 
-  Widget buildChats() {
-    return Column(children: [
-      Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: TextField(
-          onChanged: _runFilter,
-          controller: editingController,
-          decoration: InputDecoration(
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25.0),
-                borderSide: const BorderSide(color: Colors.orange, width: 1.5),
-              ),
-              labelText: "Recherche",
-              labelStyle: const TextStyle(
-                  fontSize: 20.0, color: Color.fromARGB(255, 102, 102, 102)),
-              prefixIcon: const Icon(
-                Icons.search,
-                color: Colors.orange,
-              ),
-              border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(25.0)),
-              )),
+  Widget buildChats() => Column(children: [
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: TextField(
+            onChanged: _runFilter,
+            controller: editingController,
+            decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                  borderSide:
+                      const BorderSide(color: Colors.orange, width: 1.5),
+                ),
+                labelText: "Recherche",
+                labelStyle: const TextStyle(
+                    fontSize: 20.0, color: Color.fromARGB(255, 102, 102, 102)),
+                prefixIcon: const Icon(
+                  Icons.search,
+                  color: Colors.orange,
+                ),
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                )),
+          ),
         ),
-      ),
-      ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
-        itemBuilder: (context, index) {
-          final user = userListTobuild[index];
-          //print("user coming from drawer => ${user.idUser} ${widget.currentUser}");
-          return user.idUser != widget.currentUser
-              ? SizedBox(
-                  height: 75,
-                  child: ListTile(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ChatPage(
-                          id: widget.id,
-                          user: user,
-                          loggedInUserMail: widget.currentUser,
-                          email: widget.email,
-                          name: widget.name,
-                          acces: widget.acces,
-                          role: widget.role,
-                          url: widget.url,
-                          adr: widget.adr,
-                          tel: widget.tel,
-                        ),
-                      ));
-                    },
-                    leading: CircleAvatar(
-                      radius: 25,
-                      backgroundImage: NetworkImage(user.urlAvatar!),
+        Expanded(
+            child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            final user = userListTobuild[index];
+
+            return user.idUser != widget.currentUserID
+                ? SizedBox(
+                    height: 75,
+                    child: ListTile(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ChatPage(
+                              user: user, currentUserID: widget.currentUserID),
+                        ));
+                      },
+                      leading: CircleAvatar(
+                        radius: 25,
+                        backgroundImage: NetworkImage(user.urlAvatar!),
+                      ),
+                      title: Text(user.name!),
                     ),
-                    title: Text(user.name!),
-                  ),
-                )
-              : const SizedBox();
-        },
-        itemCount: userListTobuild.length,
-      )
-    ]);
-  }
+                  )
+                : const SizedBox();
+          },
+          itemCount: userListTobuild.length,
+        )),
+        NavBottom(
+            tel: widget.telus,
+            adr: widget.adrus,
+            id: widget.idus,
+            email: widget.emailus,
+            name: widget.nameus,
+            acces: widget.accesus,
+            url: widget.url,
+            role: widget.roleus),
+      ]);
 
   void _runFilter(String enteredKeyword) {
     List<User> results = [];

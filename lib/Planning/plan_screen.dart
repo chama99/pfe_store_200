@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +9,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
@@ -14,6 +18,7 @@ import 'package:lottie/lottie.dart';
 import '../pages/utils.dart';
 import '../widget/NavBottom.dart';
 import '../widget/modal.dart';
+import 'calander.dart';
 
 class PlanScreen extends StatefulWidget {
   final String? role;
@@ -21,6 +26,8 @@ class PlanScreen extends StatefulWidget {
   final dynamic event;
   String emailus, nameus, url, roleus, adrus, telus, idus;
 
+  final String techName;
+  final String username;
   List accesus;
   PlanScreen({
     Key? key,
@@ -35,6 +42,8 @@ class PlanScreen extends StatefulWidget {
     required this.accesus,
     required this.telus,
     required this.adrus,
+    required this.techName,
+    required this.username,
   }) : super(key: key);
 
   @override
@@ -128,7 +137,6 @@ class _PlanScreenState extends State<PlanScreen> {
 
   updatePlanStatus(String status, BuildContext context) async {
     bool clicked = GetStorage().read(widget.planID) ?? false;
-    //print(clicked);
     if (status != "Terminer") {
       final refPlans = FirebaseFirestore.instance.collection("plan");
       refPlans.doc(widget.planID).update({"state": status}).then((v) {
@@ -255,9 +263,10 @@ class _PlanScreenState extends State<PlanScreen> {
   ///---------InitState()-------
   @override
   void initState() {
-    _isClicked = widget.event["updated"] ?? false;
-    if (widget.role == "Technicien") {
-      _buttons = [false, false, true];
+    if (widget.role!.toLowerCase() != "admin") {
+      _buttons = [false, true, true];
+    } else {
+      _buttons = [false, true, false];
     }
     _eventFromParent = widget.event;
     _planStatus = _eventFromParent['state'];
@@ -299,6 +308,19 @@ class _PlanScreenState extends State<PlanScreen> {
                       }
                       updatePlanStatus("Demarrer", context);
                       _planStatus = "Demarrer";
+                      Get.to(() => Calander(
+                            techName: widget.techName,
+                            username: widget.username,
+                            idus: widget.idus,
+                            url: widget.url,
+                            emailus: widget.emailus,
+                            nameus: widget.nameus,
+                            roleus: widget.roleus,
+                            accesus: widget.accesus,
+                            telus: widget.telus,
+                            adrus: widget.adrus,
+                            role: widget.roleus,
+                          ));
                       setState(() {});
                     },
                     style: ElevatedButton.styleFrom(
@@ -315,7 +337,21 @@ class _PlanScreenState extends State<PlanScreen> {
                         return;
                       }
                       updatePlanStatus("Terminer", context);
+
                       _planStatus = "Terminer";
+                      Get.to(() => Calander(
+                            techName: widget.techName,
+                            username: widget.username,
+                            idus: widget.idus,
+                            url: widget.url,
+                            emailus: widget.emailus,
+                            nameus: widget.nameus,
+                            roleus: widget.roleus,
+                            accesus: widget.accesus,
+                            telus: widget.telus,
+                            adrus: widget.adrus,
+                            role: widget.roleus,
+                          ));
 
                       setState(() {});
                     },
@@ -504,12 +540,12 @@ class _PlanScreenState extends State<PlanScreen> {
                             ),
                           );
                         })),
-            SizedBox(
-              width: 370,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
               child: ElevatedButton(
                   onPressed: () => _updatePlan(context),
                   style: ElevatedButton.styleFrom(
-                      primary: const Color.fromARGB(255, 62, 75, 146),
+                      primary: Colors.orange,
                       fixedSize:
                           Size(MediaQuery.of(context).size.width * .7, 45)),
                   child: _saveButtonContent),
@@ -557,6 +593,13 @@ class _PlanScreenState extends State<PlanScreen> {
       ]),
     );
   }
+
+  // void takePhoto(ImageSource source) async {
+  //   XFile? pickedFile = await _picker.pickImage(source: source);
+  //   setState(() {
+  //     _noteImage = pickedFile!;
+  //   });
+  // }
 
   modalShow(String text, BuildContext context, {bool success = true}) async {
     return await showDialog(

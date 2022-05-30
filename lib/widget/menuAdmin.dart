@@ -223,7 +223,19 @@ class _MenuAdminState extends State<MenuAdmin> {
                         widget.adr)
                   ],
                   if (x == "Conges") ...[
-                    buildInputCardConges(widget.id, widget.role)
+                    buildInputCardConges(
+                        widget.id,
+                        widget.role,
+                        widget.email,
+                        widget.name,
+                        widget.id,
+                        widget.name,
+                        widget.email,
+                        widget.url,
+                        widget.acces,
+                        widget.role,
+                        widget.tel,
+                        widget.adr)
                   ]
                 ]
               ],

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../Planning/calander.dart';
 import '../Planning/home_page_planning.dart';
+import '../congescreens/conges_screen.dart';
 
 Card buildInputCardPlan(
     String role,
@@ -67,12 +68,36 @@ Card buildInputCardPlan(
   );
 }
 
-Card buildInputCardConges(String userID, String role) {
+Card buildInputCardConges(
+    String userID,
+    String role,
+    String email,
+    String username,
+    String idus,
+    String nomus,
+    String emailus,
+    String url,
+    List acces,
+    String roleus,
+    String telus,
+    String adrus) {
   return Card(
     color: const Color.fromARGB(255, 239, 158, 181),
     margin: const EdgeInsets.all(8.0),
     child: InkWell(
-      onTap: () {},
+      onTap: () {
+        Get.to(() => CongesScreen(
+            userID: userID,
+            role: role,
+            idus: idus,
+            url: url,
+            telus: telus,
+            adrus: adrus,
+            accesus: acces,
+            nameus: username,
+            emailus: emailus,
+            roleus: roleus));
+      },
       splashColor: const Color.fromARGB(255, 3, 56, 109),
       child: Center(
         child: Column(
