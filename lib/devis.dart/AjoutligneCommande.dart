@@ -144,7 +144,7 @@ class _AjoutCommandeState extends State<AjoutCommande> {
                 ),
               ),
               Container(
-                width: 370,
+                width: 400,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(color: Colors.grey, width: 1)),

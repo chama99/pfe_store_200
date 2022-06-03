@@ -341,6 +341,10 @@ class _DevisDetaillerState extends State<DevisDetailler> {
     final imageSignature = await image!.toByteData(format: ImageByteFormat.png);
     final file = await PdDevis.generatePDF(
       imageSignature: imageSignature!,
+      montant: widget.montant,
+      remise: widget.remise,
+      nom: widget.name,
+      email: widget.email,
       commnd: widget.commande,
       titre: widget.titre,
       client: widget.client,

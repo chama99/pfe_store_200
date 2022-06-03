@@ -12,6 +12,8 @@ class PdfApi {
   static Future<File> generatePDF({
     required String titre,
     required ByteData imageSignature,
+    required String name,
+    required String email,
     required List commnd,
     required String client,
     required String date1,
@@ -24,42 +26,67 @@ class PdfApi {
 
     drawSignature(page, imageSignature);
     drawGrid(page, commnd);
-    drawTitre(page, titre, client, date1, total, montant, remise);
+    drawTitre(page, titre, client, date1, total, montant, remise, name, email);
 
     return saveFile(document);
   }
 
   static void drawTitre(PdfPage page, String titre, String client, String date1,
-      double total, double montant, int remise) {
+      double total, double montant, int remise, String name, String email) {
     final pageSize = page.getClientSize();
+    page.graphics.drawString(
+        "Nom  : $name", PdfStandardFont(PdfFontFamily.helvetica, 20),
+        // ignore: prefer_const_constructors
+        brush: PdfBrushes.black,
+        bounds: Rect.fromLTWH(300, 0, 200, 0));
+    page.graphics.drawString(
+        "Email : $email", PdfStandardFont(PdfFontFamily.helvetica, 20),
+        // ignore: prefer_const_constructors
+        brush: PdfBrushes.black,
+        bounds: Rect.fromLTWH(300, 50, 200, 0));
     page.graphics
         .drawString(titre, PdfStandardFont(PdfFontFamily.helvetica, 30),
             // ignore: prefer_const_constructors
             brush: PdfBrushes.black,
-            bounds: Rect.fromLTWH(0, 10, 200, 0));
+            bounds: Rect.fromLTWH(0, 110, 200, 0));
+
     page.graphics.drawString(
         "Client : $client", PdfStandardFont(PdfFontFamily.helvetica, 20),
         // ignore: prefer_const_constructors
         brush: PdfBrushes.black,
-        bounds: Rect.fromLTWH(0, 50, 200, 0));
+        bounds: Rect.fromLTWH(0, 150, 200, 0));
     page.graphics.drawString("Date de facturation : $date1",
         PdfStandardFont(PdfFontFamily.helvetica, 20),
         // ignore: prefer_const_constructors
         brush: PdfBrushes.black,
-        bounds: Rect.fromLTWH(0, 80, 0, 0));
+        bounds: Rect.fromLTWH(0, 170, 0, 0));
     page.graphics.drawString(
-        "Montant : $montant ", PdfStandardFont(PdfFontFamily.helvetica, 25),
+        "Signature", PdfStandardFont(PdfFontFamily.helvetica, 30),
+        brush: PdfBrushes.black,
         bounds:
-            Rect.fromLTWH(pageSize.width - 500, pageSize.height - 400, 0, 0));
-    page.graphics.drawString("Remise : ${remise / 100}",
-        PdfStandardFont(PdfFontFamily.helvetica, 25),
-        bounds:
-            Rect.fromLTWH(pageSize.width - 500, pageSize.height - 350, 0, 0));
+            Rect.fromLTWH(pageSize.width - 150, pageSize.height - 250, 0, 0));
+    final grid = PdfGrid();
+    grid.columns.add(count: 3);
+    final headerRow = grid.headers.add(1)[0];
+    headerRow.style.backgroundBrush = PdfSolidBrush(PdfColor(68, 114, 196));
+    headerRow.style.textBrush = PdfBrushes.white;
+    headerRow.cells[0].value = 'Montant';
+    headerRow.cells[1].value = 'Remise';
+    headerRow.cells[2].value = 'Total';
 
-    page.graphics.drawString(
-        "Total= $total £", PdfStandardFont(PdfFontFamily.helvetica, 25),
-        bounds:
-            Rect.fromLTWH(pageSize.width - 500, pageSize.height - 300, 0, 0));
+    headerRow.style.font =
+        PdfStandardFont(PdfFontFamily.helvetica, 15, style: PdfFontStyle.bold);
+    // ignore: prefer_const_constructors
+    grid.draw(page: page, bounds: Rect.fromLTWH(0, 400, 220, 0))!;
+
+    final row = grid.rows.add();
+    row.cells[0].value = "$montant £";
+    row.cells[1].value = "$remise %";
+    row.cells[2].value = "$total £";
+    row.style.font =
+        PdfStandardFont(PdfFontFamily.helvetica, 15, style: PdfFontStyle.bold);
+    // ignore: prefer_const_constructors
+    grid.draw(page: page, bounds: Rect.fromLTWH(0, 400, 250, 0))!;
   }
 
   static void drawGrid(PdfPage page, List cmmd) {
@@ -76,7 +103,7 @@ class PdfApi {
     headerRow.cells[5].value = 'Prix';
     headerRow.cells[6].value = 'Sous-total';
     headerRow.style.font =
-        PdfStandardFont(PdfFontFamily.helvetica, 10, style: PdfFontStyle.bold);
+        PdfStandardFont(PdfFontFamily.helvetica, 15, style: PdfFontStyle.bold);
     // ignore: prefer_const_constructors
     grid.draw(page: page, bounds: Rect.fromLTWH(0, 250, 0, 0))!;
 
@@ -89,7 +116,7 @@ class PdfApi {
       row.cells[4].value = cmmd[i]['Quantite'].toString();
       row.cells[5].value = cmmd[i]['prix'].toString();
       row.cells[6].value = cmmd[i]['sous-total'].toString();
-      row.style.font = PdfStandardFont(PdfFontFamily.helvetica, 10,
+      row.style.font = PdfStandardFont(PdfFontFamily.helvetica, 15,
           style: PdfFontStyle.bold);
       // ignore: prefer_const_constructors
       grid.draw(page: page, bounds: Rect.fromLTWH(0, 250, 0, 0))!;
@@ -101,7 +128,7 @@ class PdfApi {
     final PdfBitmap image = PdfBitmap(imageSignature.buffer.asUint8List());
 
     page.graphics.drawImage(image,
-        Rect.fromLTWH(pageSize.width - 120, pageSize.height - 200, 100, 40));
+        Rect.fromLTWH(pageSize.width - 100, pageSize.height - 200, 100, 40));
   }
 
   static Future<File> saveFile(PdfDocument document) async {

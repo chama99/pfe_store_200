@@ -332,6 +332,8 @@ class _DetailFactureState extends State<DetailFacture> {
     final imageSignature = await image!.toByteData(format: ImageByteFormat.png);
     final file = await PdfApi.generatePDF(
       imageSignature: imageSignature!,
+      name: widget.nameus,
+      email: widget.emailus,
       commnd: widget.listfact,
       titre: widget.titre,
       client: widget.client,

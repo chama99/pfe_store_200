@@ -103,73 +103,83 @@ class _ContactDetailState extends State<ContactDetail> {
           acces: widget.accesus,
           url: widget.url,
           role: widget.roleus),
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                height: size.height * 0.50,
-                width: double.infinity,
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: Stack(alignment: Alignment.center, children: [
+        ListView(
+          children: [
+            Column(
+              children: [
+                Stack(
+                  //alignment: Alignment.center,
                   children: [
-                    textfield(
-                      hintText: widget.email,
+                    CustomPaint(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                      ),
+                      painter: HeaderCurvedContainer(),
                     ),
-                    textfield(
-                      hintText: widget.adresse,
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(120, 20, 120, 0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                width: MediaQuery.of(context).size.width / 2,
+                                height: MediaQuery.of(context).size.width / 2,
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.white, width: 5),
+                                  shape: BoxShape.circle,
+                                  color: Colors.white,
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(widget.image),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    textfield(
-                      hintText: widget.tel,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 500,
+                          width: double.infinity,
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(height: 190),
+                              textfield(
+                                hintText: widget.nom,
+                              ),
+                              textfield(
+                                hintText: widget.email,
+                              ),
+                              textfield(
+                                hintText: widget.adresse,
+                              ),
+                              textfield(
+                                hintText: widget.tel,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              )
-            ],
-          ),
-          CustomPaint(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
+              ],
             ),
-            painter: HeaderCurvedContainer(),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Text(
-                  widget.nom,
-                  style: const TextStyle(
-                    fontSize: 35,
-                    letterSpacing: 1.5,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                width: MediaQuery.of(context).size.width / 2,
-                height: MediaQuery.of(context).size.width / 2,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 5),
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(widget.image),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+          ],
+        ),
+      ]),
     );
   }
 }
