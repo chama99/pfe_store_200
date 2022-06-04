@@ -158,10 +158,11 @@ class _CongesScreenState extends State<CongesScreen> {
                   Text("Chargement..", style: TextStyle(fontSize: 20)),
                 ],
               ))
-            : widget.role.toLowerCase() == "technicien" ||
-                    widget.role.toLowerCase() == "comptable"
-                ? _widgetForUser()
-                : _widgetForAdmin()); //TODO GET THIS BACK to Technicien
+            : SingleChildScrollView(
+                child: widget.role.toLowerCase() == "technicien" ||
+                        widget.role.toLowerCase() == "comptable"
+                    ? _widgetForUser()
+                    : _widgetForAdmin())); //TODO GET THIS BACK to Technicien
   }
 
   Widget _widgetForUser() => Container(
