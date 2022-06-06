@@ -17,7 +17,7 @@ import '../widget/NavBottom.dart';
 
 class EditArticle extends StatefulWidget {
   String id, nom, type, role, cat, data, unite;
-  int reference_interne, sale_prix;
+  int reference_interne;
   double prix_dachat, prix_de_vente;
   String image;
   int qt;
@@ -36,7 +36,6 @@ class EditArticle extends StatefulWidget {
     required this.reference_interne,
     required this.taxes_a_la_vente,
     required this.prix_dachat,
-    required this.sale_prix,
     required this.prix_de_vente,
     required this.unite,
     required this.image,
@@ -228,20 +227,6 @@ class _EditContactState extends State<EditArticle> {
                       Container(
                         margin: const EdgeInsets.symmetric(vertical: 10.0),
                         child: TextFormField(
-                          initialValue: "${widget.sale_prix}",
-                          autofocus: false,
-                          onChanged: (value) =>
-                              widget.sale_prix = int.parse(value),
-                          decoration: buildInputDecoration(
-                            Icons.monetization_on,
-                            "sale prix",
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: TextFormField(
                           initialValue: "${widget.prix_de_vente}",
                           autofocus: false,
                           onChanged: (value) =>
@@ -276,7 +261,6 @@ class _EditContactState extends State<EditArticle> {
                         widget.reference_interne,
                         widget.taxes_a_la_vente,
                         widget.prix_dachat,
-                        widget.sale_prix,
                         widget.prix_de_vente,
                         widget.unite,
                         widget.image,
@@ -292,7 +276,6 @@ class _EditContactState extends State<EditArticle> {
                       widget.reference_interne,
                       widget.taxes_a_la_vente,
                       widget.prix_dachat,
-                      widget.sale_prix,
                       widget.prix_de_vente,
                       widget.unite,
                     );
@@ -380,7 +363,6 @@ class _EditContactState extends State<EditArticle> {
     referenceInterne,
     taxesALaVente,
     prixDachat,
-    salePrix,
     prixDeVente,
     unite,
   ) async {
@@ -406,7 +388,6 @@ class _EditContactState extends State<EditArticle> {
             referenceInterne,
             taxesALaVente,
             prixDachat,
-            salePrix,
             prixDeVente,
             unite,
             uploadPath,

@@ -10,7 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
@@ -191,7 +191,7 @@ class _PlanScreenState extends State<PlanScreen> {
 
   void _updatePlan(BuildContext cx) async {
     if (_noteController.text == "") {
-      modalShow("Veuillez remplir la note.", cx, success: false);
+      modalShow("Veuillez remplir le note.", cx, success: false);
       return;
     }
     setState(() {
@@ -574,13 +574,6 @@ class _PlanScreenState extends State<PlanScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            FlatButton.icon(
-              onPressed: () {
-                selectImages();
-              },
-              icon: const Icon(Icons.camera),
-              label: const Text("Appareil photo"),
-            ),
             FlatButton.icon(
               onPressed: () {
                 selectImages();

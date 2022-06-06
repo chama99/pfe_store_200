@@ -469,12 +469,6 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                               ),
                                             ),
                                           ),
-                                          validator: (value) {
-                                            if (!RegExp("%").hasMatch(value!)) {
-                                              return "Veuillez entrer\n  valeur avec % ";
-                                            }
-                                            return null;
-                                          },
                                         ),
                                       ),
                                     )
@@ -489,7 +483,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                                         // Validate returns true if the form is valid, otherwise false.
                                         if (_formKey.currentState!.validate()) {
                                           _streamController
-                                              .add(Contolleremise.text);
+                                              .add("${Contolleremise.text}%");
                                         }
                                       },
                                       child: const Text(
@@ -570,51 +564,56 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
                           onPressed: () {
                             // Validate returns true if the form is valid, otherwise false.
                             if (_formKey.currentState!.validate()) {
-                              if (client != null) {
-                                if (etat != null) {
-                                  addList();
-                                  if (etat == "Bon de commande") {
-                                    AutoFacture().addFacture(
+                              if (Contolleremise.text.isEmpty == false) {
+                                if (client != null) {
+                                  if (etat != null) {
+                                    addList();
+                                    if (etat == "Bon de commande") {
+                                      AutoFacture().addFacture(
+                                          uuid,
+                                          "Facture N°${lf + 1}",
+                                          "Devis N°${l + 1}",
+                                          client,
+                                          "Brouillon",
+                                          dataTime,
+                                          (calculMontat() * (1 + 0.2)) *
+                                              (1 - (remisee / 100)),
+                                          list,
+                                          remisee,
+                                          calculMontat());
+                                    }
+                                    Devis().addDevis(
                                         uuid,
-                                        "Facture N°${lf + 1}",
                                         "Devis N°${l + 1}",
                                         client,
-                                        "Brouillon",
-                                        dataTime,
+                                        etat,
                                         (calculMontat() * (1 + 0.2)) *
                                             (1 - (remisee / 100)),
                                         list,
                                         remisee,
-                                        calculMontat());
-                                  }
-                                  Devis().addDevis(
-                                      uuid,
-                                      "Devis N°${l + 1}",
-                                      client,
-                                      etat,
-                                      (calculMontat() * (1 + 0.2)) *
-                                          (1 - (remisee / 100)),
-                                      list,
-                                      remisee,
-                                      calculMontat(),
-                                      dataTime);
+                                        calculMontat(),
+                                        dataTime);
 
-                                  Get.to(() => ListDevis(
-                                        idus: widget.idus,
-                                        role: widget.role,
-                                        email: widget.email,
-                                        acces: widget.acces,
-                                        name: widget.name,
-                                        url: widget.url,
-                                        tel: widget.tel,
-                                        adr: widget.adr,
-                                      ));
+                                    Get.to(() => ListDevis(
+                                          idus: widget.idus,
+                                          role: widget.role,
+                                          email: widget.email,
+                                          acces: widget.acces,
+                                          name: widget.name,
+                                          url: widget.url,
+                                          tel: widget.tel,
+                                          adr: widget.adr,
+                                        ));
+                                  } else {
+                                    showToast("veuillez sélectionner état");
+                                  }
                                 } else {
-                                  showToast("veuillez sélectionner état");
+                                  showToast("veuillez sélectionner client");
                                 }
                               } else {
-                                showToast("veuillez sélectionner client");
+                                showToast("Veuillez entrer remise");
                               }
+
                               Commande().deleteCommande();
                             }
                           },

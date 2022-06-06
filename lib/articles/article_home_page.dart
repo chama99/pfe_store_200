@@ -186,14 +186,13 @@ class _listArticleState extends State<listArticle> {
                                                       ['taxes_a_la_vente'],
                                               prix_dachat: userArticleList[index]
                                                   ['prix_dachat'],
-                                              sale_prix: userArticleList[index]
-                                                  ['sale_prix'],
                                               prix_de_vente:
                                                   userArticleList[index]
                                                       ['prix_de_vente'],
                                               unite: userArticleList[index]
                                                   ['unite'],
-                                              image: userArticleList[index]['image'],
+                                              image: userArticleList[index]
+                                                  ['image'],
                                               qt: userArticleList[index]["Quantité"],
                                               idus: widget.idus,
                                               url: widget.url,
@@ -208,7 +207,8 @@ class _listArticleState extends State<listArticle> {
                                     const Color.fromARGB(255, 3, 56, 109),
                                 child: ListTile(
                                   title: Text(article['nom_art']),
-                                  subtitle: Text(article['cat']),
+                                  subtitle: Text(
+                                      "${article['cat']}\n ${article['prix_de_vente']}£"),
                                   trailing: IconButton(
                                     onPressed: () => {
                                       openDialog(

@@ -7,7 +7,7 @@ import 'edit_article.dart';
 
 class ArticleDetail extends StatefulWidget {
   String id, nom, type, role, cat, data, unite;
-  int reference_interne, sale_prix;
+  int reference_interne;
   double prix_dachat, prix_de_vente;
   String image;
   int qt, taxes_a_la_vente;
@@ -25,7 +25,6 @@ class ArticleDetail extends StatefulWidget {
     required this.reference_interne,
     required this.taxes_a_la_vente,
     required this.prix_dachat,
-    required this.sale_prix,
     required this.prix_de_vente,
     required this.unite,
     required this.image,
@@ -57,7 +56,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
             hintText: hintText,
             hintStyle: const TextStyle(
               letterSpacing: 2,
-              color: Colors.black,
+              color: Color.fromARGB(255, 30, 41, 106),
               fontWeight: FontWeight.bold,
             ),
             fillColor: Colors.white30,
@@ -93,7 +92,6 @@ class _ArticleDetailState extends State<ArticleDetail> {
                             reference_interne: widget.reference_interne,
                             taxes_a_la_vente: widget.taxes_a_la_vente,
                             prix_dachat: widget.prix_dachat,
-                            sale_prix: widget.sale_prix,
                             prix_de_vente: widget.prix_de_vente,
                             unite: widget.unite,
                             image: widget.image,
@@ -180,25 +178,26 @@ class _ArticleDetailState extends State<ArticleDetail> {
                             children: [
                               SizedBox(height: 70),
                               textfield(
-                                hintText: widget.nom,
+                                hintText: "Nom d'artcile: ${widget.nom}",
                               ),
                               textfield(
-                                hintText: widget.role,
+                                hintText: "Type d'article: ${widget.role}",
                               ),
                               textfield(
-                                hintText: widget.cat,
+                                hintText: "Catégorie d'article: ${widget.cat}",
                               ),
                               textfield(
-                                hintText: widget.data,
+                                hintText: "Code à barres: ${widget.data}",
                               ),
                               textfield(
-                                hintText: "${widget.reference_interne}",
+                                hintText:
+                                    "Référence interne: ${widget.reference_interne}",
                               ),
                               textfield(
-                                hintText: "${widget.prix_dachat}",
+                                hintText: "Prix d'acht: ${widget.prix_dachat}",
                               ),
                               textfield(
-                                hintText: widget.unite,
+                                hintText: "Unité de mesure: ${widget.unite}",
                               ),
                             ],
                           ),

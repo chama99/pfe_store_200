@@ -244,7 +244,7 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                             keyboardType: TextInputType.text,
                             decoration: buildInputDecoration(
                               Icons.article,
-                              "Nom de article",
+                              "Nom d'article",
                               color: Colors.white,
                             ),
                             validator: (value) {
@@ -456,25 +456,6 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                           padding: const EdgeInsets.only(
                               bottom: 15, left: 10, right: 10),
                           child: TextFormField(
-                            controller: sale_prixController,
-                            keyboardType: TextInputType.number,
-                            decoration: buildInputDecoration(
-                              Icons.monetization_on,
-                              "sale prix",
-                              color: Colors.white,
-                            ),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Veuillez entrer la sale prix ';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: 15, left: 10, right: 10),
-                          child: TextFormField(
                             controller: prix_de_venteController,
                             keyboardType: TextInputType.number,
                             decoration: buildInputDecoration(
@@ -561,7 +542,6 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
                               int.parse(reference_interne),
                               int.parse(taxes_a_la_vente),
                               double.parse(prix_dachat),
-                              int.parse(sale_prix),
                               double.parse(prix_de_vente),
                               unite,
                               "http://www.ipsgroup.fr/wp-content/uploads/2013/12/default_image_01-1024x1024-1140x642.png",
@@ -675,7 +655,6 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
             reference_interne,
             taxes_a_la_vente,
             prix_dachat,
-            sale_prix,
             prix_de_vente,
             unite,
             uploadPath,

@@ -24,7 +24,7 @@ class Article {
   }
 
   Future<void> addArticle(id, nom, type, role, cat, data, referenceinterne,
-      taxesalavente, prixdachat, saleprix, prixdevente, unite, url, qt) {
+      taxesalavente, prixdachat,  prixdevente, unite, url, qt) {
     return article
         .doc(id)
         .set({
@@ -37,7 +37,7 @@ class Article {
           'reference_interne': referenceinterne,
           'taxes_a_la_vente': taxesalavente,
           'prix_dachat': prixdachat,
-          'sale_prix': saleprix,
+          
           'prix_de_vente': prixdevente,
           'unite': unite,
           'image': url,
@@ -50,7 +50,7 @@ class Article {
   }
 
   Future<void> updateArticle(id, nom, type, role, cat, data, referenceinterne,
-      taxesalavente, prixdachat, saleprix, prixdevente, unite, url, qt) {
+      taxesalavente, prixdachat,  prixdevente, unite, url, qt) {
     return article
         .doc(id)
         .update({
@@ -63,7 +63,7 @@ class Article {
           'reference_interne': referenceinterne,
           'taxes_a_la_vente': taxesalavente,
           'prix_dachat': prixdachat,
-          'sale_prix': saleprix,
+         
           'prix_de_vente': prixdevente,
           'unite': unite,
           'image': url,
