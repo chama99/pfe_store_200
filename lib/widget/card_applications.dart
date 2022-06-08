@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../users/role.dart';
+import '../users/acces.dart';
 
 Card buildInputCardRole(String idus, String nomus, String emailus, String url,
     List acces, String role, String telus, String adrus) {

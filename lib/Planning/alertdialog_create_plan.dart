@@ -6,18 +6,18 @@ import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 
 import '../pages/utils.dart';
-import '../widget/NavBottom.dart';
 import '../widget/drop_down.dart';
 
 class AlertDialogPlan extends StatefulWidget {
   final EventList<Event> allPlans;
   final String techName, username, role;
-  String emailus, nameus, url, roleus, adrus, telus, idus;
+  final String emailus, nameus, url, roleus, adrus, telus, idus;
 
-  List accesus;
-  AlertDialogPlan({
+  final List accesus;
+  const AlertDialogPlan({
     Key? key,
     required this.allPlans,
     required this.techName,
@@ -69,8 +69,9 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
   String telephone = "";
   String addresse = "";
 
-  DateTime _beginDate = DateTime.now();
-  DateTime _endDate = DateTime.now().add(const Duration(days: 1));
+  DateTime _beginDate = Utils.formatDateToCalculate(DateTime.now());
+  DateTime _endDate =
+      Utils.formatDateToCalculate(DateTime.now().add(const Duration(days: 1)));
 
   String heure = "09:00 - 16:00";
   String clientDropDown = "Choissiez un client";
@@ -82,10 +83,11 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
         clients.add(client[i]["name"]);
         users.add(client[i]);
       }
+
+      heure = timeList[0];
       setState(() {
         _loading = false;
       });
-      heure = timeList[0];
     });
     super.initState();
   }
@@ -103,15 +105,6 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
             "Créer un plan",
           ),
         ),
-        bottomNavigationBar: NavBottom(
-            tel: widget.telus,
-            adr: widget.adrus,
-            id: widget.idus,
-            email: widget.emailus,
-            name: widget.nameus,
-            acces: widget.accesus,
-            url: widget.url,
-            role: widget.roleus),
         body: Container(
           padding: const EdgeInsets.all(8),
           child: Column(
@@ -222,7 +215,9 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: const Color.fromARGB(255, 62, 75, 146)),
-                  onPressed: sauvgardePlan,
+                  onPressed: () {
+                    sauvgardePlan;
+                  },
                   child: _buttonWidget,
                 ),
               )
@@ -340,23 +335,14 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
       "owners": [widget.techName],
       "time": heure
     }).then((_) {
-      widget.callback();
       setState(() {
         _buttonWidget = const Text("Sauvgarder");
       });
       Utils.modalShow("Plan ajouter avec succès", context);
+      widget.callback();
+      Navigator.pop(context);
+    }).onError((error, stackTrace) {
+      print("$error ---- $stackTrace");
     });
-    Get.to(() => Calander(
-        techName: widget.techName,
-        username: widget.username,
-        role: widget.role,
-        idus: widget.idus,
-        url: widget.url,
-        telus: widget.telus,
-        adrus: widget.adrus,
-        accesus: widget.accesus,
-        nameus: widget.nameus,
-        emailus: widget.emailus,
-        roleus: widget.roleus));
   }
 }

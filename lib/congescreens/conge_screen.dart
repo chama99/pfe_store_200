@@ -1,14 +1,17 @@
 import 'package:chama_projet/api/firebase_api.dart';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../pages/utils.dart';
 import '../widget/NavBottom.dart';
+import 'conges_screen.dart';
 
 class CongeScreen extends StatefulWidget {
   final dynamic singleConge;
   String emailus, nameus, url, roleus, adrus, telus, idus;
-
+  final String role;
+  final String userID;
   List accesus;
   CongeScreen(
       {required this.singleConge,
@@ -20,6 +23,8 @@ class CongeScreen extends StatefulWidget {
       required this.accesus,
       required this.telus,
       required this.adrus,
+      required this.role,
+      required this.userID,
       Key? key})
       : super(key: key);
 
@@ -156,6 +161,18 @@ class _CongeScreenState extends State<CongeScreen> {
                               }
                             });
                           }
+                          Get.to(() => CongesScreen(
+                                idus: widget.idus,
+                                url: widget.url,
+                                emailus: widget.emailus,
+                                nameus: widget.nameus,
+                                roleus: widget.roleus,
+                                accesus: widget.accesus,
+                                telus: widget.telus,
+                                adrus: widget.adrus,
+                                role: '',
+                                userID: '',
+                              ));
                         },
                         child: Row(children: const [
                           Icon(Icons.check),
@@ -179,6 +196,18 @@ class _CongeScreenState extends State<CongeScreen> {
                               });
                             });
                           }
+                          Get.to(() => CongesScreen(
+                                idus: widget.idus,
+                                url: widget.url,
+                                emailus: widget.emailus,
+                                nameus: widget.nameus,
+                                roleus: widget.roleus,
+                                accesus: widget.accesus,
+                                telus: widget.telus,
+                                adrus: widget.adrus,
+                                role: '',
+                                userID: '',
+                              ));
                         },
                         child: Row(children: const [
                           Icon(Icons.close),

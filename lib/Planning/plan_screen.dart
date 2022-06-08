@@ -1,14 +1,10 @@
-// ignore_for_file: deprecated_member_use
-
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'package:get_storage/get_storage.dart';
@@ -21,30 +17,32 @@ import '../widget/modal.dart';
 import 'calander.dart';
 
 class PlanScreen extends StatefulWidget {
+  final VoidCallback callBack;
   final String? role;
   final String planID;
   final dynamic event;
-  String emailus, nameus, url, roleus, adrus, telus, idus;
+  final String emailus, nameus, url, roleus, adrus, telus, idus;
 
   final String techName;
   final String username;
-  List accesus;
-  PlanScreen({
-    Key? key,
-    required this.event,
-    required this.planID,
-    this.role,
-    required this.idus,
-    required this.url,
-    required this.emailus,
-    required this.nameus,
-    required this.roleus,
-    required this.accesus,
-    required this.telus,
-    required this.adrus,
-    required this.techName,
-    required this.username,
-  }) : super(key: key);
+  final List accesus;
+  const PlanScreen(
+      {Key? key,
+      required this.callBack,
+      required this.event,
+      required this.planID,
+      required this.idus,
+      required this.url,
+      required this.emailus,
+      required this.nameus,
+      required this.roleus,
+      required this.accesus,
+      required this.telus,
+      required this.adrus,
+      required this.techName,
+      required this.username,
+      this.role})
+      : super(key: key);
 
   @override
   State<PlanScreen> createState() => _PlanScreenState();
@@ -52,213 +50,22 @@ class PlanScreen extends StatefulWidget {
 
 class _PlanScreenState extends State<PlanScreen> {
   ///---------State-------------
-  final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
-  String _picturePath = "";
-  List<String> _pictureUploaded = [];
-  dynamic _eventFromParent;
-  List<bool> _buttons = [false, false, false];
-  String _planStatus = "Planifier";
-  final ImagePicker _picker = ImagePicker();
-  final String _networkImage =
-      "https://i0.wp.com/shahpourpouyan.com/wp-content/uploads/2018/10/orionthemes-placeholder-image-1.png";
+  List<String> _pictureUploaded =
+      []; // This is for the capture of the pictures had been uploaded
+  dynamic _eventFromParent; // thisq is from the parent widget
+  List<bool> _buttons = [false, false, false]; // this for the buttons
+  String _planStatus = "Planifier"; // this is the initial status
   final _noteController = TextEditingController();
-  List<XFile?>? _noteImage = [];
+  List<XFile?>? _noteImage = []; // this is for the images picked
   final TextStyle _leftTextStyle =
       const TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
   final TextStyle _rightTextStyle =
       const TextStyle(fontWeight: FontWeight.w500, fontSize: 18);
   Widget _saveButtonContent = const Text("Sauvgarder",
       style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18));
-  bool _isClicked = false;
   Map<String, String> _paths = {};
-  String _extension = "";
-  late FileType _pickType;
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-  List<UploadTask> _tasks = <UploadTask>[];
-
-  ///--------Methods--------------
-  Future<List<String>> _uploadImages(String email) async {
-    int i = 0;
-    await FirebaseAuth.instance.signInAnonymously();
-    for (var f in _noteImage!) {
-      i++;
-      final ref = FirebaseStorage.instance
-          .ref('plan_pictures')
-          .child(widget.planID + "$i");
-      final uploadTask = ref.putFile(File(f!.path));
-      uploadTask.whenComplete(() async {
-        try {
-          var x = await ref.getDownloadURL();
-          _pictureUploaded.add(x);
-        } catch (onError) {
-          print("Error");
-        }
-      });
-    }
-    return _pictureUploaded;
-  }
-
-  void selectImages() async {
-    final List<XFile>? selectedImages = await ImagePicker().pickMultiImage();
-    if (selectedImages!.isNotEmpty) {
-      _noteImage!.addAll(selectedImages);
-    }
-    setState(() {});
-  }
-
-  void openFileExplorer() async {
-    var i = 0;
-    try {
-      var x = await FilePicker.platform.pickFiles();
-      for (var picture in x!.files) {
-        _paths.addAll({'$i': picture.path!});
-      }
-    } on PlatformException catch (e) {
-      print("Unsupported operation" + e.toString());
-    }
-    if (!mounted) return;
-  }
-
-  _renderButton() {
-    if (_planStatus == "Demarrer") {
-      _planStatus = "Demarrer";
-      _buttons = [true, false, true];
-    }
-    if (_planStatus == "Terminer") {
-      _planStatus = "Terminer";
-      _buttons = [true, true, true];
-    }
-    if (_planStatus == "Annuler") {
-      _planStatus = "Annuler";
-      _buttons = [true, true, true];
-    }
-    setState(() {});
-  }
-
-  updatePlanStatus(String status, BuildContext context) async {
-    bool clicked = GetStorage().read(widget.planID) ?? false;
-    if (status != "Terminer") {
-      final refPlans = FirebaseFirestore.instance.collection("plan");
-      refPlans.doc(widget.planID).update({"state": status}).then((v) {
-        print("i had began");
-        _planStatus = status;
-        _renderButton();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Row(children: [
-            const Icon(
-              Icons.check,
-              color: Colors.greenAccent,
-            ),
-            const Spacer(),
-            Text('Plan a été $status avec success ')
-          ]),
-        ));
-      });
-    } else if (status == "Terminer" && clicked) {
-      final refPlans = FirebaseFirestore.instance.collection("plan");
-      refPlans.doc(widget.planID).update({"state": status}).then((v) {
-        print("i had began");
-        _planStatus = status;
-        _renderButton();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Row(children: const [
-            Icon(
-              Icons.check,
-              color: Colors.greenAccent,
-            ),
-            Spacer(),
-            Text('Plan a été Terminer avec success')
-          ]),
-        ));
-      });
-    } else if (status == "Terminer" && clicked == false) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Row(children: const [
-          Icon(
-            Icons.warning,
-            color: Colors.orangeAccent,
-          ),
-          Spacer(),
-          Text(
-              'Veuillez remplir le note et sauvgarder pour \nterminer le plan!')
-        ]),
-      ));
-    }
-  }
-
-  void _updatePlan(BuildContext cx) async {
-    if (_noteController.text == "") {
-      modalShow("Veuillez remplir le note.", cx, success: false);
-      return;
-    }
-    setState(() {
-      _saveButtonContent = const SizedBox(
-          width: 40,
-          child: CupertinoActivityIndicator(
-            color: Colors.white,
-          ));
-    });
-    if (_noteImage != null) {
-      _uploadImages(widget.planID).then((picturesUploaded) async {
-        final refPlans = FirebaseFirestore.instance.collection("plan");
-        await refPlans.doc(widget.planID).update({
-          "state": _planStatus,
-          "note": _noteController.text,
-          "picture": picturesUploaded,
-          "updated": true
-        }).then((_) async {
-          _isClicked = true;
-          var _newEvent = await refPlans.doc(widget.planID).get();
-
-          setState(() {
-            _eventFromParent = _newEvent;
-            _saveButtonContent = Text("Sauvgarder", style: _rightTextStyle);
-          });
-          ScaffoldMessenger.of(cx).showSnackBar(SnackBar(
-            content: Row(children: const [
-              Icon(
-                Icons.check,
-                color: Colors.greenAccent,
-              ),
-              Spacer(),
-              Text('Plan a été mis a jour avec success ')
-            ]),
-          ));
-          GetStorage().write(widget.planID, true);
-        }).onError((error, stackTrace) {
-          setState(() {
-            _saveButtonContent = Text("Sauvgarder", style: _rightTextStyle);
-          });
-          print(error);
-          print(stackTrace);
-          ScaffoldMessenger.of(cx).showSnackBar(SnackBar(
-            content: Row(children: [
-              const Icon(
-                Icons.check,
-                color: Colors.greenAccent,
-              ),
-              const SizedBox(width: 8),
-              Text('Probléme : $error')
-            ]),
-          ));
-        });
-      }).onError((error, stackTrace) {
-        ScaffoldMessenger.of(cx).showSnackBar(SnackBar(
-          content: Row(children: const [
-            Icon(
-              Icons.check,
-              color: Colors.greenAccent,
-            ),
-            SizedBox(width: 8),
-            Text("un probléme s'est produit lors du chargement des photo ")
-          ]),
-        ));
-      });
-    }
-  }
+  int indexOfImage = 0;
+  bool _isLoading = false;
 
   ///---------InitState()-------
   @override
@@ -272,6 +79,7 @@ class _PlanScreenState extends State<PlanScreen> {
     _planStatus = _eventFromParent['state'];
     _renderButton();
     _noteController.text = _eventFromParent['note'] ?? "";
+    print('This is the event from parent !!!! ${widget.event}');
     super.initState();
   }
 
@@ -337,7 +145,6 @@ class _PlanScreenState extends State<PlanScreen> {
                         return;
                       }
                       updatePlanStatus("Terminer", context);
-
                       _planStatus = "Terminer";
                       Get.to(() => Calander(
                             techName: widget.techName,
@@ -365,6 +172,19 @@ class _PlanScreenState extends State<PlanScreen> {
                       }
                       updatePlanStatus("Annuler", context);
                       _planStatus = "Annuler";
+                      Get.to(() => Calander(
+                            techName: widget.techName,
+                            username: widget.username,
+                            idus: widget.idus,
+                            url: widget.url,
+                            emailus: widget.emailus,
+                            nameus: widget.nameus,
+                            roleus: widget.roleus,
+                            accesus: widget.accesus,
+                            telus: widget.telus,
+                            adrus: widget.adrus,
+                            role: widget.roleus,
+                          ));
                       setState(() {});
                     },
                     style: ElevatedButton.styleFrom(
@@ -454,7 +274,7 @@ class _PlanScreenState extends State<PlanScreen> {
                       height: 50,
                       width: 50,
                       child: const Icon(
-                        Icons.add,
+                        Icons.image_rounded,
                         color: Colors.white,
                       ),
                       decoration: BoxDecoration(
@@ -474,76 +294,14 @@ class _PlanScreenState extends State<PlanScreen> {
             const SizedBox(
               height: 10,
             ),
-            _pictureUploaded.isEmpty && _eventFromParent["picture"] != null
-                ? Expanded(
-                    child: GridView.builder(
-                        scrollDirection: Axis.vertical,
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 200,
-                                childAspectRatio: 3 / 2,
-                                crossAxisSpacing: 20,
-                                mainAxisSpacing: 20),
-                        itemCount: _eventFromParent["picture"]!.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Card(
-                              child: Stack(
-                            children: [
-                              Center(
-                                  child: SizedBox(
-                                      child: Image.network(
-                                          _eventFromParent["picture"][index]))),
-                              Positioned(
-                                  bottom: 10,
-                                  right: 10,
-                                  child: GestureDetector(
-                                      onTap: () async => showDialog(
-                                            context: context,
-                                            builder: (context) => ModalImage(
-                                                link:
-                                                    _eventFromParent["picture"]
-                                                        [index]),
-                                          ),
-                                      child: Icon(Icons.zoom_in)))
-                            ],
-                          ));
-                        }))
-                : Expanded(
-                    child: GridView.builder(
-                        scrollDirection: Axis.vertical,
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 200,
-                                childAspectRatio: 3 / 2,
-                                crossAxisSpacing: 20,
-                                mainAxisSpacing: 20),
-                        itemCount: _noteImage!.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Card(
-                            child: Stack(
-                              children: [
-                                Center(
-                                    child: Image.file(
-                                        File(_noteImage![index]!.path))),
-                                Positioned(
-                                    bottom: 10,
-                                    right: 10,
-                                    child: GestureDetector(
-                                        onTap: () async => showDialog(
-                                              context: context,
-                                              builder: (context) => ModalImage(
-                                                  link:
-                                                      _noteImage![index]!.path),
-                                            ),
-                                        child: Icon(Icons.zoom_in)))
-                              ],
-                            ),
-                          );
-                        })),
+            _noteImage!.isNotEmpty && _eventFromParent["picture"] != null
+                ? listImageContainer(_noteImage!, isItFromParent: false)
+                : listImageContainer(_eventFromParent["picture"],
+                    isItFromParent: true),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
               child: ElevatedButton(
-                  onPressed: () => _updatePlan(context),
+                  onPressed: () => _savgardePlan(context),
                   style: ElevatedButton.styleFrom(
                       primary: Colors.orange,
                       fixedSize:
@@ -556,6 +314,245 @@ class _PlanScreenState extends State<PlanScreen> {
     );
   }
 
+  ///--------Methods--------------
+  Future _uploadImages() async {
+    await FirebaseAuth.instance.signInAnonymously();
+
+    await Future.forEach(_noteImage!, (XFile? image) async {
+      Reference ref = FirebaseStorage.instance
+          .ref("plans_picture")
+          .child('${widget.planID}${indexOfImage.toString()}');
+      UploadTask uploadTask = ref.putFile(File(image!.path));
+
+      var _url = await (await uploadTask).ref.getDownloadURL();
+      _pictureUploaded.add(_url);
+
+      print("this is the images uploaded ===$_pictureUploaded");
+
+      indexOfImage++;
+    }).whenComplete(() => indexOfImage = 0);
+  }
+
+  void selectImages() async {
+    final List<XFile>? selectedImages = await ImagePicker().pickMultiImage();
+    if (selectedImages!.isNotEmpty) {
+      _noteImage!.addAll(selectedImages);
+    }
+    setState(() {});
+  }
+
+  _renderButton() {
+    if (_planStatus == "Demarrer") {
+      _planStatus = "Demarrer";
+      _buttons = [true, false, true];
+    }
+    if (_planStatus == "Terminer") {
+      _planStatus = "Terminer";
+      _buttons = [true, true, true];
+    }
+    if (_planStatus == "Annuler") {
+      _planStatus = "Annuler";
+      _buttons = [true, true, true];
+    }
+    setState(() {});
+  }
+
+  updatePlanStatus(String status, BuildContext context) async {
+    bool clicked = GetStorage().read(widget.planID) ?? false;
+    if (status != "Terminer") {
+      final refPlans = FirebaseFirestore.instance.collection("plan");
+      refPlans.doc(widget.planID).update({"state": status}).then((v) {
+        _planStatus = status;
+        _renderButton();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Row(children: [
+            const Icon(
+              Icons.check,
+              color: Colors.greenAccent,
+            ),
+            const Spacer(),
+            Text('Plan a été $status avec success ')
+          ]),
+        ));
+      });
+    } else if (status == "Terminer" && clicked) {
+      final refPlans = FirebaseFirestore.instance.collection("plan");
+      refPlans.doc(widget.planID).update({"state": status}).then((v) {
+        _planStatus = status;
+        _renderButton();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Row(children: const [
+            Icon(
+              Icons.check,
+              color: Colors.greenAccent,
+            ),
+            Spacer(),
+            Text('Plan a été Terminer avec success')
+          ]),
+        ));
+      });
+    } else if (status == "Terminer" && clicked == false) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.floating,
+        content: Row(children: const [
+          Icon(
+            Icons.warning,
+            color: Colors.orangeAccent,
+          ),
+          Spacer(),
+          Text(
+              'Veuillez remplir le note et sauvgarder pour \nterminer le plan!')
+        ]),
+      ));
+    }
+    Get.to(() => Calander(
+          techName: widget.techName,
+          username: widget.username,
+          idus: widget.idus,
+          url: widget.url,
+          emailus: widget.emailus,
+          nameus: widget.nameus,
+          roleus: widget.roleus,
+          accesus: widget.accesus,
+          telus: widget.telus,
+          adrus: widget.adrus,
+          role: widget.roleus,
+        ));
+  }
+
+  void _savgardePlan(BuildContext cx) async {
+    if (_isLoading) {
+      return;
+    }
+    if (_noteController.text == "") {
+      modalShow("Veuillez remplir la note.", cx, success: false);
+      return;
+    }
+    setState(() {
+      _saveButtonContent = const SizedBox(
+          width: 40,
+          child: CupertinoActivityIndicator(
+            color: Colors.white,
+          ));
+    });
+    _isLoading = true;
+    if (_noteImage != null) {
+      _uploadImages().whenComplete(() async {
+        print(
+            "this is the picture uploaded that will be added to the don ================ $_pictureUploaded");
+        final refPlans = FirebaseFirestore.instance.collection("plan");
+        refPlans.doc(widget.planID).update({
+          "state": _planStatus,
+          "note": _noteController.text,
+          "picture": _pictureUploaded,
+          "updated": true
+        }).whenComplete(() async {
+          var _newEvent = await refPlans.doc(widget.planID).get();
+
+          setState(() {
+            _eventFromParent = _newEvent;
+            _saveButtonContent = Text("Sauvgarder", style: _rightTextStyle);
+          });
+          ScaffoldMessenger.of(cx).showSnackBar(SnackBar(
+            content: Row(children: const [
+              Icon(
+                Icons.check,
+                color: Colors.greenAccent,
+              ),
+              Spacer(),
+              Text('Plan a été mis a jour avec success ')
+            ]),
+          ));
+          GetStorage().write(widget.planID, true);
+          Get.to(() => Calander(
+                techName: widget.techName,
+                username: widget.username,
+                idus: widget.idus,
+                url: widget.url,
+                emailus: widget.emailus,
+                nameus: widget.nameus,
+                roleus: widget.roleus,
+                accesus: widget.accesus,
+                telus: widget.telus,
+                adrus: widget.adrus,
+                role: widget.roleus,
+              ));
+          widget.callBack();
+        }).onError((error, stackTrace) {
+          setState(() {
+            _saveButtonContent = Text("Sauvgarder", style: _rightTextStyle);
+          });
+          print(error);
+          print(stackTrace);
+          ScaffoldMessenger.of(cx).showSnackBar(SnackBar(
+            content: Row(children: [
+              const Icon(
+                Icons.check,
+                color: Colors.greenAccent,
+              ),
+              const SizedBox(width: 8),
+              Text('Probléme : $error')
+            ]),
+          ));
+        });
+      }).onError((error, stackTrace) {
+        throw ScaffoldMessenger.of(cx).showSnackBar(SnackBar(
+          content: Row(children: const [
+            Icon(
+              Icons.check,
+              color: Colors.greenAccent,
+            ),
+            SizedBox(width: 8),
+            Text("un probléme s'est produit lors du chargement des photo ")
+          ]),
+        ));
+      });
+    }
+  }
+
+  Widget listImageContainer(List<dynamic>? images, {bool? isItFromParent}) {
+    return Expanded(
+        child: GridView.builder(
+            scrollDirection: Axis.vertical,
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
+                childAspectRatio: 3 / 2,
+                crossAxisSpacing: 20,
+                mainAxisSpacing: 20),
+            itemCount: images?.length ?? 0,
+            itemBuilder: (BuildContext context, int index) {
+              return Card(
+                child: Stack(
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                      child: Center(
+                          child: isItFromParent!
+                              ? Image.network(
+                                  _eventFromParent["picture"][index])
+                              : Image.file(File(images![index].path))),
+                    ),
+                    Positioned(
+                        bottom: 10,
+                        right: 10,
+                        child: GestureDetector(
+                            onTap: () async => showDialog(
+                                  context: context,
+                                  builder: (context) => ModalImage(
+                                      link: isItFromParent
+                                          ? images![index]
+                                          : _eventFromParent["picture"][index]),
+                                ),
+                            child: const Icon(Icons.zoom_in))),
+                  ],
+                ),
+              );
+            }));
+  }
+
   Widget bottomSheet() {
     return Container(
       height: 100.0,
@@ -565,7 +562,7 @@ class _PlanScreenState extends State<PlanScreen> {
       ),
       child: Column(children: <Widget>[
         const Text(
-          "Choisissez un ou plusieurs images",
+          "Choisissez la photo de profil",
           style: TextStyle(fontSize: 20.0),
         ),
         const SizedBox(
@@ -579,6 +576,13 @@ class _PlanScreenState extends State<PlanScreen> {
                 selectImages();
               },
               icon: const Icon(Icons.camera),
+              label: const Text("Appareil photo"),
+            ),
+            FlatButton.icon(
+              onPressed: () {
+                selectImages();
+              },
+              icon: const Icon(Icons.camera),
               label: const Text("Galerie"),
             ),
           ],
@@ -586,13 +590,6 @@ class _PlanScreenState extends State<PlanScreen> {
       ]),
     );
   }
-
-  // void takePhoto(ImageSource source) async {
-  //   XFile? pickedFile = await _picker.pickImage(source: source);
-  //   setState(() {
-  //     _noteImage = pickedFile!;
-  //   });
-  // }
 
   modalShow(String text, BuildContext context, {bool success = true}) async {
     return await showDialog(

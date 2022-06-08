@@ -1,19 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../api/firebase_api.dart';
 import '../pages/utils.dart';
 import '../widget/NavBottom.dart';
+import 'conges_screen.dart';
 
 class DemandeCongeScreen extends StatefulWidget {
   final VoidCallback callBack;
   final String userID;
   final String emailus, nameus, url, roleus, adrus, telus, idus;
+  final String role;
 
   final List accesus;
   const DemandeCongeScreen({
     Key? key,
+    required this.role,
     required this.userID,
     required this.callBack,
     required this.idus,
@@ -259,6 +263,18 @@ class _DemandeCongeScreenState extends State<DemandeCongeScreen> {
         .then((v) {
       widget.callBack();
       Utils.snack(ctx, Icons.check, "Demande a été sauvgarder avec success");
+      Get.to(() => CongesScreen(
+            idus: widget.idus,
+            url: widget.url,
+            emailus: widget.emailus,
+            nameus: widget.nameus,
+            roleus: widget.roleus,
+            accesus: widget.accesus,
+            telus: widget.telus,
+            adrus: widget.adrus,
+            role: widget.role,
+            userID: widget.userID,
+          ));
     }).onError((error, stackTrace) {
       print(error);
       print(stackTrace);

@@ -1,11 +1,12 @@
 import 'package:chama_projet/Planning/plan_screen.dart';
-
 import 'package:chama_projet/widget/plan_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 
+import '../pages/utils.dart';
 import '../widget/NavBottom.dart';
 import 'alertdialog_create_plan.dart';
 
@@ -15,9 +16,9 @@ class Calander extends StatefulWidget {
   final String role;
   final String techName;
   final String username;
-  String emailus, nameus, url, roleus, adrus, telus, idus;
+  final String emailus, nameus, url, roleus, adrus, telus, idus;
 
-  List accesus;
+  final List accesus;
   Calander({
     Key? key,
     required this.techName,
@@ -39,6 +40,7 @@ class Calander extends StatefulWidget {
 
 class _CalanderState extends State<Calander> {
   int numberEvents = 0;
+  bool _isLoading = true;
   List? appointements = [];
   List plans = [];
   Widget _lowerHalf = const SizedBox();
@@ -63,8 +65,6 @@ class _CalanderState extends State<Calander> {
     });
     getData().then((value) {
       for (int i = 0; i < value.length; i++) {
-        print("ID => ${value[i].id}");
-        print("data => ${value[i].data()}");
         //print(value[i]['id']);
         var data = value[i].data();
         plans.add(data);
@@ -82,8 +82,14 @@ class _CalanderState extends State<Calander> {
                 ),
                 description: value[i].id));
       }
+
+      _isLoading = false;
+      setState(() {});
+    }).onError((error, stackTrace) {
+      Utils.snack(context, Icons.warning,
+          "Veuillez ressayer quelque choose n'a pas passer correctement");
+      print("$error ---------- $stackTrace");
     });
-    setState(() {});
   }
 
   callBack() async {
@@ -112,19 +118,20 @@ class _CalanderState extends State<Calander> {
                     await showDialog(
                         context: context,
                         builder: (context) => AlertDialogPlan(
-                            username: widget.username,
-                            role: widget.role,
-                            allPlans: _markedDateMap,
-                            techName: widget.techName,
-                            callback: callBack,
-                            idus: widget.idus,
-                            url: widget.url,
-                            telus: widget.telus,
-                            adrus: widget.adrus,
-                            accesus: widget.accesus,
-                            nameus: widget.nameus,
-                            emailus: widget.emailus,
-                            roleus: widget.roleus));
+                              username: widget.username,
+                              role: widget.role,
+                              allPlans: _markedDateMap,
+                              techName: widget.techName,
+                              callback: callBack,
+                              idus: widget.idus,
+                              url: widget.url,
+                              telus: widget.telus,
+                              adrus: widget.adrus,
+                              accesus: widget.accesus,
+                              nameus: widget.nameus,
+                              emailus: widget.emailus,
+                              roleus: widget.roleus,
+                            ));
                   },
                   child: const Text(
                     "Créer",
@@ -141,34 +148,47 @@ class _CalanderState extends State<Calander> {
             acces: widget.accesus,
             url: widget.url,
             role: widget.roleus),
-        body: ListView(
-          children: [
-            Column(
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+        body: _isLoading
+            ? Center(
+                child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  CupertinoActivityIndicator(
+                    radius: 20,
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text("Chargement..", style: TextStyle(fontSize: 20)),
+                ],
+              ))
+            : SingleChildScrollView(
+                child: Column(
                   children: [
                     const SizedBox(
-                      width: 2,
+                      height: 10,
                     ),
-                    _container("Planifier", Colors.blue),
-                    _container("Démarrer", Colors.orange),
-                    _container("Terminer", Colors.green),
-                    _container("Annuler", Colors.red),
-                    const SizedBox(
-                      width: 2,
-                    )
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const SizedBox(
+                          width: 2,
+                        ),
+                        _container("Planifier", Colors.blue),
+                        _container("Démarrer", Colors.orange),
+                        _container("Terminer", Colors.green),
+                        _container("Annuler", Colors.red),
+                        const SizedBox(
+                          width: 2,
+                        )
+                      ],
+                    ),
+                    _calendar(),
+                    _lowerHalf,
                   ],
                 ),
-                _calendar(),
-                _lowerHalf,
-              ],
-            ),
-          ],
-        ),
+              ),
       ),
     );
   }
@@ -208,6 +228,7 @@ class _CalanderState extends State<Calander> {
                                     event: plan[0],
                                     planID: events[0].description!,
                                     role: widget.role,
+                                    callBack: callBack,
                                     idus: widget.idus,
                                     url: widget.url,
                                     telus: widget.telus,

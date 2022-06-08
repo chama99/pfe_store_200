@@ -110,16 +110,18 @@ class _CongesScreenState extends State<CongesScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => DemandeCongeScreen(
-                                    userID: widget.userID,
-                                    callBack: callBack,
-                                    idus: widget.idus,
-                                    url: widget.url,
-                                    telus: widget.telus,
-                                    adrus: widget.adrus,
-                                    accesus: widget.accesus,
-                                    nameus: widget.nameus,
-                                    emailus: widget.emailus,
-                                    roleus: widget.roleus)));
+                                      userID: widget.userID,
+                                      callBack: callBack,
+                                      idus: widget.idus,
+                                      url: widget.url,
+                                      telus: widget.telus,
+                                      adrus: widget.adrus,
+                                      accesus: widget.accesus,
+                                      nameus: widget.nameus,
+                                      emailus: widget.emailus,
+                                      roleus: widget.roleus,
+                                      role: widget.role,
+                                    )));
                       },
                       child: const Text(
                         "Demander",
@@ -168,74 +170,76 @@ class _CongesScreenState extends State<CongesScreen> {
   Widget _widgetForUser() => Container(
         height: MediaQuery.of(context).size.height,
         padding: const EdgeInsets.all(20),
-        child: Column(children: [
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _container("Jours de congé", Color(0xff54D3C2)),
-            ],
-          ),
+        child: SingleChildScrollView(
+          child: Column(children: [
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _container("Jours de congé", Color(0xff54D3C2)),
+              ],
+            ),
 
-          const SizedBox(
-            height: 20,
-          ),
+            const SizedBox(
+              height: 20,
+            ),
 
-          ///TODO GET THISD TO YOUR APP
-          conge != null
-              ? SizedBox(
-                  height: 400,
-                  child: CalendarPopupView(
-                    // color: conge["leaveType"] == "paid" ? const Color(0xff54D3C2) : Colors.orangeAccent ,
+            ///TODO GET THISD TO YOUR APP
+            conge != null
+                ? SizedBox(
+                    height: 400,
+                    child: CalendarPopupView(
+                      // color: conge["leaveType"] == "paid" ? const Color(0xff54D3C2) : Colors.orangeAccent ,
 
-                    initialStartDate: conge["beginDateOfTheHoliday"].toDate(),
-                    initialEndDate: conge["beginDateOfTheHoliday"]
-                        .toDate()
-                        .add(Duration(days: int.parse(conge["duration"]))),
-                  ))
-              : const SizedBox(height: 400, child: CalendarPopupView()),
+                      initialStartDate: conge["beginDateOfTheHoliday"].toDate(),
+                      initialEndDate: conge["beginDateOfTheHoliday"]
+                          .toDate()
+                          .add(Duration(days: int.parse(conge["duration"]))),
+                    ))
+                : const SizedBox(height: 400, child: CalendarPopupView()),
 
-          ///TODO GET THISD TO YOUR APP
-          ///
+            ///TODO GET THISD TO YOUR APP
+            ///
 
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            child: ListView.builder(
-                physics: const AlwaysScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: refusedConge.length,
-                itemBuilder: (context, position) {
-                  if (refusedConge.isNotEmpty) {
-                    return Card(
-                        child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.close,
-                                  color: Colors.redAccent,
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                Flexible(
-                                  child: Text(
-                                    " Le congé demander pour le ${Utils.toReadableDate(refusedConge[position]['beginDateOfTheHoliday'])} a été refuser ",
-                                    style: const TextStyle(fontSize: 22.0),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              child: ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: refusedConge.length,
+                  itemBuilder: (context, position) {
+                    if (refusedConge.isNotEmpty) {
+                      return Card(
+                          child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.close,
+                                    color: Colors.redAccent,
                                   ),
-                                )
-                              ],
-                            )));
-                  } else {
-                    return const SizedBox();
-                  }
-                }),
-          ),
-        ]),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  Flexible(
+                                    child: Text(
+                                      " Le congé demander pour le ${Utils.toReadableDate(refusedConge[position]['beginDateOfTheHoliday'])} a été refuser ",
+                                      style: const TextStyle(fontSize: 22.0),
+                                    ),
+                                  )
+                                ],
+                              )));
+                    } else {
+                      return const SizedBox();
+                    }
+                  }),
+            ),
+          ]),
+        ),
       );
   Widget _widgetForAdmin() => Container(
       height: MediaQuery.of(context).size.height,
@@ -260,15 +264,18 @@ class _CongesScreenState extends State<CongesScreen> {
                 print("===========${singleDemand}");
                 return GestureDetector(
                     onTap: () => Get.to(() => CongeScreen(
-                        singleConge: singleDemand,
-                        idus: widget.idus,
-                        url: widget.url,
-                        telus: widget.telus,
-                        adrus: widget.adrus,
-                        accesus: widget.accesus,
-                        nameus: widget.nameus,
-                        emailus: widget.emailus,
-                        roleus: widget.roleus)),
+                          singleConge: singleDemand,
+                          idus: widget.idus,
+                          url: widget.url,
+                          telus: widget.telus,
+                          adrus: widget.adrus,
+                          accesus: widget.accesus,
+                          nameus: widget.nameus,
+                          emailus: widget.emailus,
+                          roleus: widget.role,
+                          role: widget.role,
+                          userID: widget.userID,
+                        )),
                     child: Card(
                       child: Padding(
                           padding: const EdgeInsets.all(16.0),
@@ -304,28 +311,6 @@ class _CongesScreenState extends State<CongesScreen> {
           ),
         ],
       ));
-
-  // callBack() async {
-  //   return await showDialog(
-  //       context: context,
-  //       builder: (_) => AlertDialog(
-  //             title: Lottie.asset("asset/success.json",
-  //                 height: MediaQuery.of(context).size.height * 0.08,
-  //                 repeat: false),
-  //             titleTextStyle: const TextStyle(
-  //                 fontWeight: FontWeight.bold,
-  //                 color: Colors.black,
-  //                 fontSize: 20),
-  //             actions: [
-  //               ElevatedButton(
-  //                   onPressed: () {
-  //                     Navigator.of(context).pop();
-  //                   },
-  //                   child: Text("Close")),
-  //             ],
-  //             content: Text("Saved successfully"),
-  //           ));
-  // }
 
   Widget _container(String t, Color c) {
     return Container(

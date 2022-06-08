@@ -1,4 +1,4 @@
-import 'package:chama_projet/users/ajoutRole.dart';
+import 'package:chama_projet/users/ajoutAcces.dart';
 import 'package:flutter/material.dart';
 
 import '../services/user.dart';
@@ -240,44 +240,63 @@ class _RolesState extends State<Roles> {
                                     ),
                                   ],
                                   Container(
-                                    margin: const EdgeInsets.all(20),
+                                    margin: const EdgeInsets.all(30),
                                     decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: const Color.fromARGB(
-                                              255, 221, 196, 158),
-                                          width: 3),
-                                      borderRadius: BorderRadius.circular(18),
-                                      color: Colors.indigo,
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.orange,
                                     ),
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AjoutAcces(
-                                                        name: userTechList[i]
-                                                            ['name'],
-                                                        id:
-                                                            userTechList[i]
-                                                                ['IdUser'],
-                                                        acces:
-                                                            userTechList[i]
-                                                                ['acces'],
-                                                        idus: widget.idus,
-                                                        url: widget.url,
-                                                        telus: widget.telus,
-                                                        adrus: widget.adrus,
-                                                        accesus: widget.accesus,
-                                                        nameus: widget.nameus,
-                                                        emailus: widget.emailus,
-                                                        roleus:
-                                                            widget.roleus)));
-                                      },
-                                      child: const Icon(
-                                        Icons.add,
-                                        color: Colors.white,
-                                      ),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 8.0, bottom: 8, left: 30),
+                                          child: InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          AjoutAcces(
+                                                              id: userTechList[
+                                                                  i]['IdUser'],
+                                                              acces:
+                                                                  userTechList[
+                                                                          i]
+                                                                      ['acces'],
+                                                              name:
+                                                                  userTechList[i]
+                                                                      ['name'],
+                                                              idus: widget.idus,
+                                                              url: widget.url,
+                                                              telus:
+                                                                  widget.telus,
+                                                              adrus:
+                                                                  widget.adrus,
+                                                              accesus: widget
+                                                                  .accesus,
+                                                              nameus:
+                                                                  widget.nameus,
+                                                              emailus: widget
+                                                                  .emailus,
+                                                              roleus: widget
+                                                                  .roleus)));
+                                            },
+                                            child: const Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "Ajouter",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white),
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   )
                                 ],
@@ -348,44 +367,63 @@ class _RolesState extends State<Roles> {
                                     ),
                                   ],
                                   Container(
-                                    margin: const EdgeInsets.all(20),
+                                    margin: const EdgeInsets.all(30),
                                     decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: const Color.fromARGB(
-                                              255, 221, 196, 158),
-                                          width: 3),
-                                      borderRadius: BorderRadius.circular(18),
-                                      color: Colors.indigo,
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.orange,
                                     ),
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AjoutAcces(
-                                                        name: userCompList[i]
-                                                            ['name'],
-                                                        id:
-                                                            userCompList[i]
-                                                                ['IdUser'],
-                                                        acces:
-                                                            userCompList[i]
-                                                                ['acces'],
-                                                        idus: widget.idus,
-                                                        url: widget.url,
-                                                        telus: widget.telus,
-                                                        adrus: widget.adrus,
-                                                        accesus: widget.accesus,
-                                                        nameus: widget.nameus,
-                                                        emailus: widget.emailus,
-                                                        roleus:
-                                                            widget.roleus)));
-                                      },
-                                      child: const Icon(
-                                        Icons.add,
-                                        color: Colors.white,
-                                      ),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 8.0, bottom: 8, left: 30),
+                                          child: InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          AjoutAcces(
+                                                              id: userCompList[
+                                                                  i]['IdUser'],
+                                                              acces:
+                                                                  userCompList[
+                                                                          i]
+                                                                      ['acces'],
+                                                              name:
+                                                                  userCompList[i]
+                                                                      ['name'],
+                                                              idus: widget.idus,
+                                                              url: widget.url,
+                                                              telus:
+                                                                  widget.telus,
+                                                              adrus:
+                                                                  widget.adrus,
+                                                              accesus: widget
+                                                                  .accesus,
+                                                              nameus:
+                                                                  widget.nameus,
+                                                              emailus: widget
+                                                                  .emailus,
+                                                              roleus: widget
+                                                                  .roleus)));
+                                            },
+                                            child: const Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "Ajouter",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white),
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   )
                                 ],

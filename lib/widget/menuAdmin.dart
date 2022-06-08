@@ -13,7 +13,7 @@ import 'card_devis.dart';
 import 'card_employe.dart';
 import 'card_facture.dart';
 import 'card_plan.dart';
-import 'card_role.dart';
+import 'card_applications.dart';
 import 'card_user.dart';
 import 'loadingpage.dart';
 

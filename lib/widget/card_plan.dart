@@ -35,17 +35,18 @@ Card buildInputCardPlan(
               adrus: adrus));
         } else if (role == "Technicien") {
           Get.to(() => Calander(
-              techName: email,
-              username: username,
-              role: role,
-              idus: idus,
-              url: url,
-              telus: telus,
-              adrus: adrus,
-              accesus: acces,
-              nameus: username,
-              emailus: emailus,
-              roleus: roleus));
+                techName: email,
+                username: username,
+                role: role,
+                idus: idus,
+                url: url,
+                telus: telus,
+                adrus: adrus,
+                accesus: acces,
+                nameus: nomus,
+                emailus: emailus,
+                roleus: roleus,
+              ));
         }
       },
       splashColor: const Color.fromARGB(255, 3, 56, 109),

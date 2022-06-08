@@ -46,7 +46,27 @@ class Utils {
     return result.substring(0, result.indexOf(" "));
   }
 
-
+  static GetSnackBar SuccessSnackBar(
+      {String title = 'Success', required String message}) {
+    Get.log("[$title] $message");
+    return GetSnackBar(
+      titleText: Text(title.tr,
+          style: Get.textTheme.headline6!
+              .merge(TextStyle(color: Get.theme.primaryColor))),
+      messageText: Text(message,
+          style: Get.textTheme.caption!
+              .merge(TextStyle(color: Get.theme.primaryColor))),
+      snackPosition: SnackPosition.BOTTOM,
+      margin: const EdgeInsets.all(20),
+      backgroundColor: Colors.green,
+      icon: Icon(Icons.check_circle_outline,
+          size: 32, color: Get.theme.primaryColor),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+      borderRadius: 8,
+      dismissDirection: DismissDirection.horizontal,
+      duration: const Duration(seconds: 5),
+    );
+  }
 
   static snack(BuildContext ctx, IconData icon, String txt) {
     return ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(

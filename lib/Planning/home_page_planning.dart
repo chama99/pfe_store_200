@@ -198,17 +198,18 @@ class _MultiSelectionState extends State<MultiSelection> {
                                   doMultiSelection(listTechs[index][0]);
                                 } else {
                                   Get.to(Calander(
-                                      username: listTechs[index]['email'],
-                                      techName: listTechs[index]['name'],
-                                      role: widget.role,
-                                      idus: widget.idus,
-                                      url: widget.url,
-                                      telus: widget.telus,
-                                      adrus: widget.adrus,
-                                      accesus: widget.accesus,
-                                      nameus: widget.nameus,
-                                      emailus: widget.emailus,
-                                      roleus: widget.roleus));
+                                    username: listTechs[index]['email'],
+                                    techName: listTechs[index]['name'],
+                                    role: widget.role,
+                                    idus: widget.idus,
+                                    url: widget.url,
+                                    telus: widget.telus,
+                                    adrus: widget.adrus,
+                                    accesus: widget.accesus,
+                                    nameus: widget.nameus,
+                                    emailus: widget.emailus,
+                                    roleus: widget.roleus,
+                                  ));
                                 }
                               },
                               splashColor:
