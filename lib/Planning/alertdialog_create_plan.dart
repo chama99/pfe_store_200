@@ -1,14 +1,13 @@
-import 'package:chama_projet/Planning/calander.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
-import 'package:get/get.dart';
+
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 
 import '../pages/utils.dart';
+import '../widget/NavBottom.dart';
 import '../widget/drop_down.dart';
 
 class AlertDialogPlan extends StatefulWidget {
@@ -105,6 +104,15 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
             "Créer un plan",
           ),
         ),
+        bottomNavigationBar: NavBottom(
+            tel: widget.telus,
+            adr: widget.adrus,
+            id: widget.idus,
+            email: widget.emailus,
+            name: widget.nameus,
+            acces: widget.accesus,
+            url: widget.url,
+            role: widget.roleus),
         body: Container(
           padding: const EdgeInsets.all(8),
           child: Column(
@@ -210,14 +218,11 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
               const Divider(
                 thickness: 4,
               ),
-              SizedBox(
-                width: 370,
+              Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: const Color.fromARGB(255, 62, 75, 146)),
-                  onPressed: () {
-                    sauvgardePlan;
-                  },
+                  onPressed: sauvgardePlan,
                   child: _buttonWidget,
                 ),
               )
@@ -344,5 +349,9 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
     }).onError((error, stackTrace) {
       print("$error ---- $stackTrace");
     });
+    // Get.to(() => Calander(
+    //     techName: widget.techName,
+    //     username: widget.username,
+    //     role: widget.role));
   }
 }
