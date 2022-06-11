@@ -323,27 +323,31 @@ class _DetailFactureState extends State<DetailFacture> {
   }
 
   Future onSubmit() async {
-    showDialog(
-        context: context,
-        builder: (context) => const Center(
-              child: CircularProgressIndicator(),
-            ));
     final image = await keySignaturePad.currentState?.toImage();
     final imageSignature = await image!.toByteData(format: ImageByteFormat.png);
-    final file = await PdfApi.generatePDF(
-      imageSignature: imageSignature!,
-      name: widget.nameus,
-      email: widget.emailus,
-      commnd: widget.listfact,
-      titre: widget.titre,
-      client: widget.client,
-      date1: widget.date1,
-      montant: widget.montant,
-      remise: widget.res,
-      total: widget.total,
-    );
-    Navigator.of(context).pop();
-    await OpenFile.open(file.path);
+    if (widget.etat != "Payée") {
+      showToast("Ne peut pas convertir cette facture");
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => const Center(
+                child: CircularProgressIndicator(),
+              ));
+      final file = await PdfApi.generatePDF(
+        imageSignature: imageSignature!,
+        name: widget.nameus,
+        email: widget.emailus,
+        commnd: widget.listfact,
+        titre: widget.titre,
+        client: widget.client,
+        date1: widget.date1,
+        montant: widget.montant,
+        remise: widget.res,
+        total: widget.total,
+      );
+      Navigator.of(context).pop();
+      await OpenFile.open(file.path);
+    }
   }
 
   Color _getDataRowColor(Set<MaterialState> states) {

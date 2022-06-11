@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, non_constant_identifier_names, prefer_typing_uninitialized_variables
+// ignore_for_file: deprecated_member_use, non_constant_identifier_names, prefer_typing_uninitialized_variables, must_be_immutable
 
 import 'dart:io';
 
@@ -170,6 +170,7 @@ class _CreeArticlePageState extends State<CreeArticlePage> {
           url: widget.url,
           role: widget.roleus),
       body: RefreshIndicator(
+        color: Colors.orange,
         onRefresh: () {
           Navigator.pushReplacement(
               context,

@@ -159,6 +159,7 @@ class _CreeDevisPageState extends State<CreeDevisPage> {
           url: widget.url,
           role: widget.role),
       body: RefreshIndicator(
+        color: Colors.orange,
         onRefresh: () {
           Navigator.pushReplacement(
               context,

@@ -7,11 +7,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:get/get.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import '../widget/InputDeco_design.dart';
 import '../widget/NavBottom.dart';
+import '../widget/menuAdmin.dart';
 
 class UpdateProfil extends StatefulWidget {
   final String nom, email, id, tel, image, adr, role;
@@ -91,9 +93,6 @@ class _UpdateProfilState extends State<UpdateProfil> {
               var email = data['email'];
               role = data['role'];
               var url = data['image'];
-              var nom = data['name'];
-              var mdp = data['mot de passe'];
-              var acces = data['acces'];
 
               return Center(
                 child: Padding(
@@ -195,6 +194,17 @@ class _UpdateProfilState extends State<UpdateProfil> {
                                   if (imageFile == null) {
                                     User().updateProf(
                                         widget.id, email, adr, tel, url);
+                                    Get.to(() => Center(
+                                            child: MenuAdmin(
+                                          acces: widget.acces,
+                                          adr: adr,
+                                          email: email,
+                                          url: url,
+                                          tel: tel,
+                                          role: widget.role,
+                                          name: widget.nom,
+                                          id: widget.id,
+                                        )));
                                   } else {
                                     uploadImage(email, adr, tel, role);
                                   }
@@ -281,6 +291,17 @@ class _UpdateProfilState extends State<UpdateProfil> {
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
         User().updateProf(widget.id, email, adr, tel, uploadPath);
+        Get.to(() => Center(
+                child: MenuAdmin(
+              acces: widget.acces,
+              adr: adr,
+              email: email,
+              url: uploadPath,
+              tel: tel,
+              role: widget.role,
+              name: widget.nom,
+              id: widget.id,
+            )));
       });
     } catch (e) {
       // ignore: avoid_print

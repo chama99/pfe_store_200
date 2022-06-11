@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, unused_local_variable, camel_case_types
+// ignore_for_file: file_names, unused_local_variable, camel_case_types, must_be_immutable
 
 import 'package:chama_projet/services/article.dart';
 
@@ -134,9 +134,10 @@ class _listArticleState extends State<listArticle> {
               Expanded(
                 child: userArticleList.isEmpty
                     ? const Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(color: Colors.orange),
                       )
                     : RefreshIndicator(
+                        color: Colors.orange,
                         onRefresh: () {
                           Navigator.pushReplacement(
                               context,
@@ -238,7 +239,7 @@ class _listArticleState extends State<listArticle> {
 
   void filterSearchResults(String query) {
     final suggestions = userArticleList.where((article) {
-      final nom = article['nom'].toLowerCase();
+      final nom = article['nom_art'].toLowerCase();
       final input = query.toLowerCase();
       return nom.contains(input);
     }).toList();

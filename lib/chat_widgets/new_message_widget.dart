@@ -1,4 +1,4 @@
-import 'package:chama_projet/api/firebase_api.dart';
+import 'package:chama_projet/services/firebase_api.dart';
 import 'package:flutter/material.dart';
 
 class NewMessageWidget extends StatefulWidget {

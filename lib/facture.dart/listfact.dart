@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, unused_local_variable
+// ignore_for_file: file_names, unused_local_variable, must_be_immutable
 
 import 'package:chama_projet/facture.dart/creer_facture.dart';
 import 'package:chama_projet/facture.dart/detille_facture.dart';
@@ -6,7 +6,6 @@ import 'package:chama_projet/facture.dart/detille_facture.dart';
 import 'package:chama_projet/services/facture.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../widget/NavBottom.dart';
 
@@ -136,9 +135,10 @@ class _ListFactureState extends State<ListFacture> {
               Expanded(
                 child: ListFact.isEmpty
                     ? const Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(color: Colors.orange),
                       )
                     : RefreshIndicator(
+                        color: Colors.orange,
                         onRefresh: () {
                           Navigator.pushReplacement(
                               context,
@@ -220,9 +220,9 @@ class _ListFactureState extends State<ListFacture> {
 
   void filterSearchResults(String query) {
     final suggestions = ListFact.where((facture) {
-      final namemploye = facture['numfact'].toLowerCase();
+      final namfact = facture['numfact'].toLowerCase();
       final input = query.toLowerCase();
-      return namemploye.contains(input);
+      return namfact.contains(input);
     }).toList();
     setState(() {
       ListFact = suggestions;

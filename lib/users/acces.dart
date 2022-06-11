@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:chama_projet/users/ajoutAcces.dart';
 import 'package:flutter/material.dart';
 
@@ -112,453 +114,494 @@ class _RolesState extends State<Roles> {
           acces: widget.accesus,
           url: widget.url,
           role: widget.roleus),
-      body: RefreshIndicator(
-        onRefresh: () {
-          Navigator.pushReplacement(
-              context,
-              PageRouteBuilder(
-                  pageBuilder: (a, b, c) => Roles(
-                      idus: widget.idus,
-                      url: widget.url,
-                      telus: widget.telus,
-                      adrus: widget.adrus,
-                      accesus: widget.accesus,
-                      nameus: widget.nameus,
-                      emailus: widget.emailus,
-                      roleus: widget.roleus),
-                  transitionDuration: const Duration(seconds: 0)));
-          // ignore: void_checks
-          return Future.value(false);
-        },
-        child: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.all(10),
-            child: Column(children: [
-              Container(
-                padding: const EdgeInsets.only(top: 8, left: 5, right: 5),
-                child: Table(
-                    border: TableBorder.all(
-                      color: Colors.grey,
-                    ),
-                    columnWidths: const <int, TableColumnWidth>{
-                      1: FixedColumnWidth(220),
-                    },
-                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                    children: [
-                      const TableRow(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: TableCell(
-                              child: Center(
-                                child: Text(
-                                  'Utilisateur',
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
+      body: userProfilesList.isEmpty ||
+              userCompList.isEmpty ||
+              userTechList.isEmpty
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: Colors.orange,
+              ),
+            )
+          : RefreshIndicator(
+              color: Colors.orange,
+              onRefresh: () {
+                Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                        pageBuilder: (a, b, c) => Roles(
+                            idus: widget.idus,
+                            url: widget.url,
+                            telus: widget.telus,
+                            adrus: widget.adrus,
+                            accesus: widget.accesus,
+                            nameus: widget.nameus,
+                            emailus: widget.emailus,
+                            roleus: widget.roleus),
+                        transitionDuration: const Duration(seconds: 0)));
+                // ignore: void_checks
+                return Future.value(false);
+              },
+              child: SingleChildScrollView(
+                child: Container(
+                  margin: const EdgeInsets.all(10),
+                  child: Column(children: [
+                    Container(
+                      padding: const EdgeInsets.only(top: 8, left: 5, right: 5),
+                      child: Table(
+                          border: TableBorder.all(
+                            color: Colors.grey,
                           ),
-                          Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: TableCell(
-                              child: Center(
-                                child: Text(
-                                  "Accès à l'application ",
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      if (ch == "Technicien") ...[
-                        for (var i = 0; i < userTechList.length; i++) ...[
-                          TableRow(
-                            children: [
-                              TableCell(
-                                child: Center(
-                                    child: Text(userTechList[i]['name'],
-                                        style:
-                                            const TextStyle(fontSize: 18.0))),
-                              ),
-                              TableCell(
-                                  child: Column(
-                                children: [
-                                  for (var j = 0;
-                                      j < userTechList[i]['acces'].length;
-                                      j++) ...[
-                                    Card(
-                                      child: ListTile(
-                                        title:
-                                            Text(userTechList[i]['acces'][j]),
-                                        trailing: IconButton(
-                                          onPressed: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                title: const Text(
-                                                    "Êtes-vous sûr de vouloir supprimer ce Application"),
-                                                actions: [
-                                                  TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: const Text(
-                                                          'Annuler')),
-                                                  TextButton(
-                                                      onPressed: () {
-                                                        List listest =
-                                                            userTechList[i]
-                                                                ['acces'];
-                                                        listest.removeAt(j);
-                                                        User().updateRoleUser(
-                                                          userTechList[i]
-                                                              ['IdUser'],
-                                                          listest,
-                                                        );
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: const Text(
-                                                          'Confirmer')),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                          icon: const Icon(
-                                            Icons.delete,
-                                            color: Colors.red,
-                                          ),
+                          columnWidths: const <int, TableColumnWidth>{
+                            1: FixedColumnWidth(220),
+                          },
+                          defaultVerticalAlignment:
+                              TableCellVerticalAlignment.middle,
+                          children: [
+                            const TableRow(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(10.0),
+                                  child: TableCell(
+                                    child: Center(
+                                      child: Text(
+                                        'Utilisateur',
+                                        style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ),
-                                  ],
-                                  Container(
-                                    margin: const EdgeInsets.all(30),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.orange,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(10.0),
+                                  child: TableCell(
+                                    child: Center(
+                                      child: Text(
+                                        "Accès à l'application ",
+                                        style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
-                                    child: Row(
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (ch == "Technicien") ...[
+                              for (var i = 0; i < userTechList.length; i++) ...[
+                                TableRow(
+                                  children: [
+                                    TableCell(
+                                      child: Center(
+                                          child: Text(userTechList[i]['name'],
+                                              style: const TextStyle(
+                                                  fontSize: 18.0))),
+                                    ),
+                                    TableCell(
+                                        child: Column(
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 8.0, bottom: 8, left: 30),
-                                          child: InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          AjoutAcces(
-                                                              id: userTechList[
-                                                                  i]['IdUser'],
-                                                              acces:
+                                        for (var j = 0;
+                                            j < userTechList[i]['acces'].length;
+                                            j++) ...[
+                                          Card(
+                                            child: ListTile(
+                                              title: Text(
+                                                  userTechList[i]['acces'][j]),
+                                              trailing: IconButton(
+                                                onPressed: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        AlertDialog(
+                                                      title: const Text(
+                                                          "Êtes-vous sûr de vouloir supprimer ce Application"),
+                                                      actions: [
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                            child: const Text(
+                                                                'Annuler')),
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              List listest =
                                                                   userTechList[
                                                                           i]
-                                                                      ['acces'],
-                                                              name:
-                                                                  userTechList[i]
-                                                                      ['name'],
-                                                              idus: widget.idus,
-                                                              url: widget.url,
-                                                              telus:
-                                                                  widget.telus,
-                                                              adrus:
-                                                                  widget.adrus,
-                                                              accesus: widget
-                                                                  .accesus,
-                                                              nameus:
-                                                                  widget.nameus,
-                                                              emailus: widget
-                                                                  .emailus,
-                                                              roleus: widget
-                                                                  .roleus)));
-                                            },
-                                            child: const Icon(
-                                              Icons.add,
-                                              color: Colors.white,
+                                                                      ['acces'];
+                                                              listest
+                                                                  .removeAt(j);
+                                                              User()
+                                                                  .updateRoleUser(
+                                                                userTechList[i]
+                                                                    ['IdUser'],
+                                                                listest,
+                                                              );
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: const Text(
+                                                                'Confirmer')),
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
+                                                icon: const Icon(
+                                                  Icons.delete,
+                                                  color: Colors.red,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "Ajouter",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.white),
+                                        ],
+                                        Container(
+                                          margin: const EdgeInsets.all(30),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            color: Colors.orange,
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 8.0,
+                                                    bottom: 8,
+                                                    left: 30),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) => AjoutAcces(
+                                                                id: userTechList[i]
+                                                                    ['IdUser'],
+                                                                acces: userTechList[
+                                                                    i]['acces'],
+                                                                name: userTechList[
+                                                                    i]['name'],
+                                                                idus:
+                                                                    widget.idus,
+                                                                url: widget.url,
+                                                                telus: widget
+                                                                    .telus,
+                                                                adrus: widget
+                                                                    .adrus,
+                                                                accesus:
+                                                                    widget
+                                                                        .accesus,
+                                                                nameus: widget
+                                                                    .nameus,
+                                                                emailus: widget
+                                                                    .emailus,
+                                                                roleus: widget
+                                                                    .roleus)));
+                                                  },
+                                                  child: const Icon(
+                                                    Icons.add,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                              const Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  "Ajouter",
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.white),
+                                                ),
+                                              )
+                                            ],
                                           ),
                                         )
                                       ],
-                                    ),
-                                  )
-                                ],
-                              )),
-                            ],
-                          ),
-                        ],
-                      ] else if (ch == "Comptable") ...[
-                        for (var i = 0; i < userCompList.length; i++) ...[
-                          TableRow(
-                            children: [
-                              TableCell(
-                                child: Center(
-                                    child: Text(userCompList[i]['name'],
-                                        style:
-                                            const TextStyle(fontSize: 18.0))),
-                              ),
-                              TableCell(
-                                  child: Column(
-                                children: [
-                                  for (var j = 0;
-                                      j < userCompList[i]['acces'].length;
-                                      j++) ...[
-                                    Card(
-                                      child: ListTile(
-                                        title:
-                                            Text(userCompList[i]['acces'][j]),
-                                        trailing: IconButton(
-                                          onPressed: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                title: const Text(
-                                                    "Êtes-vous sûr de vouloir supprimer ce Application"),
-                                                actions: [
-                                                  TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: const Text(
-                                                          'Annuler')),
-                                                  TextButton(
-                                                      onPressed: () {
-                                                        List listest =
-                                                            userCompList[i]
-                                                                ['acces'];
-                                                        listest.removeAt(j);
-                                                        User().updateRoleUser(
-                                                          userCompList[i]
-                                                              ['IdUser'],
-                                                          listest,
-                                                        );
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: const Text(
-                                                          'Confirmer')),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                          icon: const Icon(
-                                            Icons.delete,
-                                            color: Colors.red,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                    )),
                                   ],
-                                  Container(
-                                    margin: const EdgeInsets.all(30),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.orange,
+                                ),
+                              ],
+                            ] else if (ch == "Comptable") ...[
+                              for (var i = 0; i < userCompList.length; i++) ...[
+                                TableRow(
+                                  children: [
+                                    TableCell(
+                                      child: Center(
+                                          child: Text(userCompList[i]['name'],
+                                              style: const TextStyle(
+                                                  fontSize: 18.0))),
                                     ),
-                                    child: Row(
+                                    TableCell(
+                                        child: Column(
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 8.0, bottom: 8, left: 30),
-                                          child: InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          AjoutAcces(
-                                                              id: userCompList[
-                                                                  i]['IdUser'],
-                                                              acces:
+                                        for (var j = 0;
+                                            j < userCompList[i]['acces'].length;
+                                            j++) ...[
+                                          Card(
+                                            child: ListTile(
+                                              title: Text(
+                                                  userCompList[i]['acces'][j]),
+                                              trailing: IconButton(
+                                                onPressed: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        AlertDialog(
+                                                      title: const Text(
+                                                          "Êtes-vous sûr de vouloir supprimer ce Application"),
+                                                      actions: [
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                            child: const Text(
+                                                                'Annuler')),
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              List listest =
                                                                   userCompList[
                                                                           i]
-                                                                      ['acces'],
-                                                              name:
-                                                                  userCompList[i]
-                                                                      ['name'],
-                                                              idus: widget.idus,
-                                                              url: widget.url,
-                                                              telus:
-                                                                  widget.telus,
-                                                              adrus:
-                                                                  widget.adrus,
-                                                              accesus: widget
-                                                                  .accesus,
-                                                              nameus:
-                                                                  widget.nameus,
-                                                              emailus: widget
-                                                                  .emailus,
-                                                              roleus: widget
-                                                                  .roleus)));
-                                            },
-                                            child: const Icon(
-                                              Icons.add,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "Ajouter",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.white),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              )),
-                            ],
-                          ),
-                        ],
-                      ] else ...[
-                        for (var i = 0; i < userProfilesList.length; i++) ...[
-                          TableRow(
-                            children: [
-                              TableCell(
-                                child: Center(
-                                    child: Text(userProfilesList[i]['name'],
-                                        style:
-                                            const TextStyle(fontSize: 18.0))),
-                              ),
-                              TableCell(
-                                  child: Column(
-                                children: [
-                                  for (var j = 0;
-                                      j < userProfilesList[i]['acces'].length;
-                                      j++) ...[
-                                    Card(
-                                      child: ListTile(
-                                        title: Text(
-                                            userProfilesList[i]['acces'][j]),
-                                        trailing: IconButton(
-                                          onPressed: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                title: const Text(
-                                                    "Êtes-vous sûr de vouloir supprimer ce Application"),
-                                                actions: [
-                                                  TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: const Text(
-                                                          'Annuler')),
-                                                  TextButton(
-                                                      onPressed: () {
-                                                        List listest =
-                                                            userProfilesList[i]
-                                                                ['acces'];
-                                                        listest.removeAt(j);
-                                                        User().updateRoleUser(
-                                                            userProfilesList[i]
-                                                                ['IdUser'],
-                                                            listest);
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: const Text(
-                                                          'Confirmer')),
-                                                ],
+                                                                      ['acces'];
+                                                              listest
+                                                                  .removeAt(j);
+                                                              User()
+                                                                  .updateRoleUser(
+                                                                userCompList[i]
+                                                                    ['IdUser'],
+                                                                listest,
+                                                              );
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: const Text(
+                                                                'Confirmer')),
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
+                                                icon: const Icon(
+                                                  Icons.delete,
+                                                  color: Colors.red,
+                                                ),
                                               ),
-                                            );
-                                          },
-                                          icon: const Icon(
-                                            Icons.delete,
-                                            color: Colors.red,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  Container(
-                                    margin: const EdgeInsets.all(30),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.orange,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 8.0, bottom: 8, left: 30),
-                                          child: InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => AjoutAcces(
-                                                          id: userProfilesList[
-                                                              i]['IdUser'],
-                                                          acces:
-                                                              userProfilesList[
-                                                                  i]['acces'],
-                                                          name:
-                                                              userProfilesList[
-                                                                  i]['name'],
-                                                          idus: widget.idus,
-                                                          url: widget.url,
-                                                          telus: widget.telus,
-                                                          adrus: widget.adrus,
-                                                          accesus:
-                                                              widget.accesus,
-                                                          nameus: widget.nameus,
-                                                          emailus:
-                                                              widget.emailus,
-                                                          roleus:
-                                                              widget.roleus)));
-                                            },
-                                            child: const Icon(
-                                              Icons.add,
-                                              color: Colors.white,
                                             ),
                                           ),
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "Ajouter",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.white),
+                                        ],
+                                        Container(
+                                          margin: const EdgeInsets.all(30),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            color: Colors.orange,
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 8.0,
+                                                    bottom: 8,
+                                                    left: 30),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) => AjoutAcces(
+                                                                id: userCompList[i]
+                                                                    ['IdUser'],
+                                                                acces: userCompList[
+                                                                    i]['acces'],
+                                                                name: userCompList[
+                                                                    i]['name'],
+                                                                idus:
+                                                                    widget.idus,
+                                                                url: widget.url,
+                                                                telus: widget
+                                                                    .telus,
+                                                                adrus: widget
+                                                                    .adrus,
+                                                                accesus:
+                                                                    widget
+                                                                        .accesus,
+                                                                nameus: widget
+                                                                    .nameus,
+                                                                emailus: widget
+                                                                    .emailus,
+                                                                roleus: widget
+                                                                    .roleus)));
+                                                  },
+                                                  child: const Icon(
+                                                    Icons.add,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                              const Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  "Ajouter",
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.white),
+                                                ),
+                                              )
+                                            ],
                                           ),
                                         )
                                       ],
+                                    )),
+                                  ],
+                                ),
+                              ],
+                            ] else ...[
+                              for (var i = 0;
+                                  i < userProfilesList.length;
+                                  i++) ...[
+                                TableRow(
+                                  children: [
+                                    TableCell(
+                                      child: Center(
+                                          child: Text(
+                                              userProfilesList[i]['name'],
+                                              style: const TextStyle(
+                                                  fontSize: 18.0))),
                                     ),
-                                  )
-                                ],
-                              )),
-                            ],
-                          ),
-                        ],
-                      ]
-                    ]),
+                                    TableCell(
+                                        child: Column(
+                                      children: [
+                                        for (var j = 0;
+                                            j <
+                                                userProfilesList[i]['acces']
+                                                    .length;
+                                            j++) ...[
+                                          Card(
+                                            child: ListTile(
+                                              title: Text(userProfilesList[i]
+                                                  ['acces'][j]),
+                                              trailing: IconButton(
+                                                onPressed: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        AlertDialog(
+                                                      title: const Text(
+                                                          "Êtes-vous sûr de vouloir supprimer ce Application"),
+                                                      actions: [
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                            child: const Text(
+                                                                'Annuler')),
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              List listest =
+                                                                  userProfilesList[
+                                                                          i]
+                                                                      ['acces'];
+                                                              listest
+                                                                  .removeAt(j);
+                                                              User().updateRoleUser(
+                                                                  userProfilesList[
+                                                                          i][
+                                                                      'IdUser'],
+                                                                  listest);
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: const Text(
+                                                                'Confirmer')),
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
+                                                icon: const Icon(
+                                                  Icons.delete,
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        Container(
+                                          margin: const EdgeInsets.all(30),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            color: Colors.orange,
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 8.0,
+                                                    bottom: 8,
+                                                    left: 30),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) => AjoutAcces(
+                                                                id: userProfilesList[i]
+                                                                    ['IdUser'],
+                                                                acces: userProfilesList[
+                                                                    i]['acces'],
+                                                                name: userProfilesList[
+                                                                    i]['name'],
+                                                                idus:
+                                                                    widget.idus,
+                                                                url: widget.url,
+                                                                telus: widget
+                                                                    .telus,
+                                                                adrus: widget
+                                                                    .adrus,
+                                                                accesus:
+                                                                    widget
+                                                                        .accesus,
+                                                                nameus: widget
+                                                                    .nameus,
+                                                                emailus: widget
+                                                                    .emailus,
+                                                                roleus: widget
+                                                                    .roleus)));
+                                                  },
+                                                  child: const Icon(
+                                                    Icons.add,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                              const Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  "Ajouter",
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.white),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    )),
+                                  ],
+                                ),
+                              ],
+                            ]
+                          ]),
+                    ),
+                  ]),
+                ),
               ),
-            ]),
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

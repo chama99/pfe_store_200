@@ -1,4 +1,6 @@
-import 'package:chama_projet/api/firebase_api.dart';
+// ignore_for_file: must_be_immutable
+
+import 'package:chama_projet/services/firebase_api.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

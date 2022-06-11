@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:chama_projet/inventaire/reception/LigneOperation.dart';
 import 'package:chama_projet/inventaire/reception/listReception.dart';
 import 'package:chama_projet/services/reception.dart';

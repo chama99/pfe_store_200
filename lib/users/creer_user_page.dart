@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, deprecated_member_use, avoid_print, prefer_const_constructors
+// ignore_for_file: unused_import, deprecated_member_use, avoid_print, prefer_const_constructors, must_be_immutable
 
 // ignore: avoid_web_libraries_in_flutter
 

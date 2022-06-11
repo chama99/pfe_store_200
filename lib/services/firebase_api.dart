@@ -1,3 +1,5 @@
+// ignore_for_file: body_might_complete_normally_nullable
+
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -52,7 +54,6 @@ class FirebaseApi {
       String currentUserID, String destID) {
     return fbRef
         .collection('chats')
-        //.where("destID", isEqualTo: destID)
         .orderBy(MessageField.createdAt, descending: true)
         .snapshots()
         .transform(Utils.transformer(Message.fromJson));
@@ -86,15 +87,6 @@ class FirebaseApi {
     ];
   }
 
-  ///hard coded id "f3ca1b70-fcd8-43b6-ab95-00a0adb4f933" << is for the administrator
-  /// as we demand leave for admins right ???
-  ///For this "{{$userID}}" this is the user who demanded the
-  ///holiday(leave) it's like a template so if we find it
-  ///then that's something which should be rendred like
-  ///cards containg a aceept or refuse button
-  ///so incase the  admin id changed this should be changed so the app
-  ///keep running like it should
-  /// here's 4 apples from Anoir
   static Future createLeaveDemande(String userID, String duration,
       Timestamp beginDate, String leaveType, String description) async {
     var uuid = GUIDGen.generate();
@@ -167,7 +159,6 @@ class FirebaseApi {
     return demand.docs;
   }
 
-  ///TODO GET THISD TO YOUR APP
   static getUserLeaveDemandedRefused(String userID) async {
     var leaves = await fbRef
         .collection("conge")
@@ -176,6 +167,4 @@ class FirebaseApi {
         .get();
     return leaves.docs;
   }
-
-  ///TODO GET THISD TO YOUR APP
 }

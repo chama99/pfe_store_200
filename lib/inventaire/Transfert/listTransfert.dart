@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, must_be_immutable
 
 import 'package:chama_projet/inventaire/Transfert/creer_transfert.dart';
 import 'package:chama_projet/inventaire/Transfert/detail_transfert.dart';
@@ -6,7 +6,6 @@ import 'package:chama_projet/inventaire/Transfert/detail_transfert.dart';
 import 'package:chama_projet/services/transfert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../../widget/NavBottom.dart';
 import '../../widget/boitedialogue.dart';
@@ -134,9 +133,10 @@ class _ListTransfertState extends State<ListTransfert> {
               Expanded(
                 child: ListTransf.isEmpty
                     ? const Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(color: Colors.orange),
                       )
                     : RefreshIndicator(
+                        color: Colors.orange,
                         onRefresh: () {
                           Navigator.pushReplacement(
                               context,

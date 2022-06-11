@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, unused_local_variable, camel_case_types
+// ignore_for_file: file_names, unused_local_variable, camel_case_types, must_be_immutable
 
 import 'package:chama_projet/widget/boitedialogue.dart';
 
@@ -140,21 +140,22 @@ class _listEmployeState extends State<listEmploye> {
                         ),
                       )
                     : RefreshIndicator(
+                        color: Colors.orange,
                         onRefresh: () {
                           Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
-                                  pageBuilder: (a, b, c) => listEmploye(
-                                      idus: widget.idus,
-                                      url: widget.url,
-                                      telus: widget.telus,
-                                      adrus: widget.adrus,
-                                      accesus: widget.accesus,
-                                      nameus: widget.nameus,
-                                      emailus: widget.emailus,
-                                      roleus: widget.roleus),
-                                  transitionDuration:
-                                      const Duration(seconds: 0)));
+                                pageBuilder: (a, b, c) => listEmploye(
+                                    idus: widget.idus,
+                                    url: widget.url,
+                                    telus: widget.telus,
+                                    adrus: widget.adrus,
+                                    accesus: widget.accesus,
+                                    nameus: widget.nameus,
+                                    emailus: widget.emailus,
+                                    roleus: widget.roleus),
+                                transitionDuration: const Duration(seconds: 0),
+                              ));
                           // ignore: void_checks
                           return Future.value(false);
                         },

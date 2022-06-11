@@ -59,7 +59,6 @@ class _ContactDetailState extends State<ContactDetail> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,

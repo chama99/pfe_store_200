@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../api/firebase_api.dart';
+import '../services/firebase_api.dart';
 import '../pages/utils.dart';
 import '../widget/NavBottom.dart';
 import 'conges_screen.dart';

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -63,7 +65,7 @@ class _PlanScreenState extends State<PlanScreen> {
       const TextStyle(fontWeight: FontWeight.w500, fontSize: 18);
   Widget _saveButtonContent = const Text("Sauvgarder",
       style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18));
-  Map<String, String> _paths = {};
+
   int indexOfImage = 0;
   bool _isLoading = false;
 

@@ -332,27 +332,33 @@ class _DevisDetaillerState extends State<DevisDetailler> {
   }
 
   Future onSubmit() async {
-    showDialog(
-        context: context,
-        builder: (context) => const Center(
-              child: CircularProgressIndicator(),
-            ));
     final image = await keySignaturePad.currentState?.toImage();
     final imageSignature = await image!.toByteData(format: ImageByteFormat.png);
-    final file = await PdDevis.generatePDF(
-      imageSignature: imageSignature!,
-      montant: widget.montant,
-      remise: widget.remise,
-      nom: widget.name,
-      email: widget.email,
-      commnd: widget.commande,
-      titre: widget.titre,
-      client: widget.client,
-      date1: widget.date,
-      total: widget.total,
-    );
-    Navigator.of(context).pop();
-    await OpenFile.open(file.path);
+    if (widget.etat != "Bon de commande") {
+      showToast("Ne peut pas convertir cette devis");
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.orange,
+                ),
+              ));
+      final file = await PdDevis.generatePDF(
+        imageSignature: imageSignature!,
+        montant: widget.montant,
+        remise: widget.remise,
+        nom: widget.name,
+        email: widget.email,
+        commnd: widget.commande,
+        titre: widget.titre,
+        client: widget.client,
+        date1: widget.date,
+        total: widget.total,
+      );
+      Navigator.of(context).pop();
+      await OpenFile.open(file.path);
+    }
   }
 
   Color _getDataRowColor(Set<MaterialState> states) {

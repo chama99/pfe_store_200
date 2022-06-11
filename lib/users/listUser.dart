@@ -9,6 +9,7 @@ import '../widget/NavBottom.dart';
 import '../widget/boitedialogue.dart';
 import 'creer_user_page.dart';
 
+// ignore: must_be_immutable
 class ListUser extends StatefulWidget {
   String role, idus;
   String name, email, url, tel, adr;
@@ -135,9 +136,10 @@ class _ListUserState extends State<ListUser> {
               Expanded(
                 child: userProfilesList.isEmpty
                     ? const Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(color: Colors.orange),
                       )
                     : RefreshIndicator(
+                        color: Colors.orange,
                         onRefresh: () {
                           Navigator.pushReplacement(
                               context,

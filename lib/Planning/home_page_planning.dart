@@ -1,5 +1,6 @@
+// ignore_for_file: must_be_immutable, unnecessary_null_comparison
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -91,143 +92,159 @@ class _MultiSelectionState extends State<MultiSelection> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.orange,
-        centerTitle: true,
-        title: const Text("Les  techniciens"),
-      ),
-      bottomNavigationBar: NavBottom(
-          tel: widget.telus,
-          adr: widget.adrus,
-          id: widget.idus,
-          email: widget.emailus,
-          name: widget.nameus,
-          acces: widget.accesus,
-          url: widget.url,
-          role: widget.roleus),
-      body: _isLoading
-          ? Center(
-              child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                CupertinoActivityIndicator(
-                  radius: 20,
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Text("Chargement..", style: TextStyle(fontSize: 20)),
-              ],
-            ))
-          : Container(
-              margin: const EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: TextField(
-                      onChanged: _runFilter,
-                      controller: editingController,
-                      decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                            borderSide: const BorderSide(
-                                color: Colors.orange, width: 1.5),
-                          ),
-                          labelText: "recherche",
-                          labelStyle: const TextStyle(
-                              fontSize: 20.0,
-                              color: Color.fromARGB(255, 102, 102, 102)),
-                          prefixIcon: const Icon(
-                            Icons.search,
-                            color: Colors.orange,
-                          ),
-                          border: const OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(25.0)),
-                          )),
+            appBar: AppBar(
+              backgroundColor: Colors.orange,
+              centerTitle: true,
+              title: const Text("Les  techniciens"),
+            ),
+            bottomNavigationBar: NavBottom(
+                tel: widget.telus,
+                adr: widget.adrus,
+                id: widget.idus,
+                email: widget.emailus,
+                name: widget.nameus,
+                acces: widget.accesus,
+                url: widget.url,
+                role: widget.roleus),
+            body: _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.orange,
                     ),
-                  ),
-                  Visibility(
-                    visible: isMultiSelectionEnabled,
-                    child: SizedBox(
-                      height: 70,
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  )
+                : RefreshIndicator(
+                    color: Colors.orange,
+                    onRefresh: () {
+                      Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (a, b, c) => MultiSelection(
+                              accesus: widget.accesus,
+                              emailus: widget.emailus,
+                              url: widget.url,
+                              roleus: widget.roleus,
+                              telus: widget.telus,
+                              nameus: widget.nameus,
+                              idus: widget.idus,
+                              role: widget.role,
+                              adrus: widget.adrus,
+                            ),
+                            transitionDuration: const Duration(seconds: 0),
+                          ));
+                      // ignore: void_checks
+                      return Future.value(false);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.all(10),
+                      child: Column(
                         children: [
-                          IconButton(
-                              onPressed: () {
-                                selectedItems.clear();
-                                isMultiSelectionEnabled = false;
-                                setState(() {});
-                              },
-                              icon: const Icon(Icons.close)),
-                          Text(
-                            getSelectedItemCount(),
-                            style: const TextStyle(fontSize: 16),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: TextField(
+                              onChanged: _runFilter,
+                              controller: editingController,
+                              decoration: InputDecoration(
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    borderSide: const BorderSide(
+                                        color: Colors.orange, width: 1.5),
+                                  ),
+                                  labelText: "recherche",
+                                  labelStyle: const TextStyle(
+                                      fontSize: 20.0,
+                                      color:
+                                          Color.fromARGB(255, 102, 102, 102)),
+                                  prefixIcon: const Icon(
+                                    Icons.search,
+                                    color: Colors.orange,
+                                  ),
+                                  border: const OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(25.0)),
+                                  )),
+                            ),
                           ),
-                          ElevatedButton.icon(
-                              onPressed: () {
-                                Get.to(AddPlanning(
-                                  selectedItems: selectedItems,
-                                ));
+                          Visibility(
+                            visible: isMultiSelectionEnabled,
+                            child: SizedBox(
+                              height: 70,
+                              width: double.infinity,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        selectedItems.clear();
+                                        isMultiSelectionEnabled = false;
+                                        setState(() {});
+                                      },
+                                      icon: const Icon(Icons.close)),
+                                  Text(
+                                    getSelectedItemCount(),
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                  ElevatedButton.icon(
+                                      onPressed: () {
+                                        Get.to(AddPlanning(
+                                          selectedItems: selectedItems,
+                                        ));
 
-                                setState(() {
-                                  isMultiSelectionEnabled = false;
-                                });
-                              },
-                              label: Text("Plan"),
-                              icon: const Icon(
-                                Icons.add,
-                              )),
+                                        setState(() {
+                                          isMultiSelectionEnabled = false;
+                                        });
+                                      },
+                                      label: Text("Plan"),
+                                      icon: const Icon(
+                                        Icons.add,
+                                      )),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                              child: ListView.builder(
+                                  itemCount: listTechs.length,
+                                  itemBuilder: (context, index) {
+                                    final user = listTechs[index];
+                                    return Card(
+                                        child: InkWell(
+                                      onTap: () {
+                                        if (isMultiSelectionEnabled) {
+                                          doMultiSelection(listTechs[index][0]);
+                                        } else {
+                                          Get.to(Calander(
+                                            username: listTechs[index]['email'],
+                                            techName: listTechs[index]['name'],
+                                            role: widget.role,
+                                            idus: widget.idus,
+                                            url: widget.url,
+                                            telus: widget.telus,
+                                            adrus: widget.adrus,
+                                            accesus: widget.accesus,
+                                            nameus: widget.nameus,
+                                            emailus: widget.emailus,
+                                            roleus: widget.roleus,
+                                          ));
+                                        }
+                                      },
+                                      splashColor:
+                                          const Color.fromARGB(255, 3, 56, 109),
+                                      child: ListTile(
+                                        title: Text(user["name"]),
+                                        subtitle: Text(user["email"]),
+                                        leading: CircleAvatar(
+                                          radius: 20.0,
+                                          backgroundImage:
+                                              NetworkImage(user['image']),
+                                        ),
+                                      ),
+                                    ));
+                                  }))
                         ],
                       ),
                     ),
-                  ),
-                  Expanded(
-                      child: ListView.builder(
-                          itemCount: listTechs.length,
-                          itemBuilder: (context, index) {
-                            final user = listTechs[index];
-                            return Card(
-                                child: InkWell(
-                              onTap: () {
-                                if (isMultiSelectionEnabled) {
-                                  doMultiSelection(listTechs[index][0]);
-                                } else {
-                                  Get.to(Calander(
-                                    username: listTechs[index]['email'],
-                                    techName: listTechs[index]['name'],
-                                    role: widget.role,
-                                    idus: widget.idus,
-                                    url: widget.url,
-                                    telus: widget.telus,
-                                    adrus: widget.adrus,
-                                    accesus: widget.accesus,
-                                    nameus: widget.nameus,
-                                    emailus: widget.emailus,
-                                    roleus: widget.roleus,
-                                  ));
-                                }
-                              },
-                              splashColor:
-                                  const Color.fromARGB(255, 3, 56, 109),
-                              child: ListTile(
-                                title: Text(user["name"]),
-                                subtitle: Text(user["email"]),
-                                leading: CircleAvatar(
-                                  radius: 20.0,
-                                  backgroundImage: NetworkImage(user['image']),
-                                ),
-                              ),
-                            ));
-                          }))
-                ],
-              ),
-            ),
-    ));
+                  )));
   }
 
   void _runFilter(String enteredKeyword) {

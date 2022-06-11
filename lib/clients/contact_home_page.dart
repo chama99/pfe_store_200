@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, unused_local_variable, camel_case_types
+// ignore_for_file: file_names, unused_local_variable, camel_case_types, must_be_immutable
 
 import 'package:chama_projet/services/contact.dart';
 import 'package:chama_projet/widget/boitedialogue.dart';
@@ -135,9 +135,12 @@ class _listContactState extends State<listContact> {
               Expanded(
                 child: userContactList.isEmpty
                     ? const Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          color: Colors.orange,
+                        ),
                       )
                     : RefreshIndicator(
+                        color: Colors.orange,
                         onRefresh: () {
                           Navigator.pushReplacement(
                               context,
@@ -196,7 +199,7 @@ class _listContactState extends State<listContact> {
                                     onPressed: () => {
                                       openDialog(
                                           context,
-                                          contact["name"],
+                                          contact["id"],
                                           "Êtes-vous sûr de vouloir supprimer",
                                           "contact")
                                     },

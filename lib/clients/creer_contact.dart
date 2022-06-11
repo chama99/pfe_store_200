@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, deprecated_member_use, non_constant_identifier_names
+// ignore_for_file: unused_import, deprecated_member_use, non_constant_identifier_names, must_be_immutable
 
 // ignore: avoid_web_libraries_in_flutter
 
@@ -327,8 +327,8 @@ class _CreeContactPageState extends State<CreeContactPage> {
                                               email,
                                               nom,
                                               tel,
-                                              adressee.text,
-                                              etiquettetroller.text,
+                                              adresse,
+                                              etiquette,
                                               "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
                                         } else {
                                           uploadImage(email);
@@ -430,8 +430,8 @@ class _CreeContactPageState extends State<CreeContactPage> {
       UploadTask uploadTask = ref.putFile(File(imageFile!.path));
       await uploadTask.whenComplete(() async {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
-        Client().addContact(uuid, email, nom, tel, adressee.text,
-            etiquettetroller.text, uploadPath);
+        Client()
+            .addContact(uuid, email, nom, tel, adresse, etiquette, uploadPath);
       });
     } catch (e) {
       // ignore: avoid_print

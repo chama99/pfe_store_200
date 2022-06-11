@@ -33,7 +33,7 @@ class _NavBottomState extends State<NavBottom> {
 
   @override
   Widget build(BuildContext context) {
-    final items = <Widget>[
+    <Widget>[
       IconButton(
         onPressed: () => {
           Get.to(

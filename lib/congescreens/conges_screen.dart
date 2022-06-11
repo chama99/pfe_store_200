@@ -1,4 +1,4 @@
-import 'package:chama_projet/api/firebase_api.dart';
+import 'package:chama_projet/services/firebase_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -152,18 +152,15 @@ class _CongesScreenState extends State<CongesScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   CupertinoActivityIndicator(
-                    radius: 20,
+                    color: Colors.orange,
                   ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text("Chargement..", style: TextStyle(fontSize: 20)),
                 ],
               ))
             : SingleChildScrollView(
                 child: widget.role.toLowerCase() == "technicien" ||
                         widget.role.toLowerCase() == "comptable"
                     ? _widgetForUser()
+                    // ignore: todo
                     : _widgetForAdmin())); //TODO GET THIS BACK to Technicien
   }
 
@@ -181,12 +178,9 @@ class _CongesScreenState extends State<CongesScreen> {
                 _container("Jours de congé", Color(0xff54D3C2)),
               ],
             ),
-
             const SizedBox(
               height: 20,
             ),
-
-            ///TODO GET THISD TO YOUR APP
             conge != null
                 ? SizedBox(
                     height: 400,
@@ -199,10 +193,6 @@ class _CongesScreenState extends State<CongesScreen> {
                           .add(Duration(days: int.parse(conge["duration"]))),
                     ))
                 : const SizedBox(height: 400, child: CalendarPopupView()),
-
-            ///TODO GET THISD TO YOUR APP
-            ///
-
             const SizedBox(
               height: 20,
             ),

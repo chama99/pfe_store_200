@@ -1,7 +1,7 @@
 import 'package:chama_projet/Planning/plan_screen.dart';
 import 'package:chama_projet/widget/plan_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
@@ -106,64 +106,79 @@ class _CalanderState extends State<Calander> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.orange,
-          centerTitle: true,
-          title: const Text("Plan"),
-          actions: [
-            if (widget.role == "Admin")
-              TextButton(
-                  onPressed: () async {
-                    await showDialog(
-                        context: context,
-                        builder: (context) => AlertDialogPlan(
-                              username: widget.username,
-                              role: widget.role,
-                              allPlans: _markedDateMap,
-                              techName: widget.techName,
-                              callback: callBack,
-                              idus: widget.idus,
-                              url: widget.url,
-                              telus: widget.telus,
-                              adrus: widget.adrus,
-                              accesus: widget.accesus,
-                              nameus: widget.nameus,
-                              emailus: widget.emailus,
-                              roleus: widget.roleus,
-                            ));
-                  },
-                  child: const Text(
-                    "Créer",
-                    style: TextStyle(letterSpacing: 4, color: Colors.white),
-                  )),
-          ],
-        ),
-        bottomNavigationBar: NavBottom(
-            tel: widget.telus,
-            adr: widget.adrus,
-            id: widget.idus,
-            email: widget.emailus,
-            name: widget.nameus,
-            acces: widget.accesus,
-            url: widget.url,
-            role: widget.roleus),
-        body: _isLoading
-            ? Center(
-                child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CupertinoActivityIndicator(
-                    radius: 20,
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text("Chargement..", style: TextStyle(fontSize: 20)),
-                ],
-              ))
-            : SingleChildScrollView(
+        child: Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.orange,
+        centerTitle: true,
+        title: const Text("Plan"),
+        actions: [
+          if (widget.role == "Admin")
+            TextButton(
+                onPressed: () async {
+                  await showDialog(
+                      context: context,
+                      builder: (context) => AlertDialogPlan(
+                            username: widget.username,
+                            role: widget.role,
+                            allPlans: _markedDateMap,
+                            techName: widget.techName,
+                            callback: callBack,
+                            idus: widget.idus,
+                            url: widget.url,
+                            telus: widget.telus,
+                            adrus: widget.adrus,
+                            accesus: widget.accesus,
+                            nameus: widget.nameus,
+                            emailus: widget.emailus,
+                            roleus: widget.roleus,
+                          ));
+                },
+                child: const Text(
+                  "Créer",
+                  style: TextStyle(letterSpacing: 4, color: Colors.white),
+                )),
+        ],
+      ),
+      bottomNavigationBar: NavBottom(
+          tel: widget.telus,
+          adr: widget.adrus,
+          id: widget.idus,
+          email: widget.emailus,
+          name: widget.nameus,
+          acces: widget.accesus,
+          url: widget.url,
+          role: widget.roleus),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: Colors.orange,
+              ),
+            )
+          : RefreshIndicator(
+              color: Colors.orange,
+              onRefresh: () {
+                Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (a, b, c) => Calander(
+                        techName: widget.techName,
+                        username: widget.username,
+                        idus: widget.idus,
+                        url: widget.url,
+                        emailus: widget.emailus,
+                        nameus: widget.nameus,
+                        roleus: widget.roleus,
+                        accesus: widget.accesus,
+                        telus: widget.telus,
+                        adrus: widget.adrus,
+                        role: widget.roleus,
+                      ),
+                      transitionDuration: const Duration(seconds: 0),
+                    ));
+                // ignore: void_checks
+                return Future.value(false);
+              },
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
                     const SizedBox(
@@ -189,8 +204,8 @@ class _CalanderState extends State<Calander> {
                   ],
                 ),
               ),
-      ),
-    );
+            ),
+    ));
   }
 
   Widget _calendar() {

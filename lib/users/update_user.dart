@@ -201,13 +201,13 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
                                   }
                                   Get.to(() => ListUser(
                                       idus: widget.idus,
-                                      role: widget.role,
-                                      email: widget.email,
-                                      name: widget.nom,
-                                      acces: widget.acces,
-                                      url: url,
-                                      adr: widget.adr,
-                                      tel: widget.tel));
+                                      role: widget.roleus,
+                                      email: widget.emailus,
+                                      name: widget.nameus,
+                                      acces: widget.accesus,
+                                      url: widget.image,
+                                      adr: widget.adrus,
+                                      tel: widget.telus));
                                 }
                               },
                               child: const Text(
@@ -291,6 +291,15 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
         var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
         User()
             .updateUser(widget.id, email, mdp, role, uploadPath, widget.acces);
+        Get.to(() => ListUser(
+            idus: widget.idus,
+            role: widget.roleus,
+            email: widget.emailus,
+            name: widget.nameus,
+            acces: widget.accesus,
+            url: widget.image,
+            adr: widget.adrus,
+            tel: widget.telus));
       });
     } catch (e) {
       // ignore: avoid_print

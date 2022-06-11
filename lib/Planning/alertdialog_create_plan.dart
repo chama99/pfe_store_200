@@ -1,8 +1,10 @@
+import 'package:chama_projet/Planning/calander.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
+import 'package:get/get.dart';
 
 import 'package:intl/intl.dart';
 
@@ -46,8 +48,6 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
   final CollectionReference _planCollection =
       FirebaseFirestore.instance.collection('plan');
 
-  final DocumentReference _planRefrence =
-      FirebaseFirestore.instance.collection("plan").doc();
   List<String> clients = ["Choissiez un client"];
   List<dynamic> users = [];
   Future getData() async {
@@ -218,7 +218,8 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
               const Divider(
                 thickness: 4,
               ),
-              Center(
+              SizedBox(
+                width: 370,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: const Color.fromARGB(255, 62, 75, 146)),
@@ -287,7 +288,8 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
     bool isValidDate = _beginDate.isBefore(now) || _endDate.isBefore(now);
 
     if (isValidDate) {
-      Utils.modalShow("Un congé ne peut pas etre au passé", context,
+      Utils.modalShow(
+          "Un plan ne peut pas etre au passé date de debut", context,
           success: false);
       return;
     }
@@ -345,13 +347,20 @@ class _AlertDialogPlanState extends State<AlertDialogPlan> {
       });
       Utils.modalShow("Plan ajouter avec succès", context);
       widget.callback();
-      Navigator.pop(context);
+      Get.to(() => Calander(
+          techName: widget.techName,
+          username: widget.username,
+          role: widget.role,
+          idus: widget.idus,
+          url: widget.url,
+          emailus: widget.emailus,
+          nameus: widget.nameus,
+          roleus: widget.roleus,
+          accesus: widget.accesus,
+          telus: widget.telus,
+          adrus: widget.adrus));
     }).onError((error, stackTrace) {
       print("$error ---- $stackTrace");
     });
-    // Get.to(() => Calander(
-    //     techName: widget.techName,
-    //     username: widget.username,
-    //     role: widget.role));
   }
 }
