@@ -51,7 +51,7 @@ class _TechnicienPlanState extends State<TechnicienPlan> {
         _isLoading = false;
       });
     });
-    //_plansOfTechnicien.map((e) => print(e.data()));
+
     super.initState();
   }
 
@@ -135,20 +135,7 @@ class _TechnicienPlanState extends State<TechnicienPlan> {
                   )
                 ],
               )),
-        )
-        // buttonBar: GFButtonBar(
-        //   children: <Widget>[
-        //     GFButton(
-        //       onPressed: () {},
-        //       text: 'OK',
-        //     ),
-        //     GFButton(
-        //       onPressed: () {},
-        //       text: 'Cancel',
-        //     ),
-        //   ],
-        // ),
-        );
+        ));
   }
 
   Widget buildText(String text) => Center(

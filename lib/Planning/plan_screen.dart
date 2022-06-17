@@ -263,35 +263,37 @@ class _PlanScreenState extends State<PlanScreen> {
             const SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text("Note :", style: _leftTextStyle),
-                Expanded(
-                    child: TextField(
-                  controller: _noteController,
-                  decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                    icon: Container(
-                      height: 50,
-                      width: 50,
-                      child: const Icon(
-                        Icons.image_rounded,
-                        color: Colors.white,
+            SingleChildScrollView(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text("Note :", style: _leftTextStyle),
+                  Expanded(
+                      child: TextField(
+                    controller: _noteController,
+                    decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                      icon: Container(
+                        height: 50,
+                        width: 50,
+                        child: const Icon(
+                          Icons.image_rounded,
+                          color: Colors.white,
+                        ),
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(40)),
+                            color: Colors.grey[400]),
                       ),
-                      decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(40)),
-                          color: Colors.grey[400]),
-                    ),
-                    onPressed: () {
-                      showModalBottomSheet(
-                          context: context,
-                          builder: ((builder) => bottomSheet()));
-                    },
-                  )),
-                ))
-              ],
+                      onPressed: () {
+                        showModalBottomSheet(
+                            context: context,
+                            builder: ((builder) => bottomSheet()));
+                      },
+                    )),
+                  ))
+                ],
+              ),
             ),
             const SizedBox(
               height: 10,
