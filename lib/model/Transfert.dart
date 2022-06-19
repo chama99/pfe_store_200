@@ -1,35 +1,35 @@
-class Livraison {
-  final String? idliv;
+class Transfert {
+  final String? idtran;
   final String? etat;
-  final String? adr;
+  final String? trans;
   final String? typ;
   final String? num;
   final List? tab;
   final DateTime? date;
 
-  const Livraison(
-      {required this.idliv,
+  const Transfert(
+      {required this.idtran,
       required this.etat,
-      required this.adr,
+      required this.trans,
       required this.typ,
       required this.num,
       required this.tab,
       required this.date});
 
-  static Livraison fromJson(dynamic json) => Livraison(
-      idliv: json['IdLiv'],
+  static Transfert fromJson(dynamic json) => Transfert(
+      idtran: json['IdTran'],
       etat: json['etat'],
-      adr: json['Adresse de livraison'],
-      num: json['numliv'],
+      trans: json['transfert à'],
+      num: json['numtran'],
       typ: json["type d'operation"],
       tab: json["ligne d'operation"],
       date: json['date prévue']);
 
   Map<String, dynamic> toJson() => {
-        'IdLiv': idliv,
+        'IdTran': idtran,
         'etat': etat,
-        'Adresse de livraison': adr,
-        'numliv': num,
+        'transfert à': trans,
+        'numtran': num,
         "type d'operation": typ,
         "ligne d'operation": tab,
         'date prévue': date

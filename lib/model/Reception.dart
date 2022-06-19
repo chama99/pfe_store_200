@@ -1,35 +1,35 @@
-class Livraison {
-  final String? idliv;
+class Reception {
+  final String? idrecp;
   final String? etat;
-  final String? adr;
+  final String? recp;
   final String? typ;
   final String? num;
   final List? tab;
   final DateTime? date;
 
-  const Livraison(
-      {required this.idliv,
+  const Reception(
+      {required this.idrecp,
       required this.etat,
-      required this.adr,
+      required this.recp,
       required this.typ,
       required this.num,
       required this.tab,
       required this.date});
 
-  static Livraison fromJson(dynamic json) => Livraison(
-      idliv: json['IdLiv'],
+  static Reception fromJson(dynamic json) => Reception(
+      idrecp: json['IdRecp'],
       etat: json['etat'],
-      adr: json['Adresse de livraison'],
-      num: json['numliv'],
+      recp: json['reception'],
+      num: json['numrecp'],
       typ: json["type d'operation"],
       tab: json["ligne d'operation"],
       date: json['date prévue']);
 
   Map<String, dynamic> toJson() => {
-        'IdLiv': idliv,
+        'IdRecp': idrecp,
         'etat': etat,
-        'Adresse de livraison': adr,
-        'numliv': num,
+        'reception': recp,
+        'numrecp': num,
         "type d'operation": typ,
         "ligne d'operation": tab,
         'date prévue': date
