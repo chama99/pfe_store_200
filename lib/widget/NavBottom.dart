@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../chat_widgets/chats_page.dart';
+import '../chat/chats_page.dart';
 
 import '../users/profile.dart';
 import 'menuAdmin.dart';

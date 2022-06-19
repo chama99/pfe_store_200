@@ -1,4 +1,4 @@
-import 'package:chama_projet/chat_widgets/profile_header_widget.dart';
+import 'package:chama_projet/chat/profile_header_widget.dart';
 import 'package:chama_projet/model/user.dart';
 
 import 'package:flutter/material.dart';
